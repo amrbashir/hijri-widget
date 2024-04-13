@@ -1,7 +1,6 @@
 package me.amrbashir.hijriwidget
 
 
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,10 +23,6 @@ import androidx.compose.ui.unit.em
 import androidx.navigation.compose.*
 import me.amrbashir.hijriwidget.routes.*
 import me.zhanghai.compose.preference.*
-import java.text.DateFormat
-import java.text.NumberFormat
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 
 val HijriMonths = arrayOf(
@@ -66,7 +61,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        Settings.load(this.getPreferences(Context.MODE_PRIVATE))
+        Settings.load(this@MainActivity.baseContext)
         setContent {
             Content()
         }
@@ -135,7 +130,7 @@ class MainActivity : ComponentActivity() {
                 )
             }
             IconButton(onClick = {
-                Settings.save(this@MainActivity.getPreferences(Context.MODE_PRIVATE))
+                Settings.save(this@MainActivity.baseContext)
                 this@MainActivity.finish()
             }) {
                 Icon(

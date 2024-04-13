@@ -1,11 +1,12 @@
 package me.amrbashir.hijriwidget
 
 import android.content.Context
-import androidx.glance.GlanceId
-import androidx.glance.appwidget.GlanceAppWidget
-import androidx.glance.appwidget.GlanceAppWidgetReceiver
-import androidx.glance.appwidget.provideContent
-import androidx.glance.text.Text
+import android.widget.RemoteViews
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.*
+import androidx.glance.*
+import androidx.glance.appwidget.*
+import androidx.glance.layout.*
 
 class HijriWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = HijriWidget()
@@ -14,9 +15,25 @@ class HijriWidgetReceiver : GlanceAppWidgetReceiver() {
 class HijriWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
+        Settings.load(context)
         provideContent {
-            Text("Hello World")
+            GlanceTheme {
+                Content()
+            }
         }
+    }
+
+    @Composable
+    private fun Content() {
+        val packageName = LocalContext.current.packageName
+        val remoteView = RemoteViews(packageName, R.layout.widget_text_view);
+        remoteView.setTextViewText(R.id.widget_text_view, Settings.language.value)
+
+
+        AndroidRemoteViews(
+            remoteViews = remoteView,
+            modifier = GlanceModifier.padding(8.dp)
+        )
     }
 }
 
