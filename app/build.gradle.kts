@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    kotlin("plugin.serialization") version "1.9.23"
 }
 
 android {
@@ -57,4 +58,8 @@ dependencies {
 
     implementation("me.zhanghai.compose.preference:library:1.0.0")
 
+    implementation("io.ktor:ktor-client-core:2.3.10")
+    implementation("io.ktor:ktor-client-android:2.3.10")
+    implementation("io.ktor:ktor-client-content-negotiation:2.3.10")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.10")
 }

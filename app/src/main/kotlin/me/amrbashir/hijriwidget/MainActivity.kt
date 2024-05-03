@@ -25,36 +25,6 @@ import me.amrbashir.hijriwidget.routes.*
 import me.zhanghai.compose.preference.*
 
 
-val HijriMonths = arrayOf(
-    "Muharram",
-    "Safar",
-    "Rabi Al-Awwal",
-    "Rabi Al-Thani",
-    "Jumada Al-Awwal",
-    "Jumada Al-Thani",
-    "Rajab",
-    "Shaban",
-    "Ramadan",
-    "Shawwal",
-    "Du al-Qadah",
-    "Du al-Hijjah"
-)
-val HijriMonthsAr = arrayOf(
-    "محرم",
-    "سفر",
-    "ربيع الأول",
-    "ربيع الثانى",
-    "جمادى الأول",
-    "جمادى الثانى",
-    "رجب",
-    "شعبان",
-    "رمضان",
-    "شوال",
-    "ذو القعدة",
-    "ذو الحجة"
-)
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
 
@@ -147,22 +117,20 @@ class MainActivity : ComponentActivity() {
     private fun PreviewWidget() {
         val d = 3
         val y = 1445
-        val m = 8
-
 
         var day by remember { mutableStateOf("$d") }
-        var month by remember { mutableStateOf(HijriMonthsAr[m]) }
+        var month by remember { mutableStateOf("رمضان") }
         var year by remember { mutableStateOf("$y") }
 
         when (Settings.language.value) {
             "English" -> {
-                month = HijriMonths[m]
+                month = "Ramadan"
                 day = "$d"
                 year = "$y"
             }
 
             else -> {
-                month = HijriMonthsAr[m]
+                month = "رمضان"
                 day = day.convertNumbersToAr()
                 year = year.convertNumbersToAr()
             }
