@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.routes
+package me.amrbashir.hijriwidget.settings.routes
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn

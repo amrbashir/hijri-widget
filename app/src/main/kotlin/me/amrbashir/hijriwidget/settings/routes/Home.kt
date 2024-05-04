@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.routes
+package me.amrbashir.hijriwidget.settings.routes
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -22,7 +22,7 @@ import androidx.glance.appwidget.updateAll
 import androidx.navigation.NavController
 import kotlinx.coroutines.*
 import me.amrbashir.hijriwidget.HijriDate
-import me.amrbashir.hijriwidget.HijriWidget
+import me.amrbashir.hijriwidget.widget.HijriWidget
 import me.zhanghai.compose.preference.preference
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.Settings
@@ -77,18 +77,13 @@ fun Home(navController: NavController, snackbarHostState: SnackbarHostState) {
             onClick = {
                 isRefreshing = true
                 coroutineScope.launch {
-                    HijriWidget().apply {
-                        Settings.load(navController.context)
-                        HijriDate.populateDatabase(navController.context)
-                        HijriDate.load(navController.context, Settings.language.value)
-                        updateAll(navController.context)
-                        isRefreshing = false
-                        snackbarHostState
-                            .showSnackbar(
-                                "Success",
-                            )
-
-                    }
+                    HijriDate.populateDatabase(navController.context)
+                    HijriWidget.update(navController.context)
+                    isRefreshing = false
+                    snackbarHostState
+                        .showSnackbar(
+                            "Success",
+                        )
                 }
 
 

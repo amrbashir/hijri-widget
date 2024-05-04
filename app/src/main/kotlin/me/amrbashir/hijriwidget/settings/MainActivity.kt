@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget
+package me.amrbashir.hijriwidget.settings
 
 
 import android.os.Bundle
@@ -21,7 +21,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.navigation.compose.*
-import me.amrbashir.hijriwidget.routes.*
+import kotlinx.coroutines.runBlocking
+import me.amrbashir.hijriwidget.HijriDate
+import me.amrbashir.hijriwidget.R
+import me.amrbashir.hijriwidget.Settings
+import me.amrbashir.hijriwidget.settings.routes.*
+import me.amrbashir.hijriwidget.widget.HijriWidget
 import me.zhanghai.compose.preference.*
 
 
@@ -31,8 +36,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        Settings.load(this@MainActivity.baseContext)
-        HijriDate.load(this@MainActivity.baseContext, Settings.language.value)
+        Settings.load(this.baseContext)
         setContent {
             Content()
         }
@@ -106,6 +110,7 @@ class MainActivity : ComponentActivity() {
             }
             IconButton(onClick = {
                 Settings.save(this@MainActivity.baseContext)
+                runBlocking { HijriWidget.update(this@MainActivity.baseContext) }
                 this@MainActivity.finish()
             }) {
                 Icon(
@@ -120,9 +125,16 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun PreviewWidget() {
-        var date by remember { mutableStateOf(HijriDate.today.value) }
+        var date by remember {
+            mutableStateOf(
+                HijriDate.todayForLang(
+                    this.baseContext,
+                    Settings.language.value
+                )
+            )
+        }
 
-        LaunchedEffect(Settings.language.value) {
+        LaunchedEffect(Settings.language.value, HijriDate.today.value) {
             date = HijriDate.todayForLang(this@MainActivity.baseContext, Settings.language.value)
         }
 
