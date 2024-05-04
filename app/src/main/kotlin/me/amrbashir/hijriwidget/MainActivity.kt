@@ -32,6 +32,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         Settings.load(this@MainActivity.baseContext)
+        HijriDate.load(this@MainActivity.baseContext, Settings.language.value)
         setContent {
             Content()
         }
@@ -40,8 +41,12 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun Content() {
         val navController = rememberNavController()
+        val snackbarHostState = remember { SnackbarHostState() }
 
         Scaffold(
+            snackbarHost = {
+                SnackbarHost(hostState = snackbarHostState)
+            },
             topBar = {
                 TopAppBar(
                     modifier = Modifier.height(
@@ -59,7 +64,7 @@ class MainActivity : ComponentActivity() {
                     Column(modifier = Modifier.padding(it)) {
                         AppBar()
                         NavHost(navController = navController, startDestination = "home") {
-                            composable("home") { Home(navController) }
+                            composable("home") { Home(navController, snackbarHostState) }
                             composable("language") { Language(navController) }
                         }
                     }
@@ -115,25 +120,10 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun PreviewWidget() {
-        val d = 3
-        val y = 1445
+        var date by remember { mutableStateOf(HijriDate.today.value) }
 
-        var day by remember { mutableStateOf("$d") }
-        var month by remember { mutableStateOf("رمضان") }
-        var year by remember { mutableStateOf("$y") }
-
-        when (Settings.language.value) {
-            "English" -> {
-                month = "Ramadan"
-                day = "$d"
-                year = "$y"
-            }
-
-            else -> {
-                month = "رمضان"
-                day = day.convertNumbersToAr()
-                year = year.convertNumbersToAr()
-            }
+        LaunchedEffect(Settings.language.value) {
+            date = HijriDate.todayForLang(this@MainActivity.baseContext, Settings.language.value)
         }
 
         Box(Modifier.padding(16.dp)) {
@@ -150,7 +140,7 @@ class MainActivity : ComponentActivity() {
                 )
 
                 Text(
-                    "$day $month $year",
+                    date,
                     color = MaterialTheme.colorScheme.onPrimary,
                     fontSize = 7.em,
                     modifier = Modifier.align(Alignment.Center)
@@ -160,16 +150,3 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
-fun String.convertNumbersToAr(): String {
-    return this.replace("0", "٠")
-        .replace("1", "١")
-        .replace("2", "٢")
-        .replace("3", "٣")
-        .replace("4", "٤")
-        .replace("5", "٥")
-        .replace("6", "٦")
-        .replace("7", "٧")
-        .replace("8", "٨")
-        .replace("9", "٩")
-}
