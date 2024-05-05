@@ -64,30 +64,23 @@ fun Home(navController: NavController, snackbarHostState: SnackbarHostState) {
                 navController.navigate("language")
             }
         )
-        preference(key = "repopulateDatabase",
-            title = { Text("Refresh Database") },
-            summary = { Text("Refreshes the hijri database and updates the widget") },
+        preference(key = "syncDatabase",
+            title = { Text("Sync Database") },
+            summary = { Text("Synchronize the hijri database and updates the widget") },
             icon = {
                 Icon(
                     Icons.Default.Refresh,
                     contentDescription = "Refresh",
-                    modifier = if (isRefreshing) {
-                        Modifier.rotate(angle)
-                    } else {
-                        Modifier
-                    }
+                    modifier = if (isRefreshing) Modifier.rotate(angle) else Modifier
                 )
             },
             onClick = {
                 isRefreshing = true
                 coroutineScope.launch {
-                    HijriDate.populateDatabase(navController.context)
+                    HijriDate.syncDatabase(navController.context)
                     HijriWidget.update(navController.context)
                     isRefreshing = false
-                    snackbarHostState
-                        .showSnackbar(
-                            "Success",
-                        )
+                    snackbarHostState.showSnackbar("Success")
                 }
 
 

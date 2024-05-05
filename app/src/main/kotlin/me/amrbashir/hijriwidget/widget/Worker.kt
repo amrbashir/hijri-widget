@@ -29,7 +29,7 @@ class HijriWidgetWorker(
 
             val now = Calendar.getInstance()
 
-            val delay = nextDayStart.timeInMillis - now.timeInMillis;
+            val delay = nextDayStart.timeInMillis - now.timeInMillis
 
             WorkManager.getInstance(context).enqueueUniquePeriodicWork(
                 "hijriWidgetWorker",
@@ -44,11 +44,3 @@ class HijriWidgetWorker(
     }
 }
 
-
-// TODOs:
-// 1. Update date when system time changes
-// 2. Run logic on widget startup:
-//   - check if some `lastUpdate` key exists:
-//     - if does not exit: repopulate database and set the key
-//     - if exists: check the next hijri month start date and set a job to run to repopulate database
-// 3. Run same logic as 2. whenever a Internet Connection is available
