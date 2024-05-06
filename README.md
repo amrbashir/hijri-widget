@@ -1,6 +1,11 @@
-# Hijri Widget
+<p align="center">
+    <img src="icon.svg" style="width:100px;" />
+</p>
+<h1 align="center">Hijri Widget</h1>
 
+<p align="center">
 Android widget for displaying Hijri date
+</p>
 
 |                                                         |                                                       |
 | ------------------------------------------------------- | ----------------------------------------------------- |
