@@ -1,8 +1,16 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     kotlin("plugin.serialization") version "1.9.23"
 }
+
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystoreProperties = Properties()
+keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+
 
 android {
     namespace = "me.amrbashir.hijriwidget"
@@ -13,12 +21,22 @@ android {
         minSdk = 26
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "0.1"
+    }
+
+    signingConfigs {
+        create("config") {
+            keyAlias = keystoreProperties["keyAlias"] as String
+            keyPassword = keystoreProperties["keyPassword"] as String
+            storeFile = file(keystoreProperties["storeFile"] as String)
+            storePassword = keystoreProperties["storePassword"] as String
+        }
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            signingConfig = signingConfigs.getByName("config")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -43,7 +61,7 @@ android {
 dependencies {
     implementation(platform("androidx.compose:compose-bom:2024.05.00"))
     implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material3:material3:1.2.1")
 
     implementation("androidx.activity:activity-ktx:1.9.0")
     implementation("androidx.activity:activity-compose:1.9.0")
@@ -56,8 +74,6 @@ dependencies {
     implementation("androidx.glance:glance-material3:1.0.0")
 
     implementation("androidx.navigation:navigation-compose:2.7.7")
-
-    implementation("me.zhanghai.compose.preference:library:1.0.0")
 
     implementation("io.ktor:ktor-client-core:2.3.10")
     implementation("io.ktor:ktor-client-android:2.3.10")

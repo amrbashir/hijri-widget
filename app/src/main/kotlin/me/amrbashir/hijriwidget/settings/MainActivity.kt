@@ -6,7 +6,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -53,7 +53,6 @@ import me.amrbashir.hijriwidget.Settings
 import me.amrbashir.hijriwidget.settings.routes.Home
 import me.amrbashir.hijriwidget.settings.routes.Language
 import me.amrbashir.hijriwidget.widget.HijriWidget
-import me.zhanghai.compose.preference.ProvidePreferenceLocals
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,30 +72,28 @@ class MainActivity : ComponentActivity() {
         val navController = rememberNavController()
         val snackbarHostState = remember { SnackbarHostState() }
 
-        Scaffold(
-            snackbarHost = {
-                SnackbarHost(hostState = snackbarHostState)
-            },
-            topBar = {
-                TopAppBar(
-                    modifier = Modifier.height(
-                        TopAppBarDefaults.windowInsets.asPaddingValues().calculateTopPadding()
-                    ),
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    ),
-                    title = { }
-                )
-            }
-        ) {
-            MaterialTheme {
-                ProvidePreferenceLocals {
-                    Column(modifier = Modifier.padding(it)) {
-                        AppBar()
-                        NavHost(navController = navController, startDestination = "home") {
-                            composable("home") { Home(navController, snackbarHostState) }
-                            composable("language") { Language(navController) }
-                        }
+        AppTheme {
+            Scaffold(
+                snackbarHost = {
+                    SnackbarHost(hostState = snackbarHostState)
+                },
+                topBar = {
+                    TopAppBar(
+                        modifier = Modifier.height(
+                            TopAppBarDefaults.windowInsets.asPaddingValues().calculateTopPadding()
+                        ),
+                        colors = TopAppBarDefaults.topAppBarColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        ),
+                        title = { }
+                    )
+                }
+            ) {
+                Column(modifier = Modifier.padding(it)) {
+                    AppBar()
+                    NavHost(navController = navController, startDestination = "home") {
+                        composable("home") { Home(navController, snackbarHostState) }
+                        composable("language") { Language(navController) }
                     }
                 }
 
@@ -107,9 +104,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun AppBar() {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.primaryContainer)
+            modifier = Modifier.fillMaxWidth()
         ) {
             Column(
                 modifier = Modifier
@@ -118,7 +113,6 @@ class MainActivity : ComponentActivity() {
             ) {
                 Actions()
                 PreviewWidget()
-                Text("Hijri Widget Settings", color = MaterialTheme.colorScheme.primary)
             }
         }
     }
@@ -126,14 +120,21 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun Actions() {
-        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
             IconButton(onClick = { this@MainActivity.finish() }) {
                 Icon(
                     Icons.Default.Close,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
+
+            Text("Hijri Widget Settings", color = MaterialTheme.colorScheme.onSurface)
+
             IconButton(onClick = {
                 Settings.save(this@MainActivity.baseContext)
                 runBlocking { HijriWidget.update(this@MainActivity.baseContext) }
@@ -142,7 +143,7 @@ class MainActivity : ComponentActivity() {
                 Icon(
                     Icons.Default.Check,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
 
@@ -179,7 +180,7 @@ class MainActivity : ComponentActivity() {
 
                 Text(
                     date,
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = Color.White,
                     fontSize = 7.em,
                     modifier = Modifier.align(Alignment.Center)
                 )

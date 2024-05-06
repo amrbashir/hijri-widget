@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import me.amrbashir.hijriwidget.Settings
-import me.zhanghai.compose.preference.preference
+import me.amrbashir.hijriwidget.settings.composables.settingsItem
 
 
 @Composable
@@ -21,8 +21,7 @@ fun Language(navController: NavController) {
         modifier = Modifier.fillMaxSize()
     ) {
         for (lang in arrayOf("Arabic", "English")) {
-            preference(
-                key = lang,
+            settingsItem(
                 title = { Text(lang) },
                 icon = {
                     if (savedLang == lang) {

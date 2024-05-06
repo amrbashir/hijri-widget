@@ -6,6 +6,9 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -19,6 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -28,8 +32,9 @@ import kotlinx.coroutines.launch
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.Settings
+import me.amrbashir.hijriwidget.settings.composables.SettingsItem
+import me.amrbashir.hijriwidget.settings.composables.settingsItem
 import me.amrbashir.hijriwidget.widget.HijriWidget
-import me.zhanghai.compose.preference.preference
 
 
 @Composable
@@ -39,7 +44,7 @@ fun Home(navController: NavController, snackbarHostState: SnackbarHostState) {
     val coroutineScope = rememberCoroutineScope()
 
 
-    var isRefreshing by remember { mutableStateOf(false) }
+    var isSyncing by remember { mutableStateOf(false) }
     val infiniteTransition = rememberInfiniteTransition(label = "rotation")
     val angle by infiniteTransition.animateFloat(
         initialValue = 0f,
@@ -48,10 +53,12 @@ fun Home(navController: NavController, snackbarHostState: SnackbarHostState) {
         label = "rotation"
     )
 
+
+
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
-        preference(key = "language_page",
+        settingsItem(
             title = { Text("Language") },
             summary = { Text("Choose the widget language ($lang)") },
             icon = {
@@ -64,27 +71,32 @@ fun Home(navController: NavController, snackbarHostState: SnackbarHostState) {
                 navController.navigate("language")
             }
         )
-        preference(key = "syncDatabase",
+    }
+
+    Box(contentAlignment = Alignment.BottomEnd, modifier = Modifier.fillMaxSize()) {
+        SettingsItem(
             title = { Text("Sync Database") },
-            summary = { Text("Synchronize the hijri database and updates the widget") },
             icon = {
                 Icon(
                     Icons.Default.Refresh,
                     contentDescription = "Refresh",
-                    modifier = if (isRefreshing) Modifier.rotate(angle) else Modifier
+                    modifier = if (isSyncing) Modifier.rotate(angle) else Modifier
                 )
             },
-            onClick = {
-                isRefreshing = true
-                coroutineScope.launch {
-                    HijriDate.syncDatabase(navController.context)
-                    HijriWidget.update(navController.context)
-                    isRefreshing = false
-                    snackbarHostState.showSnackbar("Success")
+            onClick = if (!isSyncing) {
+                {
+                    isSyncing = true
+                    coroutineScope.launch {
+                        HijriDate.syncDatabase(navController.context)
+                        HijriWidget.update(navController.context)
+                        isSyncing = false
+                        snackbarHostState.showSnackbar("Success", withDismissAction = true)
+                    }
                 }
 
-
-            }
+            } else null
         )
     }
+
+
 }

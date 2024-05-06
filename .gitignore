@@ -7,3 +7,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+keystore.properties
+
+upload.jks
