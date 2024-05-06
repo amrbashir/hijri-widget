@@ -20,8 +20,8 @@ android {
         applicationId = "me.amrbashir.hijriwidget"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "0.1"
+        versionCode = 2
+        versionName = "0.2"
     }
 
     signingConfigs {
