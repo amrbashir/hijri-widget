@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="icon.svg" style="width:100px;" />
+    <img src="app\src\main\res\mipmap-xxxhdpi\ic_launcher_round.webp" style="width:100px;" />
 </p>
 <h1 align="center">Hijri Widget</h1>
 
