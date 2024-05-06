@@ -3,6 +3,8 @@
     android:initialLayout="@layout/glance_default_loading_layout"
     android:minWidth="10dp"
     android:minHeight="10dp"
+    android:targetCellHeight="1"
+    android:targetCellWidth="2"
     android:description="@string/description"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="86400000"
