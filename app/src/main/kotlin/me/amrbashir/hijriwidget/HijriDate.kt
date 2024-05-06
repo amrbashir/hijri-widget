@@ -24,18 +24,15 @@ object HijriDate {
         this.today.value = todayForLang(context, lang)
     }
 
-    fun today(context: Context): HijriDateDataClass? {
+    fun todayForLang(context: Context, lang: String): String {
         val sharedPreferences = context.getSharedPreferences(PREF, 0)
+
         val dateKey = "$DATE_KEY_PREFIX${todayAsGregorian()}"
+
         val dateJson = sharedPreferences.getString(dateKey, "")
-        if (dateJson.isNullOrEmpty()) return null
+        if (dateJson.isNullOrEmpty()) return "null"
 
         val date = Json.decodeFromString<HijriDateDataClass>(dateJson)
-        return date
-    }
-
-    fun todayForLang(context: Context, lang: String): String {
-        val date = today(context) ?: return ""
 
         val day = date.day.convertNumbersToLang(lang)
         val month = when (lang) {
@@ -49,6 +46,7 @@ object HijriDate {
 
 
     suspend fun syncDatabase(context: Context) {
+
         val calendar = getCalendarForCurrentYear()
 
         val sharedPreferences = context.getSharedPreferences(PREF, 0)
@@ -78,6 +76,12 @@ object HijriDate {
                 now.timeInMillis
             ).apply()
 
+    }
+
+    suspend fun syncDatabaseIfNot(context: Context) {
+        if (lastUpdate(context) == null) {
+            syncDatabase(context)
+        }
     }
 
     fun lastUpdate(context: Context): Long? {

@@ -59,9 +59,14 @@ import me.amrbashir.hijriwidget.widget.HijriWidget
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        
+        enableEdgeToEdge()
+
         Settings.load(this.baseContext)
+        runBlocking { HijriDate.syncDatabaseIfNot(this@MainActivity.baseContext) }
+        HijriDate.load(this.baseContext, Settings.language.value)
+
         setContent {
             Content()
         }
