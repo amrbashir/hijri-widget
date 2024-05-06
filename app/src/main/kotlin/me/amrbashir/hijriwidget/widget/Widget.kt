@@ -46,10 +46,7 @@ class HijriWidget : GlanceAppWidget() {
 
         remoteView.setTextViewText(R.id.widget_text_view, HijriDate.today.value)
 
-        AndroidRemoteViews(
-            remoteViews = remoteView,
-            modifier = GlanceModifier.padding(8.dp)
-        )
+        AndroidRemoteViews(remoteView)
     }
 
     companion object {
