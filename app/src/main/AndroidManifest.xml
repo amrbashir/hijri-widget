@@ -9,7 +9,6 @@
         android:description="@string/description"
         android:icon="@mipmap/ic_launcher"
         android:label="Hijri Widget"
-        android:logo="@mipmap/ic_launcher"
         android:supportsRtl="true"
         tools:targetApi="31">
         <receiver
