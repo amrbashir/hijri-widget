@@ -1,9 +1,11 @@
 package me.amrbashir.hijriwidget
 
+import me.amrbashir.hijriwidget.settings.SupportedLanguage
 
-fun String.convertNumbersToLang(lang: String): String {
+
+fun String.convertNumbersToLang(lang: SupportedLanguage): String {
     return when (lang) {
-        "English" -> this
+        SupportedLanguage.English -> this
         else -> this.replace("0", "٠")
             .replace("1", "١")
             .replace("2", "٢")

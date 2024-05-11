@@ -6,9 +6,7 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -39,10 +37,7 @@ import me.amrbashir.hijriwidget.widget.HijriWidget
 
 @Composable
 fun Home(navController: NavController, snackbarHostState: SnackbarHostState) {
-    val lang by remember { mutableStateOf(Settings.language.value) }
-
     val coroutineScope = rememberCoroutineScope()
-
 
     var isSyncing by remember { mutableStateOf(false) }
     val infiniteTransition = rememberInfiniteTransition(label = "rotation")
@@ -60,7 +55,7 @@ fun Home(navController: NavController, snackbarHostState: SnackbarHostState) {
     ) {
         settingsItem(
             title = { Text("Language") },
-            summary = { Text("Choose the widget language ($lang)") },
+            summary = { Text("Choose the widget language (${Settings.language.value})") },
             icon = {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.baseline_translate_24),
@@ -69,6 +64,21 @@ fun Home(navController: NavController, snackbarHostState: SnackbarHostState) {
             },
             onClick = {
                 navController.navigate("language")
+            }
+        )
+
+
+        settingsItem(
+            title = { Text("Theme") },
+            summary = { Text("Choose the widget theme (${Settings.theme.value})") },
+            icon = {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.baseline_color_lens_24),
+                    contentDescription = "Theme"
+                )
+            },
+            onClick = {
+                navController.navigate("theme")
             }
         )
     }

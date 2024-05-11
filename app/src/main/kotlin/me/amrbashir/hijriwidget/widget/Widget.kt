@@ -3,9 +3,7 @@ package me.amrbashir.hijriwidget.widget
 import android.content.Context
 import android.widget.RemoteViews
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceId
-import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.LocalContext
 import androidx.glance.appwidget.AndroidRemoteViews
@@ -14,7 +12,6 @@ import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.provideContent
 import androidx.glance.appwidget.updateAll
-import androidx.glance.layout.padding
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.Settings
@@ -45,6 +42,7 @@ class HijriWidget : GlanceAppWidget() {
         val remoteView = RemoteViews(packageName, R.layout.widget_text_view)
 
         remoteView.setTextViewText(R.id.widget_text_view, HijriDate.today.value)
+        remoteView.setTextColor(R.id.widget_text_view, Settings.color.value)
 
         AndroidRemoteViews(remoteView)
     }

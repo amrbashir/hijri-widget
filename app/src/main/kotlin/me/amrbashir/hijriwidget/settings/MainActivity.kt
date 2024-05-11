@@ -52,6 +52,7 @@ import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.Settings
 import me.amrbashir.hijriwidget.settings.routes.Home
 import me.amrbashir.hijriwidget.settings.routes.Language
+import me.amrbashir.hijriwidget.settings.routes.Theme
 import me.amrbashir.hijriwidget.widget.HijriWidget
 
 
@@ -60,7 +61,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         enableEdgeToEdge()
 
         Settings.load(this.baseContext)
@@ -99,6 +100,7 @@ class MainActivity : ComponentActivity() {
                     NavHost(navController = navController, startDestination = "home") {
                         composable("home") { Home(navController, snackbarHostState) }
                         composable("language") { Language(navController) }
+                        composable("theme") { Theme(navController) }
                     }
                 }
 
@@ -166,7 +168,7 @@ class MainActivity : ComponentActivity() {
             )
         }
 
-        LaunchedEffect(Settings.language.value, HijriDate.today.value) {
+        LaunchedEffect(Settings.language.value, Settings.color.value, HijriDate.today.value) {
             date = HijriDate.todayForLang(this@MainActivity.baseContext, Settings.language.value)
         }
 
@@ -185,7 +187,7 @@ class MainActivity : ComponentActivity() {
 
                 Text(
                     date,
-                    color = Color.White,
+                    color = Color(Settings.color.value),
                     fontSize = 7.em,
                     modifier = Modifier.align(Alignment.Center)
                 )

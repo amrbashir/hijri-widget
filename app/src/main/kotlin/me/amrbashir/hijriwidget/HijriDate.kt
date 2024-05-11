@@ -12,6 +12,7 @@ import io.ktor.client.request.get
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import me.amrbashir.hijriwidget.settings.SupportedLanguage
 
 private const val PREF = "HijriWidgetDateDatabasePref"
 private const val DATE_KEY_PREFIX = "_g_"
@@ -20,11 +21,11 @@ private const val LAST_UPDATE = "lastUpdate"
 object HijriDate {
     val today: MutableState<String> = mutableStateOf("")
 
-    fun load(context: Context, lang: String) {
+    fun load(context: Context, lang: SupportedLanguage) {
         this.today.value = todayForLang(context, lang)
     }
 
-    fun todayForLang(context: Context, lang: String): String {
+    fun todayForLang(context: Context, lang: SupportedLanguage): String {
         val sharedPreferences = context.getSharedPreferences(PREF, 0)
 
         val dateKey = "$DATE_KEY_PREFIX${todayAsGregorian()}"
@@ -36,7 +37,7 @@ object HijriDate {
 
         val day = date.day.convertNumbersToLang(lang)
         val month = when (lang) {
-            "English" -> date.month.en
+            SupportedLanguage.English -> date.month.en
             else -> date.month.ar
         }
         val year = date.year.toString().convertNumbersToLang(lang)
