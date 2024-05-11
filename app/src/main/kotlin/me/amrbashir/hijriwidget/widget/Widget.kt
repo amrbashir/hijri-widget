@@ -15,6 +15,7 @@ import androidx.glance.appwidget.updateAll
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.Settings
+import me.amrbashir.hijriwidget.settings.SupportedTheme
 
 class HijriWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = HijriWidget()
@@ -38,13 +39,23 @@ class HijriWidget : GlanceAppWidget() {
 
     @Composable
     private fun Content() {
-        val packageName = LocalContext.current.packageName
-        val remoteView = RemoteViews(packageName, R.layout.widget_text_view)
-
+        val remoteView = getView()
+        android.provider.Settings.Secure.ANDROID_ID
         remoteView.setTextViewText(R.id.widget_text_view, HijriDate.today.value)
-        remoteView.setTextColor(R.id.widget_text_view, Settings.color.value)
 
         AndroidRemoteViews(remoteView)
+    }
+
+    @Composable
+    private fun getView(): RemoteViews {
+        return if (Settings.theme.value == SupportedTheme.Dynamic) {
+            RemoteViews(LocalContext.current.packageName, R.layout.widget_text_view_dynamic)
+        } else {
+            val view = RemoteViews(LocalContext.current.packageName, R.layout.widget_text_view)
+            view.setTextColor(R.id.widget_text_view, Settings.color.value)
+
+            return view
+        }
     }
 
     companion object {
