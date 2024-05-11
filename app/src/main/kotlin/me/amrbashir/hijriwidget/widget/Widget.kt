@@ -40,7 +40,7 @@ class HijriWidget : GlanceAppWidget() {
     @Composable
     private fun Content() {
         val remoteView = getView()
-        android.provider.Settings.Secure.ANDROID_ID
+
         remoteView.setTextViewText(R.id.widget_text_view, HijriDate.today.value)
 
         AndroidRemoteViews(remoteView)
