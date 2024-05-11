@@ -19,7 +19,6 @@ import me.amrbashir.hijriwidget.settings.lightScheme
 private const val PREF = "HijriWidgetSettingsPref"
 private const val LANG_KEY = "LANG"
 private const val THEME_KEY = "THEME"
-private const val COLOR_KEY = "COLOR"
 
 object Settings {
     val language: MutableState<SupportedLanguage> = mutableStateOf(SupportedLanguage.Arabic)
@@ -33,12 +32,7 @@ object Settings {
             SupportedLanguage.valueOf(sharedPreferences.getString(LANG_KEY, "Arabic") ?: "Arabic")
         this.theme.value =
             SupportedTheme.valueOf(sharedPreferences.getString(THEME_KEY, "Dynamic") ?: "Dynamic")
-
-        if (sharedPreferences.contains(COLOR_KEY)) {
-            this.color.value = sharedPreferences.getInt(COLOR_KEY, Color.WHITE)
-        } else {
-            this.updateColor(context)
-        }
+        this.updateColor(context)
     }
 
     fun save(context: Context) {
@@ -46,18 +40,16 @@ object Settings {
         sharedPreferences.edit()?.run {
             putString(LANG_KEY, this@Settings.language.value.toString())
             putString(THEME_KEY, this@Settings.theme.value.toString())
-            putInt(COLOR_KEY, this@Settings.color.value)
             commit()
         }
     }
 
     fun updateColor(context: Context) {
-
         val newColor = when {
             this.theme.value == SupportedTheme.Dynamic && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-                if (context.isDark()) dynamicDarkColorScheme(context).surfaceTint else dynamicLightColorScheme(
+                if (context.isDark()) dynamicDarkColorScheme(context).primary else dynamicLightColorScheme(
                     context
-                ).surfaceTint
+                ).primary
             }
 
             this.theme.value == SupportedTheme.System && context.isDark() -> darkScheme.surface
