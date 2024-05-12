@@ -7,11 +7,6 @@ plugins {
     kotlin("plugin.serialization") version "1.9.23"
 }
 
-val keystorePropertiesFile = rootProject.file("keystore.properties")
-val keystoreProperties = Properties()
-keystoreProperties.load(FileInputStream(keystorePropertiesFile))
-
-
 android {
     namespace = "me.amrbashir.hijriwidget"
     compileSdk = 34
@@ -26,6 +21,10 @@ android {
 
     signingConfigs {
         create("config") {
+            val keystorePropertiesFile = rootProject.file("keystore.properties")
+            val keystoreProperties = Properties()
+            keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+
             keyAlias = keystoreProperties["keyAlias"] as String
             keyPassword = keystoreProperties["keyPassword"] as String
             storeFile = file(keystoreProperties["storeFile"] as String)
