@@ -68,12 +68,15 @@ class MainActivity : ComponentActivity() {
         runBlocking { HijriDate.syncDatabaseIfNot(this@MainActivity.baseContext) }
         HijriDate.load(this.baseContext, Settings.language.value)
 
-        // TODO: find a better way to change icon when app is first installed
-        HijriWidgetLauncherIconWorker.changeLauncherIcon(this.baseContext)
-
         setContent {
             Content()
         }
+    }
+
+    override fun onDestroy() {
+        // TODO: find a better way to change icon when app is first installed
+        HijriWidgetLauncherIconWorker.changeLauncherIcon(this.baseContext)
+        super.onDestroy()
     }
 
     @Composable
