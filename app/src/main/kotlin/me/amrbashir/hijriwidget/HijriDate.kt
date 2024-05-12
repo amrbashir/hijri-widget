@@ -45,6 +45,19 @@ object HijriDate {
         return "$day $month $year"
     }
 
+    fun todayNumber(context: Context): Int? {
+        val sharedPreferences = context.getSharedPreferences(PREF, 0)
+
+        val dateKey = "$DATE_KEY_PREFIX${todayAsGregorian()}"
+
+        val dateJson = sharedPreferences.getString(dateKey, "")
+        if (dateJson.isNullOrEmpty()) return null
+
+        val date = Json.decodeFromString<HijriDateDataClass>(dateJson)
+        return date.day.toInt()
+    }
+
+
 
     suspend fun syncDatabase(context: Context) {
 
@@ -62,21 +75,22 @@ object HijriDate {
             commit()
         }
 
-        for ((g, h) in calendar) {
-            sharedPreferences.edit()
-                .putString(
+        sharedPreferences.edit().run {
+            for ((g, h) in calendar) {
+                putString(
                     "$DATE_KEY_PREFIX$g",
                     Json.encodeToString(HijriDateDataClass.serializer(), h)
-                ).apply()
-        }
+                )
+            }
 
-        val now = Calendar.getInstance()
-        sharedPreferences.edit()
-            .putLong(
+            val now = Calendar.getInstance()
+            putLong(
                 LAST_UPDATE,
                 now.timeInMillis
-            ).apply()
+            )
 
+            commit()
+        }
     }
 
     suspend fun syncDatabaseIfNot(context: Context) {
@@ -85,7 +99,7 @@ object HijriDate {
         }
     }
 
-    fun lastUpdate(context: Context): Long? {
+    private fun lastUpdate(context: Context): Long? {
         val sharedPreferences = context.getSharedPreferences(PREF, 0)
         val lastUpdate = sharedPreferences.getLong(LAST_UPDATE, 0)
         return if (lastUpdate == 0.toLong()) null else lastUpdate
@@ -94,9 +108,9 @@ object HijriDate {
 
     private fun todayAsGregorian(): String {
         val calendar = Calendar.getInstance()
-        val currentYear = calendar.get(Calendar.YEAR)
-        val currentMonth = "%02d".format(calendar.get(Calendar.MONTH) + 1)
-        val currentDay = "%02d".format(calendar.get(Calendar.DAY_OF_MONTH))
+        val currentYear = calendar[Calendar.YEAR]
+        val currentMonth = "%02d".format(calendar[Calendar.MONTH] + 1)
+        val currentDay = "%02d".format(calendar[Calendar.DAY_OF_MONTH])
         return "$currentDay-$currentMonth-$currentYear"
     }
 

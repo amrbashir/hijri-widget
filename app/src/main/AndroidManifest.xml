@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -11,6 +12,7 @@
         android:label="Hijri Widget"
         android:supportsRtl="true"
         tools:targetApi="31">
+
         <receiver
             android:name=".widget.HijriWidgetReceiver"
             android:exported="false">
@@ -35,13 +37,389 @@
         <activity
             android:name=".settings.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.HijriWidget">
+            android:theme="@style/Theme.HijriWidget"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity-alias
+            android:name=".settings.Calendar_1"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_1_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_2"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_2_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_3"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_3_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_4"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_4_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_5"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_5_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_6"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_6_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_7"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_7_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_8"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_8_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_9"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_9_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_10"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_10_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_11"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_11_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_12"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_12_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_13"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_13_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_14"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_14_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_15"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_15_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_16"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_16_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_17"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_17_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_18"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_18_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_19"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_19_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_20"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_20_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_21"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_21_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_22"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_22_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_23"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_23_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_24"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_24_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_25"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_25_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_26"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_26_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_27"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_27_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_28"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_28_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_29"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_29_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".settings.Calendar_30"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".settings.MainActivity"
+            android:icon="@drawable/calendar_30_drawable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <receiver
+            android:name=".settings.HijriWidgetLauncherIconBroadCastReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

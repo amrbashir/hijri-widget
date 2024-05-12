@@ -9,9 +9,7 @@ import kotlinx.coroutines.runBlocking
 class TimeChangedReceiver : BroadcastReceiver() {
     @SuppressLint("UnsafeProtectedBroadcastReceiver")
     override fun onReceive(context: Context, intent: Intent?) {
-        runBlocking {
-            HijriWidget.update(context)
-            HijriWidgetWorker.setup24Periodic(context)
-        }
+        runBlocking { HijriWidget.update(context) }
+        HijriWidgetWorker.setup24Periodic(context)
     }
 }
