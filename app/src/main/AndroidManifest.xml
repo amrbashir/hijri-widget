@@ -51,7 +51,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_1_drawable"
+            android:icon="@mipmap/calendar_1"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -63,7 +63,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_2_drawable"
+            android:icon="@mipmap/calendar_2"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -75,7 +75,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_3_drawable"
+            android:icon="@mipmap/calendar_3"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -87,7 +87,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_4_drawable"
+            android:icon="@mipmap/calendar_4"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -99,7 +99,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_5_drawable"
+            android:icon="@mipmap/calendar_5"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -111,7 +111,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_6_drawable"
+            android:icon="@mipmap/calendar_6"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -123,7 +123,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_7_drawable"
+            android:icon="@mipmap/calendar_7"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -135,7 +135,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_8_drawable"
+            android:icon="@mipmap/calendar_8"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -147,7 +147,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_9_drawable"
+            android:icon="@mipmap/calendar_9"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -159,7 +159,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_10_drawable"
+            android:icon="@mipmap/calendar_10"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -171,7 +171,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_11_drawable"
+            android:icon="@mipmap/calendar_11"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -183,7 +183,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_12_drawable"
+            android:icon="@mipmap/calendar_12"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -195,7 +195,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_13_drawable"
+            android:icon="@mipmap/calendar_13"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -207,7 +207,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_14_drawable"
+            android:icon="@mipmap/calendar_14"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -219,7 +219,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_15_drawable"
+            android:icon="@mipmap/calendar_15"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -231,7 +231,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_16_drawable"
+            android:icon="@mipmap/calendar_16"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -243,7 +243,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_17_drawable"
+            android:icon="@mipmap/calendar_17"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -255,7 +255,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_18_drawable"
+            android:icon="@mipmap/calendar_18"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -267,7 +267,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_19_drawable"
+            android:icon="@mipmap/calendar_19"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -279,7 +279,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_20_drawable"
+            android:icon="@mipmap/calendar_20"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -291,7 +291,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_21_drawable"
+            android:icon="@mipmap/calendar_21"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -303,7 +303,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_22_drawable"
+            android:icon="@mipmap/calendar_22"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -315,7 +315,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_23_drawable"
+            android:icon="@mipmap/calendar_23"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -327,7 +327,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_24_drawable"
+            android:icon="@mipmap/calendar_24"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -339,7 +339,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_25_drawable"
+            android:icon="@mipmap/calendar_25"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -351,7 +351,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_26_drawable"
+            android:icon="@mipmap/calendar_26"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -363,7 +363,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_27_drawable"
+            android:icon="@mipmap/calendar_27"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -375,7 +375,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_28_drawable"
+            android:icon="@mipmap/calendar_28"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -387,7 +387,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_29_drawable"
+            android:icon="@mipmap/calendar_29"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -399,7 +399,7 @@
             android:enabled="false"
             android:exported="true"
             android:targetActivity=".settings.MainActivity"
-            android:icon="@drawable/calendar_30_drawable"
+            android:icon="@mipmap/calendar_30"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
