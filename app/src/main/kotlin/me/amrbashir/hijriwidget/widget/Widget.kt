@@ -40,9 +40,7 @@ class HijriWidget : GlanceAppWidget() {
     @Composable
     private fun Content() {
         val remoteView = getView()
-
         remoteView.setTextViewText(R.id.widget_text_view, HijriDate.today.value)
-
         AndroidRemoteViews(remoteView)
     }
 
@@ -53,8 +51,7 @@ class HijriWidget : GlanceAppWidget() {
         } else {
             val view = RemoteViews(LocalContext.current.packageName, R.layout.widget_text_view)
             view.setTextColor(R.id.widget_text_view, Settings.color.value)
-
-            return view
+            view
         }
     }
 
