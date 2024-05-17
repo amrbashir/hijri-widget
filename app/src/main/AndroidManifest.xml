@@ -35,7 +35,7 @@
         </receiver>
 
         <activity
-            android:name=".settings.MainActivity"
+            android:name=".preferences.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.HijriWidget"
             >
@@ -47,10 +47,10 @@
         </activity>
 
         <activity-alias
-            android:name=".settings.Calendar_1"
+            android:name=".preferences.Calendar_1"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_1"
             >
             <intent-filter>
@@ -59,10 +59,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_2"
+            android:name=".preferences.Calendar_2"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_2"
             >
             <intent-filter>
@@ -71,10 +71,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_3"
+            android:name=".preferences.Calendar_3"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_3"
             >
             <intent-filter>
@@ -83,10 +83,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_4"
+            android:name=".preferences.Calendar_4"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_4"
             >
             <intent-filter>
@@ -95,10 +95,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_5"
+            android:name=".preferences.Calendar_5"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_5"
             >
             <intent-filter>
@@ -107,10 +107,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_6"
+            android:name=".preferences.Calendar_6"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_6"
             >
             <intent-filter>
@@ -119,10 +119,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_7"
+            android:name=".preferences.Calendar_7"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_7"
             >
             <intent-filter>
@@ -131,10 +131,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_8"
+            android:name=".preferences.Calendar_8"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_8"
             >
             <intent-filter>
@@ -143,10 +143,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_9"
+            android:name=".preferences.Calendar_9"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_9"
             >
             <intent-filter>
@@ -155,10 +155,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_10"
+            android:name=".preferences.Calendar_10"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_10"
             >
             <intent-filter>
@@ -167,10 +167,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_11"
+            android:name=".preferences.Calendar_11"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_11"
             >
             <intent-filter>
@@ -179,10 +179,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_12"
+            android:name=".preferences.Calendar_12"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_12"
             >
             <intent-filter>
@@ -191,10 +191,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_13"
+            android:name=".preferences.Calendar_13"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_13"
             >
             <intent-filter>
@@ -203,10 +203,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_14"
+            android:name=".preferences.Calendar_14"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_14"
             >
             <intent-filter>
@@ -215,10 +215,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_15"
+            android:name=".preferences.Calendar_15"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_15"
             >
             <intent-filter>
@@ -227,10 +227,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_16"
+            android:name=".preferences.Calendar_16"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_16"
             >
             <intent-filter>
@@ -239,10 +239,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_17"
+            android:name=".preferences.Calendar_17"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_17"
             >
             <intent-filter>
@@ -251,10 +251,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_18"
+            android:name=".preferences.Calendar_18"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_18"
             >
             <intent-filter>
@@ -263,10 +263,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_19"
+            android:name=".preferences.Calendar_19"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_19"
             >
             <intent-filter>
@@ -275,10 +275,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_20"
+            android:name=".preferences.Calendar_20"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_20"
             >
             <intent-filter>
@@ -287,10 +287,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_21"
+            android:name=".preferences.Calendar_21"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_21"
             >
             <intent-filter>
@@ -299,10 +299,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_22"
+            android:name=".preferences.Calendar_22"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_22"
             >
             <intent-filter>
@@ -311,10 +311,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_23"
+            android:name=".preferences.Calendar_23"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_23"
             >
             <intent-filter>
@@ -323,10 +323,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_24"
+            android:name=".preferences.Calendar_24"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_24"
             >
             <intent-filter>
@@ -335,10 +335,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_25"
+            android:name=".preferences.Calendar_25"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_25"
             >
             <intent-filter>
@@ -347,10 +347,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_26"
+            android:name=".preferences.Calendar_26"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_26"
             >
             <intent-filter>
@@ -359,10 +359,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_27"
+            android:name=".preferences.Calendar_27"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_27"
             >
             <intent-filter>
@@ -371,10 +371,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_28"
+            android:name=".preferences.Calendar_28"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_28"
             >
             <intent-filter>
@@ -383,10 +383,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_29"
+            android:name=".preferences.Calendar_29"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_29"
             >
             <intent-filter>
@@ -395,10 +395,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".settings.Calendar_30"
+            android:name=".preferences.Calendar_30"
             android:enabled="false"
             android:exported="true"
-            android:targetActivity=".settings.MainActivity"
+            android:targetActivity=".preferences.MainActivity"
             android:icon="@mipmap/calendar_30"
             >
             <intent-filter>
@@ -408,7 +408,7 @@
         </activity-alias>
 
         <receiver
-            android:name=".settings.HijriWidgetLauncherIconBroadCastReceiver"
+            android:name=".preferences.HijriWidgetLauncherIconBroadCastReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

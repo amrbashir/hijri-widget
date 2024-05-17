@@ -12,11 +12,27 @@ import io.ktor.client.request.get
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import me.amrbashir.hijriwidget.settings.SupportedLanguage
 
 private const val PREF = "HijriWidgetDateDatabasePref"
 private const val DATE_KEY_PREFIX = "_g_"
 private const val LAST_UPDATE = "lastUpdate"
+
+
+@Serializable
+data class GregorianDate(val date: String)
+
+@Serializable
+data class HijriMonthData(val number: Int, val en: String, val ar: String)
+
+@Serializable
+data class HijriDateDataClass(val day: String, val month: HijriMonthData, val year: Int)
+
+@Serializable
+data class ResponseDataEntry(val hijri: HijriDateDataClass, val gregorian: GregorianDate)
+
+@Serializable
+data class ResponseData(val data: List<ResponseDataEntry>)
+
 
 object HijriDate {
     val today: MutableState<String> = mutableStateOf("")
@@ -76,10 +92,10 @@ object HijriDate {
         }
 
         sharedPreferences.edit().run {
-            for ((g, h) in calendar) {
+            for ((gregorian, hijri) in calendar) {
                 putString(
-                    "$DATE_KEY_PREFIX$g",
-                    Json.encodeToString(HijriDateDataClass.serializer(), h)
+                    "$DATE_KEY_PREFIX$gregorian",
+                    Json.encodeToString(HijriDateDataClass.serializer(), hijri)
                 )
             }
 
@@ -151,19 +167,4 @@ object HijriDate {
     }
 }
 
-
-@Serializable
-data class GregorianDate(val date: String)
-
-@Serializable
-data class HijriMonthData(val number: Int, val en: String, val ar: String)
-
-@Serializable
-data class HijriDateDataClass(val day: String, val month: HijriMonthData, val year: Int)
-
-@Serializable
-data class ResponseDataEntry(val hijri: HijriDateDataClass, val gregorian: GregorianDate)
-
-@Serializable
-data class ResponseData(@Suppress("ArrayInDataClass") val data: Array<ResponseDataEntry>)
 

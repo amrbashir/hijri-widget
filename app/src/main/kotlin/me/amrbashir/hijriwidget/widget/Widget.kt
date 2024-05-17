@@ -14,8 +14,8 @@ import androidx.glance.appwidget.provideContent
 import androidx.glance.appwidget.updateAll
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.R
-import me.amrbashir.hijriwidget.Settings
-import me.amrbashir.hijriwidget.settings.SupportedTheme
+import me.amrbashir.hijriwidget.Preferences
+import me.amrbashir.hijriwidget.SupportedTheme
 
 class HijriWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = HijriWidget()
@@ -25,9 +25,9 @@ class HijriWidget : GlanceAppWidget() {
     override val sizeMode: SizeMode = SizeMode.Single
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        Settings.load(context)
+        Preferences.load(context)
         HijriDate.syncDatabaseIfNot(context)
-        HijriDate.load(context, Settings.language.value)
+        HijriDate.load(context, Preferences.language.value)
         HijriWidgetWorker.setup24Periodic(context)
 
         provideContent {
@@ -46,11 +46,11 @@ class HijriWidget : GlanceAppWidget() {
 
     @Composable
     private fun getView(): RemoteViews {
-        return if (Settings.theme.value == SupportedTheme.Dynamic) {
+        return if (Preferences.theme.value == SupportedTheme.Dynamic) {
             RemoteViews(LocalContext.current.packageName, R.layout.widget_text_view_dynamic)
         } else {
             val view = RemoteViews(LocalContext.current.packageName, R.layout.widget_text_view)
-            view.setTextColor(R.id.widget_text_view, Settings.color.value)
+            view.setTextColor(R.id.widget_text_view, Preferences.color.value)
             view
         }
     }
@@ -58,8 +58,8 @@ class HijriWidget : GlanceAppWidget() {
     companion object {
         suspend fun update(context: Context) {
             HijriWidget().apply {
-                Settings.load(context)
-                HijriDate.load(context, Settings.language.value)
+                Preferences.load(context)
+                HijriDate.load(context, Preferences.language.value)
                 updateAll(context)
             }
         }

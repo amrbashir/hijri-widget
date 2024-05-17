@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.settings
+package me.amrbashir.hijriwidget.preferences
 
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
@@ -15,6 +15,7 @@ import androidx.work.WorkerParameters
 import kotlinx.coroutines.runBlocking
 import me.amrbashir.hijriwidget.HijriDate
 import java.util.concurrent.TimeUnit
+import me.amrbashir.hijriwidget.BuildConfig
 
 class HijriWidgetLauncherIconBroadCastReceiver : BroadcastReceiver() {
     @SuppressLint("UnsafeProtectedBroadcastReceiver")
@@ -40,15 +41,18 @@ class HijriWidgetLauncherIconWorker(
 
             val packageManager = context.packageManager
 
-            val mainActivity = ComponentName(context, "me.amrbashir.hijriwidget.settings.MainActivity")
-            packageManager.setComponentEnabledSetting(
-                mainActivity,
-                if (today != null) PackageManager.COMPONENT_ENABLED_STATE_DISABLED else PackageManager.COMPONENT_ENABLED_STATE_ENABLED  ,
-                PackageManager.DONT_KILL_APP
-            )
+
+            if (!BuildConfig.DEBUG) {
+                val mainActivity = ComponentName(context, "me.amrbashir.hijriwidget.preferences.MainActivity")
+                packageManager.setComponentEnabledSetting(
+                    mainActivity,
+                    if (today != null) PackageManager.COMPONENT_ENABLED_STATE_DISABLED else PackageManager.COMPONENT_ENABLED_STATE_ENABLED  ,
+                    PackageManager.DONT_KILL_APP
+                )
+            }
 
             for (day in 1..30) {
-                val dayActivity = ComponentName(context, "me.amrbashir.hijriwidget.settings.Calendar_$day")
+                val dayActivity = ComponentName(context, "me.amrbashir.hijriwidget.preferences.Calendar_$day")
                 packageManager.setComponentEnabledSetting(
                     dayActivity,
                     if (today != null && today == day) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED  ,

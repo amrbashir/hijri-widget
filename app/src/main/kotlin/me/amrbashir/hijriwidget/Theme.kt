@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.settings
+package me.amrbashir.hijriwidget
 
 import android.app.Activity
 import android.os.Build
@@ -175,14 +175,9 @@ data class ColorFamily(
     val onColorContainer: Color
 )
 
-val unspecified_scheme = ColorFamily(
-    Color.Unspecified, Color.Unspecified, Color.Unspecified, Color.Unspecified
-)
-
 @Composable
-fun AppTheme(
+fun PreferencesTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable() () -> Unit
 ) {
@@ -199,7 +194,7 @@ fun AppTheme(
     val view = LocalView.current
     SideEffect {
         val window = (view.context as Activity).window
-        window.statusBarColor = colorScheme.surface.toArgb()
+        window.statusBarColor = colorScheme.surfaceContainerLow.toArgb()
         WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
     }
 
@@ -210,10 +205,10 @@ fun AppTheme(
     )
 }
 
-
 enum class SupportedTheme {
     Dynamic,
     System,
     Dark,
     Light,
 }
+

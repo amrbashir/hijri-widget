@@ -1,7 +1,5 @@
 package me.amrbashir.hijriwidget
 
-import me.amrbashir.hijriwidget.settings.SupportedLanguage
-
 
 fun String.convertNumbersToLang(lang: SupportedLanguage): String {
     return when (lang) {

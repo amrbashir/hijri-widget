@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.settings
+package me.amrbashir.hijriwidget
 
 enum class SupportedLanguage {
     Arabic,

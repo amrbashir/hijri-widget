@@ -11,16 +11,12 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.toArgb
-import me.amrbashir.hijriwidget.settings.SupportedLanguage
-import me.amrbashir.hijriwidget.settings.SupportedTheme
-import me.amrbashir.hijriwidget.settings.darkScheme
-import me.amrbashir.hijriwidget.settings.lightScheme
 
-private const val PREF = "HijriWidgetSettingsPref"
+private const val PREF = "HijriWidgetPref"
 private const val LANG_KEY = "LANG"
 private const val THEME_KEY = "THEME"
 
-object Settings {
+object Preferences {
     val language: MutableState<SupportedLanguage> = mutableStateOf(SupportedLanguage.Arabic)
     val theme: MutableState<SupportedTheme> =
         mutableStateOf(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) SupportedTheme.Dynamic else SupportedTheme.System)
@@ -38,8 +34,8 @@ object Settings {
     fun save(context: Context) {
         val sharedPreferences = context.getSharedPreferences(PREF, 0)
         sharedPreferences.edit()?.run {
-            putString(LANG_KEY, this@Settings.language.value.toString())
-            putString(THEME_KEY, this@Settings.theme.value.toString())
+            putString(LANG_KEY, this@Preferences.language.value.toString())
+            putString(THEME_KEY, this@Preferences.theme.value.toString())
             commit()
         }
     }
