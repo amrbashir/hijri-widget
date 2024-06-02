@@ -51,14 +51,14 @@ import me.amrbashir.hijriwidget.PreferencesTheme
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.preferences.routes.Home
 import me.amrbashir.hijriwidget.preferences.routes.Language
-import me.amrbashir.hijriwidget.preferences.routes.Theme
+import me.amrbashir.hijriwidget.preferences.routes.ThemeAndColor
 import me.amrbashir.hijriwidget.widget.HijriWidget
 
 
-object Routes {
+object Route {
     const val HOME = "/"
     const val LANGUAGE = "Language"
-    const val THEME = "Theme"
+    const val THEME_AND_COLOR = "ThemeAndColor"
 }
 
 val LocalNavController = staticCompositionLocalOf<NavController> {
@@ -113,7 +113,7 @@ class MainActivity : ComponentActivity() {
                         ),
                         scrollBehavior = topAppBarScrollBehavior,
                         navigationIcon = {
-                            if (currentBackStackEntry?.destination?.route != Routes.HOME) {
+                            if (currentBackStackEntry?.destination?.route != Route.HOME) {
                                 IconButton(onClick = { navController.popBackStack() }) {
                                     Icon(
                                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -148,7 +148,7 @@ class MainActivity : ComponentActivity() {
 
                         NavHost(
                             navController = navController,
-                            startDestination = Routes.HOME,
+                            startDestination = Route.HOME,
                             enterTransition = {
                                 slideIntoContainer(
                                     AnimatedContentTransitionScope.SlideDirection.Left,
@@ -174,9 +174,9 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         ) {
-                            composable(Routes.HOME) { Home() }
-                            composable(Routes.LANGUAGE) { Language() }
-                            composable(Routes.THEME) { Theme() }
+                            composable(Route.HOME) { Home() }
+                            composable(Route.LANGUAGE) { Language() }
+                            composable(Route.THEME_AND_COLOR) { ThemeAndColor() }
                         }
                     }
                 }

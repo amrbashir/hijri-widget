@@ -80,4 +80,6 @@ dependencies {
     implementation("io.ktor:ktor-client-android:2.3.10")
     implementation("io.ktor:ktor-client-content-negotiation:2.3.10")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.10")
+
+    implementation("com.github.skydoves:colorpicker-compose:1.0.8")
 }

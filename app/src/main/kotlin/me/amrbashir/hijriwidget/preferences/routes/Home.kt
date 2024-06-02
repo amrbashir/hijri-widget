@@ -33,6 +33,7 @@ import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.preferences.LocalNavController
 import me.amrbashir.hijriwidget.preferences.LocalSnackbarHostState
+import me.amrbashir.hijriwidget.preferences.Route
 import me.amrbashir.hijriwidget.preferences.composables.PreferenceCategory
 import me.amrbashir.hijriwidget.widget.HijriWidget
 
@@ -59,19 +60,19 @@ fun Home() {
         Column {
             PreferenceCategory(
                 label = "Language",
-                description = "Choose the widget language (${Preferences.language.value})",
+                description = "Choose the widget language",
                 icon = ImageVector.vectorResource(R.drawable.baseline_translate_24),
                 onClick = {
-                    navController.navigate("language")
+                    navController.navigate(Route.LANGUAGE)
                 }
             )
 
             PreferenceCategory(
-                label = "Theme",
-                description = "Choose the widget theme (${Preferences.theme.value})",
+                label = "Theme and Color",
+                description = "Choose the widget theme and color",
                 icon = ImageVector.vectorResource(R.drawable.baseline_color_lens_24),
                 onClick = {
-                    navController.navigate("theme")
+                    navController.navigate(Route.THEME_AND_COLOR)
                 }
             )
         }
