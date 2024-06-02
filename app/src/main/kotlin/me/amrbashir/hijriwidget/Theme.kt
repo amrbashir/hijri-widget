@@ -197,14 +197,14 @@ fun PreferencesTheme(
 }
 
 enum class SupportedTheme(val prettyName: String, val description: String) {
-    Dynamic("Material You","Dynamic color based on your wallpaper"),
-    System("System","Light or dark color based on device settings"),
-    Dark("Dark","Dark color, usually black"),
-    Light("Light","Light color, usually white"),
-    Custom("Custom","Pick a custom color");
+    Dynamic("Material You", "Dynamic color based on your wallpaper"),
+    System("System", "Light or dark color based on device settings"),
+    Dark("Dark", "Dark color, usually black"),
+    Light("Light", "Light color, usually white"),
+    Custom("Custom", "Pick a custom color");
 
     companion object {
-        fun all() : MutableList<SupportedTheme>{
+        fun all(): MutableList<SupportedTheme> {
             val supportedThemes = mutableListOf(System, Dark, Light, Custom)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 supportedThemes.add(0, Dynamic)

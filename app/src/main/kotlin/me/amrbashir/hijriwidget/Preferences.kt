@@ -20,7 +20,8 @@ private const val SHADOW_KEY = "SHADOW"
 
 object Preferences {
     val language: MutableState<SupportedLanguage> = mutableStateOf(SupportedLanguage.Arabic)
-    val theme: MutableState<SupportedTheme> = mutableStateOf(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) SupportedTheme.Dynamic else SupportedTheme.System)
+    val theme: MutableState<SupportedTheme> =
+        mutableStateOf(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) SupportedTheme.Dynamic else SupportedTheme.System)
     val color: MutableState<Int> = mutableIntStateOf(Color.White.toArgb())
     val customColor: MutableState<Int> = mutableIntStateOf(Color.White.toArgb())
     val shadow: MutableState<Boolean> = mutableStateOf(true)
@@ -59,6 +60,7 @@ object Preferences {
                 if (context.isDark()) dynamicDarkColorScheme(context).primary
                 else dynamicLightColorScheme(context).primary
             }
+
             this.theme.value == SupportedTheme.System && context.isDark() -> darkScheme.surface
             this.theme.value == SupportedTheme.System && !context.isDark() -> lightScheme.surface
             this.theme.value == SupportedTheme.Dark -> darkScheme.surface

@@ -30,8 +30,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import kotlinx.coroutines.launch
 import me.amrbashir.hijriwidget.HijriDate
-import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.Preferences
+import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preferences.LocalNavController
 import me.amrbashir.hijriwidget.preferences.LocalSnackbarHostState
 import me.amrbashir.hijriwidget.preferences.Route
@@ -54,7 +54,7 @@ fun Home() {
         label = "rotation"
     )
 
-    Column (
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(
@@ -89,12 +89,12 @@ fun Home() {
                 description = "Enable or disable the widget shadow",
                 icon = ImageVector.vectorResource(R.drawable.baseline_brightness_6_24),
                 rightContent = {
-                      Switch(
-                          checked = Preferences.shadow.value,
-                          onCheckedChange = {
-                              Preferences.shadow.value = it
-                          }
-                      )
+                    Switch(
+                        checked = Preferences.shadow.value,
+                        onCheckedChange = {
+                            Preferences.shadow.value = it
+                        }
+                    )
                 },
                 onClick = {
                     Preferences.shadow.value = !Preferences.shadow.value

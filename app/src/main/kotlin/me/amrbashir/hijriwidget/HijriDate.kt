@@ -74,7 +74,6 @@ object HijriDate {
     }
 
 
-
     suspend fun syncDatabase(context: Context) {
 
         val calendar = getCalendarForCurrentYear()

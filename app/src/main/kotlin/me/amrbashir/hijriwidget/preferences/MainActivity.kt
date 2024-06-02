@@ -41,7 +41,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -49,8 +48,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.runBlocking
 import me.amrbashir.hijriwidget.HijriDate
-import me.amrbashir.hijriwidget.PreferencesTheme
 import me.amrbashir.hijriwidget.Preferences
+import me.amrbashir.hijriwidget.PreferencesTheme
 import me.amrbashir.hijriwidget.preferences.routes.Home
 import me.amrbashir.hijriwidget.preferences.routes.Language
 import me.amrbashir.hijriwidget.preferences.routes.ThemeAndColor
@@ -100,7 +99,8 @@ class MainActivity : ComponentActivity() {
         val currentBackStackEntry by navController.currentBackStackEntryAsState()
         val snackbarHostState = remember { SnackbarHostState() }
 
-        val topAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+        val topAppBarScrollBehavior =
+            TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
         PreferencesTheme {
             Scaffold(
@@ -141,7 +141,7 @@ class MainActivity : ComponentActivity() {
                 },
                 modifier = Modifier.nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
             ) { padding ->
-                Column (modifier = Modifier.padding(padding)) {
+                Column(modifier = Modifier.padding(padding)) {
                     CompositionLocalProvider(
                         LocalNavController provides navController,
                         LocalSnackbarHostState provides snackbarHostState
@@ -210,10 +210,12 @@ class MainActivity : ComponentActivity() {
                 Text(
                     date,
                     color = Color(Preferences.color.value),
-                    modifier = Modifier.padding(all = 16.dp).align(Alignment.CenterHorizontally),
+                    modifier = Modifier
+                        .padding(all = 16.dp)
+                        .align(Alignment.CenterHorizontally),
                     style = MaterialTheme.typography.headlineLarge.copy(
-                        shadow = if (Preferences.shadow.value)  Shadow(
-                            color = Color(0,0,0,128),
+                        shadow = if (Preferences.shadow.value) Shadow(
+                            color = Color(0, 0, 0, 128),
                             offset = Offset(x = 1f, y = 1f),
                             blurRadius = 5f,
                         ) else null

@@ -46,7 +46,7 @@ fun ColorPickerDialog(
 
     var hexCode by remember { mutableStateOf("") }
 
-    Dialog (onDismissRequest = onDismissRequest) {
+    Dialog(onDismissRequest = onDismissRequest) {
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
@@ -102,11 +102,14 @@ fun ColorPickerDialog(
                         try {
                             val parsedColor = android.graphics.Color.parseColor("#FF$hexCode")
                             controller.selectByColor(Color(parsedColor), fromUser = false)
-                        } catch (_:Exception) {}
+                        } catch (_: Exception) {
+                        }
                     }
                 },
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
             )
 
             Spacer(modifier = Modifier.height(16.dp))

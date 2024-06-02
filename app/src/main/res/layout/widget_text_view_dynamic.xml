@@ -4,5 +4,5 @@
     style="@style/TextWithShadow"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:theme="@style/Theme.Material3.DynamicColors.DayNight"
-    android:textColor="?attr/colorPrimary"/>
+    android:textColor="?attr/colorPrimary"
+    android:theme="@style/Theme.Material3.DynamicColors.DayNight" />

@@ -3,12 +3,12 @@ package me.amrbashir.hijriwidget.preferences.composables
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -34,9 +34,11 @@ fun PreferenceCategory(
     onClick: (() -> Unit)? = null,
     rightContent: (@Composable () -> Unit)? = null
 ) {
-    Column (Modifier.addIf(onClick != null) { clickable(enabled, onClick = onClick!!) }) {
+    Column(Modifier.addIf(onClick != null) { clickable(enabled, onClick = onClick!!) }) {
         Row(
-            modifier = modifier.fillMaxWidth().padding(all = 16.dp),
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(all = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
