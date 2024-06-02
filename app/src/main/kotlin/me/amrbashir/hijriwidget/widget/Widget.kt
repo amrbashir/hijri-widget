@@ -46,13 +46,24 @@ class HijriWidget : GlanceAppWidget() {
 
     @Composable
     private fun getView(): RemoteViews {
-        return if (Preferences.theme.value == SupportedTheme.Dynamic) {
-            RemoteViews(LocalContext.current.packageName, R.layout.widget_text_view_dynamic)
-        } else {
-            val view = RemoteViews(LocalContext.current.packageName, R.layout.widget_text_view)
-            view.setTextColor(R.id.widget_text_view, Preferences.color.value)
-            view
-        }
+        return if (Preferences.theme.value == SupportedTheme.Dynamic) getDynamicView()
+               else getNormalView()
+    }
+
+    @Composable
+    private fun getDynamicView(): RemoteViews {
+        val layout = if (Preferences.shadow.value) R.layout.widget_text_view_dynamic
+                     else R.layout.widget_text_view_dynamic_no_shadow
+        return RemoteViews(LocalContext.current.packageName, layout)
+    }
+
+    @Composable
+    private fun getNormalView(): RemoteViews {
+        val layout = if (Preferences.shadow.value) R.layout.widget_text_view
+                     else R.layout.widget_text_view_no_shadow
+        val view = RemoteViews(LocalContext.current.packageName, layout)
+        view.setTextColor(R.id.widget_text_view, Preferences.color.value)
+        return view
     }
 
     companion object {

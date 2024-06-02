@@ -11,4 +11,8 @@
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">5</item>
     </style>
+    <style name="TextWithOutShadow">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
 </resources>

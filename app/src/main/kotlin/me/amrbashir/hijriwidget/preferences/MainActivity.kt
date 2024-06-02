@@ -36,7 +36,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
@@ -208,8 +210,14 @@ class MainActivity : ComponentActivity() {
                 Text(
                     date,
                     color = Color(Preferences.color.value),
-                    fontSize = 7.em,
                     modifier = Modifier.padding(all = 16.dp).align(Alignment.CenterHorizontally),
+                    style = MaterialTheme.typography.headlineLarge.copy(
+                        shadow = if (Preferences.shadow.value)  Shadow(
+                            color = Color(0,0,0,128),
+                            offset = Offset(x = 1f, y = 1f),
+                            blurRadius = 5f,
+                        ) else null
+                    )
                 )
             }
         }

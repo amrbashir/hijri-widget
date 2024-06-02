@@ -32,6 +32,7 @@ fun PreferenceCategory(
     icon: ImageVector? = null,
     description: String? = null,
     onClick: (() -> Unit)? = null,
+    rightContent: (@Composable () -> Unit)? = null
 ) {
     Column (Modifier.addIf(onClick != null) { clickable(enabled, onClick = onClick!!) }) {
         Row(
@@ -57,7 +58,7 @@ fun PreferenceCategory(
 
             Spacer(modifier = Modifier.requiredWidth(16.dp))
 
-            Row(modifier = Modifier.weight(1f)) {
+            Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
 
                     CompositionLocalProvider(
@@ -76,6 +77,10 @@ fun PreferenceCategory(
                             Text(description)
                         }
                     }
+                }
+
+                if (rightContent != null) {
+                    rightContent()
                 }
             }
         }

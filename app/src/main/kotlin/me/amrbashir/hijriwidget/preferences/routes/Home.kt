@@ -17,6 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,8 +40,8 @@ import me.amrbashir.hijriwidget.widget.HijriWidget
 
 @Composable
 fun Home() {
-    val navController = LocalNavController.current;
-    val snackbarHostState = LocalSnackbarHostState.current;
+    val navController = LocalNavController.current
+    val snackbarHostState = LocalSnackbarHostState.current
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -54,7 +55,14 @@ fun Home() {
     )
 
     Column (
-        modifier = Modifier.fillMaxSize().padding(bottom = WindowInsets.safeContent.asPaddingValues().calculateBottomPadding()).verticalScroll(rememberScrollState()),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                bottom = WindowInsets.safeContent
+                    .asPaddingValues()
+                    .calculateBottomPadding()
+            )
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Column {
@@ -73,6 +81,23 @@ fun Home() {
                 icon = ImageVector.vectorResource(R.drawable.baseline_color_lens_24),
                 onClick = {
                     navController.navigate(Route.THEME_AND_COLOR)
+                }
+            )
+
+            PreferenceCategory(
+                label = "Shadow",
+                description = "Enable or disable the widget shadow",
+                icon = ImageVector.vectorResource(R.drawable.baseline_brightness_6_24),
+                rightContent = {
+                      Switch(
+                          checked = Preferences.shadow.value,
+                          onCheckedChange = {
+                              Preferences.shadow.value = it
+                          }
+                      )
+                },
+                onClick = {
+                    Preferences.shadow.value = !Preferences.shadow.value
                 }
             )
         }
