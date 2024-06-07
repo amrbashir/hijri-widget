@@ -1,6 +1,7 @@
 package me.amrbashir.hijriwidget.widget
 
 import android.content.Context
+import android.util.TypedValue
 import android.widget.RemoteViews
 import androidx.compose.runtime.Composable
 import androidx.glance.GlanceId
@@ -40,7 +41,21 @@ class HijriWidget : GlanceAppWidget() {
     @Composable
     private fun Content() {
         val remoteView = getView()
+
         remoteView.setTextViewText(R.id.widget_text_view, HijriDate.today.value)
+
+        if (Preferences.isCustomTextSize.value) {
+            Preferences.customTextSize.value?.let {
+                remoteView.setTextViewTextSize(
+                    R.id.widget_text_view,
+                    TypedValue.COMPLEX_UNIT_SP,
+                    it
+                )
+            }
+        } else {
+            remoteView.setTextViewTextSize(R.id.widget_text_view, TypedValue.COMPLEX_UNIT_SP, 22F)
+        }
+
         AndroidRemoteViews(remoteView)
     }
 

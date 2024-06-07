@@ -22,7 +22,8 @@ fun Language() {
     Column(
         Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())) {
+            .verticalScroll(rememberScrollState())
+    ) {
         for (lang in arrayOf(SupportedLanguage.Arabic, SupportedLanguage.English)) {
             PreferenceCategory(
                 label = "$lang",

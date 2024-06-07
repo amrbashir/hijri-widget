@@ -12,7 +12,6 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import kotlinx.coroutines.runBlocking
 import me.amrbashir.hijriwidget.BuildConfig
 import me.amrbashir.hijriwidget.HijriDate
 import java.util.concurrent.TimeUnit

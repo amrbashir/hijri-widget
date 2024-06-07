@@ -42,11 +42,11 @@ fun PreferenceCategory(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.size(32.dp),
-            ) {
-                icon?.let {
+            icon?.let {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.size(32.dp),
+                ) {
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
@@ -56,9 +56,8 @@ fun PreferenceCategory(
 
                 }
 
+                Spacer(modifier = Modifier.requiredWidth(16.dp))
             }
-
-            Spacer(modifier = Modifier.requiredWidth(16.dp))
 
             Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {

@@ -7,7 +7,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 
 
-val AR_MONTHS = arrayOf("مُحَرَّم",
+val AR_MONTHS = arrayOf(
+    "مُحَرَّم",
     "صَفَر",
     "رَبِيع الأوَّل",
     "رَبِيع الثَّاني",
@@ -34,7 +35,6 @@ val EN_MONTHS = arrayOf(
     "Dhu al-Qi’dah",
     "Dhu al-Hijjah",
 )
-
 
 
 object HijriDate {

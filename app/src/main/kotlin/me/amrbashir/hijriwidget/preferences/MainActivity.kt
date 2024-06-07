@@ -40,7 +40,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -52,6 +54,7 @@ import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.PreferencesTheme
 import me.amrbashir.hijriwidget.preferences.routes.Home
 import me.amrbashir.hijriwidget.preferences.routes.Language
+import me.amrbashir.hijriwidget.preferences.routes.TextSize
 import me.amrbashir.hijriwidget.preferences.routes.ThemeAndColor
 import me.amrbashir.hijriwidget.widget.HijriWidget
 
@@ -60,6 +63,7 @@ object Route {
     const val HOME = "/"
     const val LANGUAGE = "Language"
     const val THEME_AND_COLOR = "ThemeAndColor"
+    const val TEXT_SIZE = "TextSize"
 }
 
 val LocalNavController = staticCompositionLocalOf<NavController> {
@@ -179,6 +183,7 @@ class MainActivity : ComponentActivity() {
                             composable(Route.HOME) { Home() }
                             composable(Route.LANGUAGE) { Language() }
                             composable(Route.THEME_AND_COLOR) { ThemeAndColor() }
+                            composable(Route.TEXT_SIZE) { TextSize() }
                         }
                     }
                 }
@@ -207,19 +212,22 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
             ) {
+
                 Text(
                     date,
                     color = Color(Preferences.color.value),
                     modifier = Modifier
                         .padding(all = 16.dp)
                         .align(Alignment.CenterHorizontally),
-                    style = MaterialTheme.typography.headlineLarge.copy(
+                    style = MaterialTheme.typography.headlineMedium.copy(
                         shadow = if (Preferences.shadow.value) Shadow(
                             color = Color(0, 0, 0, 128),
                             offset = Offset(x = 1f, y = 1f),
                             blurRadius = 5f,
                         ) else null
-                    )
+                    ),
+                    fontSize = if (Preferences.isCustomTextSize.value) Preferences.customTextSize.value.sp
+                    else TextUnit.Unspecified,
                 )
             }
         }
