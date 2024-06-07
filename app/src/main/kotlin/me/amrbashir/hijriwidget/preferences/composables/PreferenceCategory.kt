@@ -32,7 +32,8 @@ fun PreferenceCategory(
     icon: ImageVector? = null,
     description: String? = null,
     onClick: (() -> Unit)? = null,
-    rightContent: (@Composable () -> Unit)? = null
+    rightContent: (@Composable () -> Unit)? = null,
+    reserveIconSpace: Boolean = true,
 ) {
     Column(Modifier.addIf(onClick != null) { clickable(enabled, onClick = onClick!!) }) {
         Row(
@@ -42,17 +43,19 @@ fun PreferenceCategory(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            icon?.let {
+            if (reserveIconSpace || icon != null) {
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier.size(32.dp),
                 ) {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = null,
-                        modifier = iconModifier.size(24.dp),
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
+                    icon?.let {
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = null,
+                            modifier = iconModifier.size(24.dp),
+                            tint = MaterialTheme.colorScheme.primary,
+                        )
+                    }
 
                 }
 

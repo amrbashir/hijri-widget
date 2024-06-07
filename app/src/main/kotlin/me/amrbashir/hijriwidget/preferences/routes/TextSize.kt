@@ -30,6 +30,7 @@ fun TextSize() {
 
         PreferenceCategory(
             label = "Custom text size",
+            reserveIconSpace = false,
             rightContent = {
                 Switch(
                     checked = Preferences.isCustomTextSize.value,
