@@ -40,7 +40,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -226,8 +225,7 @@ class MainActivity : ComponentActivity() {
                             blurRadius = 1f,
                         ) else null
                     ),
-                    fontSize = if (Preferences.isCustomTextSize.value) Preferences.customTextSize.value.sp
-                    else TextUnit.Unspecified,
+                    fontSize = if (Preferences.isCustomTextSize.value) Preferences.customTextSize.value.sp else 22.sp,
                 )
             }
         }
