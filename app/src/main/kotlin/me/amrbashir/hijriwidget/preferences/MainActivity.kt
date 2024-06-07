@@ -223,7 +223,7 @@ class MainActivity : ComponentActivity() {
                         shadow = if (Preferences.shadow.value) Shadow(
                             color = Color(0, 0, 0, 128),
                             offset = Offset(x = 1f, y = 1f),
-                            blurRadius = 5f,
+                            blurRadius = 1f,
                         ) else null
                     ),
                     fontSize = if (Preferences.isCustomTextSize.value) Preferences.customTextSize.value.sp
