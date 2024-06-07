@@ -102,21 +102,21 @@ fun Home() {
             )
         }
 
-        PreferenceCategory(
-            label = "Sync Database",
-            description = "Synchronize database and update the widget",
-            icon = Icons.Default.Refresh,
-            iconModifier = Modifier.rotate(if (isSyncing) angle else 0f),
-            enabled = !isSyncing,
-            onClick = {
-                isSyncing = true
-                coroutineScope.launch {
-                    HijriDate.syncDatabase(navController.context)
-                    HijriWidget.update(navController.context)
-                    isSyncing = false
-                    snackbarHostState.showSnackbar("Success", withDismissAction = true)
-                }
-            }
-        )
+//        PreferenceCategory(
+//            label = "Sync Database",
+//            description = "Synchronize database and update the widget",
+//            icon = Icons.Default.Refresh,
+//            iconModifier = Modifier.rotate(if (isSyncing) angle else 0f),
+//            enabled = !isSyncing,
+//            onClick = {
+//                isSyncing = true
+//                coroutineScope.launch {
+//                    HijriDate.syncDatabase(navController.context)
+//                    HijriWidget.update(navController.context)
+//                    isSyncing = false
+//                    snackbarHostState.showSnackbar("Success", withDismissAction = true)
+//                }
+//            }
+//        )
     }
 }
