@@ -18,8 +18,6 @@ import me.amrbashir.hijriwidget.preferences.composables.RadioIcon
 
 @Composable
 fun TextColor() {
-    val navController = LocalNavController.current
-
     val savedTheme = Preferences.theme.value
 
     val supportedThemes = SupportedTheme.all()
@@ -42,9 +40,6 @@ fun TextColor() {
                 onClick = {
                     Preferences.theme.value = theme
                     Preferences.updateColor(context)
-                    if (theme != SupportedTheme.Custom) {
-                        navController.navigateUp()
-                    }
                 }
             )
         }

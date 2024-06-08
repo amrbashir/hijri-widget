@@ -14,8 +14,6 @@ import me.amrbashir.hijriwidget.preferences.composables.RadioIcon
 
 @Composable
 fun Language() {
-    val navController = LocalNavController.current
-
     val savedLang = Preferences.language.value
 
     Column(
@@ -29,7 +27,6 @@ fun Language() {
                 alternateIcon = { RadioIcon(selected = savedLang == lang) },
                 onClick = {
                     Preferences.language.value = lang
-                    navController.navigateUp()
                 }
             )
         }
