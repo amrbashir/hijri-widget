@@ -42,6 +42,7 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.ColorUtils
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -200,6 +201,13 @@ class MainActivity : ComponentActivity() {
             )
         }
 
+        val textColor = Preferences.color.value
+        val isDarkColor = ColorUtils.calculateLuminance(textColor) < 0.1
+        val cardColor = if (isDarkColor)
+            MaterialTheme.colorScheme.inverseSurface
+        else
+            MaterialTheme.colorScheme.surfaceContainerHigh
+
         LaunchedEffect(Preferences.language.value, Preferences.color.value, HijriDate.today.value) {
             date = HijriDate.todayForLang(Preferences.language.value)
         }
@@ -208,12 +216,12 @@ class MainActivity : ComponentActivity() {
         Box(Modifier.padding(all = 16.dp)) {
             ElevatedCard(
                 modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
+                colors =  CardDefaults.elevatedCardColors(containerColor = cardColor)
             ) {
 
                 Text(
                     date,
-                    color = Color(Preferences.color.value),
+                    color = Color(textColor),
                     modifier = Modifier
                         .padding(all = 16.dp)
                         .align(Alignment.CenterHorizontally),
