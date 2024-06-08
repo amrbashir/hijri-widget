@@ -55,14 +55,14 @@ import me.amrbashir.hijriwidget.PreferencesTheme
 import me.amrbashir.hijriwidget.preferences.routes.Home
 import me.amrbashir.hijriwidget.preferences.routes.Language
 import me.amrbashir.hijriwidget.preferences.routes.TextSize
-import me.amrbashir.hijriwidget.preferences.routes.ThemeAndColor
+import me.amrbashir.hijriwidget.preferences.routes.TextColor
 import me.amrbashir.hijriwidget.widget.HijriWidget
 
 
 object Route {
     const val HOME = "/"
     const val LANGUAGE = "Language"
-    const val THEME_AND_COLOR = "ThemeAndColor"
+    const val TEXT_COLOR = "TextColor"
     const val TEXT_SIZE = "TextSize"
 }
 
@@ -182,7 +182,7 @@ class MainActivity : ComponentActivity() {
                         ) {
                             composable(Route.HOME) { Home() }
                             composable(Route.LANGUAGE) { Language() }
-                            composable(Route.THEME_AND_COLOR) { ThemeAndColor() }
+                            composable(Route.TEXT_COLOR) { TextColor() }
                             composable(Route.TEXT_SIZE) { TextSize() }
                         }
                     }

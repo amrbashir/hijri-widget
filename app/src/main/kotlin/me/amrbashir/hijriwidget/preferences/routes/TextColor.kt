@@ -16,7 +16,7 @@ import me.amrbashir.hijriwidget.preferences.composables.PreferenceCategory
 import me.amrbashir.hijriwidget.preferences.composables.RadioIcon
 
 @Composable
-fun ThemeAndColor() {
+fun TextColor() {
     val navController = LocalNavController.current
 
     val savedTheme = Preferences.theme.value
