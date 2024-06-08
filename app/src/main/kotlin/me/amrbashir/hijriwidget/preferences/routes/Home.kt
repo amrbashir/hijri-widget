@@ -86,7 +86,7 @@ fun Home() {
                 description = "Restore the default preferences",
                 icon = ImageVector.vectorResource(R.drawable.baseline_settings_backup_restore_24),
                 onClick = {
-                    Preferences.restoreDefaults()
+                    Preferences.restoreDefaults(navController.context)
                 }
             )
         }

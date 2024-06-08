@@ -40,13 +40,13 @@ object Preferences {
         const val shadow = true
     }
 
-    fun restoreDefaults() {
+    fun restoreDefaults(context: Context) {
         this.language.value = Defaults.language
         this.theme.value = Defaults.theme
-        this.color.value = Defaults.color
         this.isCustomTextSize.value= Defaults.isCustomTextSize
         this.customTextSize.value = Defaults.customTextSize
         this.shadow.value = Defaults.shadow
+        this.updateColor(context)
     }
 
 
