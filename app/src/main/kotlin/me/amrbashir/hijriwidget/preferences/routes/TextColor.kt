@@ -2,6 +2,7 @@ package me.amrbashir.hijriwidget.preferences.routes
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -25,10 +26,13 @@ fun TextColor() {
 
     val context = LocalContext.current
 
+    val scrollState = rememberScrollState()
+
     Column(
         Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(scrollState)
+            .imePadding()
     ) {
         for (theme in supportedThemes) {
             PreferenceCategory(
@@ -47,6 +51,7 @@ fun TextColor() {
 
         if (Preferences.theme.value == SupportedTheme.Custom) {
             ColorPicker(
+                scrollState,
                 onColorChanged = {
                     Preferences.customColor.value = it.toArgb()
                     Preferences.updateColor(context)
