@@ -23,18 +23,6 @@ import me.amrbashir.hijriwidget.preferences.composables.PreferenceCategory
 @Composable
 fun Home() {
     val navController = LocalNavController.current
-//    val snackbarHostState = LocalSnackbarHostState.current
-//
-//    val coroutineScope = rememberCoroutineScope()
-//
-//    var isSyncing by remember { mutableStateOf(false) }
-//    val infiniteTransition = rememberInfiniteTransition(label = "rotation")
-//    val angle by infiniteTransition.animateFloat(
-//        initialValue = 0f,
-//        targetValue = 360f,
-//        animationSpec = infiniteRepeatable(tween(1000, easing = LinearEasing), RepeatMode.Restart),
-//        label = "rotation"
-//    )
 
     Column(
         modifier = Modifier
@@ -102,22 +90,5 @@ fun Home() {
                 }
             )
         }
-
-//        PreferenceCategory(
-//            label = "Sync Database",
-//            description = "Synchronize database and update the widget",
-//            icon = Icons.Default.Refresh,
-//            iconModifier = Modifier.rotate(if (isSyncing) angle else 0f),
-//            enabled = !isSyncing,
-//            onClick = {
-//                isSyncing = true
-//                coroutineScope.launch {
-//                    HijriDate.syncDatabase(navController.context)
-//                    HijriWidget.update(navController.context)
-//                    isSyncing = false
-//                    snackbarHostState.showSnackbar("Success", withDismissAction = true)
-//                }
-//            }
-//        )
     }
 }

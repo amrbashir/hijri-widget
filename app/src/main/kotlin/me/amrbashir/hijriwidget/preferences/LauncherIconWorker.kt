@@ -35,11 +35,9 @@ class HijriWidgetLauncherIconWorker(
 
     companion object {
         fun changeLauncherIcon(context: Context) {
-//            runBlocking { HijriDate.syncDatabaseIfNot(context) }
             val today = HijriDate.todayNumber()
 
             val packageManager = context.packageManager
-
 
             if (!BuildConfig.DEBUG) {
                 val mainActivity =
@@ -60,8 +58,6 @@ class HijriWidgetLauncherIconWorker(
                     PackageManager.DONT_KILL_APP
                 )
             }
-
-
         }
 
         fun setup24Periodic(context: Context) {

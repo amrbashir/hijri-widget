@@ -40,7 +40,6 @@ fun RadioIcon(
             .padding(2.dp)
             .requiredSize(20.dp)
     ) {
-        // Draw the radio button
         val strokeWidth = 2.dp.toPx()
         drawCircle(
             radioColor.value,
@@ -51,7 +50,6 @@ fun RadioIcon(
             drawCircle(radioColor.value, dotRadius.value.toPx() - strokeWidth / 2, style = Fill)
         }
     }
-
 }
 
 
@@ -65,8 +63,6 @@ fun RadioButtonColors.radioColor(enabled: Boolean, selected: Boolean): State<Col
         else -> disabledUnselectedColor
     }
 
-    // If not enabled 'snap' to the disabled state, as there should be no animations between
-    // enabled / disabled.
     return if (enabled) {
         animateColorAsState(target, tween(durationMillis = 100), label = "")
     } else {

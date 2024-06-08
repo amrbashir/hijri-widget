@@ -82,7 +82,6 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         Preferences.load(this.baseContext)
-//        runBlocking { HijriDate.syncDatabaseIfNot(this@MainActivity.baseContext) }
         HijriDate.load(Preferences.language.value)
 
         setContent {
