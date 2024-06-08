@@ -32,6 +32,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
@@ -48,7 +49,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.PreferencesTheme
@@ -58,7 +59,6 @@ import me.amrbashir.hijriwidget.preferences.routes.TextSize
 import me.amrbashir.hijriwidget.preferences.routes.TextColor
 import me.amrbashir.hijriwidget.widget.HijriWidget
 
-
 object Route {
     const val HOME = "/"
     const val LANGUAGE = "Language"
@@ -67,10 +67,6 @@ object Route {
 }
 
 val LocalNavController = staticCompositionLocalOf<NavController> {
-    error("CompositionLocal LocalNavController not present")
-}
-
-val LocalSnackbarHostState = staticCompositionLocalOf<SnackbarHostState> {
     error("CompositionLocal LocalNavController not present")
 }
 
@@ -100,10 +96,13 @@ class MainActivity : ComponentActivity() {
     private fun Content() {
         val navController = rememberNavController()
         val currentBackStackEntry by navController.currentBackStackEntryAsState()
+
         val snackbarHostState = remember { SnackbarHostState() }
 
-        val topAppBarScrollBehavior =
-            TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+        val coroutineScope = rememberCoroutineScope()
+
+        val state =rememberTopAppBarState()
+        val topAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(state)
 
         PreferencesTheme {
             Scaffold(
@@ -130,8 +129,10 @@ class MainActivity : ComponentActivity() {
                         actions = {
                             IconButton(onClick = {
                                 Preferences.save(this@MainActivity.baseContext)
-                                runBlocking { HijriWidget.update(this@MainActivity.baseContext) }
-                                this@MainActivity.finish()
+                                coroutineScope.launch {
+                                    HijriWidget.update(this@MainActivity.baseContext)
+                                    snackbarHostState.showSnackbar("Widget updated!")
+                                }
                             }) {
                                 Icon(
                                     Icons.Default.Check,
@@ -147,7 +148,6 @@ class MainActivity : ComponentActivity() {
                 Column(modifier = Modifier.padding(padding)) {
                     CompositionLocalProvider(
                         LocalNavController provides navController,
-                        LocalSnackbarHostState provides snackbarHostState
                     ) {
                         PreviewWidget()
 
