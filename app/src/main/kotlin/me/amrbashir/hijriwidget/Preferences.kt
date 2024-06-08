@@ -22,14 +22,32 @@ private const val IS_CUSTOM_TEXT_SIZE_KEY = "IS_CUSTOM_TEXT_SIZE"
 private const val CUSTOM_TEXT_SIZE_KEY = "CUSTOM_TEXT_SIZE"
 
 object Preferences {
-    val language: MutableState<SupportedLanguage> = mutableStateOf(SupportedLanguage.Arabic)
-    val theme: MutableState<SupportedTheme> =
-        mutableStateOf(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) SupportedTheme.Dynamic else SupportedTheme.System)
+    val language: MutableState<SupportedLanguage> = mutableStateOf(Defaults.language)
+    val theme: MutableState<SupportedTheme> = mutableStateOf(Defaults.theme)
     val color: MutableState<Int> = mutableIntStateOf(Color.White.toArgb())
-    val customColor: MutableState<Int> = mutableIntStateOf(Color.White.toArgb())
-    val shadow: MutableState<Boolean> = mutableStateOf(true)
-    val isCustomTextSize: MutableState<Boolean> = mutableStateOf(false)
-    val customTextSize: MutableState<Float> = mutableFloatStateOf(22F)
+    val customColor: MutableState<Int> = mutableIntStateOf(Defaults.color)
+    val isCustomTextSize: MutableState<Boolean> = mutableStateOf(Defaults.isCustomTextSize)
+    val customTextSize: MutableState<Float> = mutableFloatStateOf(Defaults.customTextSize)
+    val shadow: MutableState<Boolean> = mutableStateOf(Defaults.shadow)
+
+    @Suppress("ConstPropertyName")
+    object Defaults {
+        val language = SupportedLanguage.Arabic
+        val theme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) SupportedTheme.Dynamic else SupportedTheme.System
+        val color = Color.White.toArgb()
+        const val isCustomTextSize= false
+        const val customTextSize = 22F
+        const val shadow = true
+    }
+
+    fun restoreDefaults() {
+        this.language.value = Defaults.language
+        this.theme.value = Defaults.theme
+        this.color.value = Defaults.color
+        this.isCustomTextSize.value= Defaults.isCustomTextSize
+        this.customTextSize.value = Defaults.customTextSize
+        this.shadow.value = Defaults.shadow
+    }
 
 
     fun load(context: Context) {

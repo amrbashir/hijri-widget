@@ -92,6 +92,15 @@ fun Home() {
                     Preferences.shadow.value = !Preferences.shadow.value
                 }
             )
+
+            PreferenceCategory(
+                label = "Restore defaults",
+                description = "Restore the default preferences",
+                icon = ImageVector.vectorResource(R.drawable.baseline_settings_backup_restore_24),
+                onClick = {
+                    Preferences.restoreDefaults()
+                }
+            )
         }
 
 //        PreferenceCategory(
