@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="description">Android widget for displaying Hijri date</string>
+    <string name="preview_date">16 رمضان 1445</string>
 </resources>
