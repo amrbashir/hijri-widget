@@ -53,6 +53,7 @@ import kotlinx.coroutines.launch
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.PreferencesTheme
+import me.amrbashir.hijriwidget.isDark
 import me.amrbashir.hijriwidget.preferences.routes.Home
 import me.amrbashir.hijriwidget.preferences.routes.Language
 import me.amrbashir.hijriwidget.preferences.routes.TextSize
@@ -204,9 +205,13 @@ open class WidgetConfiguration : ComponentActivity() {
 
         val textColor = Preferences.color.value
 
-        val isDarkColor = ColorUtils.calculateLuminance(textColor) < 0.1
-
-        val cardColor = if (isDarkColor)
+        val isDark = this@WidgetConfiguration.baseContext.isDark()
+        val isEnoughLuminance = if (isDark) {
+            ColorUtils.calculateLuminance(textColor) < 0.1
+        } else {
+            ColorUtils.calculateLuminance(textColor) > 0.5
+        }
+        val cardColor = if (isEnoughLuminance)
             MaterialTheme.colorScheme.surfaceTint
         else
             MaterialTheme.colorScheme.surfaceContainerHigh
