@@ -194,14 +194,16 @@ class MainActivity : ComponentActivity() {
     private fun PreviewWidget() {
         var date by remember {
             mutableStateOf(
-                HijriDate.todayForLang(
-                    Preferences.language.value
-                )
+                HijriDate.todayForLang(Preferences.language.value)
             )
         }
 
+        val textSize = if (Preferences.isCustomTextSize.value) Preferences.customTextSize.value.sp else 22.sp
+
         val textColor = Preferences.color.value
+
         val isDarkColor = ColorUtils.calculateLuminance(textColor) < 0.1
+
         val cardColor = if (isDarkColor)
             MaterialTheme.colorScheme.surfaceTint
         else
@@ -211,13 +213,11 @@ class MainActivity : ComponentActivity() {
             date = HijriDate.todayForLang(Preferences.language.value)
         }
 
-
         Box(Modifier.padding(all = 16.dp)) {
             ElevatedCard(
                 modifier = Modifier.fillMaxWidth(),
-                colors =  CardDefaults.elevatedCardColors(containerColor = cardColor)
+                colors =  CardDefaults.elevatedCardColors(containerColor = cardColor),
             ) {
-
                 Text(
                     date,
                     color = Color(textColor),
@@ -225,13 +225,14 @@ class MainActivity : ComponentActivity() {
                         .padding(all = 16.dp)
                         .align(Alignment.CenterHorizontally),
                     style = MaterialTheme.typography.headlineMedium.copy(
+                        lineHeight = textSize,
                         shadow = if (Preferences.shadow.value) Shadow(
                             color = Color(0, 0, 0, 128),
                             offset = Offset(x = 1f, y = 1f),
                             blurRadius = 1f,
                         ) else null
                     ),
-                    fontSize = if (Preferences.isCustomTextSize.value) Preferences.customTextSize.value.sp else 22.sp,
+                    fontSize = textSize,
                 )
             }
         }
