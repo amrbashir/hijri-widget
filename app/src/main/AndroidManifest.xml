@@ -41,9 +41,20 @@
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".preferences.WidgetConfiguration"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:autoRemoveFromRecents="true"
+            android:theme="@style/Theme.HijriWidget"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
 

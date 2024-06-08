@@ -11,7 +11,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.SupportedTheme
-import me.amrbashir.hijriwidget.preferences.LocalNavController
 import me.amrbashir.hijriwidget.preferences.composables.ColorPicker
 import me.amrbashir.hijriwidget.preferences.composables.PreferenceCategory
 import me.amrbashir.hijriwidget.preferences.composables.RadioIcon

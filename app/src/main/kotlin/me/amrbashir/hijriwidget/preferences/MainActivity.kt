@@ -70,7 +70,9 @@ val LocalNavController = staticCompositionLocalOf<NavController> {
     error("CompositionLocal LocalNavController not present")
 }
 
-class MainActivity : ComponentActivity() {
+
+class MainActivity: WidgetConfiguration()
+open class WidgetConfiguration : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -128,9 +130,9 @@ class MainActivity : ComponentActivity() {
                         },
                         actions = {
                             IconButton(onClick = {
-                                Preferences.save(this@MainActivity.baseContext)
+                                Preferences.save(this@WidgetConfiguration.baseContext)
                                 coroutineScope.launch {
-                                    HijriWidget.update(this@MainActivity.baseContext)
+                                    HijriWidget.update(this@WidgetConfiguration.baseContext)
                                     snackbarHostState.showSnackbar("Widget updated!")
                                 }
                             }) {
@@ -238,5 +240,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-

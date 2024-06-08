@@ -6,7 +6,7 @@
     android:minHeight="10dp"
     android:previewLayout="@layout/widget_text_view_preview"
     android:widgetFeatures="configuration_optional|reconfigurable"
-    android:configure="me.amrbashir.hijriwidget.preferences.MainActivity"
+    android:configure="me.amrbashir.hijriwidget.preferences.WidgetConfiguration"
     android:resizeMode="horizontal|vertical"
     android:targetCellWidth="2"
     android:targetCellHeight="1"

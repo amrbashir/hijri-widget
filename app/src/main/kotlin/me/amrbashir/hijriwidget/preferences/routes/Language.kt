@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.SupportedLanguage
-import me.amrbashir.hijriwidget.preferences.LocalNavController
 import me.amrbashir.hijriwidget.preferences.composables.PreferenceCategory
 import me.amrbashir.hijriwidget.preferences.composables.RadioIcon
 
