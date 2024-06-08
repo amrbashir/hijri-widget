@@ -5,17 +5,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.SupportedTheme
 import me.amrbashir.hijriwidget.preferences.LocalNavController
-import me.amrbashir.hijriwidget.preferences.composables.ColorPickerDialog
+import me.amrbashir.hijriwidget.preferences.composables.ColorPicker
 import me.amrbashir.hijriwidget.preferences.composables.PreferenceCategory
 import me.amrbashir.hijriwidget.preferences.composables.RadioIcon
 
@@ -29,8 +25,6 @@ fun ThemeAndColor() {
 
     val context = LocalContext.current
 
-    var colorPickerOpen by remember { mutableStateOf(false) }
-
     Column(
         Modifier
             .fillMaxSize()
@@ -42,28 +36,20 @@ fun ThemeAndColor() {
                 description = theme.description,
                 alternateIcon = { RadioIcon(selected = savedTheme == theme) },
                 onClick = {
-                    if (theme == SupportedTheme.Custom) {
-                        colorPickerOpen = true
-                    } else {
-                        Preferences.theme.value = theme
-                        Preferences.updateColor(context)
+                    Preferences.theme.value = theme
+                    Preferences.updateColor(context)
+                    if (theme != SupportedTheme.Custom) {
                         navController.navigateUp()
                     }
                 }
             )
         }
 
-        if (colorPickerOpen) {
-            ColorPickerDialog(
-                onDismissRequest = {
-                    colorPickerOpen = false
-                },
-                onConfirm = {
-                    colorPickerOpen = false
-                    Preferences.theme.value = SupportedTheme.Custom
+        if (Preferences.theme.value == SupportedTheme.Custom) {
+            ColorPicker(
+                onColorChanged = {
                     Preferences.customColor.value = it.toArgb()
                     Preferences.updateColor(context)
-                    navController.navigateUp()
                 }
             )
         }
