@@ -5,7 +5,7 @@
 Android widget for displaying Hijri date
 </p>
 
-|                                                            |                                                          |
-|------------------------------------------------------------|----------------------------------------------------------|
-| ![Widget in Arabic](screenshots/ar.png)                    | ![Widget in English](screenshots/en.png)                 |
-| ![Widget preferences in light mode](screenshots/light.png) | ![Widget preferences in dark mode](screenshots/dark.png) |
+|                                                  |                                                       |                                                              |
+|--------------------------------------------------|-------------------------------------------------------|--------------------------------------------------------------|
+| ![Widget in Arabic](screenshots/ar.png)          | ![Widget in English](screenshots/en.png)              | ![Widget preview in widgets picker](screenshots/preview.png) |
+| ![Widget in resize mode](screenshots/resize.png) | ![Widget settings in dark mode](screenshots/dark.png) | ![Widget settings in light mode](screenshots/light.png)      |
