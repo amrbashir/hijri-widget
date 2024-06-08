@@ -1,6 +1,5 @@
 package me.amrbashir.hijriwidget
 
-import android.content.Context
 import android.icu.util.Calendar
 import android.icu.util.ULocale
 import androidx.compose.runtime.MutableState
@@ -40,11 +39,11 @@ val EN_MONTHS = arrayOf(
 object HijriDate {
     val today: MutableState<String> = mutableStateOf("")
 
-    fun load(context: Context, lang: SupportedLanguage) {
-        this.today.value = todayForLang(context, lang)
+    fun load(lang: SupportedLanguage) {
+        this.today.value = todayForLang(lang)
     }
 
-    fun todayForLang(_c: Context, lang: SupportedLanguage): String {
+    fun todayForLang(lang: SupportedLanguage): String {
         val calendar = Calendar.getInstance(ULocale("@calendar=islamic-umalqura"))
         val day = calendar[Calendar.DAY_OF_MONTH].toString().convertNumbersToLang(lang)
         val month = when (lang) {
@@ -56,7 +55,7 @@ object HijriDate {
         return "$day $month $year"
     }
 
-    fun todayNumber(_c: Context): Int {
+    fun todayNumber(): Int {
         val calendar = Calendar.getInstance(ULocale("@calendar=islamic-umalqura"))
         return calendar[Calendar.DAY_OF_MONTH]
     }

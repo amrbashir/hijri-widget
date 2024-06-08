@@ -82,7 +82,7 @@ class MainActivity : ComponentActivity() {
 
         Preferences.load(this.baseContext)
 //        runBlocking { HijriDate.syncDatabaseIfNot(this@MainActivity.baseContext) }
-        HijriDate.load(this.baseContext, Preferences.language.value)
+        HijriDate.load(Preferences.language.value)
 
         setContent {
             Content()
@@ -195,14 +195,13 @@ class MainActivity : ComponentActivity() {
         var date by remember {
             mutableStateOf(
                 HijriDate.todayForLang(
-                    this.baseContext,
                     Preferences.language.value
                 )
             )
         }
 
         LaunchedEffect(Preferences.language.value, Preferences.color.value, HijriDate.today.value) {
-            date = HijriDate.todayForLang(this@MainActivity.baseContext, Preferences.language.value)
+            date = HijriDate.todayForLang(Preferences.language.value)
         }
 
 

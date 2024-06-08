@@ -28,7 +28,7 @@ class HijriWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         Preferences.load(context)
 //        HijriDate.syncDatabaseIfNot(context)
-        HijriDate.load(context, Preferences.language.value)
+        HijriDate.load(Preferences.language.value)
         HijriWidgetWorker.setup24Periodic(context)
 
         provideContent {
@@ -45,13 +45,11 @@ class HijriWidget : GlanceAppWidget() {
         remoteView.setTextViewText(R.id.widget_text_view, HijriDate.today.value)
 
         if (Preferences.isCustomTextSize.value) {
-            Preferences.customTextSize.value?.let {
-                remoteView.setTextViewTextSize(
-                    R.id.widget_text_view,
-                    TypedValue.COMPLEX_UNIT_SP,
-                    it
-                )
-            }
+            remoteView.setTextViewTextSize(
+                R.id.widget_text_view,
+                TypedValue.COMPLEX_UNIT_SP,
+                Preferences.customTextSize.value
+            )
         } else {
             remoteView.setTextViewTextSize(R.id.widget_text_view, TypedValue.COMPLEX_UNIT_SP, 22F)
         }
@@ -85,7 +83,7 @@ class HijriWidget : GlanceAppWidget() {
         suspend fun update(context: Context) {
             HijriWidget().apply {
                 Preferences.load(context)
-                HijriDate.load(context, Preferences.language.value)
+                HijriDate.load(Preferences.language.value)
                 updateAll(context)
             }
         }

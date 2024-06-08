@@ -36,7 +36,7 @@ class HijriWidgetLauncherIconWorker(
     companion object {
         fun changeLauncherIcon(context: Context) {
 //            runBlocking { HijriDate.syncDatabaseIfNot(context) }
-            val today = HijriDate.todayNumber(context)
+            val today = HijriDate.todayNumber()
 
             val packageManager = context.packageManager
 

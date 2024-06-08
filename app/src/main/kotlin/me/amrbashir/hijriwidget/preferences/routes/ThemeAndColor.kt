@@ -4,8 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,6 +17,7 @@ import me.amrbashir.hijriwidget.SupportedTheme
 import me.amrbashir.hijriwidget.preferences.LocalNavController
 import me.amrbashir.hijriwidget.preferences.composables.ColorPickerDialog
 import me.amrbashir.hijriwidget.preferences.composables.PreferenceCategory
+import me.amrbashir.hijriwidget.preferences.composables.RadioIcon
 
 @Composable
 fun ThemeAndColor() {
@@ -41,7 +40,7 @@ fun ThemeAndColor() {
             PreferenceCategory(
                 label = theme.prettyName,
                 description = theme.description,
-                icon = if (savedTheme == theme) Icons.Filled.Check else null,
+                alternateIcon = { RadioIcon(selected = savedTheme == theme) },
                 onClick = {
                     if (theme == SupportedTheme.Custom) {
                         colorPickerOpen = true

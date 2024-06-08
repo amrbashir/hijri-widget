@@ -30,6 +30,7 @@ fun PreferenceCategory(
     iconModifier: Modifier = Modifier,
     enabled: Boolean = true,
     icon: ImageVector? = null,
+    alternateIcon:  (@Composable () -> Unit)? = null,
     description: String? = null,
     onClick: (() -> Unit)? = null,
     rightContent: (@Composable () -> Unit)? = null,
@@ -55,6 +56,10 @@ fun PreferenceCategory(
                             modifier = iconModifier.size(24.dp),
                             tint = MaterialTheme.colorScheme.primary,
                         )
+                    }
+
+                    alternateIcon?.let {
+                        alternateIcon()
                     }
 
                 }
