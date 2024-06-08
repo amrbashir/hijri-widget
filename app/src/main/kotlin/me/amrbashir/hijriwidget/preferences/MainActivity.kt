@@ -204,7 +204,7 @@ class MainActivity : ComponentActivity() {
         val textColor = Preferences.color.value
         val isDarkColor = ColorUtils.calculateLuminance(textColor) < 0.1
         val cardColor = if (isDarkColor)
-            MaterialTheme.colorScheme.inverseSurface
+            MaterialTheme.colorScheme.surfaceTint
         else
             MaterialTheme.colorScheme.surfaceContainerHigh
 
