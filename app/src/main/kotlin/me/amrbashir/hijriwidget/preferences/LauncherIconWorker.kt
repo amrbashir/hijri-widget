@@ -44,7 +44,7 @@ class HijriWidgetLauncherIconWorker(
                     ComponentName(context, "me.amrbashir.hijriwidget.preferences.MainActivity")
                 packageManager.setComponentEnabledSetting(
                     mainActivity,
-                    if (today != null) PackageManager.COMPONENT_ENABLED_STATE_DISABLED else PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                     PackageManager.DONT_KILL_APP
                 )
             }
@@ -54,7 +54,7 @@ class HijriWidgetLauncherIconWorker(
                     ComponentName(context, "me.amrbashir.hijriwidget.preferences.Calendar_$day")
                 packageManager.setComponentEnabledSetting(
                     dayActivity,
-                    if (today != null && today == day) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    if (today == day) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                     PackageManager.DONT_KILL_APP
                 )
             }

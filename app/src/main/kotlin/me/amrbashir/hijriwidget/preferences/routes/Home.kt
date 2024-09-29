@@ -1,5 +1,7 @@
 package me.amrbashir.hijriwidget.preferences.routes
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -87,6 +89,16 @@ fun Home() {
                 icon = ImageVector.vectorResource(R.drawable.baseline_settings_backup_restore_24),
                 onClick = {
                     Preferences.restoreDefaults(navController.context)
+                }
+            )
+
+            val privacyUrl = "https://hijri-widget.amrbashir.me/PRIVACY.md"
+            PreferenceCategory(
+                label = "Privacy Policy",
+                description = "Click to read our privacy policy",
+                icon = ImageVector.vectorResource(R.drawable.baseline_launch_24),
+                onClick = {
+                  navController.context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(privacyUrl)))
                 }
             )
         }

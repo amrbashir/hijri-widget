@@ -9,4 +9,4 @@
 local.properties
 keystore.properties
 
-upload.jks
+*.jks
