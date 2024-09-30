@@ -71,13 +71,12 @@ val LocalNavController = staticCompositionLocalOf<NavController> {
     error("CompositionLocal LocalNavController not present")
 }
 
+class MainActivity: WidgetConfiguration(false)
 
-class MainActivity: WidgetConfiguration()
-open class WidgetConfiguration : ComponentActivity() {
+open class WidgetConfiguration(private val autoClose: Boolean = true) : ComponentActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+  override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         enableEdgeToEdge()
 
         Preferences.load(this.baseContext)
@@ -134,7 +133,11 @@ open class WidgetConfiguration : ComponentActivity() {
                                 Preferences.save(this@WidgetConfiguration.baseContext)
                                 coroutineScope.launch {
                                     HijriWidget.update(this@WidgetConfiguration.baseContext)
-                                    snackbarHostState.showSnackbar("Widget updated!")
+                                    if (this@WidgetConfiguration.autoClose) {
+                                      this@WidgetConfiguration.finish()
+                                    } else {
+                                      snackbarHostState.showSnackbar("Widget updated!")
+                                    }
                                 }
                             }) {
                                 Icon(

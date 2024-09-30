@@ -32,16 +32,6 @@ The Service Provider does not knowingly collect any personally identifiable info
 
 The Service Provider is concerned about safeguarding the confidentiality of your information. The Service Provider does not knowingly collect any information.
 
-**Changes**
-
-This Privacy Policy may be updated from time to time for any reason. The Service Provider will notify you of any changes to the Privacy Policy by updating this page with the new Privacy Policy. You are advised to consult this Privacy Policy regularly for any changes, as continued use is deemed approval of all changes.
-
-This privacy policy is effective as of 2024-09-28
-
-**Your Consent**
-
-By using the Application, you are consenting to the processing of your information as set forth in this Privacy Policy now and as amended by us.
-
 **Contact Us**
 
 If you have any questions regarding privacy while using the Application, or have questions about the practices, please contact the Service Provider via email at contact@amrbashir.me.
