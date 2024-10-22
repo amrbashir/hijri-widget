@@ -29,8 +29,13 @@ class HijriWidgetLauncherIconWorker(
     params: WorkerParameters
 ) : CoroutineWorker(appContext, params) {
     override suspend fun doWork(): Result {
-        changeLauncherIcon(this.applicationContext)
-        return Result.success()
+       try {
+         changeLauncherIcon(this.applicationContext)
+         return Result.success()
+       } catch (e: Exception) {
+           e.printStackTrace()
+           return Result.retry()
+       }
     }
 
     companion object {
@@ -73,7 +78,7 @@ class HijriWidgetLauncherIconWorker(
 
             WorkManager.getInstance(context).enqueueUniquePeriodicWork(
                 "hijriWidgetLauncherIconWorker",
-                ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
+                ExistingPeriodicWorkPolicy.KEEP,
                 PeriodicWorkRequest.Builder(
                     HijriWidgetLauncherIconWorker::class.java,
                     24,

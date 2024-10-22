@@ -14,8 +14,13 @@ class HijriWidgetWorker(
     params: WorkerParameters
 ) : CoroutineWorker(appContext, params) {
     override suspend fun doWork(): Result {
-        HijriWidget.update(applicationContext)
-        return Result.success()
+        try {
+            HijriWidget.update(applicationContext)
+            return Result.success()
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            return Result.retry()
+        }
     }
 
 
@@ -33,7 +38,7 @@ class HijriWidgetWorker(
 
             WorkManager.getInstance(context).enqueueUniquePeriodicWork(
                 "hijriWidgetWorker",
-                ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
+                ExistingPeriodicWorkPolicy.KEEP,
                 PeriodicWorkRequest.Builder(
                     HijriWidgetWorker::class.java,
                     24,
