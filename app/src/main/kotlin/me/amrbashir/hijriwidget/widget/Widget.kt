@@ -28,7 +28,6 @@ class HijriWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         Preferences.load(context)
         HijriDate.load(Preferences.language.value)
-        HijriWidgetWorker.setup24Periodic(context)
 
         provideContent {
             GlanceTheme {

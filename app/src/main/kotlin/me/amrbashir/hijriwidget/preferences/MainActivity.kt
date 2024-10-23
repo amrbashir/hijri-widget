@@ -88,7 +88,6 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
     }
 
     override fun onDestroy() {
-        // TODO: find a better way to change icon when app is first installed
         HijriWidgetLauncherIconWorker.changeLauncherIcon(this.baseContext)
         super.onDestroy()
     }
