@@ -87,6 +87,11 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
         }
     }
 
+    override fun onDestroy() {
+        HijriWidgetLauncherIconWorker.changeLauncherIcon(this.baseContext)
+        super.onDestroy()
+    }
+
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun Content() {

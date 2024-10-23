@@ -11,6 +11,5 @@ class HijriWidgetApp : Application() {
 
     HijriWidgetLauncherIconWorker.setup24Periodic(this)
     HijriWidgetWorker.setup24Periodic(this)
-    HijriWidgetLauncherIconWorker.changeLauncherIcon(this)
   }
 }
