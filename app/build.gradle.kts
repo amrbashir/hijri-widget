@@ -23,7 +23,7 @@ android {
         create("config") {
             keyAlias = System.getProperty("KEY_ALIAS")
             keyPassword = System.getProperty("KEY_PASSWORD")
-            storeFile = file(System.getProperty("KEYSTORE_FILE_PATH"))
+            storeFile = rootProject.file(System.getProperty("KEYSTORE_FILE_PATH"))
             storePassword = System.getProperty("KEYSTORE_PASSWORD")
         }
     }
