@@ -1,8 +1,8 @@
+name: Publish
+
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
     cancel-in-progress: true
-
-name: Distribute play store
 
 on:
     push:
@@ -64,8 +64,11 @@ jobs:
                     mkdir -p "${KEYSTORE_FILE_PATH%/*}" && touch "$KEYSTORE_FILE_PATH"
                     echo "${{ secrets.KEYSTORE_FILE_CONTENT_BASE64_ENCODED }}" | base64 --decode >> $KEYSTORE_FILE_PATH
 
-            -   name: Assemble
+            -   name: Assemble Bundle
                 run: ./gradlew bundleRelease --stacktrace
+
+            -   name: Assemble
+                run: ./gradlew assembleRelease --stacktrace
 
             -   name: Distribute
                 uses: r0adkll/upload-google-play@v1
@@ -77,3 +80,13 @@ jobs:
                     status: draft
                     inAppUpdatePriority: 5
                     mappingFile: "app/build/outputs/mapping/release/mapping.txt"
+
+            -   name: Upload artifact
+                id: uploadArtifact
+                uses: actions/upload-artifact@v4
+                with:
+                    name: Artifacts
+                    path: |
+                        app/build/outputs/bundle/release/app-release.aab
+                        app/build/outputs/apk/release/app-release.apk
+
