@@ -1,0 +1,79 @@
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+name: Distribute play store
+
+on:
+    push:
+        tags:
+            - "[0-9]+.[0-9]+.[0-9]+"
+
+    workflow_dispatch:
+
+jobs:
+    distribute:
+        name: Build release bundle
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v3
+
+            -   name: Setup JDK
+                uses: actions/setup-java@v3
+                with:
+                    distribution: "zulu"
+                    java-version: "8"
+
+            -   name: Setup gradle
+                uses: gradle/gradle-build-action@v2
+                with:
+                    cache-read-only: ${{ github.ref != 'refs/heads/dev' && github.ref != 'refs/heads/master' }}
+                    gradle-home-cache-includes: |
+                        caches
+                        notifications
+                    gradle-home-cache-cleanup: true
+                env:
+                    GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
+
+            -   name: Prepare Version Code
+                id: version_code
+                run: |
+                    INPUT_VERSION=${{ github.run_number }}
+
+                    echo "code=$(($INPUT_VERSION + 9))" >> $GITHUB_OUTPUT
+
+            -   name: Bump version
+                uses: chkfung/android-version-actions@v1.2.1
+                with:
+                    gradlePath: "app/build.gradle.kts"
+                    versionCode: ${{ steps.version_code.outputs.code }}
+                    versionName: ${{ github.ref_name }}
+
+            -   name: Init secrets
+                id: inject
+                run: |
+                    KEYSTORE_FILE_PATH=${{ secrets.KEYSTORE_FILE_PATH }}
+
+                    touch .env
+                    echo "KEYSTORE_FILE_PATH=$KEYSTORE_FILE_PATH" >> .env
+                    echo "KEYSTORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}" >> .env
+                    echo "KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> .env
+                    echo "KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}" >> .env
+
+                    mkdir -p "${KEYSTORE_FILE_PATH%/*}" && touch "$KEYSTORE_FILE_PATH"
+                    echo "${{ secrets.KEYSTORE_FILE_CONTENT_BASE64_ENCODED }}" | base64 --decode >> $KEYSTORE_FILE_PATH
+
+            -   name: Assemble
+                run: ./gradlew bundleRelease --stacktrace
+
+            -   name: Distribute
+                uses: r0adkll/upload-google-play@v1
+                with:
+                    serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_KEY }}
+                    packageName: "me.amrbashir.hijriwidget"
+                    releaseFiles: "app/build/outputs/bundle/release/app-release.aab"
+                    track: "internal"
+                    status: draft
+                    inAppUpdatePriority: 5
+                    mappingFile: "app/build/outputs/mapping/release/mapping.txt"
