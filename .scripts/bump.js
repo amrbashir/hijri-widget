@@ -4,8 +4,8 @@ const fs = require("fs");
 const bump = process.argv[2];
 
 if (!["major", "minor", "patch"].includes(bump)) {
-  console.error(`Unkown bump type: ${bump}`);
-  process.exit(1);
+    console.error(`Unkown bump type: ${bump}`);
+    process.exit(1);
 }
 
 const appGradle = path.resolve(__dirname, "..", "app", "build.gradle.kts");
@@ -27,25 +27,25 @@ let minor = Number(mi);
 let patch = Number(pa);
 
 switch (bump) {
-  case "major":
-    major = +1;
-    minor = 0;
-    patch = 0;
-    break;
-  case "minor":
-    minor = +1;
-    patch = 0;
-    break;
-  case "patch":
-    patch = +1;
-    break;
-  default:
-    break;
+    case "major":
+        major += 1;
+        minor = 0;
+        patch = 0;
+        break;
+    case "minor":
+        minor += 1;
+        patch = 0;
+        break;
+    case "patch":
+        patch = +1;
+        break;
+    default:
+        break;
 }
 
 const newContent = content
-  .replace(versionCodeRe, `versionCode = ${newVersionCode}`)
-  .replace(versionNameRe, `versionName = "${major}.${minor}.${patch}"`);
+    .replace(versionCodeRe, `versionCode = ${newVersionCode}`)
+    .replace(versionNameRe, `versionName = "${major}.${minor}.${patch}"`);
 
 fs.writeFileSync(appGradle, newContent);
 
