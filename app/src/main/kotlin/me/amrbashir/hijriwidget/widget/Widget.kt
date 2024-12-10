@@ -27,7 +27,7 @@ class HijriWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         Preferences.load(context)
-        HijriDate.load(Preferences.language.value)
+        HijriDate.load(Preferences.language.value, Preferences.dayStart.value)
 
         provideContent {
             GlanceTheme {
@@ -81,7 +81,7 @@ class HijriWidget : GlanceAppWidget() {
         suspend fun update(context: Context) {
             HijriWidget().apply {
                 Preferences.load(context)
-                HijriDate.load(Preferences.language.value)
+                HijriDate.load(Preferences.language.value, Preferences.dayStart.value)
                 updateAll(context)
             }
         }

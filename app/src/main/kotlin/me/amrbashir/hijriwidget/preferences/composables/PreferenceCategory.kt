@@ -30,7 +30,7 @@ fun PreferenceCategory(
     iconModifier: Modifier = Modifier,
     enabled: Boolean = true,
     icon: ImageVector? = null,
-    alternateIcon:  (@Composable () -> Unit)? = null,
+    alternateIcon: (@Composable () -> Unit)? = null,
     description: String? = null,
     onClick: (() -> Unit)? = null,
     rightContent: (@Composable () -> Unit)? = null,

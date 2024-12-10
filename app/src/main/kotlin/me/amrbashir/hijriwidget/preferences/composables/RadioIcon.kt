@@ -35,7 +35,8 @@ fun RadioIcon(
     val radioColor = colors.radioColor(enabled, selected)
 
     Canvas(
-        Modifier.minimumInteractiveComponentSize()
+        Modifier
+            .minimumInteractiveComponentSize()
             .wrapContentSize(Alignment.Center)
             .padding(2.dp)
             .requiredSize(20.dp)
@@ -51,7 +52,6 @@ fun RadioIcon(
         }
     }
 }
-
 
 
 @Composable
