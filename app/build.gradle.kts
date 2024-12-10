@@ -1,6 +1,3 @@
-import java.io.FileInputStream
-import java.util.Properties
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -9,9 +6,9 @@ plugins {
 
 android {
     namespace = "me.amrbashir.hijriwidget"
-  compileSdk = 35
+    compileSdk = 35
 
-  defaultConfig {
+    defaultConfig {
         applicationId = "me.amrbashir.hijriwidget"
         minSdk = 26
         targetSdk = 35
@@ -21,10 +18,10 @@ android {
 
     signingConfigs {
         create("config") {
-            keyAlias = System.getProperty("KEY_ALIAS")
-            keyPassword = System.getProperty("KEY_PASSWORD")
             storeFile = rootProject.file(System.getProperty("KEYSTORE_FILE_PATH"))
             storePassword = System.getProperty("KEYSTORE_PASSWORD")
+            keyAlias = System.getProperty("KEY_ALIAS")
+            keyPassword = System.getProperty("KEY_PASSWORD")
         }
     }
 

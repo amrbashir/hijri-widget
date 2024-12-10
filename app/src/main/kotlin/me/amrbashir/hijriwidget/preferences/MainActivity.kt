@@ -56,9 +56,10 @@ import me.amrbashir.hijriwidget.PreferencesTheme
 import me.amrbashir.hijriwidget.isDark
 import me.amrbashir.hijriwidget.preferences.routes.Home
 import me.amrbashir.hijriwidget.preferences.routes.Language
-import me.amrbashir.hijriwidget.preferences.routes.TextSize
 import me.amrbashir.hijriwidget.preferences.routes.TextColor
+import me.amrbashir.hijriwidget.preferences.routes.TextSize
 import me.amrbashir.hijriwidget.widget.HijriWidget
+import me.amrbashir.hijriwidget.widget.HijriWidgetWorker
 
 object Route {
     const val HOME = "/"
@@ -71,16 +72,16 @@ val LocalNavController = staticCompositionLocalOf<NavController> {
     error("CompositionLocal LocalNavController not present")
 }
 
-class MainActivity: WidgetConfiguration(false)
+class MainActivity : WidgetConfiguration(false)
 
 open class WidgetConfiguration(private val autoClose: Boolean = true) : ComponentActivity() {
 
-  override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
         Preferences.load(this.baseContext)
-        HijriDate.load(Preferences.language.value)
+        HijriDate.load(Preferences.language.value, Preferences.dayStart.value)
 
         setContent {
             Content()
@@ -102,7 +103,7 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
 
         val coroutineScope = rememberCoroutineScope()
 
-        val state =rememberTopAppBarState()
+        val state = rememberTopAppBarState()
         val topAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(state)
 
         PreferencesTheme {
@@ -132,10 +133,14 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
                                 Preferences.save(this@WidgetConfiguration.baseContext)
                                 coroutineScope.launch {
                                     HijriWidget.update(this@WidgetConfiguration.baseContext)
+
+                                    HijriWidgetLauncherIconWorker.setup24Periodic(this@WidgetConfiguration.baseContext, true)
+                                    HijriWidgetWorker.setup24Periodic(this@WidgetConfiguration.baseContext, true)
+
                                     if (this@WidgetConfiguration.autoClose) {
-                                      this@WidgetConfiguration.finish()
+                                        this@WidgetConfiguration.finish()
                                     } else {
-                                      snackbarHostState.showSnackbar("Widget updated!")
+                                        snackbarHostState.showSnackbar("Widget updated!")
                                     }
                                 }
                             }) {
@@ -199,7 +204,7 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
     private fun PreviewWidget() {
         var date by remember {
             mutableStateOf(
-                HijriDate.todayForLang(Preferences.language.value)
+                HijriDate.todayForLang(Preferences.language.value, Preferences.dayStart.value)
             )
         }
 
@@ -218,14 +223,18 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
         else
             MaterialTheme.colorScheme.surfaceContainerHigh
 
-        LaunchedEffect(Preferences.language.value, Preferences.color.value, HijriDate.today.value) {
-            date = HijriDate.todayForLang(Preferences.language.value)
+        LaunchedEffect(
+            Preferences.language.value,
+            Preferences.dayStart.value,
+            HijriDate.today.value
+        ) {
+            date = HijriDate.todayForLang(Preferences.language.value, Preferences.dayStart.value)
         }
 
         Box(Modifier.padding(all = 16.dp)) {
             ElevatedCard(
                 modifier = Modifier.fillMaxWidth(),
-                colors =  CardDefaults.elevatedCardColors(containerColor = cardColor),
+                colors = CardDefaults.elevatedCardColors(containerColor = cardColor),
             ) {
                 Text(
                     date,

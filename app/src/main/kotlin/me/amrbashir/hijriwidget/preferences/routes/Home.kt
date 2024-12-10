@@ -11,17 +11,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import me.amrbashir.hijriwidget.DayStart
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preferences.LocalNavController
 import me.amrbashir.hijriwidget.preferences.Route
 import me.amrbashir.hijriwidget.preferences.composables.PreferenceCategory
+import me.amrbashir.hijriwidget.preferences.composables.TimePickerDialog
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Home() {
     val navController = LocalNavController.current
@@ -83,6 +91,29 @@ fun Home() {
                 }
             )
 
+            var showDayStartPicker by remember { mutableStateOf(false) }
+
+            PreferenceCategory(
+                label = "Day Start (${Preferences.dayStart.value.toString()})",
+                description = "Choose when to update the widget date",
+                icon = ImageVector.vectorResource(R.drawable.baseline_access_time_24),
+                onClick = {
+                    showDayStartPicker = true
+                }
+            )
+
+            if (showDayStartPicker) {
+                TimePickerDialog(
+                    initialHour = Preferences.dayStart.value.hour,
+                    initialMinute = Preferences.dayStart.value.minute,
+                    onConfirm = { state ->
+                        Preferences.dayStart.value = DayStart(state.hour, state.minute)
+                        showDayStartPicker = false
+                    },
+                    onDismiss = { showDayStartPicker = false }
+                )
+            }
+
             PreferenceCategory(
                 label = "Restore defaults",
                 description = "Restore the default preferences",
@@ -98,7 +129,12 @@ fun Home() {
                 description = "Click to read our privacy policy",
                 icon = ImageVector.vectorResource(R.drawable.baseline_launch_24),
                 onClick = {
-                  navController.context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(privacyUrl)))
+                    navController.context.startActivity(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse(privacyUrl)
+                        )
+                    )
                 }
             )
         }

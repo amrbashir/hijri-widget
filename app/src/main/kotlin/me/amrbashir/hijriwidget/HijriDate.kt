@@ -39,13 +39,13 @@ val EN_MONTHS = arrayOf(
 object HijriDate {
     val today: MutableState<String> = mutableStateOf("")
 
-    fun load(lang: SupportedLanguage) {
-        this.today.value = todayForLang(lang)
+    fun load(lang: SupportedLanguage, dayStart: DayStart) {
+        this.today.value = todayForLang(lang, dayStart)
     }
 
-    fun todayForLang(lang: SupportedLanguage): String {
+    fun todayForLang(lang: SupportedLanguage, dayStart: DayStart): String {
         val calendar = Calendar.getInstance(ULocale("@calendar=islamic-umalqura"))
-        val day = calendar[Calendar.DAY_OF_MONTH].toString().convertNumbersToLang(lang)
+        val day = todayNumber(dayStart).toString().convertNumbersToLang(lang)
         val month = when (lang) {
             SupportedLanguage.English -> EN_MONTHS[calendar[Calendar.MONTH]]
             else -> AR_MONTHS[calendar[Calendar.MONTH]]
@@ -55,8 +55,12 @@ object HijriDate {
         return "$day $month $year"
     }
 
-    fun todayNumber(): Int {
+    fun todayNumber(dayStart: DayStart): Int {
         val calendar = Calendar.getInstance(ULocale("@calendar=islamic-umalqura"))
-        return calendar[Calendar.DAY_OF_MONTH]
+        val dayOfMonth = calendar[Calendar.DAY_OF_MONTH]
+        return if (
+            calendar[Calendar.HOUR_OF_DAY] >= dayStart.hour &&
+            calendar[Calendar.MINUTE] >= dayStart.minute
+        ) dayOfMonth else dayOfMonth - 1
     }
 }

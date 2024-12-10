@@ -6,7 +6,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.icu.util.Calendar
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequest
@@ -14,11 +13,14 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import me.amrbashir.hijriwidget.BuildConfig
 import me.amrbashir.hijriwidget.HijriDate
+import me.amrbashir.hijriwidget.Preferences
+import me.amrbashir.hijriwidget.nextDayStartWorkerDelay
 import java.util.concurrent.TimeUnit
 
 class HijriWidgetLauncherIconBroadCastReceiver : BroadcastReceiver() {
     @SuppressLint("UnsafeProtectedBroadcastReceiver")
     override fun onReceive(context: Context, intent: Intent?) {
+        Preferences.load(context)
         HijriWidgetLauncherIconWorker.changeLauncherIcon(context)
         HijriWidgetLauncherIconWorker.setup24Periodic(context)
     }
@@ -29,18 +31,18 @@ class HijriWidgetLauncherIconWorker(
     params: WorkerParameters
 ) : CoroutineWorker(appContext, params) {
     override suspend fun doWork(): Result {
-       try {
-         changeLauncherIcon(this.applicationContext)
-         return Result.success()
-       } catch (e: Exception) {
-           e.printStackTrace()
-           return Result.retry()
-       }
+        try {
+            changeLauncherIcon(this.applicationContext)
+            return Result.success()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return Result.retry()
+        }
     }
 
     companion object {
         fun changeLauncherIcon(context: Context) {
-            val today = HijriDate.todayNumber()
+            val today = HijriDate.todayNumber(Preferences.dayStart.value)
 
             val packageManager = context.packageManager
 
@@ -65,25 +67,15 @@ class HijriWidgetLauncherIconWorker(
             }
         }
 
-        fun setup24Periodic(context: Context) {
-            val nextDayStart = Calendar.getInstance()
-            nextDayStart[Calendar.DAY_OF_MONTH] = nextDayStart[Calendar.DAY_OF_MONTH] + 1
-            nextDayStart[Calendar.HOUR_OF_DAY] = 0
-            nextDayStart[Calendar.MINUTE] = 0
-            nextDayStart[Calendar.SECOND] = 0
-
-            val now = Calendar.getInstance()
-
-            val delay = nextDayStart.timeInMillis - now.timeInMillis
-
+        fun setup24Periodic(context: Context, cancelAndRequeue: Boolean = false) {
             WorkManager.getInstance(context).enqueueUniquePeriodicWork(
                 "hijriWidgetLauncherIconWorker",
-                ExistingPeriodicWorkPolicy.KEEP,
+                if (cancelAndRequeue) ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE else ExistingPeriodicWorkPolicy.KEEP,
                 PeriodicWorkRequest.Builder(
                     HijriWidgetLauncherIconWorker::class.java,
                     24,
                     TimeUnit.HOURS
-                ).setInitialDelay(delay, TimeUnit.MILLISECONDS).build()
+                ).setInitialDelay(nextDayStartWorkerDelay(), TimeUnit.MILLISECONDS).build()
             )
         }
     }
