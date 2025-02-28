@@ -5,18 +5,22 @@ import android.util.TypedValue
 import android.widget.RemoteViews
 import androidx.compose.runtime.Composable
 import androidx.glance.GlanceId
+import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.LocalContext
+import androidx.glance.action.clickable
 import androidx.glance.appwidget.AndroidRemoteViews
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.provideContent
 import androidx.glance.appwidget.updateAll
+import kotlinx.coroutines.runBlocking
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.SupportedTheme
+import me.amrbashir.hijriwidget.preferences.HijriWidgetLauncherIconWorker
 
 class HijriWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = HijriWidget()
@@ -38,6 +42,8 @@ class HijriWidget : GlanceAppWidget() {
 
     @Composable
     private fun Content() {
+        val context = LocalContext.current
+
         val remoteView = getView()
 
         remoteView.setTextViewText(R.id.widget_text_view, HijriDate.today.value)
@@ -52,7 +58,14 @@ class HijriWidget : GlanceAppWidget() {
             remoteView.setTextViewTextSize(R.id.widget_text_view, TypedValue.COMPLEX_UNIT_SP, 22F)
         }
 
-        AndroidRemoteViews(remoteView)
+        AndroidRemoteViews(remoteView, modifier = GlanceModifier.clickable {
+            runBlocking {
+                update(context)
+
+                HijriWidgetLauncherIconWorker.setup24Periodic(context, true)
+                HijriWidgetWorker.setup24Periodic(context, true)
+            }
+        })
     }
 
     @Composable
