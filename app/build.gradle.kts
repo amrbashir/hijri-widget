@@ -12,7 +12,7 @@ android {
         applicationId = "me.amrbashir.hijriwidget"
         minSdk = 26
         targetSdk = 35
-        versionCode = 11
+        versionCode = 12
         versionName = "0.11.0"
     }
 
