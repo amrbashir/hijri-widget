@@ -3,7 +3,7 @@ $version = $args[0];
 $path = "app/build.gradle.kts"
 $appBuild = Get-Content $path;
 
-$appBuild = $appBuild -replace "versionName = `"[0-9].[0-9].[0-9]`"", "versionName = `"$version`""
+$appBuild = $appBuild -replace "versionName = `"[0-9]+.[0-9]+.[0-9]+`"", "versionName = `"$version`""
 
 $versionCodeMatches = [regex]::Match($appBuild, 'versionCode = ([0-9]+)')
 $currentVersionCode = [int]$versionCodeMatches.Groups[1].Value
