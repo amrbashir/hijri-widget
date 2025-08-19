@@ -94,7 +94,7 @@ fun Home() {
             var showDayStartPicker by remember { mutableStateOf(false) }
 
             PreferenceCategory(
-                label = "Day Start (${Preferences.dayStart.value.toString()})",
+                label = "Day Start (${Preferences.dayStart.value})",
                 description = "Choose when to update the widget date",
                 icon = ImageVector.vectorResource(R.drawable.baseline_access_time_24),
                 onClick = {

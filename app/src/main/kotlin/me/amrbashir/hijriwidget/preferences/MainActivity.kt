@@ -53,13 +53,13 @@ import kotlinx.coroutines.launch
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.PreferencesTheme
+import me.amrbashir.hijriwidget.android.AlarmReceiver
 import me.amrbashir.hijriwidget.isDark
 import me.amrbashir.hijriwidget.preferences.routes.Home
 import me.amrbashir.hijriwidget.preferences.routes.Language
 import me.amrbashir.hijriwidget.preferences.routes.TextColor
 import me.amrbashir.hijriwidget.preferences.routes.TextSize
 import me.amrbashir.hijriwidget.widget.HijriWidget
-import me.amrbashir.hijriwidget.widget.HijriWidgetWorker
 
 object Route {
     const val HOME = "/"
@@ -89,7 +89,7 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
     }
 
     override fun onDestroy() {
-        HijriWidgetLauncherIconWorker.changeLauncherIcon(this.baseContext)
+        changeLauncherIcon(this.baseContext)
         super.onDestroy()
     }
 
@@ -134,8 +134,7 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
                                 coroutineScope.launch {
                                     HijriWidget.update(this@WidgetConfiguration.baseContext)
 
-                                    HijriWidgetLauncherIconWorker.setup24Periodic(this@WidgetConfiguration.baseContext, true)
-                                    HijriWidgetWorker.setup24Periodic(this@WidgetConfiguration.baseContext, true)
+                                    AlarmReceiver.setup24Periodic(this@WidgetConfiguration.baseContext)
 
                                     if (this@WidgetConfiguration.autoClose) {
                                         this@WidgetConfiguration.finish()

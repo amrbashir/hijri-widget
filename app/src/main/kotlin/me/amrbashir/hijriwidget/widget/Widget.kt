@@ -20,7 +20,7 @@ import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.SupportedTheme
-import me.amrbashir.hijriwidget.preferences.HijriWidgetLauncherIconWorker
+import me.amrbashir.hijriwidget.android.AlarmReceiver
 
 class HijriWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = HijriWidget()
@@ -61,9 +61,7 @@ class HijriWidget : GlanceAppWidget() {
         AndroidRemoteViews(remoteView, modifier = GlanceModifier.clickable {
             runBlocking {
                 update(context)
-
-                HijriWidgetLauncherIconWorker.setup24Periodic(context, true)
-                HijriWidgetWorker.setup24Periodic(context, true)
+                AlarmReceiver.setup24Periodic(context)
             }
         })
     }
