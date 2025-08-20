@@ -113,7 +113,7 @@ fun Home() {
             PreferenceCategory(
                 label = "Background Color",
                 description = "Choose the widget background color",
-                icon = ImageVector.vectorResource(R.drawable.baseline_color_lens_24),
+                icon = ImageVector.vectorResource(R.drawable.baseline_format_color_fill_24),
                 onClick = {
                     navController.navigate(Route.BG_COLOR)
                 }
