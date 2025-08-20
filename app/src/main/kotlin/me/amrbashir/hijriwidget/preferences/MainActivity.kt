@@ -13,8 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,7 +43,6 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.ColorUtils
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -54,7 +53,7 @@ import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.PreferencesTheme
 import me.amrbashir.hijriwidget.android.AlarmReceiver
-import me.amrbashir.hijriwidget.isDark
+import me.amrbashir.hijriwidget.preferences.routes.BgColor
 import me.amrbashir.hijriwidget.preferences.routes.CalendarCalculation
 import me.amrbashir.hijriwidget.preferences.routes.DayOffset
 import me.amrbashir.hijriwidget.preferences.routes.Home
@@ -69,6 +68,7 @@ object Route {
     const val CALENDAR_CALCULATION_METHOD = "CalendarCalculationMethod"
     const val LANGUAGE = "Language"
     const val TEXT_COLOR = "TextColor"
+    const val BG_COLOR = "BgColor"
     const val TEXT_SIZE = "TextSize"
 }
 
@@ -197,6 +197,7 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
                             composable(Route.CALENDAR_CALCULATION_METHOD) { CalendarCalculation() }
                             composable(Route.LANGUAGE) { Language() }
                             composable(Route.TEXT_COLOR) { TextColor() }
+                            composable(Route.BG_COLOR) { BgColor() }
                             composable(Route.TEXT_SIZE) { TextSize() }
                         }
                     }
@@ -213,20 +214,10 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
             )
         }
 
-        val textSize = if (Preferences.isCustomTextSize.value) Preferences.customTextSize.value.sp else 22.sp
+        val textSize = Preferences.customTextSize.value.sp
 
         val textColor = Preferences.color.value
-
-        val isDark = this@WidgetConfiguration.baseContext.isDark()
-        val isEnoughLuminance = if (isDark) {
-            ColorUtils.calculateLuminance(textColor) < 0.1
-        } else {
-            ColorUtils.calculateLuminance(textColor) > 0.5
-        }
-        val cardColor = if (isEnoughLuminance)
-            MaterialTheme.colorScheme.surfaceTint
-        else
-            MaterialTheme.colorScheme.surfaceContainerHigh
+        val bgColor = Color(Preferences.bgColor.value)
 
         LaunchedEffect(
             Preferences.language.value,
@@ -239,9 +230,9 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
         }
 
         Box(Modifier.padding(all = 16.dp)) {
-            ElevatedCard(
+            Card(
                 modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.elevatedCardColors(containerColor = cardColor),
+                colors = CardDefaults.elevatedCardColors(containerColor = bgColor),
             ) {
                 Text(
                     date.display(),

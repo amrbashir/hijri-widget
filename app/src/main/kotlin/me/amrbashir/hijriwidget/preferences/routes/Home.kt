@@ -111,6 +111,15 @@ fun Home() {
             )
 
             PreferenceCategory(
+                label = "Background Color",
+                description = "Choose the widget background color",
+                icon = ImageVector.vectorResource(R.drawable.baseline_color_lens_24),
+                onClick = {
+                    navController.navigate(Route.BG_COLOR)
+                }
+            )
+
+            PreferenceCategory(
                 label = "Text Size",
                 description = "Change the widget text size",
                 icon = ImageVector.vectorResource(R.drawable.baseline_text_increase_24),

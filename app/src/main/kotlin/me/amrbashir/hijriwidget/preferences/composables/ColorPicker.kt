@@ -29,17 +29,18 @@ import kotlinx.coroutines.launch
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.addIf
 import androidx.core.graphics.toColorInt
+import com.github.skydoves.colorpicker.compose.AlphaSlider
 
 @Composable
 fun ColorPicker(
+    initialColor: Int,
     scrollState: ScrollState?,
     onColorChanged: (Color) -> Unit,
 ) {
     val controller = rememberColorPickerController()
-    controller.setAlpha(1f, fromUser = false)
     LaunchedEffect(Unit) {
         controller.setBrightness(1f, fromUser = false)
-        controller.selectByColor(Color.White, fromUser = false)
+        controller.selectByColor(Color(initialColor), fromUser = false)
     }
 
     var hexCode by remember { mutableStateOf("") }
@@ -59,12 +60,21 @@ fun ColorPicker(
             },
             controller = controller,
             onColorChanged = {
-                hexCode = it.hexCode.substring(2)
+                hexCode = it.hexCode
                 onColorChanged(it.color)
             }
         )
 
         BrightnessSlider(
+            modifier = Modifier
+                .height(35.dp)
+                .fillMaxWidth(),
+            controller = controller
+        )
+
+        Spacer(modifier = Modifier.requiredHeight(16.dp))
+
+        AlphaSlider(
             modifier = Modifier
                 .height(35.dp)
                 .fillMaxWidth(),
@@ -90,10 +100,10 @@ fun ColorPicker(
             prefix = { Text("#") },
             value = hexCode,
             onValueChange = {
-                hexCode = it.take(6)
-                if (hexCode.length == 6) {
+                hexCode = it.take(8)
+                if (hexCode.length == 8) {
                     try {
-                        val parsedColor = "#FF$hexCode".toColorInt()
+                        val parsedColor = hexCode.toColorInt()
                         val color = Color(parsedColor)
                         controller.selectByColor(color, fromUser = false)
                     } catch (_: Exception) {

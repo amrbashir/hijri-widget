@@ -20,8 +20,9 @@ private const val PREF = "HijriWidgetPref"
 private const val LANG_KEY = "LANG"
 private const val THEME_KEY = "THEME"
 private const val CUSTOM_COLOR_KEY = "CUSTOM_COLOR"
+private const val BG_THEME_KEY = "BG_THEME"
+private const val BG_CUSTOM_COLOR_KEY = "BG_CUSTOM_COLOR"
 private const val SHADOW_KEY = "SHADOW"
-private const val IS_CUSTOM_TEXT_SIZE_KEY = "IS_CUSTOM_TEXT_SIZE"
 private const val CUSTOM_TEXT_SIZE_KEY = "CUSTOM_TEXT_SIZE"
 private const val DAY_START_HOUR_KEY = "DAY_START_HOUR"
 private const val DAY_START_MINUTE_KEY = "DAY_START_MINUTE"
@@ -31,9 +32,11 @@ private const val CALENDAR_CALCULATION_METHOD_KEY = "CALENDAR_CALCULATION_METHOD
 object Preferences {
     val language: MutableState<SupportedLanguage> = mutableStateOf(Defaults.language)
     val theme: MutableState<SupportedTheme> = mutableStateOf(Defaults.theme)
-    val color: MutableState<Int> = mutableIntStateOf(Color.White.toArgb())
+    val color: MutableState<Int> = mutableIntStateOf(Defaults.color)
     val customColor: MutableState<Int> = mutableIntStateOf(Defaults.color)
-    val isCustomTextSize: MutableState<Boolean> = mutableStateOf(Defaults.isCustomTextSize)
+    val bgTheme: MutableState<SupportedTheme> = mutableStateOf(Defaults.bgTheme)
+    val bgColor: MutableState<Int> = mutableIntStateOf(Defaults.bgColor)
+    val bgCustomColor: MutableState<Int> = mutableIntStateOf(Defaults.bgColor)
     val customTextSize: MutableState<Float> = mutableFloatStateOf(Defaults.customTextSize)
     val shadow: MutableState<Boolean> = mutableStateOf(Defaults.shadow)
     val dayStart: MutableState<DayStart> = mutableStateOf(Defaults.dayStart)
@@ -45,7 +48,8 @@ object Preferences {
         val language = SupportedLanguage.Arabic
         val theme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) SupportedTheme.Dynamic else SupportedTheme.System
         val color = Color.White.toArgb()
-        const val isCustomTextSize = false
+        val bgTheme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) SupportedTheme.Dynamic else SupportedTheme.Transparent
+        val bgColor = Color.Transparent.toArgb()
         const val customTextSize = 22F
         const val shadow = true
         val dayStart = DayStart(0, 0)
@@ -56,7 +60,7 @@ object Preferences {
     fun restoreDefaults(context: Context) {
         this.language.value = Defaults.language
         this.theme.value = Defaults.theme
-        this.isCustomTextSize.value = Defaults.isCustomTextSize
+        this.bgTheme.value = Defaults.bgTheme
         this.customTextSize.value = Defaults.customTextSize
         this.shadow.value = Defaults.shadow
         this.dayStart.value = Defaults.dayStart
@@ -74,11 +78,13 @@ object Preferences {
 
         val theme = sharedPreferences.getString(THEME_KEY, "Dynamic") ?: "Dynamic"
         this.theme.value = SupportedTheme.valueOf(theme)
-
         this.customColor.value = sharedPreferences.getInt(CUSTOM_COLOR_KEY, Color.White.toArgb())
 
+        val bgTheme = sharedPreferences.getString(BG_THEME_KEY, "Dynamic") ?: "Dynamic"
+        this.bgTheme.value = SupportedTheme.valueOf(bgTheme)
+        this.bgCustomColor.value = sharedPreferences.getInt(BG_CUSTOM_COLOR_KEY, Color.Transparent.toArgb())
+
         this.shadow.value = sharedPreferences.getBoolean(SHADOW_KEY, true)
-        this.isCustomTextSize.value = sharedPreferences.getBoolean(IS_CUSTOM_TEXT_SIZE_KEY, false)
 
         this.customTextSize.value = sharedPreferences.getFloat(CUSTOM_TEXT_SIZE_KEY, 22F)
 
@@ -92,6 +98,7 @@ object Preferences {
         this.calendarCalculationMethod.value = sharedPreferences.getString(CALENDAR_CALCULATION_METHOD_KEY, "islamic-umalqura")?: "islamic-umalqura"
 
         this.updateColor(context)
+        this.updateBgColor(context)
     }
 
     fun save(context: Context) {
@@ -100,8 +107,9 @@ object Preferences {
             putString(LANG_KEY, this@Preferences.language.value.toString())
             putString(THEME_KEY, this@Preferences.theme.value.toString())
             putInt(CUSTOM_COLOR_KEY, this@Preferences.customColor.value)
+            putString(BG_THEME_KEY, this@Preferences.bgTheme.value.toString())
+            putInt(BG_CUSTOM_COLOR_KEY, this@Preferences.bgCustomColor.value)
             putBoolean(SHADOW_KEY, this@Preferences.shadow.value)
-            putBoolean(IS_CUSTOM_TEXT_SIZE_KEY, this@Preferences.isCustomTextSize.value)
             putFloat(CUSTOM_TEXT_SIZE_KEY, this@Preferences.customTextSize.value)
             putInt(DAY_START_HOUR_KEY, this@Preferences.dayStart.value.hour)
             putInt(DAY_START_MINUTE_KEY, this@Preferences.dayStart.value.minute)
@@ -118,14 +126,33 @@ object Preferences {
                 else dynamicLightColorScheme(context).primary
             }
 
-            this.theme.value == SupportedTheme.System && context.isDark() -> darkScheme.surface
-            this.theme.value == SupportedTheme.System && !context.isDark() -> lightScheme.surface
-            this.theme.value == SupportedTheme.Dark -> darkScheme.surface
+            this.theme.value == SupportedTheme.System && context.isDark() -> darkScheme.onSurface
+            this.theme.value == SupportedTheme.System && !context.isDark() -> lightScheme.onSurface
+            this.theme.value == SupportedTheme.Dark -> lightScheme.onSurface
+            this.theme.value == SupportedTheme.Light -> darkScheme.onSurface
             this.theme.value == SupportedTheme.Custom -> Color(this.customColor.value)
-            else -> lightScheme.surface
+            else -> lightScheme.onSurface
         }
 
         this.color.value = newColor.toArgb()
+    }
+
+    fun updateBgColor(context: Context) {
+        val newColor = when {
+            this.bgTheme.value == SupportedTheme.Dynamic && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+                if (context.isDark()) dynamicDarkColorScheme(context).primaryContainer
+                else dynamicLightColorScheme(context).primaryContainer
+            }
+
+            this.bgTheme.value == SupportedTheme.System && context.isDark() -> darkScheme.surface
+            this.bgTheme.value == SupportedTheme.System && !context.isDark() -> lightScheme.surface
+            this.bgTheme.value == SupportedTheme.Dark -> darkScheme.surface
+            this.bgTheme.value == SupportedTheme.Light -> lightScheme.surface
+            this.bgTheme.value == SupportedTheme.Custom -> Color(this.bgCustomColor.value)
+            else -> Color.Transparent
+        }
+
+        this.bgColor.value = newColor.toArgb()
     }
 
     fun nextUpdateDateInMillis(): Long {

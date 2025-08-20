@@ -2,7 +2,6 @@ package me.amrbashir.hijriwidget.widget
 
 import android.content.Context
 import android.util.TypedValue
-import android.view.View
 import android.widget.RemoteViews
 import androidx.compose.runtime.Composable
 import androidx.glance.GlanceId
@@ -53,6 +52,7 @@ class HijriWidget : GlanceAppWidget() {
             TypedValue.COMPLEX_UNIT_SP,
             Preferences.customTextSize.value
         )
+        remoteView.setInt(R.id.widget_text_view, "setBackgroundColor", Preferences.bgColor.value)
 
         AndroidRemoteViews(remoteView, modifier = GlanceModifier.clickable {
             runBlocking {

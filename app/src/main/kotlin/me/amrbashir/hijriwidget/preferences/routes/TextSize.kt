@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -27,25 +28,13 @@ fun TextSize() {
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-        PreferenceCategory(
-            label = "Custom text size",
-            reserveIconSpace = false,
-            rightContent = {
-                Switch(
-                    checked = Preferences.isCustomTextSize.value,
-                    onCheckedChange = {
-                        Preferences.isCustomTextSize.value = it
-                    }
-                )
-            },
-            onClick = {
-                Preferences.isCustomTextSize.value = !Preferences.isCustomTextSize.value
-            }
+        Text(
+            "Text Size",
+            modifier = Modifier.padding(horizontal = 16.dp),
+            style = MaterialTheme.typography.bodySmall,
         )
 
         Slider(
-            enabled = Preferences.isCustomTextSize.value,
             value = Preferences.customTextSize.value,
             valueRange = 1F..100F,
             steps = 100,

@@ -201,6 +201,7 @@ enum class SupportedTheme(val prettyName: String, val description: String) {
     System("System", "Light or dark color based on device settings"),
     Dark("Dark", "Dark color, usually black"),
     Light("Light", "Light color, usually white"),
+    Transparent("Transparent", "Transparent color"),
     Custom("Custom", "Pick a custom color");
 
     companion object {
@@ -209,6 +210,13 @@ enum class SupportedTheme(val prettyName: String, val description: String) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 supportedThemes.add(0, Dynamic)
             }
+            return supportedThemes
+        }
+
+        fun allForBg(): MutableList<SupportedTheme> {
+            val supportedThemes = this.all()
+            val indexToAdd = if (supportedThemes[0] === Dynamic) 1 else 0
+            supportedThemes.add(indexToAdd, Transparent)
             return supportedThemes
         }
     }

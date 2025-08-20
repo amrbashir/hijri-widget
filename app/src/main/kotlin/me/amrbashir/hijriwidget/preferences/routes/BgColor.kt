@@ -19,10 +19,10 @@ import me.amrbashir.hijriwidget.preferences.composables.PreferenceCategory
 import me.amrbashir.hijriwidget.preferences.composables.RadioIcon
 
 @Composable
-fun TextColor() {
-    val savedTheme = Preferences.theme.value
+fun BgColor() {
+    val savedTheme = Preferences.bgTheme.value
 
-    val supportedThemes = SupportedTheme.all()
+    val supportedThemes = SupportedTheme.allForBg()
 
     val context = LocalContext.current
 
@@ -34,7 +34,7 @@ fun TextColor() {
             .verticalScroll(scrollState)
     ) {
         Text(
-            "Text Color",
+            "Background Color",
             modifier = Modifier.padding(horizontal = 16.dp),
             style = MaterialTheme.typography.bodySmall,
         )
@@ -45,19 +45,19 @@ fun TextColor() {
                 description = theme.description,
                 alternateIcon = { RadioIcon(selected = savedTheme == theme) },
                 onClick = {
-                    Preferences.theme.value = theme
-                    Preferences.updateColor(context)
+                    Preferences.bgTheme.value = theme
+                    Preferences.updateBgColor(context)
                 }
             )
         }
 
-        if (Preferences.theme.value == SupportedTheme.Custom) {
+        if (Preferences.bgTheme.value == SupportedTheme.Custom) {
             ColorPicker(
-                Preferences.customColor.value,
+                Preferences.bgCustomColor.value,
                 scrollState,
                 onColorChanged = {
-                    Preferences.customColor.value = it.toArgb()
-                    Preferences.updateColor(context)
+                    Preferences.bgCustomColor.value = it.toArgb()
+                    Preferences.updateBgColor(context)
                 }
             )
         }
