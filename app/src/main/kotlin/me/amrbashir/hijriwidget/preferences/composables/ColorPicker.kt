@@ -28,6 +28,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.addIf
+import androidx.core.graphics.toColorInt
 
 @Composable
 fun ColorPicker(
@@ -38,7 +39,7 @@ fun ColorPicker(
     controller.setAlpha(1f, fromUser = false)
     LaunchedEffect(Unit) {
         controller.setBrightness(1f, fromUser = false)
-        controller.setWheelColor(Color.Blue)
+        controller.selectByColor(Color.White, fromUser = false)
     }
 
     var hexCode by remember { mutableStateOf("") }
@@ -92,7 +93,7 @@ fun ColorPicker(
                 hexCode = it.take(6)
                 if (hexCode.length == 6) {
                     try {
-                        val parsedColor = android.graphics.Color.parseColor("#FF$hexCode")
+                        val parsedColor = "#FF$hexCode".toColorInt()
                         val color = Color(parsedColor)
                         controller.selectByColor(color, fromUser = false)
                     } catch (_: Exception) {

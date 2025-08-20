@@ -2,6 +2,7 @@ package me.amrbashir.hijriwidget.widget
 
 import android.content.Context
 import android.util.TypedValue
+import android.view.View
 import android.widget.RemoteViews
 import androidx.compose.runtime.Composable
 import androidx.glance.GlanceId
@@ -31,7 +32,7 @@ class HijriWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         Preferences.load(context)
-        HijriDate.load(Preferences.language.value, Preferences.dayStart.value)
+        HijriDate.load()
 
         provideContent {
             GlanceTheme {
@@ -46,17 +47,12 @@ class HijriWidget : GlanceAppWidget() {
 
         val remoteView = getView()
 
-        remoteView.setTextViewText(R.id.widget_text_view, HijriDate.today.value)
-
-        if (Preferences.isCustomTextSize.value) {
-            remoteView.setTextViewTextSize(
-                R.id.widget_text_view,
-                TypedValue.COMPLEX_UNIT_SP,
-                Preferences.customTextSize.value
-            )
-        } else {
-            remoteView.setTextViewTextSize(R.id.widget_text_view, TypedValue.COMPLEX_UNIT_SP, 22F)
-        }
+        remoteView.setTextViewText(R.id.widget_text_view, HijriDate.today.value.display())
+        remoteView.setTextViewTextSize(
+            R.id.widget_text_view,
+            TypedValue.COMPLEX_UNIT_SP,
+            Preferences.customTextSize.value
+        )
 
         AndroidRemoteViews(remoteView, modifier = GlanceModifier.clickable {
             runBlocking {
@@ -75,14 +71,14 @@ class HijriWidget : GlanceAppWidget() {
     @Composable
     private fun getDynamicView(): RemoteViews {
         val layout = if (Preferences.shadow.value) R.layout.widget_text_view_dynamic
-        else R.layout.widget_text_view_dynamic_no_shadow
+                     else R.layout.widget_text_view_dynamic_no_shadow
         return RemoteViews(LocalContext.current.packageName, layout)
     }
 
     @Composable
     private fun getNormalView(): RemoteViews {
         val layout = if (Preferences.shadow.value) R.layout.widget_text_view
-        else R.layout.widget_text_view_no_shadow
+                     else R.layout.widget_text_view_no_shadow
         val view = RemoteViews(LocalContext.current.packageName, layout)
         view.setTextColor(R.id.widget_text_view, Preferences.color.value)
         return view
@@ -92,7 +88,7 @@ class HijriWidget : GlanceAppWidget() {
         suspend fun update(context: Context) {
             HijriWidget().apply {
                 Preferences.load(context)
-                HijriDate.load(Preferences.language.value, Preferences.dayStart.value)
+                HijriDate.load()
                 updateAll(context)
             }
         }

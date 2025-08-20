@@ -25,6 +25,7 @@ private const val IS_CUSTOM_TEXT_SIZE_KEY = "IS_CUSTOM_TEXT_SIZE"
 private const val CUSTOM_TEXT_SIZE_KEY = "CUSTOM_TEXT_SIZE"
 private const val DAY_START_HOUR_KEY = "DAY_START_HOUR"
 private const val DAY_START_MINUTE_KEY = "DAY_START_MINUTE"
+private const val DAY_OFFSET_KEY = "DAY_OFFSET"
 
 object Preferences {
     val language: MutableState<SupportedLanguage> = mutableStateOf(Defaults.language)
@@ -35,6 +36,7 @@ object Preferences {
     val customTextSize: MutableState<Float> = mutableFloatStateOf(Defaults.customTextSize)
     val shadow: MutableState<Boolean> = mutableStateOf(Defaults.shadow)
     val dayStart: MutableState<DayStart> = mutableStateOf(Defaults.dayStart)
+    val dayOffset: MutableState<Int> = mutableIntStateOf(Defaults.dayOffset)
 
     @Suppress("ConstPropertyName")
     object Defaults {
@@ -45,6 +47,7 @@ object Preferences {
         const val customTextSize = 22F
         const val shadow = true
         val dayStart = DayStart(0, 0)
+        val dayOffset = 0
     }
 
     fun restoreDefaults(context: Context) {
@@ -54,6 +57,7 @@ object Preferences {
         this.customTextSize.value = Defaults.customTextSize
         this.shadow.value = Defaults.shadow
         this.dayStart.value = Defaults.dayStart
+        this.dayOffset.value = Defaults.dayOffset
         this.updateColor(context)
     }
 
@@ -79,6 +83,8 @@ object Preferences {
             sharedPreferences.getInt(DAY_START_MINUTE_KEY, 0)
         )
 
+        this.dayOffset.value = sharedPreferences.getInt(DAY_OFFSET_KEY, 0)
+
         this.updateColor(context)
     }
 
@@ -93,6 +99,7 @@ object Preferences {
             putFloat(CUSTOM_TEXT_SIZE_KEY, this@Preferences.customTextSize.value)
             putInt(DAY_START_HOUR_KEY, this@Preferences.dayStart.value.hour)
             putInt(DAY_START_MINUTE_KEY, this@Preferences.dayStart.value.minute)
+            putInt(DAY_OFFSET_KEY, this@Preferences.dayOffset.value)
             commit()
         }
     }

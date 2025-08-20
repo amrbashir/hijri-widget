@@ -5,10 +5,9 @@ import android.content.Context
 import android.content.pm.PackageManager
 import me.amrbashir.hijriwidget.BuildConfig
 import me.amrbashir.hijriwidget.HijriDate
-import me.amrbashir.hijriwidget.Preferences
 
 fun changeLauncherIcon(context: Context) {
-    val today = HijriDate.todayNumber(Preferences.dayStart.value)
+    val today = HijriDate.today()
 
     val packageManager = context.packageManager
 
@@ -27,7 +26,7 @@ fun changeLauncherIcon(context: Context) {
             ComponentName(context, "me.amrbashir.hijriwidget.preferences.Calendar_$day")
         packageManager.setComponentEnabledSetting(
             dayActivity,
-            if (today == day) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+            if (today.day == day) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
             PackageManager.DONT_KILL_APP
         )
     }

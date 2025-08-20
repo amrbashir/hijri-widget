@@ -3,17 +3,17 @@
 
     <style name="Theme.HijriWidget" parent="android:Theme.Material.NoActionBar" />
 
-    <style name="TextWithShadow">
+    <style name="HijriWidgetTextStyle">
         <item name="android:textSize">22sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">8dp</item>
         <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="HijriWidgetTextStyleWithShadow" parent="HijriWidgetTextStyle">
         <item name="android:shadowColor">#80000000</item>
         <item name="android:shadowDx">1</item>
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">1</item>
-    </style>
-
-    <style name="TextWithOutShadow">
-        <item name="android:textSize">22sp</item>
-        <item name="android:textColor">@android:color/white</item>
     </style>
 </resources>

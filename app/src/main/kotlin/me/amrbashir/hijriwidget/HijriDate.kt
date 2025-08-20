@@ -2,6 +2,7 @@ package me.amrbashir.hijriwidget
 
 import android.icu.util.Calendar
 import android.icu.util.ULocale
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 
@@ -36,31 +37,47 @@ val EN_MONTHS = arrayOf(
 )
 
 
-object HijriDate {
-    val today: MutableState<String> = mutableStateOf("")
+class HijriDate (val day: Int, val month: Int, val year: Int) {
 
-    fun load(lang: SupportedLanguage, dayStart: DayStart) {
-        this.today.value = todayForLang(lang, dayStart)
-    }
+    fun display(): String {
+        val lang = Preferences.language.value
 
-    fun todayForLang(lang: SupportedLanguage, dayStart: DayStart): String {
-        val calendar = Calendar.getInstance(ULocale("@calendar=islamic-umalqura"))
-        val day = todayNumber(dayStart).toString().convertNumbersToLang(lang)
-        val month = when (lang) {
-            SupportedLanguage.English -> EN_MONTHS[calendar[Calendar.MONTH]]
-            else -> AR_MONTHS[calendar[Calendar.MONTH]]
+        val day = day.toString().convertNumbersToLang(Preferences.language.value)
+        val monthName = when (lang) {
+            SupportedLanguage.English -> EN_MONTHS[month]
+            else -> AR_MONTHS[month]
         }
-        val year = calendar[Calendar.YEAR].toString().convertNumbersToLang(lang)
+        val year = year.toString().convertNumbersToLang(Preferences.language.value)
 
-        return "$day $month $year"
+        return "$day $monthName $year"
     }
 
-    fun todayNumber(dayStart: DayStart): Int {
-        val calendar = Calendar.getInstance(ULocale("@calendar=islamic-umalqura"))
-        val dayOfMonth = calendar[Calendar.DAY_OF_MONTH]
-        return if (
-            calendar[Calendar.HOUR_OF_DAY] >= dayStart.hour &&
-            calendar[Calendar.MINUTE] >= dayStart.minute
-        ) dayOfMonth else dayOfMonth - 1
+    companion object {
+        val today: MutableState<HijriDate> = mutableStateOf(HijriDate(0,0, 0))
+
+        fun load() {
+            this.today.value = today()
+        }
+
+        fun today(): HijriDate {
+            val dayStart = Preferences.dayStart.value
+
+            val calendar = Calendar.getInstance(ULocale("@calendar=islamic-umalqura"))
+
+            Log.d("HijriDate", "Day before offset: ${calendar[Calendar.DAY_OF_MONTH]}/${calendar[Calendar.MONTH]}")
+            calendar.add(Calendar.DAY_OF_MONTH, Preferences.dayOffset.value)
+            Log.d("HijriDate", "Day after offset: ${calendar[Calendar.DAY_OF_MONTH]}/${calendar[Calendar.MONTH]}")
+
+            val dayOfMonth = calendar[Calendar.DAY_OF_MONTH]
+            val day = if (
+                calendar[Calendar.HOUR_OF_DAY] >= dayStart.hour &&
+                calendar[Calendar.MINUTE] >= dayStart.minute
+            ) dayOfMonth else dayOfMonth - 1
+
+            val month = calendar[Calendar.MONTH]
+            val year = calendar[Calendar.YEAR]
+
+            return HijriDate(day, month, year)
+        }
     }
 }

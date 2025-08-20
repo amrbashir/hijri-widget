@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_text_view"
-    style="@style/TextWithShadow"
+    style="@style/HijriWidgetTextStyleWithShadow"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textColor="?attr/colorPrimary"
-    android:theme="@style/Theme.Material3.DynamicColors.DayNight" />
+    android:theme="@style/Theme.Material3.DynamicColors.DayNight"
+    />

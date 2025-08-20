@@ -41,6 +41,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.ColorUtils
@@ -55,6 +56,7 @@ import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.PreferencesTheme
 import me.amrbashir.hijriwidget.android.AlarmReceiver
 import me.amrbashir.hijriwidget.isDark
+import me.amrbashir.hijriwidget.preferences.routes.DayOffset
 import me.amrbashir.hijriwidget.preferences.routes.Home
 import me.amrbashir.hijriwidget.preferences.routes.Language
 import me.amrbashir.hijriwidget.preferences.routes.TextColor
@@ -63,6 +65,7 @@ import me.amrbashir.hijriwidget.widget.HijriWidget
 
 object Route {
     const val HOME = "/"
+    const val DAY_OFFSET = "DayOffset"
     const val LANGUAGE = "Language"
     const val TEXT_COLOR = "TextColor"
     const val TEXT_SIZE = "TextSize"
@@ -81,7 +84,7 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
         enableEdgeToEdge()
 
         Preferences.load(this.baseContext)
-        HijriDate.load(Preferences.language.value, Preferences.dayStart.value)
+        HijriDate.load()
 
         setContent {
             Content()
@@ -189,6 +192,7 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
                             }
                         ) {
                             composable(Route.HOME) { Home() }
+                            composable(Route.DAY_OFFSET) { DayOffset() }
                             composable(Route.LANGUAGE) { Language() }
                             composable(Route.TEXT_COLOR) { TextColor() }
                             composable(Route.TEXT_SIZE) { TextSize() }
@@ -203,7 +207,7 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
     private fun PreviewWidget() {
         var date by remember {
             mutableStateOf(
-                HijriDate.todayForLang(Preferences.language.value, Preferences.dayStart.value)
+                HijriDate.today()
             )
         }
 
@@ -225,9 +229,10 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
         LaunchedEffect(
             Preferences.language.value,
             Preferences.dayStart.value,
+            Preferences.dayOffset.value,
             HijriDate.today.value
         ) {
-            date = HijriDate.todayForLang(Preferences.language.value, Preferences.dayStart.value)
+            date = HijriDate.today()
         }
 
         Box(Modifier.padding(all = 16.dp)) {
@@ -236,7 +241,7 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
                 colors = CardDefaults.elevatedCardColors(containerColor = cardColor),
             ) {
                 Text(
-                    date,
+                    date.display(),
                     color = Color(textColor),
                     modifier = Modifier
                         .padding(all = 16.dp)
@@ -247,7 +252,8 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
                             color = Color(0, 0, 0, 128),
                             offset = Offset(x = 1f, y = 1f),
                             blurRadius = 1f,
-                        ) else null
+                        ) else null,
+                        textDirection = Preferences.language.value.dir()
                     ),
                     fontSize = textSize,
                 )

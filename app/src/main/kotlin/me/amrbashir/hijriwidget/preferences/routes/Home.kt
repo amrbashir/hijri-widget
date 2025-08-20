@@ -1,7 +1,6 @@
 package me.amrbashir.hijriwidget.preferences.routes
 
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.dp
 import me.amrbashir.hijriwidget.DayStart
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.R
@@ -28,6 +29,7 @@ import me.amrbashir.hijriwidget.preferences.LocalNavController
 import me.amrbashir.hijriwidget.preferences.Route
 import me.amrbashir.hijriwidget.preferences.composables.PreferenceCategory
 import me.amrbashir.hijriwidget.preferences.composables.TimePickerDialog
+import androidx.core.net.toUri
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,6 +48,41 @@ fun Home() {
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Column {
+
+            var showDayStartPicker by remember { mutableStateOf(false) }
+
+            PreferenceCategory(
+                label = "Day Start (${Preferences.dayStart.value})",
+                description = "Set when the Hijri day begins based on your local or religious preference",
+                icon = ImageVector.vectorResource(R.drawable.baseline_access_time_24),
+                onClick = {
+                    showDayStartPicker = true
+                }
+            )
+
+            if (showDayStartPicker) {
+                TimePickerDialog(
+                    initialHour = Preferences.dayStart.value.hour,
+                    initialMinute = Preferences.dayStart.value.minute,
+                    onConfirm = { state ->
+                        Preferences.dayStart.value = DayStart(state.hour, state.minute)
+                        showDayStartPicker = false
+                    },
+                    onDismiss = { showDayStartPicker = false }
+                )
+            }
+
+            PreferenceCategory(
+                label = "Day Offset (${Preferences.dayOffset.value})",
+                description = "Adjust Hijri date by ±1 day to match local moon sightings or personal observance",
+                icon = ImageVector.vectorResource(R.drawable.baseline_more_time_24),
+                onClick = {
+                    navController.navigate(Route.DAY_OFFSET)
+                }
+            )
+
+            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+
             PreferenceCategory(
                 label = "Language",
                 description = "Choose the widget language",
@@ -91,28 +128,7 @@ fun Home() {
                 }
             )
 
-            var showDayStartPicker by remember { mutableStateOf(false) }
-
-            PreferenceCategory(
-                label = "Day Start (${Preferences.dayStart.value})",
-                description = "Choose when to update the widget date",
-                icon = ImageVector.vectorResource(R.drawable.baseline_access_time_24),
-                onClick = {
-                    showDayStartPicker = true
-                }
-            )
-
-            if (showDayStartPicker) {
-                TimePickerDialog(
-                    initialHour = Preferences.dayStart.value.hour,
-                    initialMinute = Preferences.dayStart.value.minute,
-                    onConfirm = { state ->
-                        Preferences.dayStart.value = DayStart(state.hour, state.minute)
-                        showDayStartPicker = false
-                    },
-                    onDismiss = { showDayStartPicker = false }
-                )
-            }
+            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
 
             PreferenceCategory(
                 label = "Restore defaults",
@@ -132,7 +148,7 @@ fun Home() {
                     navController.context.startActivity(
                         Intent(
                             Intent.ACTION_VIEW,
-                            Uri.parse(privacyUrl)
+                            privacyUrl.toUri()
                         )
                     )
                 }
