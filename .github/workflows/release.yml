@@ -67,9 +67,12 @@ jobs:
       - name: Rename and move APK
         run: mv app/build/outputs/apk/release/app-release.apk hijri-widget-${{ github.ref_name }}.apk
 
-      - name: Release to GitHub
+      - name: generate release notes
+        run: .scripts/generate-release-notes.ps1
+
+      - name: release
         uses: softprops/action-gh-release@v2
         with:
           name: Hijri Widget ${{ github.ref_name }}
           files: hijri-widget-${{ github.ref_name }}.apk
-          generate_release_notes: true
+          body_path: RELEASE_NOTES.md
