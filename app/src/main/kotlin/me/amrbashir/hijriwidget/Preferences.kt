@@ -26,6 +26,7 @@ private const val CUSTOM_TEXT_SIZE_KEY = "CUSTOM_TEXT_SIZE"
 private const val DAY_START_HOUR_KEY = "DAY_START_HOUR"
 private const val DAY_START_MINUTE_KEY = "DAY_START_MINUTE"
 private const val DAY_OFFSET_KEY = "DAY_OFFSET"
+private const val CALENDAR_CALCULATION_METHOD_KEY = "CALENDAR_CALCULATION_METHOD"
 
 object Preferences {
     val language: MutableState<SupportedLanguage> = mutableStateOf(Defaults.language)
@@ -37,6 +38,7 @@ object Preferences {
     val shadow: MutableState<Boolean> = mutableStateOf(Defaults.shadow)
     val dayStart: MutableState<DayStart> = mutableStateOf(Defaults.dayStart)
     val dayOffset: MutableState<Int> = mutableIntStateOf(Defaults.dayOffset)
+    val calendarCalculationMethod: MutableState<String> = mutableStateOf(Defaults.calendarCalculationMethod)
 
     @Suppress("ConstPropertyName")
     object Defaults {
@@ -47,7 +49,8 @@ object Preferences {
         const val customTextSize = 22F
         const val shadow = true
         val dayStart = DayStart(0, 0)
-        val dayOffset = 0
+        const val dayOffset = 0
+        val calendarCalculationMethod = CalendarCalculationMethod.ISLAMIC_UMALQURA.toString()
     }
 
     fun restoreDefaults(context: Context) {
@@ -58,6 +61,7 @@ object Preferences {
         this.shadow.value = Defaults.shadow
         this.dayStart.value = Defaults.dayStart
         this.dayOffset.value = Defaults.dayOffset
+        this.calendarCalculationMethod.value = Defaults.calendarCalculationMethod
         this.updateColor(context)
     }
 
@@ -85,6 +89,8 @@ object Preferences {
 
         this.dayOffset.value = sharedPreferences.getInt(DAY_OFFSET_KEY, 0)
 
+        this.calendarCalculationMethod.value = sharedPreferences.getString(CALENDAR_CALCULATION_METHOD_KEY, "islamic-umalqura")?: "islamic-umalqura"
+
         this.updateColor(context)
     }
 
@@ -100,6 +106,7 @@ object Preferences {
             putInt(DAY_START_HOUR_KEY, this@Preferences.dayStart.value.hour)
             putInt(DAY_START_MINUTE_KEY, this@Preferences.dayStart.value.minute)
             putInt(DAY_OFFSET_KEY, this@Preferences.dayOffset.value)
+            putString(CALENDAR_CALCULATION_METHOD_KEY, this@Preferences.calendarCalculationMethod.value)
             commit()
         }
     }

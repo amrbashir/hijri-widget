@@ -4,6 +4,7 @@
 
 ## Added
 
+- Added "Calendar Calculation Method" to choose between "Islamic", "Islamic Umm al-Qura" or "Islamic Civil" methods
 - Added "Day Offset" option to adjust Hijri date by ±1 day to match local moon sightings or personal observance
 
 ## Changed

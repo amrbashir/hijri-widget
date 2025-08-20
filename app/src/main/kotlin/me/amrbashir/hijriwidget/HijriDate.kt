@@ -62,7 +62,7 @@ class HijriDate (val day: Int, val month: Int, val year: Int) {
         fun today(): HijriDate {
             val dayStart = Preferences.dayStart.value
 
-            val calendar = Calendar.getInstance(ULocale("@calendar=islamic-umalqura"))
+            val calendar = Calendar.getInstance(ULocale("@calendar=${Preferences.calendarCalculationMethod.value}"))
 
             Log.d("HijriDate", "Day before offset: ${calendar[Calendar.DAY_OF_MONTH]}/${calendar[Calendar.MONTH]}")
             calendar.add(Calendar.DAY_OF_MONTH, Preferences.dayOffset.value)

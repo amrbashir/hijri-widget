@@ -73,6 +73,15 @@ fun Home() {
             }
 
             PreferenceCategory(
+                label = "Calendar Calculation Method (${Preferences.calendarCalculationMethod.value})",
+                description = "Choose the method used to calculate Hijri dates",
+                icon = ImageVector.vectorResource(R.drawable.baseline_calendar_month_24),
+                onClick = {
+                    navController.navigate(Route.CALENDAR_CALCULATION_METHOD)
+                }
+            )
+
+            PreferenceCategory(
                 label = "Day Offset (${Preferences.dayOffset.value})",
                 description = "Adjust Hijri date by ±1 day to match local moon sightings or personal observance",
                 icon = ImageVector.vectorResource(R.drawable.baseline_more_time_24),
