@@ -3,5 +3,4 @@
     android:id="@+id/widget_text_view"
     style="@style/HijriWidgetTextStyle"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    />
+    android:layout_height="wrap_content" />

@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import me.amrbashir.hijriwidget.DayStart
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.R
@@ -29,7 +30,6 @@ import me.amrbashir.hijriwidget.preferences.LocalNavController
 import me.amrbashir.hijriwidget.preferences.Route
 import me.amrbashir.hijriwidget.preferences.composables.PreferenceCategory
 import me.amrbashir.hijriwidget.preferences.composables.TimePickerDialog
-import androidx.core.net.toUri
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -126,7 +126,6 @@ fun Home() {
                 onClick = {
                     navController.navigate(Route.TEXT_SIZE)
                 }
-
             )
 
             PreferenceCategory(

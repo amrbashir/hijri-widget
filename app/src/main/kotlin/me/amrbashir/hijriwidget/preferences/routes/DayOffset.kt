@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import me.amrbashir.hijriwidget.Preferences
-import me.amrbashir.hijriwidget.SupportedLanguage
 import me.amrbashir.hijriwidget.preferences.composables.PreferenceCategory
 import me.amrbashir.hijriwidget.preferences.composables.RadioIcon
 
@@ -30,7 +29,7 @@ fun DayOffset() {
             style = MaterialTheme.typography.bodySmall,
         )
 
-        for (offset in arrayOf(Pair(-1,"-1"), Pair(0, "0"), Pair(1, "+1"))) {
+        for (offset in arrayOf(Pair(-1, "-1"), Pair(0, "0"), Pair(1, "+1"))) {
             PreferenceCategory(
                 label = offset.second,
                 alternateIcon = { RadioIcon(selected = savedOffset == offset.first) },

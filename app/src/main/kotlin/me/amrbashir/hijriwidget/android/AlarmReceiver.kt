@@ -13,13 +13,17 @@ import kotlinx.coroutines.runBlocking
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.preferences.changeLauncherIcon
 import me.amrbashir.hijriwidget.widget.HijriWidget
-import java.util.Date;
+import java.util.Date
 
 
 class AlarmReceiver : BroadcastReceiver() {
     @SuppressLint("UnsafeProtectedBroadcastReceiver")
     override fun onReceive(context: Context, intent: Intent?) {
-        Log.d("AlarmReceiver", "Alarm fired at: " + DateFormat.getDateTimeInstance().format(Date(System.currentTimeMillis())) )
+        Log.d(
+            "AlarmReceiver",
+            "Alarm fired at: " + DateFormat.getDateTimeInstance()
+                .format(Date(System.currentTimeMillis()))
+        )
 
         runBlocking {
             changeLauncherIcon(context)
@@ -43,7 +47,11 @@ class AlarmReceiver : BroadcastReceiver() {
 
             val nextUpdateMillis = Preferences.nextUpdateDateInMillis()
 
-            Log.d("AlarmReceiver", "Setting up next alarm to fire at: " + DateFormat.getDateTimeInstance().format(Date(nextUpdateMillis)))
+            Log.d(
+                "AlarmReceiver",
+                "Setting up next alarm to fire at: " + DateFormat.getDateTimeInstance()
+                    .format(Date(nextUpdateMillis))
+            )
 
 
             val intent = Intent(context, AlarmReceiver::class.java)

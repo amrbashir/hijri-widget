@@ -41,14 +41,17 @@ object Preferences {
     val shadow: MutableState<Boolean> = mutableStateOf(Defaults.shadow)
     val dayStart: MutableState<DayStart> = mutableStateOf(Defaults.dayStart)
     val dayOffset: MutableState<Int> = mutableIntStateOf(Defaults.dayOffset)
-    val calendarCalculationMethod: MutableState<String> = mutableStateOf(Defaults.calendarCalculationMethod)
+    val calendarCalculationMethod: MutableState<String> =
+        mutableStateOf(Defaults.calendarCalculationMethod)
 
     @Suppress("ConstPropertyName")
     object Defaults {
         val language = SupportedLanguage.Arabic
-        val theme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) SupportedTheme.Dynamic else SupportedTheme.System
+        val theme =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) SupportedTheme.Dynamic else SupportedTheme.System
         val color = Color.White.toArgb()
-        val bgTheme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) SupportedTheme.Dynamic else SupportedTheme.Transparent
+        val bgTheme =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) SupportedTheme.Dynamic else SupportedTheme.Transparent
         val bgColor = Color.Transparent.toArgb()
         const val customTextSize = 22F
         const val shadow = true
@@ -82,7 +85,8 @@ object Preferences {
 
         val bgTheme = sharedPreferences.getString(BG_THEME_KEY, "Dynamic") ?: "Dynamic"
         this.bgTheme.value = SupportedTheme.valueOf(bgTheme)
-        this.bgCustomColor.value = sharedPreferences.getInt(BG_CUSTOM_COLOR_KEY, Color.Transparent.toArgb())
+        this.bgCustomColor.value =
+            sharedPreferences.getInt(BG_CUSTOM_COLOR_KEY, Color.Transparent.toArgb())
 
         this.shadow.value = sharedPreferences.getBoolean(SHADOW_KEY, true)
 
@@ -95,7 +99,9 @@ object Preferences {
 
         this.dayOffset.value = sharedPreferences.getInt(DAY_OFFSET_KEY, 0)
 
-        this.calendarCalculationMethod.value = sharedPreferences.getString(CALENDAR_CALCULATION_METHOD_KEY, "islamic-umalqura")?: "islamic-umalqura"
+        this.calendarCalculationMethod.value =
+            sharedPreferences.getString(CALENDAR_CALCULATION_METHOD_KEY, "islamic-umalqura")
+                ?: "islamic-umalqura"
 
         this.updateColor(context)
         this.updateBgColor(context)
@@ -114,7 +120,10 @@ object Preferences {
             putInt(DAY_START_HOUR_KEY, this@Preferences.dayStart.value.hour)
             putInt(DAY_START_MINUTE_KEY, this@Preferences.dayStart.value.minute)
             putInt(DAY_OFFSET_KEY, this@Preferences.dayOffset.value)
-            putString(CALENDAR_CALCULATION_METHOD_KEY, this@Preferences.calendarCalculationMethod.value)
+            putString(
+                CALENDAR_CALCULATION_METHOD_KEY,
+                this@Preferences.calendarCalculationMethod.value
+            )
             commit()
         }
     }

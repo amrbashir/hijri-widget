@@ -55,9 +55,9 @@
 
         <activity
             android:name=".preferences.WidgetConfiguration"
-            android:exported="false"
-            android:excludeFromRecents="true"
             android:autoRemoveFromRecents="true"
+            android:excludeFromRecents="true"
+            android:exported="false"
             android:theme="@style/Theme.HijriWidget"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>

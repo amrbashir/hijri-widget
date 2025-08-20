@@ -20,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.toColorInt
+import com.github.skydoves.colorpicker.compose.AlphaSlider
 import com.github.skydoves.colorpicker.compose.BrightnessSlider
 import com.github.skydoves.colorpicker.compose.HsvColorPicker
 import com.github.skydoves.colorpicker.compose.drawColorIndicator
@@ -28,8 +30,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.addIf
-import androidx.core.graphics.toColorInt
-import com.github.skydoves.colorpicker.compose.AlphaSlider
 
 @Composable
 fun ColorPicker(

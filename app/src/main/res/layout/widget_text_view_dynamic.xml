@@ -5,5 +5,4 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textColor="?attr/colorPrimary"
-    android:theme="@style/Theme.Material3.DynamicColors.DayNight"
-    />
+    android:theme="@style/Theme.Material3.DynamicColors.DayNight" />

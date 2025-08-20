@@ -37,7 +37,7 @@ val EN_MONTHS = arrayOf(
 )
 
 
-class HijriDate (val day: Int, val month: Int, val year: Int) {
+class HijriDate(val day: Int, val month: Int, val year: Int) {
 
     fun display(): String {
         val lang = Preferences.language.value
@@ -53,7 +53,7 @@ class HijriDate (val day: Int, val month: Int, val year: Int) {
     }
 
     companion object {
-        val today: MutableState<HijriDate> = mutableStateOf(HijriDate(0,0, 0))
+        val today: MutableState<HijriDate> = mutableStateOf(HijriDate(0, 0, 0))
 
         fun load() {
             this.today.value = today()
@@ -62,11 +62,18 @@ class HijriDate (val day: Int, val month: Int, val year: Int) {
         fun today(): HijriDate {
             val dayStart = Preferences.dayStart.value
 
-            val calendar = Calendar.getInstance(ULocale("@calendar=${Preferences.calendarCalculationMethod.value}"))
+            val calendar =
+                Calendar.getInstance(ULocale("@calendar=${Preferences.calendarCalculationMethod.value}"))
 
-            Log.d("HijriDate", "Day before offset: ${calendar[Calendar.DAY_OF_MONTH]}/${calendar[Calendar.MONTH]}")
+            Log.d(
+                "HijriDate",
+                "Day before offset: ${calendar[Calendar.DAY_OF_MONTH]}/${calendar[Calendar.MONTH]}"
+            )
             calendar.add(Calendar.DAY_OF_MONTH, Preferences.dayOffset.value)
-            Log.d("HijriDate", "Day after offset: ${calendar[Calendar.DAY_OF_MONTH]}/${calendar[Calendar.MONTH]}")
+            Log.d(
+                "HijriDate",
+                "Day after offset: ${calendar[Calendar.DAY_OF_MONTH]}/${calendar[Calendar.MONTH]}"
+            )
 
             val dayOfMonth = calendar[Calendar.DAY_OF_MONTH]
             val day = if (
