@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## Added
+
+- Added "Day Offset" option to adjust Hijri date by ±1 day to match local moon sightings or personal observance
+
+## Changed
+
+- Use `AlarmManager` instead of `WorkManager` for accurate date updates
+
 ## [v0.11.2] - 2025-03-06
 
 ### Changed
@@ -22,7 +30,7 @@
 
 ## [v0.10.0] - 2024-10-25
 
-### Enhanced
+### Changed
 - Improved workers functionality
 - Added CI workflow to publish to Google Play Store
 
