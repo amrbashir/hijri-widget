@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.12.0] - 2025-08-21
+
 ## Added
 
 - Added "Calendar Calculation Method" to choose between "Islamic", "Islamic Umm al-Qura" or "Islamic Civil" methods
