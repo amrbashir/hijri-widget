@@ -15,6 +15,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -53,11 +54,12 @@ import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.PreferencesTheme
 import me.amrbashir.hijriwidget.android.AlarmReceiver
+import me.amrbashir.hijriwidget.preferences.composables.TextAnyRtl
 import me.amrbashir.hijriwidget.preferences.routes.BgColor
 import me.amrbashir.hijriwidget.preferences.routes.CalendarCalculation
 import me.amrbashir.hijriwidget.preferences.routes.DayOffset
+import me.amrbashir.hijriwidget.preferences.routes.Format
 import me.amrbashir.hijriwidget.preferences.routes.Home
-import me.amrbashir.hijriwidget.preferences.routes.Language
 import me.amrbashir.hijriwidget.preferences.routes.TextColor
 import me.amrbashir.hijriwidget.preferences.routes.TextSize
 import me.amrbashir.hijriwidget.widget.HijriWidget
@@ -66,7 +68,7 @@ object Route {
     const val HOME = "/"
     const val DAY_OFFSET = "DayOffset"
     const val CALENDAR_CALCULATION_METHOD = "CalendarCalculationMethod"
-    const val LANGUAGE = "Language"
+    const val FORMAT = "Format"
     const val TEXT_COLOR = "TextColor"
     const val BG_COLOR = "BgColor"
     const val TEXT_SIZE = "TextSize"
@@ -195,7 +197,7 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
                             composable(Route.HOME) { Home() }
                             composable(Route.DAY_OFFSET) { DayOffset() }
                             composable(Route.CALENDAR_CALCULATION_METHOD) { CalendarCalculation() }
-                            composable(Route.LANGUAGE) { Language() }
+                            composable(Route.FORMAT) { Format() }
                             composable(Route.TEXT_COLOR) { TextColor() }
                             composable(Route.BG_COLOR) { BgColor() }
                             composable(Route.TEXT_SIZE) { TextSize() }
@@ -210,47 +212,53 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
     private fun PreviewWidget() {
         var date by remember {
             mutableStateOf(
-                HijriDate.today()
+                HijriDate.todayStr()
             )
         }
 
-        val textSize = Preferences.customTextSize.value.sp
+        val textSize = Preferences.textSize.value.sp
 
         val textColor = Preferences.color.value
         val bgColor = Color(Preferences.bgColor.value)
 
         LaunchedEffect(
-            Preferences.language.value,
             Preferences.dayStart.value,
+            Preferences.format.value,
+            Preferences.customFormat.value,
+            Preferences.isCustomFormat.value,
             Preferences.dayOffset.value,
             Preferences.calendarCalculationMethod.value,
             HijriDate.today.value
         ) {
-            date = HijriDate.today()
+            date = HijriDate.todayStr()
         }
 
         Box(Modifier.padding(all = 16.dp)) {
-            Card(
+            ElevatedCard(
                 modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.elevatedCardColors(containerColor = bgColor),
+                colors = CardDefaults.elevatedCardColors(MaterialTheme.colorScheme.surfaceContainerLow),
             ) {
-                Text(
-                    date.display(),
-                    color = Color(textColor),
-                    modifier = Modifier
-                        .padding(all = 16.dp)
-                        .align(Alignment.CenterHorizontally),
-                    style = MaterialTheme.typography.headlineMedium.copy(
-                        lineHeight = textSize,
-                        shadow = if (Preferences.shadow.value) Shadow(
-                            color = Color(0, 0, 0, 128),
-                            offset = Offset(x = 1f, y = 1f),
-                            blurRadius = 1f,
-                        ) else null,
-                        textDirection = Preferences.language.value.dir()
-                    ),
-                    fontSize = textSize,
-                )
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(containerColor = bgColor),
+                ) {
+                    TextAnyRtl(
+                        date,
+                        color = Color(textColor),
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(16.dp),
+                        style = MaterialTheme.typography.headlineMedium.copy(
+                            lineHeight = textSize,
+                            shadow = if (Preferences.shadow.value) Shadow(
+                                color = Color(0, 0, 0, 128),
+                                offset = Offset(x = 1f, y = 1f),
+                                blurRadius = 1f,
+                            ) else null,
+                        ),
+                        fontSize = textSize,
+                    )
+                }
             }
         }
     }

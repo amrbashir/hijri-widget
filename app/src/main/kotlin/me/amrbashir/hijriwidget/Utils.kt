@@ -1,0 +1,37 @@
+package me.amrbashir.hijriwidget
+
+import android.content.Context
+import android.content.res.Configuration
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextDirection
+
+fun isRtlChar(char: Char): Boolean = when (Character.getDirectionality(char)) {
+    Character.DIRECTIONALITY_RIGHT_TO_LEFT,
+    Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC,
+    Character.DIRECTIONALITY_RIGHT_TO_LEFT_EMBEDDING,
+    Character.DIRECTIONALITY_RIGHT_TO_LEFT_OVERRIDE,
+        -> true
+
+    else -> false
+}
+
+fun TextDirection.Companion.anyRtl(text: String): TextDirection {
+    val hasAnyRtlCharacter = text.any { isRtlChar(it) }
+    return if (hasAnyRtlCharacter) {
+        TextDirection.Rtl
+    } else {
+        TextDirection.Content
+    }
+}
+
+
+fun Context.isDark(): Boolean {
+    return resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_YES
+}
+
+
+inline fun Modifier.addIf(
+    condition: Boolean,
+    crossinline factory: Modifier.() -> Modifier
+): Modifier = if (condition) factory() else this

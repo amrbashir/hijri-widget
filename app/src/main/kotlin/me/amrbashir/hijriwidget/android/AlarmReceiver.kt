@@ -47,10 +47,10 @@ class AlarmReceiver : BroadcastReceiver() {
 
             val nextUpdateMillis = Preferences.nextUpdateDateInMillis()
 
+            val formatter = DateFormat.getDateTimeInstance()
             Log.d(
                 "AlarmReceiver",
-                "Setting up next alarm to fire at: " + DateFormat.getDateTimeInstance()
-                    .format(Date(nextUpdateMillis))
+                "Setting up next alarm to fire at: " + formatter.format(Date(nextUpdateMillis))
             )
 
 

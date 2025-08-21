@@ -70,11 +70,12 @@ fun PreferenceCategory(
             Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
 
+
                     CompositionLocalProvider(
                         LocalContentColor provides MaterialTheme.colorScheme.onBackground,
                         LocalTextStyle provides MaterialTheme.typography.bodyLarge,
                     ) {
-                        Text(label)
+                        TextAnyRtl(label)
                     }
 
 

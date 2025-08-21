@@ -10,14 +10,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import me.amrbashir.hijriwidget.CalendarCalculationMethod
+import me.amrbashir.hijriwidget.HijriDateCalculationMethod
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.preferences.composables.PreferenceCategory
 import me.amrbashir.hijriwidget.preferences.composables.RadioIcon
 
 @Composable
 fun CalendarCalculation() {
-    val savedCalcMethod = Preferences.calendarCalculationMethod.value
+    val savedMethod = Preferences.calendarCalculationMethod.value
 
     Column(
         Modifier
@@ -30,15 +30,14 @@ fun CalendarCalculation() {
             style = MaterialTheme.typography.bodySmall,
         )
 
-        for (calcMethod in CalendarCalculationMethod.entries) {
-            val methodStr = calcMethod.toString()
+        for (method in HijriDateCalculationMethod.entries) {
 
             PreferenceCategory(
-                label = calcMethod.label(),
-                description = calcMethod.desc(),
-                alternateIcon = { RadioIcon(selected = savedCalcMethod == methodStr) },
+                label = method.label,
+                description = method.description,
+                alternateIcon = { RadioIcon(selected = savedMethod == method.id) },
                 onClick = {
-                    Preferences.calendarCalculationMethod.value = methodStr
+                    Preferences.calendarCalculationMethod.value = method.id
                 }
             )
         }

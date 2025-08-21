@@ -33,22 +33,22 @@ fun TextSize() {
         )
 
         Slider(
-            value = Preferences.customTextSize.value,
+            value = Preferences.textSize.value,
             valueRange = 1F..100F,
             steps = 100,
             onValueChange = {
-                Preferences.customTextSize.value = it
+                Preferences.textSize.value = it
             },
             modifier = Modifier.padding(horizontal = 16.dp)
         )
 
-        Text(Preferences.customTextSize.value.roundToInt().toString())
+        Text(Preferences.textSize.value.roundToInt().toString())
 
         Spacer(modifier = Modifier.requiredHeight(16.dp))
 
         TextButton(
             onClick = {
-                Preferences.customTextSize.value = 22F
+                Preferences.textSize.value = 22F
             }
         ) {
             Text("Reset to default")

@@ -46,11 +46,11 @@ class HijriWidget : GlanceAppWidget() {
 
         val remoteView = getView()
 
-        remoteView.setTextViewText(R.id.widget_text_view, HijriDate.today.value.display())
+        remoteView.setTextViewText(R.id.widget_text_view, HijriDate.today.value)
         remoteView.setTextViewTextSize(
             R.id.widget_text_view,
             TypedValue.COMPLEX_UNIT_SP,
-            Preferences.customTextSize.value
+            Preferences.textSize.value
         )
         remoteView.setInt(R.id.widget_text_view, "setBackgroundColor", Preferences.bgColor.value)
 

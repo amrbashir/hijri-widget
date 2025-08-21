@@ -7,11 +7,16 @@
 - Added "Calendar Calculation Method" to choose between "Islamic", "Islamic Umm al-Qura" or "Islamic Civil" methods
 - Added "Day Offset" option to adjust Hijri date by ±1 day to match local moon sightings or personal observance
 - Added "Background Color" option to adjust the widget background color
+- Added "Format" option to choose between pre-defined presets of date, date and time or fine-tune using manual format string.
 
 ## Changed
 
 - Allow using a transparent text color when using the "Custom Color" option
 - Use `AlarmManager` instead of `WorkManager` for accurate date updates
+
+## Removed
+
+- Removed "Language" option, use the new "Format" option instead
 
 ## [v0.11.2] - 2025-03-06
 

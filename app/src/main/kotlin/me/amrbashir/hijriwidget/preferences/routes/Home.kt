@@ -73,7 +73,7 @@ fun Home() {
             }
 
             PreferenceCategory(
-                label = "Calendar Calculation Method (${Preferences.calendarCalculationMethod.value})",
+                label = "Calendar Calculation Method",
                 description = "Choose the method used to calculate Hijri dates",
                 icon = ImageVector.vectorResource(R.drawable.baseline_calendar_month_24),
                 onClick = {
@@ -93,11 +93,11 @@ fun Home() {
             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
 
             PreferenceCategory(
-                label = "Language",
-                description = "Choose the widget language",
+                label = "Format",
+                description = "Customize how the Hijri date appears by choosing a format pattern",
                 icon = ImageVector.vectorResource(R.drawable.baseline_translate_24),
                 onClick = {
-                    navController.navigate(Route.LANGUAGE)
+                    navController.navigate(Route.FORMAT)
                 }
             )
 
