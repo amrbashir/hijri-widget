@@ -61,7 +61,6 @@ import me.amrbashir.hijriwidget.isDark
 import me.amrbashir.hijriwidget.preferences.composables.ui.TextAnyRtl
 import me.amrbashir.hijriwidget.preferences.routes.CalendarCalculation
 import me.amrbashir.hijriwidget.preferences.routes.Color
-import me.amrbashir.hijriwidget.preferences.routes.DayOffset
 import me.amrbashir.hijriwidget.preferences.routes.Format
 import me.amrbashir.hijriwidget.preferences.routes.Home
 import me.amrbashir.hijriwidget.widget.HijriWidget

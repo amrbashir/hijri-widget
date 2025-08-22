@@ -86,7 +86,7 @@ fun Home() {
                 description = "Adjust Hijri date by ±1 day to match local moon sightings or personal observance",
                 iconResId = R.drawable.baseline_more_time_24,
             ) {
-                Row (
+                Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
@@ -143,7 +143,7 @@ fun Home() {
                 description = "Change the widget text size",
                 iconResId = R.drawable.baseline_text_increase_24,
             ) {
-                Row (
+                Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
