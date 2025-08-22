@@ -1,6 +1,9 @@
-package me.amrbashir.hijriwidget.preferences.composables
+package me.amrbashir.hijriwidget.preferences.composables.ui
 
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,7 +21,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import me.amrbashir.hijriwidget.addIf
 
@@ -29,37 +34,36 @@ fun PreferenceCategory(
     modifier: Modifier = Modifier,
     iconModifier: Modifier = Modifier,
     enabled: Boolean = true,
-    icon: ImageVector? = null,
-    alternateIcon: (@Composable () -> Unit)? = null,
+    @DrawableRes iconResId: Int? = null,
+    icon: (@Composable () -> Unit)? = null,
     description: String? = null,
     onClick: (() -> Unit)? = null,
-    rightContent: (@Composable () -> Unit)? = null,
-    reserveIconSpace: Boolean = true,
+    endContent: (@Composable () -> Unit)? = null,
+    content: (@Composable () -> Unit)? = null
 ) {
-    Column(Modifier.addIf(onClick != null) { clickable(enabled, onClick = onClick!!) }) {
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(all = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            if (reserveIconSpace || icon != null) {
+    Column(
+        modifier = modifier
+            .addIf(onClick != null) { clickable(enabled, onClick = onClick!!) }
+            .background(MaterialTheme.colorScheme.surfaceBright)
+            .padding(16.dp)
+    ) {
+        Row {
+            if (iconResId != null || icon != null) {
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier.size(32.dp),
                 ) {
-                    icon?.let {
+                    iconResId?.let {
                         Icon(
-                            imageVector = icon,
+                            imageVector = ImageVector.vectorResource(iconResId),
                             contentDescription = null,
                             modifier = iconModifier.size(24.dp),
                             tint = MaterialTheme.colorScheme.primary,
                         )
                     }
 
-                    alternateIcon?.let {
-                        alternateIcon()
+                    icon?.let {
+                        icon()
                     }
 
                 }
@@ -67,10 +71,12 @@ fun PreferenceCategory(
                 Spacer(modifier = Modifier.requiredWidth(16.dp))
             }
 
-            Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
-                Column(Modifier.weight(1f)) {
-
-
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
                     CompositionLocalProvider(
                         LocalContentColor provides MaterialTheme.colorScheme.onBackground,
                         LocalTextStyle provides MaterialTheme.typography.bodyLarge,
@@ -89,11 +95,12 @@ fun PreferenceCategory(
                     }
                 }
 
-                if (rightContent != null) {
-                    rightContent()
+                if (endContent != null) {
+                    endContent()
                 }
             }
         }
 
+        content?.invoke()
     }
 }

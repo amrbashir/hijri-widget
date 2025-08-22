@@ -21,8 +21,9 @@ import me.amrbashir.hijriwidget.FORMAT_PRESETES
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.formatDate
-import me.amrbashir.hijriwidget.preferences.composables.PreferenceCategory
-import me.amrbashir.hijriwidget.preferences.composables.RadioIcon
+import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceCategory
+import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
+import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
 
 @Composable
 fun Format() {
@@ -30,50 +31,47 @@ fun Format() {
 
     Column(
         Modifier
+            .padding(horizontal = 16.dp)
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        Text(
-            "Format",
-            modifier = Modifier.padding(horizontal = 16.dp),
-            style = MaterialTheme.typography.bodySmall,
-        )
+        PreferencesGroup(label = "Format") {
 
 
-        for (format in FORMAT_PRESETES) {
-            PreferenceCategory(
-                label = format.formatDate(HijriDate.today()),
-                description = format,
-                alternateIcon = { RadioIcon(selected = !Preferences.isCustomFormat.value && savedFormat == format) },
-                onClick = {
-                    Preferences.isCustomFormat.value = false
-                    Preferences.format.value = format
-                }
-            )
-        }
-
-        PreferenceCategory(
-            label = "Custom",
-            description = "Specify custom date format pattern (e.g., 'dd/MM/yyyy', 'EEEE, MMMM d')",
-            alternateIcon = { RadioIcon(selected = Preferences.isCustomFormat.value) },
-            onClick = {
-                Preferences.isCustomFormat.value = true
+            for (format in FORMAT_PRESETES) {
+                PreferenceCategory(
+                    label = format.formatDate(HijriDate.today()),
+                    description = format,
+                    icon = { RadioIcon(selected = !Preferences.isCustomFormat.value && savedFormat == format) },
+                    onClick = {
+                        Preferences.isCustomFormat.value = false
+                        Preferences.format.value = format
+                    }
+                )
             }
-        )
 
-        if (Preferences.isCustomFormat.value) {
-            OutlinedTextField(
-                value = Preferences.customFormat.value,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(),
-                onValueChange = {
-                    Preferences.customFormat.value = it
+            PreferenceCategory(
+                label = "Custom",
+                description = "Specify custom date format pattern (e.g., 'dd/MM/yyyy', 'EEEE, MMMM d')",
+                icon = { RadioIcon(selected = Preferences.isCustomFormat.value) },
+                onClick = {
+                    Preferences.isCustomFormat.value = true
                 }
             )
-            val annotatedString = buildAnnotatedString {
-                append(
-                    """
+
+            if (Preferences.isCustomFormat.value) {
+                OutlinedTextField(
+                    value = Preferences.customFormat.value,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
+                    onValueChange = {
+                        Preferences.customFormat.value = it
+                    }
+                )
+                val annotatedString = buildAnnotatedString {
+                    append(
+                        """
                     Customize how the date appears on your widget
 
                     You can use these codes:
@@ -106,34 +104,36 @@ fun Format() {
 
                     For the full list of language identifiers:
                 """.trimIndent()
-                )
-                withLink(
-                    LinkAnnotation.Url(
-                        "http://www.i18nguy.com/unicode/language-identifiers.html",
-                        TextLinkStyles(
-                            style = SpanStyle(
-                                color = MaterialTheme.colorScheme.primary.copy(
-                                    alpha = 0.7F
+                    )
+                    withLink(
+                        LinkAnnotation.Url(
+                            "http://www.i18nguy.com/unicode/language-identifiers.html",
+                            TextLinkStyles(
+                                style = SpanStyle(
+                                    color = MaterialTheme.colorScheme.primary.copy(
+                                        alpha = 0.7F
+                                    )
                                 )
                             )
                         )
-                    )
-                ) {
-                    append("http://www.i18nguy.com/unicode/language-identifiers.html")
+                    ) {
+                        append("http://www.i18nguy.com/unicode/language-identifiers.html")
+                    }
                 }
-            }
 
-            Text(
-                annotatedString,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(),
-                style = MaterialTheme.typography.bodyMedium.merge(
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
-                        alpha = 0.7F
-                    )
-                ),
-            )
+                Text(
+                    annotatedString,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
+                    style = MaterialTheme.typography.bodyMedium.merge(
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
+                            alpha = 0.7F
+                        )
+                    ),
+                )
+            }
         }
+
     }
 }

@@ -1,21 +1,23 @@
 package me.amrbashir.hijriwidget.preferences
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,6 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
@@ -54,24 +57,20 @@ import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.PreferencesTheme
 import me.amrbashir.hijriwidget.android.AlarmReceiver
-import me.amrbashir.hijriwidget.preferences.composables.TextAnyRtl
-import me.amrbashir.hijriwidget.preferences.routes.BgColor
+import me.amrbashir.hijriwidget.isDark
+import me.amrbashir.hijriwidget.preferences.composables.ui.TextAnyRtl
 import me.amrbashir.hijriwidget.preferences.routes.CalendarCalculation
+import me.amrbashir.hijriwidget.preferences.routes.Color
 import me.amrbashir.hijriwidget.preferences.routes.DayOffset
 import me.amrbashir.hijriwidget.preferences.routes.Format
 import me.amrbashir.hijriwidget.preferences.routes.Home
-import me.amrbashir.hijriwidget.preferences.routes.TextColor
-import me.amrbashir.hijriwidget.preferences.routes.TextSize
 import me.amrbashir.hijriwidget.widget.HijriWidget
 
 object Route {
     const val HOME = "/"
-    const val DAY_OFFSET = "DayOffset"
     const val CALENDAR_CALCULATION_METHOD = "CalendarCalculationMethod"
     const val FORMAT = "Format"
-    const val TEXT_COLOR = "TextColor"
-    const val BG_COLOR = "BgColor"
-    const val TEXT_SIZE = "TextSize"
+    const val COLOR = "Color"
 }
 
 val LocalNavController = staticCompositionLocalOf<NavController> {
@@ -113,15 +112,18 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
         val topAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(state)
 
         PreferencesTheme {
+            val containerColor =
+                if (navController.context.isDark()) MaterialTheme.colorScheme.surfaceContainer else MaterialTheme.colorScheme.surfaceContainerLow
+
             Scaffold(
-                containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                containerColor = containerColor,
                 snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
                 topBar = {
                     LargeTopAppBar(
                         title = { Text("Hijri Widget") },
                         colors = TopAppBarDefaults.topAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                            scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                            containerColor = containerColor,
+                            scrolledContainerColor = containerColor,
                         ),
                         scrollBehavior = topAppBarScrollBehavior,
                         navigationIcon = {
@@ -160,12 +162,18 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
                 },
                 modifier = Modifier.nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
             ) { padding ->
-                Column(modifier = Modifier.padding(padding)) {
+                Column(
+                    modifier = Modifier
+                        .consumeWindowInsets(padding)
+                        .padding(padding)
+                ) {
+                    PreviewWidget(navController.context)
+
+                    Spacer(modifier = Modifier.requiredHeight(16.dp))
+
                     CompositionLocalProvider(
                         LocalNavController provides navController,
                     ) {
-                        PreviewWidget()
-
                         NavHost(
                             navController = navController,
                             startDestination = Route.HOME,
@@ -195,12 +203,9 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
                             }
                         ) {
                             composable(Route.HOME) { Home() }
-                            composable(Route.DAY_OFFSET) { DayOffset() }
                             composable(Route.CALENDAR_CALCULATION_METHOD) { CalendarCalculation() }
                             composable(Route.FORMAT) { Format() }
-                            composable(Route.TEXT_COLOR) { TextColor() }
-                            composable(Route.BG_COLOR) { BgColor() }
-                            composable(Route.TEXT_SIZE) { TextSize() }
+                            composable(Route.COLOR) { Color() }
                         }
                     }
                 }
@@ -209,7 +214,7 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
     }
 
     @Composable
-    private fun PreviewWidget() {
+    private fun PreviewWidget(context: Context) {
         var date by remember {
             mutableStateOf(
                 HijriDate.todayStr()
@@ -218,8 +223,8 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
 
         val textSize = Preferences.textSize.value.sp
 
-        val textColor = Preferences.color.value
-        val bgColor = Color(Preferences.bgColor.value)
+        val textColor = Preferences.getColor(context)
+        val bgColor = Preferences.getBgColor(context)
 
         LaunchedEffect(
             Preferences.dayStart.value,
@@ -233,33 +238,28 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
             date = HijriDate.todayStr()
         }
 
-        Box(Modifier.padding(all = 16.dp)) {
-            ElevatedCard(
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.elevatedCardColors(MaterialTheme.colorScheme.surfaceContainerLow),
-            ) {
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(containerColor = bgColor),
-                ) {
-                    TextAnyRtl(
-                        date,
-                        color = Color(textColor),
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(16.dp),
-                        style = MaterialTheme.typography.headlineMedium.copy(
-                            lineHeight = textSize,
-                            shadow = if (Preferences.shadow.value) Shadow(
-                                color = Color(0, 0, 0, 128),
-                                offset = Offset(x = 1f, y = 1f),
-                                blurRadius = 1f,
-                            ) else null,
-                        ),
-                        fontSize = textSize,
-                    )
-                }
-            }
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(20.dp))
+                .background(bgColor)
+                .padding(16.dp)
+        ) {
+            TextAnyRtl(
+                date,
+                color = textColor,
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                style = MaterialTheme.typography.headlineMedium.copy(
+                    lineHeight = textSize,
+                    shadow = if (Preferences.shadow.value) Shadow(
+                        color = Color(0, 0, 0, 128),
+                        offset = Offset(x = 1f, y = 1f),
+                        blurRadius = 1f,
+                    ) else null,
+                ),
+                fontSize = textSize,
+            )
         }
     }
 }

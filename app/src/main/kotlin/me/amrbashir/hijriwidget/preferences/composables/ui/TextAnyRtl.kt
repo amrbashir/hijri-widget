@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preferences.composables
+package me.amrbashir.hijriwidget.preferences.composables.ui
 
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text

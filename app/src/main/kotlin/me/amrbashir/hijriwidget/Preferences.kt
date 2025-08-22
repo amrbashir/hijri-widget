@@ -5,12 +5,14 @@ import android.icu.util.Calendar
 import android.os.Build
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.glance.GlanceTheme
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -31,11 +33,9 @@ private const val CUSTOM_FORMAT_KEY = "CUSTOM_FORMAT"
 
 object Preferences {
     val theme: MutableState<SupportedTheme> = mutableStateOf(Defaults.theme)
-    val color: MutableState<Int> = mutableIntStateOf(Defaults.color)
-    val customColor: MutableState<Int> = mutableIntStateOf(Defaults.color)
+    val customColor: MutableState<Int> = mutableIntStateOf(Color.White.toArgb())
     val bgTheme: MutableState<SupportedTheme> = mutableStateOf(Defaults.bgTheme)
-    val bgColor: MutableState<Int> = mutableIntStateOf(Defaults.bgColor)
-    val bgCustomColor: MutableState<Int> = mutableIntStateOf(Defaults.bgColor)
+    val bgCustomColor: MutableState<Int> = mutableIntStateOf(Color.Transparent.toArgb())
     val textSize: MutableState<Float> = mutableFloatStateOf(Defaults.textSize)
     val shadow: MutableState<Boolean> = mutableStateOf(Defaults.shadow)
     val dayStart: MutableState<DayStart> = mutableStateOf(Defaults.dayStart)
@@ -50,9 +50,7 @@ object Preferences {
     object Defaults {
         val theme =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) SupportedTheme.Dynamic else SupportedTheme.System
-        val color = Color.White.toArgb()
-        val bgTheme = SupportedTheme.Transparent
-        val bgColor = Color.Transparent.toArgb()
+        val bgTheme = SupportedTheme.Dynamic
         const val textSize = 22F
         const val shadow = true
         val dayStart = DayStart(0, 0)
@@ -63,7 +61,7 @@ object Preferences {
         const val customFormat = ""
     }
 
-    fun restoreDefaults(context: Context) {
+    fun restoreDefaults() {
         this.theme.value = Defaults.theme
         this.bgTheme.value = Defaults.bgTheme
         this.textSize.value = Defaults.textSize
@@ -73,7 +71,6 @@ object Preferences {
         this.calendarCalculationMethod.value = Defaults.calendarCalculationMethod
         this.format.value = Defaults.format
         this.isCustomFormat.value = Defaults.isCustomFormat
-        this.updateColor(context)
     }
 
 
@@ -114,9 +111,6 @@ object Preferences {
         this.isCustomFormat.value =
             sharedPreferences.getBoolean(IS_CUSTOM_FORMAT_KEY, Defaults.isCustomFormat)
         this.customFormat.value = sharedPreferences.getString(CUSTOM_FORMAT_KEY, "") ?: ""
-
-        this.updateColor(context)
-        this.updateBgColor(context)
     }
 
     fun save(context: Context) {
@@ -142,40 +136,39 @@ object Preferences {
         }
     }
 
-    fun updateColor(context: Context) {
-        val newColor = when {
+    val Dark = Color(0xFF151515)
+
+    fun getColor(context: Context): Color {
+        return when {
             this.theme.value == SupportedTheme.Dynamic && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
                 if (context.isDark()) dynamicDarkColorScheme(context).primary
                 else dynamicLightColorScheme(context).primary
             }
 
-            this.theme.value == SupportedTheme.System && context.isDark() -> darkScheme.onSurface
-            this.theme.value == SupportedTheme.System && !context.isDark() -> lightScheme.onSurface
-            this.theme.value == SupportedTheme.Dark -> lightScheme.onSurface
-            this.theme.value == SupportedTheme.Light -> darkScheme.onSurface
+            this.theme.value == SupportedTheme.System && context.isDark() -> Color.White
+            this.theme.value == SupportedTheme.System && !context.isDark() -> Dark
+            this.theme.value == SupportedTheme.Dark -> Color.White
+            this.theme.value == SupportedTheme.Light -> Dark
             this.theme.value == SupportedTheme.Custom -> Color(this.customColor.value)
-            else -> lightScheme.onSurface
+            else -> Color.White
         }
 
-        this.color.value = newColor.toArgb()
     }
 
-    fun updateBgColor(context: Context) {
-        val newColor = when {
-            this.bgTheme.value == SupportedTheme.Dynamic && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-                if (context.isDark()) dynamicDarkColorScheme(context).primaryContainer
-                else dynamicLightColorScheme(context).primaryContainer
-            }
+    @Composable
+    fun getBgColor(context: Context): Color {
+        return when {
+            this.bgTheme.value == SupportedTheme.Dynamic && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> GlanceTheme.colors.widgetBackground.getColor(
+                context
+            )
 
-            this.bgTheme.value == SupportedTheme.System && context.isDark() -> darkScheme.surface
-            this.bgTheme.value == SupportedTheme.System && !context.isDark() -> lightScheme.surface
-            this.bgTheme.value == SupportedTheme.Dark -> darkScheme.surface
-            this.bgTheme.value == SupportedTheme.Light -> lightScheme.surface
+            this.bgTheme.value == SupportedTheme.System && context.isDark() -> Dark
+            this.bgTheme.value == SupportedTheme.System && !context.isDark() -> Color.White
+            this.bgTheme.value == SupportedTheme.Dark -> Dark
+            this.bgTheme.value == SupportedTheme.Light -> Color.White
             this.bgTheme.value == SupportedTheme.Custom -> Color(this.bgCustomColor.value)
-            else -> Color.Transparent
+            else -> Dark
         }
-
-        this.bgColor.value = newColor.toArgb()
     }
 
     fun nextUpdateDateInMillis(): Long {

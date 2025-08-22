@@ -3,8 +3,10 @@ package me.amrbashir.hijriwidget
 import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextDirection
+import androidx.glance.GlanceModifier
 
 fun isRtlChar(char: Char): Boolean = when (Character.getDirectionality(char)) {
     Character.DIRECTIONALITY_RIGHT_TO_LEFT,
@@ -35,3 +37,10 @@ inline fun Modifier.addIf(
     condition: Boolean,
     crossinline factory: Modifier.() -> Modifier
 ): Modifier = if (condition) factory() else this
+
+@Composable
+inline fun GlanceModifier.addIf(
+    condition: Boolean,
+    crossinline factory: @Composable GlanceModifier.() -> GlanceModifier
+): GlanceModifier = if (condition) factory() else this
+

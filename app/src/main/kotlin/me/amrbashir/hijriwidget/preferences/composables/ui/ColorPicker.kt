@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preferences.composables
+package me.amrbashir.hijriwidget.preferences.composables.ui
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
