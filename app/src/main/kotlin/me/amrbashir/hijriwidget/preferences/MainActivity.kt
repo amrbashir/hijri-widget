@@ -242,12 +242,12 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(20.dp))
-                .background(bgColor)
+                .background(bgColor.getColor(context))
                 .padding(16.dp)
         ) {
             TextAnyRtl(
                 date,
-                color = textColor,
+                color = textColor.getColor(context),
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.headlineMedium.copy(
                     lineHeight = textSize,

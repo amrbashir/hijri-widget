@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.glance.GlanceTheme
+import androidx.glance.unit.ColorProvider
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -138,36 +139,30 @@ object Preferences {
 
     val Dark = Color(0xFF151515)
 
-    fun getColor(context: Context): Color {
+    @Composable
+    fun getColor(context: Context): ColorProvider {
         return when {
-            this.theme.value == SupportedTheme.Dynamic && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-                if (context.isDark()) dynamicDarkColorScheme(context).primary
-                else dynamicLightColorScheme(context).primary
-            }
-
-            this.theme.value == SupportedTheme.System && context.isDark() -> Color.White
-            this.theme.value == SupportedTheme.System && !context.isDark() -> Dark
-            this.theme.value == SupportedTheme.Dark -> Color.White
-            this.theme.value == SupportedTheme.Light -> Dark
-            this.theme.value == SupportedTheme.Custom -> Color(this.customColor.value)
-            else -> Color.White
+            this.theme.value == SupportedTheme.Dynamic && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> GlanceTheme.colors.primary
+            this.theme.value == SupportedTheme.System && context.isDark() -> ColorProvider(Color.White)
+            this.theme.value == SupportedTheme.System && !context.isDark() -> ColorProvider(Dark)
+            this.theme.value == SupportedTheme.Dark -> ColorProvider(Color.White)
+            this.theme.value == SupportedTheme.Light -> ColorProvider(Dark)
+            this.theme.value == SupportedTheme.Custom -> ColorProvider(Color(this.customColor.value))
+            else -> ColorProvider(Color.White)
         }
 
     }
 
     @Composable
-    fun getBgColor(context: Context): Color {
+    fun getBgColor(context: Context): ColorProvider {
         return when {
-            this.bgTheme.value == SupportedTheme.Dynamic && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> GlanceTheme.colors.widgetBackground.getColor(
-                context
-            )
-
-            this.bgTheme.value == SupportedTheme.System && context.isDark() -> Dark
-            this.bgTheme.value == SupportedTheme.System && !context.isDark() -> Color.White
-            this.bgTheme.value == SupportedTheme.Dark -> Dark
-            this.bgTheme.value == SupportedTheme.Light -> Color.White
-            this.bgTheme.value == SupportedTheme.Custom -> Color(this.bgCustomColor.value)
-            else -> Dark
+            this.bgTheme.value == SupportedTheme.Dynamic && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> GlanceTheme.colors.widgetBackground
+            this.theme.value == SupportedTheme.System && context.isDark() -> ColorProvider(Dark)
+            this.theme.value == SupportedTheme.System && !context.isDark() -> ColorProvider(Color.White)
+            this.theme.value == SupportedTheme.Dark -> ColorProvider(Dark)
+            this.theme.value == SupportedTheme.Light -> ColorProvider(Color.White)
+            this.theme.value == SupportedTheme.Custom -> ColorProvider(Color(this.customColor.value))
+            else -> ColorProvider(Dark)
         }
     }
 
