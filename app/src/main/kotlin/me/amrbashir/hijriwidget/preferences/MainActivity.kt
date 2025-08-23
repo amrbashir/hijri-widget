@@ -13,13 +13,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -53,6 +53,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -251,7 +252,7 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
                 .padding(horizontal = 16.dp)
                 .clip(RoundedCornerShape(20.dp))
                 .fillMaxWidth()
-                .height(200.dp)
+                .height(220.dp)
                 .drawBehind {
                     val tileSize = 20F
                     val tileCountX = (size.width / tileSize).toInt()
@@ -268,13 +269,13 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
                         }
                     }
                 }
-                .padding(50.dp)
         ) {
 
             // Widget container simulating the resize bounds/handles on actual widget provided by the OS
             Box(
                 modifier = Modifier
-                    .aspectRatio(1.60F)
+                    .height(110.dp)
+                    .width(175.dp)
                     .clip(RoundedCornerShape(20.dp))
             ) {
                 // This is the same UI tree that is used for the widget
@@ -293,7 +294,7 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
                         Text(
                             date,
                             color = textColor.getColor(context),
-                            style = MaterialTheme.typography.headlineMedium.copy(
+                            style = TextStyle(
                                 fontSize = textSize,
                                 shadow = if (Preferences.shadow.value) Shadow(
                                     color = Color(0, 0, 0, 128),

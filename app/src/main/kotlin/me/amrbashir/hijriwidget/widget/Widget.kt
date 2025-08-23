@@ -43,6 +43,17 @@ class HijriWidget : GlanceAppWidget() {
         }
     }
 
+    override suspend fun providePreview(context: Context, widgetCategory: Int) {
+        Preferences.load(context)
+        HijriDate.load()
+
+        provideContent {
+            GlanceTheme {
+                Content()
+            }
+        }
+    }
+
     @Composable
     private fun Content() {
         val context = LocalContext.current
