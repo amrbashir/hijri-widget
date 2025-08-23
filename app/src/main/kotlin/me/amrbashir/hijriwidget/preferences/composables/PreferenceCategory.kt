@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preferences.composables.ui
+package me.amrbashir.hijriwidget.preferences.composables
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
@@ -80,7 +80,7 @@ fun PreferenceCategory(
                         LocalContentColor provides MaterialTheme.colorScheme.onBackground,
                         LocalTextStyle provides MaterialTheme.typography.bodyLarge,
                     ) {
-                        TextAnyRtl(label)
+                        Text(label)
                     }
 
 

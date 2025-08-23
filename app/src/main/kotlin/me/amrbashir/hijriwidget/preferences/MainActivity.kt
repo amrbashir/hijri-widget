@@ -8,10 +8,16 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,7 +47,9 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -58,7 +66,6 @@ import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.PreferencesTheme
 import me.amrbashir.hijriwidget.android.AlarmReceiver
 import me.amrbashir.hijriwidget.isDark
-import me.amrbashir.hijriwidget.preferences.composables.ui.TextAnyRtl
 import me.amrbashir.hijriwidget.preferences.routes.CalendarCalculation
 import me.amrbashir.hijriwidget.preferences.routes.Color
 import me.amrbashir.hijriwidget.preferences.routes.Format
@@ -103,7 +110,7 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
         val navController = rememberNavController()
         val currentBackStackEntry by navController.currentBackStackEntryAsState()
 
-        val snackbarHostState = remember { SnackbarHostState() }
+        val snackBarHostState = remember { SnackbarHostState() }
 
         val coroutineScope = rememberCoroutineScope()
 
@@ -116,7 +123,7 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
 
             Scaffold(
                 containerColor = containerColor,
-                snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+                snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
                 topBar = {
                     LargeTopAppBar(
                         title = { Text("Hijri Widget") },
@@ -146,7 +153,7 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
                                     if (this@WidgetConfiguration.autoClose) {
                                         this@WidgetConfiguration.finish()
                                     } else {
-                                        snackbarHostState.showSnackbar("Widget updated!")
+                                        snackBarHostState.showSnackbar("Widget updated!")
                                     }
                                 }
                             }) {
@@ -237,28 +244,67 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
             date = HijriDate.todayStr()
         }
 
-        Column(
+        // Checkerboard container
+        Box (
+            contentAlignment = Alignment.Center,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .fillMaxWidth()
                 .clip(RoundedCornerShape(20.dp))
-                .background(bgColor.getColor(context))
-                .padding(16.dp)
-        ) {
-            TextAnyRtl(
-                date,
-                color = textColor.getColor(context),
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                style = MaterialTheme.typography.headlineMedium.copy(
-                    lineHeight = textSize,
-                    shadow = if (Preferences.shadow.value) Shadow(
-                        color = Color(0, 0, 0, 128),
-                        offset = Offset(x = 1f, y = 1f),
-                        blurRadius = 1f,
-                    ) else null,
-                ),
-                fontSize = textSize,
-            )
+                .fillMaxWidth()
+                .height(200.dp)
+                .drawBehind {
+                    val tileSize = 20F
+                    val tileCountX = (size.width / tileSize).toInt()
+                    val tileCountY = (size.height / tileSize).toInt()
+                    val darkColor = Color.hsl(0F, 0F, 0.8F, 0.25F)
+                    val lightColor = Color.hsl(1F, 1F, 1F, 0.25F)
+                    for (i in 0..tileCountX) {
+                        for (j in 0..tileCountY) {
+                            drawRect(
+                                topLeft = Offset(i * tileSize, j * tileSize),
+                                color = if ((i + j) % 2 == 0) darkColor else lightColor,
+                                size = Size(tileSize, tileSize)
+                            )
+                        }
+                    }
+                }
+                .padding(50.dp)
+        )  {
+
+            // Widget container simulating the resize bounds/handles on actual widget provided by the OS
+            Box (
+                modifier = Modifier
+                    .aspectRatio(1.60F)
+                    .clip(RoundedCornerShape(20.dp))
+            ) {
+                // This is the same UI tree that is used for the widget
+                Box (
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(20.dp))
+                            .fillMaxSize()
+                            .background(bgColor.getColor(context))
+                    ) {
+                        Text(
+                            date,
+                            color = textColor.getColor(context),
+                            style = MaterialTheme.typography.headlineMedium.copy(
+                                fontSize = textSize,
+                                shadow = if (Preferences.shadow.value) Shadow(
+                                    color = Color(0, 0, 0, 128),
+                                    offset = Offset(x = 1f, y = 1f),
+                                    blurRadius = 1f,
+                                ) else null,
+                            ),
+                        )
+                    }
+                }
+            }
         }
     }
 }

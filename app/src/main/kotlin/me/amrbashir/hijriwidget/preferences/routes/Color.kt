@@ -11,10 +11,10 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.SupportedTheme
-import me.amrbashir.hijriwidget.preferences.composables.ui.ColorPicker
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceCategory
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
-import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
+import me.amrbashir.hijriwidget.preferences.composables.ColorPicker
+import me.amrbashir.hijriwidget.preferences.composables.PreferenceCategory
+import me.amrbashir.hijriwidget.preferences.composables.PreferencesGroup
+import me.amrbashir.hijriwidget.preferences.composables.RadioIcon
 
 @Composable
 fun Color() {

@@ -1,10 +1,9 @@
 package me.amrbashir.hijriwidget
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.icu.util.Calendar
 import android.os.Build
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableFloatStateOf
@@ -51,7 +50,7 @@ object Preferences {
     object Defaults {
         val theme =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) SupportedTheme.Dynamic else SupportedTheme.System
-        val bgTheme = SupportedTheme.Dynamic
+        val bgTheme = SupportedTheme.Transparent
         const val textSize = 22F
         const val shadow = true
         val dayStart = DayStart(0, 0)
@@ -139,6 +138,7 @@ object Preferences {
 
     val Dark = Color(0xFF151515)
 
+    @SuppressLint("RestrictedApi")
     @Composable
     fun getColor(context: Context): ColorProvider {
         return when {
@@ -153,6 +153,7 @@ object Preferences {
 
     }
 
+    @SuppressLint("RestrictedApi")
     @Composable
     fun getBgColor(context: Context): ColorProvider {
         return when {
@@ -162,7 +163,7 @@ object Preferences {
             this.theme.value == SupportedTheme.Dark -> ColorProvider(Dark)
             this.theme.value == SupportedTheme.Light -> ColorProvider(Color.White)
             this.theme.value == SupportedTheme.Custom -> ColorProvider(Color(this.customColor.value))
-            else -> ColorProvider(Dark)
+            else -> ColorProvider(Color.Transparent)
         }
     }
 

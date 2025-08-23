@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preferences.composables.ui
+package me.amrbashir.hijriwidget.preferences.composables
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

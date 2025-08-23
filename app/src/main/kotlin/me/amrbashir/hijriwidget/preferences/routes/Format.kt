@@ -21,9 +21,9 @@ import me.amrbashir.hijriwidget.FORMAT_PRESETES
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.formatDate
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceCategory
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
-import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
+import me.amrbashir.hijriwidget.preferences.composables.PreferenceCategory
+import me.amrbashir.hijriwidget.preferences.composables.PreferencesGroup
+import me.amrbashir.hijriwidget.preferences.composables.RadioIcon
 
 @Composable
 fun Format() {

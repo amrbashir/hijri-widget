@@ -5,10 +5,9 @@ import android.content.res.Configuration
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextDirection
 import androidx.glance.GlanceModifier
 
-fun isRtlChar(char: Char): Boolean = when (Character.getDirectionality(char)) {
+fun Char.isRtl(): Boolean = when (Character.getDirectionality(this)) {
     Character.DIRECTIONALITY_RIGHT_TO_LEFT,
     Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC,
     Character.DIRECTIONALITY_RIGHT_TO_LEFT_EMBEDDING,
@@ -17,16 +16,6 @@ fun isRtlChar(char: Char): Boolean = when (Character.getDirectionality(char)) {
 
     else -> false
 }
-
-fun TextDirection.Companion.anyRtl(text: String): TextDirection {
-    val hasAnyRtlCharacter = text.any { isRtlChar(it) }
-    return if (hasAnyRtlCharacter) {
-        TextDirection.Rtl
-    } else {
-        TextDirection.Content
-    }
-}
-
 
 fun Context.isDark(): Boolean {
     return resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_YES

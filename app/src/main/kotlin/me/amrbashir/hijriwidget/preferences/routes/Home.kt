@@ -31,9 +31,9 @@ import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preferences.LocalNavController
 import me.amrbashir.hijriwidget.preferences.Route
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceCategory
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
-import me.amrbashir.hijriwidget.preferences.composables.ui.TimePickerDialog
+import me.amrbashir.hijriwidget.preferences.composables.PreferenceCategory
+import me.amrbashir.hijriwidget.preferences.composables.PreferencesGroup
+import me.amrbashir.hijriwidget.preferences.composables.TimePickerDialog
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,9 +46,8 @@ fun Home() {
             .padding(horizontal = 16.dp)
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        PreferencesGroup {
+        PreferencesGroup (label = "Functionality") {
             var showDayStartPicker by remember { mutableStateOf(false) }
 
             PreferenceCategory(
@@ -119,7 +118,7 @@ fun Home() {
             }
         }
 
-        PreferencesGroup {
+        PreferencesGroup (label = "Customization"){
             PreferenceCategory(
                 label = "Format",
                 description = "Customize how the Hijri date appears by choosing a format pattern",
@@ -152,8 +151,8 @@ fun Home() {
                     Slider(
                         modifier = Modifier.weight(1F),
                         value = Preferences.textSize.value,
-                        valueRange = 1F..100F,
-                        steps = 100,
+                        valueRange = 1F..50F,
+                        steps = 50,
                         onValueChange = {
                             Preferences.textSize.value = it
                         },
@@ -193,7 +192,7 @@ fun Home() {
             )
         }
 
-        PreferencesGroup {
+        PreferencesGroup (label = "Misc.") {
             PreferenceCategory(
                 label = "Restore defaults",
                 description = "Restore the default preferences",

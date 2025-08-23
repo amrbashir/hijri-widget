@@ -513,8 +513,7 @@ enum class SupportedTheme(val prettyName: String, val description: String) {
 
         fun allForBg(): MutableList<SupportedTheme> {
             val supportedThemes = this.all()
-            val indexToAdd = if (supportedThemes[0] === Dynamic) 1 else 0
-            supportedThemes.add(indexToAdd, Transparent)
+            supportedThemes.add(0, Transparent)
             return supportedThemes
         }
     }

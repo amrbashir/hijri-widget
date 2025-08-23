@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preferences.composables.ui
+package me.amrbashir.hijriwidget.preferences.composables
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,7 +27,7 @@ fun PreferencesGroup(
     }
 
     Column(
-        modifier = Modifier.clip(shape = RoundedCornerShape(20.dp)),
+        modifier = Modifier.clip(RoundedCornerShape(20.dp)),
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
 
