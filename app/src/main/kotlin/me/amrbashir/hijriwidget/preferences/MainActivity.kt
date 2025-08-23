@@ -245,7 +245,7 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
         }
 
         // Checkerboard container
-        Box (
+        Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
@@ -269,16 +269,16 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
                     }
                 }
                 .padding(50.dp)
-        )  {
+        ) {
 
             // Widget container simulating the resize bounds/handles on actual widget provided by the OS
-            Box (
+            Box(
                 modifier = Modifier
                     .aspectRatio(1.60F)
                     .clip(RoundedCornerShape(20.dp))
             ) {
                 // This is the same UI tree that is used for the widget
-                Box (
+                Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier.fillMaxSize()
                 ) {

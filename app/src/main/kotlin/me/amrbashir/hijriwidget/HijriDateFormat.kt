@@ -59,7 +59,7 @@ fun String.formatDate(date: Calendar): String {
             // adding LTR marker after the output of RTL segments `ar-SA{MMMM}` -> `صفر\u2000E`
             // will force the flow of characters to stay consistent i.e left-to-right, while keeping flow
             // from right-to-left, if the formatted output is all RTL like `ar-SA{dd MMMM yyyy}`
-            val leftToRightMarker = if (formatted.any { it.isRtl()} ) "\u200E" else ""
+            val leftToRightMarker = if (formatted.any { it.isRtl() }) "\u200E" else ""
             acc + formatted + leftToRightMarker
         } catch (_: Exception) {
             acc + it.format

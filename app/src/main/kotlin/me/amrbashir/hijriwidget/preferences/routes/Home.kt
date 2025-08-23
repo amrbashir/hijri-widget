@@ -47,7 +47,7 @@ fun Home() {
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
     ) {
-        PreferencesGroup (label = "Functionality") {
+        PreferencesGroup(label = "Functionality") {
             var showDayStartPicker by remember { mutableStateOf(false) }
 
             PreferenceCategory(
@@ -118,7 +118,7 @@ fun Home() {
             }
         }
 
-        PreferencesGroup (label = "Customization"){
+        PreferencesGroup(label = "Customization") {
             PreferenceCategory(
                 label = "Format",
                 description = "Customize how the Hijri date appears by choosing a format pattern",
@@ -192,7 +192,7 @@ fun Home() {
             )
         }
 
-        PreferencesGroup (label = "Misc.") {
+        PreferencesGroup(label = "Misc.") {
             PreferenceCategory(
                 label = "Restore defaults",
                 description = "Restore the default preferences",
