@@ -15,6 +15,7 @@ import androidx.glance.GlanceTheme
 import androidx.glance.unit.ColorProvider
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import androidx.core.content.edit
 
 private const val PREF = "HijriWidgetPref"
 private const val THEME_KEY = "THEME"
@@ -30,6 +31,10 @@ private const val CALENDAR_CALCULATION_METHOD_KEY = "CALENDAR_CALCULATION_METHOD
 private const val FORMAT_KEY = "FORMAT"
 private const val IS_CUSTOM_FORMAT_KEY = "IS_CUSTOM_FORMAT"
 private const val CUSTOM_FORMAT_KEY = "CUSTOM_FORMAT"
+
+// Deprecated options
+private const val LANG_KEY = "LANG"
+
 
 object Preferences {
     val theme: MutableState<SupportedTheme> = mutableStateOf(Defaults.theme)
@@ -111,11 +116,23 @@ object Preferences {
         this.isCustomFormat.value =
             sharedPreferences.getBoolean(IS_CUSTOM_FORMAT_KEY, Defaults.isCustomFormat)
         this.customFormat.value = sharedPreferences.getString(CUSTOM_FORMAT_KEY, "") ?: ""
+
+
+        // Migrate old preferences
+        sharedPreferences.getString(LANG_KEY, null)?.let {
+            when (it) {
+                "Arabic" -> this.format.value = "dd MMMM yyyy"
+                "English" -> this.format.value = "en-GB{dd MMMM yyyy}"
+                else -> {}
+            }
+
+            sharedPreferences.edit(commit = true) { putString(FORMAT_KEY, this@Preferences.format.value) }
+        }
     }
 
     fun save(context: Context) {
         val sharedPreferences = context.getSharedPreferences(PREF, 0)
-        sharedPreferences.edit()?.run {
+        sharedPreferences.edit(commit = true) {
             putString(THEME_KEY, this@Preferences.theme.value.toString())
             putInt(CUSTOM_COLOR_KEY, this@Preferences.customColor.value)
             putString(BG_THEME_KEY, this@Preferences.bgTheme.value.toString())
@@ -132,7 +149,6 @@ object Preferences {
             putString(FORMAT_KEY, this@Preferences.format.value)
             putBoolean(IS_CUSTOM_FORMAT_KEY, this@Preferences.isCustomFormat.value)
             putString(CUSTOM_FORMAT_KEY, this@Preferences.customFormat.value)
-            commit()
         }
     }
 
