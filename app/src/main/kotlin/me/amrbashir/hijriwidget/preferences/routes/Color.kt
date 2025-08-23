@@ -74,7 +74,7 @@ fun Color() {
 
         if (Preferences.bgTheme.value == SupportedTheme.Custom) {
             Spacer(Modifier.requiredHeight(16.dp))
-            
+
             ColorPicker(
                 Preferences.bgCustomColor.value,
                 onColorChanged = {

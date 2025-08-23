@@ -1,5 +1,6 @@
 package me.amrbashir.hijriwidget.preferences
 
+import android.app.WallpaperManager
 import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -47,13 +48,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.drawable.toBitmap
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -230,6 +233,9 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
         val textColor = Preferences.getColor(context)
         val bgColor = Preferences.getBgColor(context)
 
+        val wallpaperManager = WallpaperManager.getInstance(context)
+        val builtinWallpaper = wallpaperManager.builtInDrawable.toBitmap().asImageBitmap()
+
         LaunchedEffect(
             Preferences.dayStart.value,
             Preferences.format.value,
@@ -242,32 +248,21 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
             date = HijriDate.todayStr()
         }
 
-        // Checkerboard container
+        // Wallpaper container
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .clip(RoundedCornerShape(20.dp))
-                .fillMaxWidth()
                 .height(220.dp)
+                .fillMaxWidth()
                 .drawBehind {
-                    val tileSize = 20F
-                    val tileCountX = (size.width / tileSize).toInt()
-                    val tileCountY = (size.height / tileSize).toInt()
-                    val darkColor = Color.hsl(0F, 0F, 0.8F, 0.25F)
-                    val lightColor = Color.hsl(1F, 1F, 1F, 0.25F)
-                    for (i in 0..tileCountX) {
-                        for (j in 0..tileCountY) {
-                            drawRect(
-                                topLeft = Offset(i * tileSize, j * tileSize),
-                                color = if ((i + j) % 2 == 0) darkColor else lightColor,
-                                size = Size(tileSize, tileSize)
-                            )
-                        }
-                    }
+                    drawImage(
+                        image = builtinWallpaper,
+                        dstSize = IntSize(size.width.toInt(), size.height.toInt())
+                    )
                 }
         ) {
-
             // Widget container simulating the resize bounds/handles on actual widget provided by the OS
             Box(
                 modifier = Modifier
