@@ -1,9 +1,11 @@
 package me.amrbashir.hijriwidget.preferences.routes
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -57,21 +59,24 @@ fun Format() {
                 onClick = {
                     Preferences.isCustomFormat.value = true
                 }
-            )
-
-            if (Preferences.isCustomFormat.value) {
+            ) {
                 OutlinedTextField(
+                    modifier = Modifier.padding(start = 48.dp).fillMaxWidth(),
+                    enabled = Preferences.isCustomFormat.value,
                     value = Preferences.customFormat.value,
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth(),
                     onValueChange = {
                         Preferences.customFormat.value = it
                     }
                 )
-                val annotatedString = buildAnnotatedString {
-                    append(
-                        """
+            }
+        }
+
+        if (Preferences.isCustomFormat.value) {
+            Spacer(Modifier.requiredHeight(16.dp))
+
+            val annotatedString = buildAnnotatedString {
+                append(
+                    """
                     Customize how the date appears on your widget
 
                     You can use these codes:
@@ -104,35 +109,32 @@ fun Format() {
 
                     For the full list of language identifiers:
                 """.trimIndent()
-                    )
-                    withLink(
-                        LinkAnnotation.Url(
-                            "http://www.i18nguy.com/unicode/language-identifiers.html",
-                            TextLinkStyles(
-                                style = SpanStyle(
-                                    color = MaterialTheme.colorScheme.primary.copy(
-                                        alpha = 0.7F
-                                    )
+                )
+                withLink(
+                    LinkAnnotation.Url(
+                        "http://www.i18nguy.com/unicode/language-identifiers.html",
+                        TextLinkStyles(
+                            style = SpanStyle(
+                                color = MaterialTheme.colorScheme.primary.copy(
+                                    alpha = 0.7F
                                 )
                             )
                         )
-                    ) {
-                        append("http://www.i18nguy.com/unicode/language-identifiers.html")
-                    }
+                    )
+                ) {
+                    append("http://www.i18nguy.com/unicode/language-identifiers.html")
                 }
-
-                Text(
-                    annotatedString,
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth(),
-                    style = MaterialTheme.typography.bodyMedium.merge(
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
-                            alpha = 0.7F
-                        )
-                    ),
-                )
             }
+
+            Text(
+                annotatedString,
+                modifier = Modifier.fillMaxWidth(),
+                style = MaterialTheme.typography.bodyMedium.merge(
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
+                        alpha = 0.7F
+                    )
+                ),
+            )
         }
 
     }
