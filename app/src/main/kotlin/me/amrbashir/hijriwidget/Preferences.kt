@@ -11,11 +11,11 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.core.content.edit
 import androidx.glance.GlanceTheme
 import androidx.glance.unit.ColorProvider
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import androidx.core.content.edit
 
 private const val PREF = "HijriWidgetPref"
 private const val THEME_KEY = "THEME"
@@ -126,7 +126,12 @@ object Preferences {
                 else -> {}
             }
 
-            sharedPreferences.edit(commit = true) { putString(FORMAT_KEY, this@Preferences.format.value) }
+            sharedPreferences.edit(commit = true) {
+                putString(
+                    FORMAT_KEY,
+                    this@Preferences.format.value
+                )
+            }
         }
     }
 

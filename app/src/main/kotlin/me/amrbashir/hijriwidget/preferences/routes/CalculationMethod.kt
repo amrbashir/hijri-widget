@@ -21,6 +21,7 @@ fun CalendarCalculation() {
     Column(
         Modifier
             .padding(horizontal = 16.dp)
+            .padding(bottom = 16.dp)
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {

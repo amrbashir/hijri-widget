@@ -1,8 +1,10 @@
 package me.amrbashir.hijriwidget.preferences.routes
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -24,13 +26,12 @@ fun Color() {
     val savedBgTheme = Preferences.bgTheme.value
     val supportedBgThemes = SupportedTheme.allForBg()
 
-    val scrollState = rememberScrollState()
-
     Column(
         Modifier
             .padding(horizontal = 16.dp)
+            .padding(bottom = 16.dp)
             .fillMaxSize()
-            .verticalScroll(scrollState)
+            .verticalScroll(rememberScrollState())
     ) {
         PreferencesGroup(label = "Text Color") {
             for (theme in supportedThemes) {
@@ -44,15 +45,17 @@ fun Color() {
                 )
             }
 
-            if (Preferences.theme.value == SupportedTheme.Custom) {
-                ColorPicker(
-                    Preferences.customColor.value,
-                    scrollState,
-                    onColorChanged = {
-                        Preferences.customColor.value = it.toArgb()
-                    }
-                )
-            }
+        }
+
+        if (Preferences.theme.value == SupportedTheme.Custom) {
+            Spacer(Modifier.requiredHeight(16.dp))
+
+            ColorPicker(
+                Preferences.customColor.value,
+                onColorChanged = {
+                    Preferences.customColor.value = it.toArgb()
+                }
+            )
         }
 
         PreferencesGroup(label = "Background Color") {
@@ -67,15 +70,17 @@ fun Color() {
                 )
             }
 
-            if (Preferences.bgTheme.value == SupportedTheme.Custom) {
-                ColorPicker(
-                    Preferences.bgCustomColor.value,
-                    scrollState,
-                    onColorChanged = {
-                        Preferences.bgCustomColor.value = it.toArgb()
-                    }
-                )
-            }
+        }
+
+        if (Preferences.bgTheme.value == SupportedTheme.Custom) {
+            Spacer(Modifier.requiredHeight(16.dp))
+            
+            ColorPicker(
+                Preferences.bgCustomColor.value,
+                onColorChanged = {
+                    Preferences.bgCustomColor.value = it.toArgb()
+                }
+            )
         }
     }
 }

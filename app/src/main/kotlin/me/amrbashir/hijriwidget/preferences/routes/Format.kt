@@ -34,12 +34,11 @@ fun Format() {
     Column(
         Modifier
             .padding(horizontal = 16.dp)
+            .padding(bottom = 16.dp)
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
         PreferencesGroup(label = "Format") {
-
-
             for (format in FORMAT_PRESETES) {
                 PreferenceCategory(
                     label = format.formatDate(HijriDate.today()),
@@ -61,7 +60,9 @@ fun Format() {
                 }
             ) {
                 OutlinedTextField(
-                    modifier = Modifier.padding(start = 48.dp).fillMaxWidth(),
+                    modifier = Modifier
+                        .padding(start = 48.dp)
+                        .fillMaxWidth(),
                     enabled = Preferences.isCustomFormat.value,
                     value = Preferences.customFormat.value,
                     onValueChange = {
