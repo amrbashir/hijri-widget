@@ -27,6 +27,10 @@ android {
     }
 
     buildTypes {
+        debug {
+            applicationIdSuffix = ".debug"
+        }
+
         release {
             isMinifyEnabled = true
             signingConfig = signingConfigs.getByName("config")
@@ -58,8 +62,8 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.10.1")
     implementation("androidx.work:work-runtime-ktx:2.10.3")
     debugImplementation("androidx.compose.ui:ui-tooling")
-    implementation("androidx.glance:glance-appwidget:1.1.1")
-    implementation("androidx.glance:glance-material3:1.1.1")
+    implementation("androidx.glance:glance-appwidget:1.2.0-alpha01")
+    implementation("androidx.glance:glance-material3:1.2.0-alpha01")
     implementation("androidx.navigation:navigation-compose:2.9.3")
     implementation("com.github.skydoves:colorpicker-compose:1.1.2")
 }
