@@ -8,7 +8,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceModifier
 import androidx.glance.appwidget.cornerRadius
 
@@ -48,7 +47,8 @@ fun GlanceModifier.widgetCornerRadius(): GlanceModifier {
 fun Modifier.widgetCornerRadius(context: Context): Modifier {
     val cornerRadiusModifier =
         if (Build.VERSION.SDK_INT >= 31) {
-            val radius =context.resources.getDimension(android.R.dimen.system_app_widget_background_radius)
+            val radius =
+                context.resources.getDimension(android.R.dimen.system_app_widget_background_radius)
             Modifier.clip(RoundedCornerShape(radius.toFloat()))
         } else {
             Modifier

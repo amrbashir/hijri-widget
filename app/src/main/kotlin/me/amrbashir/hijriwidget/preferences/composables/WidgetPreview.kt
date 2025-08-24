@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
@@ -71,13 +72,23 @@ fun WidgetPreview(context: Context) {
             .height(150.dp)
             .fillMaxWidth()
             .drawBehind {
-                //  center the image on the canvas
-                val offsetX = ((size.width - builtinWallpaper.width) / 2).toInt()
-                val offsetY = ((size.height - builtinWallpaper.height) / 2).toInt()
+                val imageWidth = builtinWallpaper.width.toFloat()
+                val imageHeight = builtinWallpaper.height.toFloat()
+                val canvasWidth = size.width
+                val canvasHeight = size.height
+
+                val scale = maxOf(canvasWidth / imageWidth, canvasHeight / imageHeight)
+
+                val scaledWidth = imageWidth * scale
+                val scaledHeight = imageHeight * scale
+
+                val offsetX = (canvasWidth - scaledWidth) / 2
+                val offsetY = (canvasHeight - scaledHeight) / 2
 
                 drawImage(
                     image = builtinWallpaper,
-                    dstOffset = IntOffset(offsetX, offsetY)
+                    dstSize = IntSize(scaledWidth.toInt(), scaledHeight.toInt()),
+                    dstOffset = IntOffset(offsetX.toInt(), offsetY.toInt())
                 )
             }
     ) {
