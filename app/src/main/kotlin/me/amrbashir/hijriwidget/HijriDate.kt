@@ -32,8 +32,10 @@ object HijriDate {
 
     fun todayStr(): String {
         val today = today()
-        return if (Preferences.isCustomFormat.value) Preferences.customFormat.value.formatDate(today)
-        else Preferences.format.value.formatDate(today)
+        return if (Preferences.textIsCustomFormat.value) Preferences.textCustomFormat.value.formatDate(
+            today
+        )
+        else Preferences.textFormat.value.formatDate(today)
     }
 
     fun todayNumber(): Int {

@@ -41,7 +41,7 @@ fun ColorPicker(
     ) {
         HsvColorPicker(
             modifier = Modifier.height(300.dp),
-            initialColor = Color(Preferences.customColor.value),
+            initialColor = Color(Preferences.textCustomColor.value),
             drawOnPosSelected = {
                 drawColorIndicator(
                     controller.selectedPoint.value,

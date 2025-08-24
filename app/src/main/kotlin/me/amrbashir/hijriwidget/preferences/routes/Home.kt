@@ -83,20 +83,20 @@ fun Home() {
 
         PreferencesGroup(label = "Appearance") {
             PreferenceButton(
-                label = "Format",
-                description = "Customize how the Hijri date appears by choosing a format pattern",
-                iconResId = R.drawable.baseline_translate_24,
-                onClick = {
-                    navController.navigate(Route.FORMAT)
-                }
-            )
-
-            PreferenceButton(
                 label = "Color",
                 description = "Choose the widget text and background color",
                 iconResId = R.drawable.baseline_color_lens_24,
                 onClick = {
                     navController.navigate(Route.COLOR)
+                }
+            )
+
+            PreferenceButton(
+                label = "Text Format",
+                description = "Customize how the Hijri date appears by choosing a format pattern",
+                iconResId = R.drawable.baseline_translate_24,
+                onClick = {
+                    navController.navigate(Route.FORMAT)
                 }
             )
 

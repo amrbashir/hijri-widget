@@ -29,7 +29,7 @@ import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
 
 @Composable
 fun Format() {
-    val savedFormat = Preferences.format.value
+    val savedFormat = Preferences.textFormat.value
 
     Column(
         Modifier
@@ -43,10 +43,10 @@ fun Format() {
                 PreferenceButton(
                     label = format.formatDate(HijriDate.today()),
                     description = format,
-                    icon = { RadioIcon(selected = !Preferences.isCustomFormat.value && savedFormat == format) },
+                    icon = { RadioIcon(selected = !Preferences.textIsCustomFormat.value && savedFormat == format) },
                     onClick = {
-                        Preferences.isCustomFormat.value = false
-                        Preferences.format.value = format
+                        Preferences.textIsCustomFormat.value = false
+                        Preferences.textFormat.value = format
                     }
                 )
             }
@@ -54,25 +54,25 @@ fun Format() {
             PreferenceButton(
                 label = "Custom",
                 description = "Specify custom date format pattern (e.g., 'dd/MM/yyyy', 'EEEE, MMMM d')",
-                icon = { RadioIcon(selected = Preferences.isCustomFormat.value) },
+                icon = { RadioIcon(selected = Preferences.textIsCustomFormat.value) },
                 onClick = {
-                    Preferences.isCustomFormat.value = true
+                    Preferences.textIsCustomFormat.value = true
                 }
             ) {
                 OutlinedTextField(
                     modifier = Modifier
                         .padding(start = 48.dp)
                         .fillMaxWidth(),
-                    enabled = Preferences.isCustomFormat.value,
-                    value = Preferences.customFormat.value,
+                    enabled = Preferences.textIsCustomFormat.value,
+                    value = Preferences.textCustomFormat.value,
                     onValueChange = {
-                        Preferences.customFormat.value = it
+                        Preferences.textCustomFormat.value = it
                     }
                 )
             }
         }
 
-        if (Preferences.isCustomFormat.value) {
+        if (Preferences.textIsCustomFormat.value) {
             Spacer(Modifier.requiredHeight(16.dp))
 
             val annotatedString = buildAnnotatedString {
