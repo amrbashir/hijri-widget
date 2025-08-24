@@ -1,6 +1,5 @@
 package me.amrbashir.hijriwidget.preferences
 
-import WidgetPreview
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -45,6 +44,7 @@ import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.PreferencesTheme
 import me.amrbashir.hijriwidget.android.AlarmReceiver
 import me.amrbashir.hijriwidget.isDark
+import me.amrbashir.hijriwidget.preferences.composables.WidgetPreview
 import me.amrbashir.hijriwidget.preferences.routes.CalendarCalculation
 import me.amrbashir.hijriwidget.preferences.routes.Color
 import me.amrbashir.hijriwidget.preferences.routes.Format

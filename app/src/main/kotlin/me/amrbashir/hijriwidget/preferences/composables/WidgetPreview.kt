@@ -1,10 +1,9 @@
+package me.amrbashir.hijriwidget.preferences.composables
+
 import android.app.WallpaperManager
 import android.content.Context
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -26,12 +25,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.Preferences
+import me.amrbashir.hijriwidget.widgetCornerRadius
 
 @Composable
 fun WidgetPreview(context: Context) {
@@ -67,49 +68,41 @@ fun WidgetPreview(context: Context) {
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(20.dp))
-            .height(220.dp)
+            .height(150.dp)
             .fillMaxWidth()
             .drawBehind {
+                //  center the image on the canvas
+                val offsetX = ((size.width - builtinWallpaper.width) / 2).toInt()
+                val offsetY = ((size.height - builtinWallpaper.height) / 2).toInt()
+
                 drawImage(
                     image = builtinWallpaper,
-                    dstSize = IntSize(size.width.toInt(), size.height.toInt())
+                    dstOffset = IntOffset(offsetX, offsetY)
                 )
             }
     ) {
-        // Widget container simulating the resize bounds/handles on actual widget provided by the OS
+
         Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier
-                .height(110.dp)
-                .width(175.dp)
-                .clip(RoundedCornerShape(20.dp))
+                .height(65.dp)
+                .width(120.dp)
+                .widgetCornerRadius(context)
+                .background(bgColor.getColor(context))
         ) {
-            // This is the same UI tree that is used for the widget
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(20.dp))
-                        .fillMaxSize()
-                        .background(bgColor.getColor(context))
-                ) {
-                    Text(
-                        date,
-                        color = textColor,
-                        style = TextStyle(
-                            fontSize = textSize,
-                            shadow = if (Preferences.textShadow.value) Shadow(
-                                color = Color(0, 0, 0, 128),
-                                offset = Offset(x = 1f, y = 1f),
-                                blurRadius = 1f,
-                            ) else null,
-                        ),
-                    )
-                }
-            }
+            Text(
+                date,
+                color = textColor,
+                style = TextStyle(
+                    textAlign = TextAlign.Center,
+                    fontSize = textSize,
+                    shadow = if (Preferences.textShadow.value) Shadow(
+                        color = Color(0, 0, 0, 128),
+                        offset = Offset(x = 1f, y = 1f),
+                        blurRadius = 1f,
+                    ) else null,
+                ),
+            )
         }
     }
 }

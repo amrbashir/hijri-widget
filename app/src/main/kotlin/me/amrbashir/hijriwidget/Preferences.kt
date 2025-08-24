@@ -158,10 +158,10 @@ object Preferences {
                 context
             )
 
-            this.textColorMode.value == ColorMode.System && context.isDark() -> Color.White
-            this.textColorMode.value == ColorMode.System && !context.isDark() -> Dark
-            this.textColorMode.value == ColorMode.Dark -> Color.White
-            this.textColorMode.value == ColorMode.Light -> Dark
+            this.textColorMode.value == ColorMode.System && context.isDark() -> Dark
+            this.textColorMode.value == ColorMode.System && !context.isDark() -> Color.White
+            this.textColorMode.value == ColorMode.Dark -> Dark
+            this.textColorMode.value == ColorMode.Light -> Color.White
             this.textColorMode.value == ColorMode.Custom -> Color(this.textCustomColor.value)
             else -> Color.White
         }
@@ -173,11 +173,11 @@ object Preferences {
     fun getBgColor(context: Context): ColorProvider {
         return when {
             this.bgColorMode.value == ColorMode.Dynamic && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> GlanceTheme.colors.widgetBackground
-            this.textColorMode.value == ColorMode.System && context.isDark() -> ColorProvider(Dark)
-            this.textColorMode.value == ColorMode.System && !context.isDark() -> ColorProvider(Color.White)
-            this.textColorMode.value == ColorMode.Dark -> ColorProvider(Dark)
-            this.textColorMode.value == ColorMode.Light -> ColorProvider(Color.White)
-            this.textColorMode.value == ColorMode.Custom -> ColorProvider(Color(this.textCustomColor.value))
+            this.bgColorMode.value == ColorMode.System && context.isDark() -> ColorProvider(Dark)
+            this.bgColorMode.value == ColorMode.System && !context.isDark() -> ColorProvider(Color.White)
+            this.bgColorMode.value == ColorMode.Dark -> ColorProvider(Dark)
+            this.bgColorMode.value == ColorMode.Light -> ColorProvider(Color.White)
+            this.bgColorMode.value == ColorMode.Custom -> ColorProvider(Color(this.bgCustomColor.value))
             else -> ColorProvider(Color.Transparent)
         }
     }

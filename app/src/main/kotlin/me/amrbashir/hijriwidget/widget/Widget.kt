@@ -15,6 +15,7 @@ import androidx.glance.appwidget.AndroidRemoteViews
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.SizeMode
+import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.provideContent
 import androidx.glance.appwidget.updateAll
 import androidx.glance.background
@@ -26,6 +27,7 @@ import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.android.AlarmReceiver
+import me.amrbashir.hijriwidget.widgetCornerRadius
 
 class HijriWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = HijriWidget()
@@ -82,6 +84,8 @@ class HijriWidget : GlanceAppWidget() {
         Box(
             contentAlignment = Alignment.Center,
             modifier = GlanceModifier.fillMaxSize()
+                .appWidgetBackground()
+                .widgetCornerRadius()
                 .background(Preferences.getBgColor(context))
                 .clickable {
                     runBlocking {

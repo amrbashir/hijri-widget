@@ -22,7 +22,7 @@ enum class ColorMode(val prettyName: String, val description: String) {
 
         fun allForBg(): ArrayList<ColorMode> {
             val modes = this.all()
-            modes.add(modes.count() - 2, Transparent)
+            modes.add(modes.count() - 1, Transparent)
             return modes
         }
     }
