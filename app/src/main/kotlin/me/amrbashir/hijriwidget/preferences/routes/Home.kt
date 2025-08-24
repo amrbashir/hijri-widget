@@ -109,19 +109,19 @@ fun Home() {
             }
 
             PreferenceButton(
-                label = "Shadow",
-                description = "Enable or disable the widget shadow",
+                label = "Text Shadow",
+                description = "Enable or disable the widget text shadow",
                 iconResId = R.drawable.baseline_brightness_6_24,
                 endContent = {
                     Switch(
-                        checked = Preferences.shadow.value,
+                        checked = Preferences.textShadow.value,
                         onCheckedChange = {
-                            Preferences.shadow.value = it
+                            Preferences.textShadow.value = it
                         }
                     )
                 },
                 onClick = {
-                    Preferences.shadow.value = !Preferences.shadow.value
+                    Preferences.textShadow.value = !Preferences.textShadow.value
                 }
             )
         }

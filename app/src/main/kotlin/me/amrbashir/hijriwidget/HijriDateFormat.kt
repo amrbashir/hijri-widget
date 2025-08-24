@@ -6,11 +6,11 @@ import android.icu.util.Calendar
 import android.icu.util.ULocale
 
 val FORMAT_PRESETES = arrayOf(
-    "dd MMMM yyyy",
-    "en-GB{dd MMMM yyyy}",
-    "en-GB{dd} ar-SA{MMMM} en-GB{yyyy}",
-    "dd / MM / yy",
-    "en-GB{dd / MM / yy}",
+    "d MMMM yyyy",
+    "en-GB{d MMMM yyyy}",
+    "en-GB{d} ar-SA{MMMM} en-GB{yyyy}",
+    "d / MM / yy",
+    "en-GB{d / MM / yy}",
 )
 
 data class FormatSegment(val langCode: String?, val format: String)

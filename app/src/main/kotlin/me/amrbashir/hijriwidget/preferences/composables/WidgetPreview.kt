@@ -43,7 +43,7 @@ fun WidgetPreview(context: Context) {
 
     val textSize = Preferences.textSize.value.sp
 
-    val textColor = Preferences.getColor(context)
+    val textColor = Preferences.getTextColor(context)
     val bgColor = Preferences.getBgColor(context)
 
     val wallpaperManager = WallpaperManager.getInstance(context)
@@ -98,10 +98,10 @@ fun WidgetPreview(context: Context) {
                 ) {
                     Text(
                         date,
-                        color = textColor.getColor(context),
+                        color = textColor,
                         style = TextStyle(
                             fontSize = textSize,
-                            shadow = if (Preferences.shadow.value) Shadow(
+                            shadow = if (Preferences.textShadow.value) Shadow(
                                 color = Color(0, 0, 0, 128),
                                 offset = Offset(x = 1f, y = 1f),
                                 blurRadius = 1f,
