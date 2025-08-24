@@ -204,6 +204,15 @@ object Preferences {
     fun migratePreferences(context: Context) {
         val sharedPreferences = context.getSharedPreferences(PREF, 0)
 
+        if (
+            !sharedPreferences.contains(BG_COLOR_MODE_KEY) &&
+            sharedPreferences.contains("LANG")
+        ) {
+            sharedPreferences.edit(commit = true) {
+                putString(BG_COLOR_MODE_KEY, ColorMode.Transparent.toString())
+            }
+        }
+
         if (!sharedPreferences.contains(TEXT_FORMAT_KEY)) {
             sharedPreferences.getString("LANG", null)?.let {
                 sharedPreferences.edit(commit = true) {
