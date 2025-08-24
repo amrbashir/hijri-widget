@@ -81,7 +81,7 @@ fun Home() {
             }
         }
 
-        PreferencesGroup(label = "Customization") {
+        PreferencesGroup(label = "Appearance") {
             PreferenceButton(
                 label = "Format",
                 description = "Customize how the Hijri date appears by choosing a format pattern",

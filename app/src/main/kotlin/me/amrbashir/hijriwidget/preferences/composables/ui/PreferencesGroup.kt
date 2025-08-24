@@ -22,7 +22,7 @@ fun PreferencesGroup(
             label,
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(vertical = 16.dp)
+            modifier = Modifier.padding(16.dp)
         )
     }
 
