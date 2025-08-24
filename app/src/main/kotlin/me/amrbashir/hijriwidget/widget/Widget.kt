@@ -23,6 +23,7 @@ import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.fillMaxSize
 import kotlinx.coroutines.runBlocking
+import me.amrbashir.hijriwidget.ColorMode
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.R
@@ -75,7 +76,7 @@ class HijriWidget : GlanceAppWidget() {
             Preferences.textSize.value
         )
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && Preferences.textColorMode.value == ColorMode.Dynamic) {
             remoteViews.setColorAttr(remoteViewId, "setTextColor", android.R.attr.colorPrimary)
         } else {
             remoteViews.setTextColor(remoteViewId, Preferences.getTextColor(context).toArgb())
