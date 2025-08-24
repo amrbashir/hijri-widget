@@ -23,9 +23,9 @@ import me.amrbashir.hijriwidget.FORMAT_PRESETES
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.formatDate
-import me.amrbashir.hijriwidget.preferences.composables.PreferenceCategory
-import me.amrbashir.hijriwidget.preferences.composables.PreferencesGroup
-import me.amrbashir.hijriwidget.preferences.composables.RadioIcon
+import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceButton
+import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
+import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
 
 @Composable
 fun Format() {
@@ -40,7 +40,7 @@ fun Format() {
     ) {
         PreferencesGroup(label = "Format") {
             for (format in FORMAT_PRESETES) {
-                PreferenceCategory(
+                PreferenceButton(
                     label = format.formatDate(HijriDate.today()),
                     description = format,
                     icon = { RadioIcon(selected = !Preferences.isCustomFormat.value && savedFormat == format) },
@@ -51,7 +51,7 @@ fun Format() {
                 )
             }
 
-            PreferenceCategory(
+            PreferenceButton(
                 label = "Custom",
                 description = "Specify custom date format pattern (e.g., 'dd/MM/yyyy', 'EEEE, MMMM d')",
                 icon = { RadioIcon(selected = Preferences.isCustomFormat.value) },

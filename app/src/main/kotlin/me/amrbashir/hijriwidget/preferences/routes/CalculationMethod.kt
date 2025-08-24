@@ -10,9 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import me.amrbashir.hijriwidget.HijriDateCalculationMethod
 import me.amrbashir.hijriwidget.Preferences
-import me.amrbashir.hijriwidget.preferences.composables.PreferenceCategory
-import me.amrbashir.hijriwidget.preferences.composables.PreferencesGroup
-import me.amrbashir.hijriwidget.preferences.composables.RadioIcon
+import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceButton
+import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
+import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
 
 @Composable
 fun CalendarCalculation() {
@@ -28,7 +28,7 @@ fun CalendarCalculation() {
         PreferencesGroup(label = "Calendar Calculation Method") {
             for (method in HijriDateCalculationMethod.entries) {
 
-                PreferenceCategory(
+                PreferenceButton(
                     label = method.label,
                     description = method.description,
                     icon = { RadioIcon(selected = savedMethod == method.id) },

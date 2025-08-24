@@ -13,10 +13,10 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.SupportedTheme
-import me.amrbashir.hijriwidget.preferences.composables.ColorPicker
-import me.amrbashir.hijriwidget.preferences.composables.PreferenceCategory
-import me.amrbashir.hijriwidget.preferences.composables.PreferencesGroup
-import me.amrbashir.hijriwidget.preferences.composables.RadioIcon
+import me.amrbashir.hijriwidget.preferences.composables.ui.ColorPicker
+import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceButton
+import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
+import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
 
 @Composable
 fun Color() {
@@ -35,7 +35,7 @@ fun Color() {
     ) {
         PreferencesGroup(label = "Text Color") {
             for (theme in supportedThemes) {
-                PreferenceCategory(
+                PreferenceButton(
                     label = theme.prettyName,
                     description = theme.description,
                     icon = { RadioIcon(selected = savedTheme == theme) },
@@ -60,7 +60,7 @@ fun Color() {
 
         PreferencesGroup(label = "Background Color") {
             for (bgTheme in supportedBgThemes) {
-                PreferenceCategory(
+                PreferenceButton(
                     label = bgTheme.prettyName,
                     description = bgTheme.description,
                     icon = { RadioIcon(selected = savedBgTheme == bgTheme) },

@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preferences.composables
+package me.amrbashir.hijriwidget.preferences.composables.ui
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
@@ -26,7 +26,7 @@ import me.amrbashir.hijriwidget.addIf
 
 
 @Composable
-fun PreferenceCategory(
+fun PreferenceButton(
     label: String,
     modifier: Modifier = Modifier,
     iconModifier: Modifier = Modifier,

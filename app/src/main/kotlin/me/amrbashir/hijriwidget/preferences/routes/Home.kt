@@ -31,9 +31,11 @@ import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preferences.LocalNavController
 import me.amrbashir.hijriwidget.preferences.Route
-import me.amrbashir.hijriwidget.preferences.composables.PreferenceCategory
-import me.amrbashir.hijriwidget.preferences.composables.PreferencesGroup
-import me.amrbashir.hijriwidget.preferences.composables.TimePickerDialog
+import me.amrbashir.hijriwidget.preferences.composables.DayOffset
+import me.amrbashir.hijriwidget.preferences.composables.TextSize
+import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceButton
+import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
+import me.amrbashir.hijriwidget.preferences.composables.ui.TimePickerDialog
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,28 +53,28 @@ fun Home() {
         PreferencesGroup(label = "Functionality") {
             var showDayStartPicker by remember { mutableStateOf(false) }
 
-            PreferenceCategory(
+            PreferenceButton(
                 label = "Day Start (${Preferences.dayStart.value})",
                 description = "Set when the Hijri day begins based on your local or religious preference",
                 iconResId = R.drawable.baseline_access_time_24,
                 onClick = {
                     showDayStartPicker = true
                 }
-            )
-
-            if (showDayStartPicker) {
-                TimePickerDialog(
-                    initialHour = Preferences.dayStart.value.hour,
-                    initialMinute = Preferences.dayStart.value.minute,
-                    onConfirm = { state ->
-                        Preferences.dayStart.value = DayStart(state.hour, state.minute)
-                        showDayStartPicker = false
-                    },
-                    onDismiss = { showDayStartPicker = false }
-                )
+            ) {
+                if (showDayStartPicker) {
+                    TimePickerDialog(
+                        initialHour = Preferences.dayStart.value.hour,
+                        initialMinute = Preferences.dayStart.value.minute,
+                        onConfirm = { state ->
+                            Preferences.dayStart.value = DayStart(state.hour, state.minute)
+                            showDayStartPicker = false
+                        },
+                        onDismiss = { showDayStartPicker = false }
+                    )
+                }
             }
 
-            PreferenceCategory(
+            PreferenceButton(
                 label = "Calendar Calculation Method",
                 description = "Choose the method used to calculate Hijri dates",
                 iconResId = R.drawable.baseline_calendar_month_24,
@@ -81,46 +83,17 @@ fun Home() {
                 }
             )
 
-            PreferenceCategory(
+            PreferenceButton(
                 label = "Day Offset",
                 description = "Adjust Hijri date by ±1 day to match local moon sightings or personal observance",
                 iconResId = R.drawable.baseline_more_time_24,
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    Spacer(modifier = Modifier.requiredWidth(38.dp))
-
-                    Slider(
-                        modifier = Modifier.weight(1F),
-                        value = Preferences.dayOffset.value.toFloat(),
-                        valueRange = -1F..1F,
-                        steps = 1,
-                        onValueChange = {
-                            Preferences.dayOffset.value = it.toInt()
-                        },
-                    )
-
-                    Text("${Preferences.dayOffset.value}")
-
-                    IconButton(
-                        onClick = {
-                            Preferences.dayOffset.value = Preferences.Defaults.dayOffset
-                        }
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.baseline_settings_backup_restore_24),
-                            contentDescription = "Reset to default"
-                        )
-                    }
-                }
-
+                DayOffset()
             }
         }
 
         PreferencesGroup(label = "Customization") {
-            PreferenceCategory(
+            PreferenceButton(
                 label = "Format",
                 description = "Customize how the Hijri date appears by choosing a format pattern",
                 iconResId = R.drawable.baseline_translate_24,
@@ -129,7 +102,7 @@ fun Home() {
                 }
             )
 
-            PreferenceCategory(
+            PreferenceButton(
                 label = "Color",
                 description = "Choose the widget text and background color",
                 iconResId = R.drawable.baseline_color_lens_24,
@@ -138,44 +111,15 @@ fun Home() {
                 }
             )
 
-            PreferenceCategory(
+            PreferenceButton(
                 label = "Text Size",
                 description = "Change the widget text size",
                 iconResId = R.drawable.baseline_text_increase_24,
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    Spacer(modifier = Modifier.requiredWidth(38.dp))
-
-                    Slider(
-                        modifier = Modifier.weight(1F),
-                        value = Preferences.textSize.value,
-                        valueRange = 1F..50F,
-                        steps = 50,
-                        onValueChange = {
-                            Preferences.textSize.value = it
-                        },
-                    )
-
-                    Text("${Preferences.textSize.value.roundToInt()}")
-
-                    IconButton(
-                        onClick = {
-                            Preferences.textSize.value = Preferences.Defaults.textSize
-                        }
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.baseline_settings_backup_restore_24),
-                            contentDescription = "Reset to default"
-                        )
-                    }
-                }
-
+                    TextSize()
             }
 
-            PreferenceCategory(
+            PreferenceButton(
                 label = "Shadow",
                 description = "Enable or disable the widget shadow",
                 iconResId = R.drawable.baseline_brightness_6_24,
@@ -194,7 +138,7 @@ fun Home() {
         }
 
         PreferencesGroup(label = "Misc.") {
-            PreferenceCategory(
+            PreferenceButton(
                 label = "Restore defaults",
                 description = "Restore the default preferences",
                 iconResId = R.drawable.baseline_settings_backup_restore_24,
@@ -203,8 +147,7 @@ fun Home() {
                 }
             )
 
-            val privacyUrl = "https://hijri-widget.amrbashir.me/PRIVACY.md"
-            PreferenceCategory(
+            PreferenceButton(
                 label = "Privacy Policy",
                 description = "Click to read our privacy policy",
                 iconResId = R.drawable.baseline_launch_24,
@@ -212,7 +155,7 @@ fun Home() {
                     navController.context.startActivity(
                         Intent(
                             Intent.ACTION_VIEW,
-                            privacyUrl.toUri()
+                            "https://hijri-widget.amrbashir.me/PRIVACY.md".toUri()
                         )
                     )
                 }
