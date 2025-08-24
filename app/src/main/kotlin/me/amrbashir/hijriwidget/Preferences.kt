@@ -250,10 +250,10 @@ object Preferences {
         }
 
         if (!sharedPreferences.contains(TEXT_SIZE_KEY)) {
-            sharedPreferences.getInt("CUSTOM_TEXT_SIZE", -1).let {
-                if (it != -1) {
+            sharedPreferences.getFloat("CUSTOM_TEXT_SIZE", -1F).let {
+                if (it != -1F) {
                     sharedPreferences.edit(commit = true) {
-                        putInt(
+                        putFloat(
                             TEXT_SIZE_KEY,
                             it
                         )
