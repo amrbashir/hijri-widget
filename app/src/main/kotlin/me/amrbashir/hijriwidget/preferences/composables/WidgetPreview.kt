@@ -96,8 +96,8 @@ fun WidgetPreview(context: Context) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .height(65.dp)
-                .width(120.dp)
+                .height(110.dp)
+                .width(175.dp)
                 .widgetCornerRadius(context)
                 .background(bgColor.getColor(context))
         ) {
