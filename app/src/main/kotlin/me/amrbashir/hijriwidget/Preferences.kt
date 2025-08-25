@@ -51,9 +51,8 @@ object Preferences {
     @Suppress("ConstPropertyName")
     object Defaults {
         val bgColorMode =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) ColorMode.Dynamic else ColorMode.System
-        val textColorMode =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) ColorMode.Dynamic else ColorMode.System
+            ColorMode.Transparent
+        val textColorMode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) ColorMode.Dynamic else ColorMode.System
         const val textSize = 22F
         const val textShadow = true
         val textFormat = FORMAT_PRESETES[0]
@@ -203,15 +202,6 @@ object Preferences {
 
     fun migratePreferences(context: Context) {
         val sharedPreferences = context.getSharedPreferences(PREF, 0)
-
-        if (
-            !sharedPreferences.contains(BG_COLOR_MODE_KEY) &&
-            sharedPreferences.contains("LANG")
-        ) {
-            sharedPreferences.edit(commit = true) {
-                putString(BG_COLOR_MODE_KEY, ColorMode.Transparent.toString())
-            }
-        }
 
         if (!sharedPreferences.contains(TEXT_FORMAT_KEY)) {
             sharedPreferences.getString("LANG", null)?.let {

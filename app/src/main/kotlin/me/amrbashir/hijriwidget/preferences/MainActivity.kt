@@ -54,8 +54,8 @@ import me.amrbashir.hijriwidget.widget.HijriWidget
 object Route {
     const val HOME = "/"
     const val CALENDAR_CALCULATION_METHOD = "CalendarCalculationMethod"
-    const val FORMAT = "Format"
-    const val COLOR = "Color"
+    const val DATE_FORMAT = "DateFormat"
+    const val COLOR_MODE = "ColorMode"
 }
 
 val LocalNavController = staticCompositionLocalOf<NavController> {
@@ -188,8 +188,8 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
                         ) {
                             composable(Route.HOME) { Home() }
                             composable(Route.CALENDAR_CALCULATION_METHOD) { CalendarCalculation() }
-                            composable(Route.FORMAT) { Format() }
-                            composable(Route.COLOR) { Color() }
+                            composable(Route.DATE_FORMAT) { Format() }
+                            composable(Route.COLOR_MODE) { Color() }
                         }
                     }
                 }

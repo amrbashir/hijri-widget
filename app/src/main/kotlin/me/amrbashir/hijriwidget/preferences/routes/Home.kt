@@ -31,6 +31,7 @@ import me.amrbashir.hijriwidget.preferences.composables.ui.TimePickerDialog
 @Composable
 fun Home() {
     val navController = LocalNavController.current
+    var showDayStartPicker by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -40,7 +41,15 @@ fun Home() {
             .verticalScroll(rememberScrollState()),
     ) {
         PreferencesGroup(label = "Functionality") {
-            var showDayStartPicker by remember { mutableStateOf(false) }
+
+            PreferenceButton(
+                label = "Date Format",
+                description = "Customize how the Hijri date appears by choosing a format pattern",
+                iconResId = R.drawable.baseline_translate_24,
+                onClick = {
+                    navController.navigate(Route.DATE_FORMAT)
+                }
+            )
 
             PreferenceButton(
                 label = "Day Start (${Preferences.dayStart.value})",
@@ -87,16 +96,7 @@ fun Home() {
                 description = "Choose the widget text and background color",
                 iconResId = R.drawable.baseline_color_lens_24,
                 onClick = {
-                    navController.navigate(Route.COLOR)
-                }
-            )
-
-            PreferenceButton(
-                label = "Text Format",
-                description = "Customize how the Hijri date appears by choosing a format pattern",
-                iconResId = R.drawable.baseline_translate_24,
-                onClick = {
-                    navController.navigate(Route.FORMAT)
+                    navController.navigate(Route.COLOR_MODE)
                 }
             )
 
