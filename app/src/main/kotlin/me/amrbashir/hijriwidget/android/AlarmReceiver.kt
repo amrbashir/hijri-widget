@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.icu.text.DateFormat
+import android.icu.util.Calendar
 import android.os.Build
 import android.util.Log
 import kotlinx.coroutines.runBlocking
@@ -37,6 +38,28 @@ class AlarmReceiver : BroadcastReceiver() {
     companion object {
         private const val ALARM_REQUEST_CODE = 1
 
+        fun nextUpdateDateInMillis(): Long {
+            val nextDayStart = Calendar.getInstance()
+
+            Log.d("AlarmReceiver","ph: " + Preferences.dayStart.value.hour )
+            Log.d("AlarmReceiver","pm: " + Preferences.dayStart.value.minute )
+            Log.d("AlarmReceiver","d: " + nextDayStart[Calendar.DAY_OF_MONTH].toString() )
+            Log.d("AlarmReceiver","h: " + nextDayStart[Calendar.HOUR_OF_DAY].toString() )
+            Log.d("AlarmReceiver","m: " + nextDayStart[Calendar.MINUTE].toString() )
+
+            val currentTime = nextDayStart[Calendar.HOUR_OF_DAY] * 60 + nextDayStart[Calendar.MINUTE]
+            val dayStartTime = Preferences.dayStart.value.hour * 60 + Preferences.dayStart.value.minute
+            if (currentTime >= dayStartTime) {
+                nextDayStart[Calendar.DAY_OF_MONTH] = nextDayStart[Calendar.DAY_OF_MONTH] + 1
+            }
+
+            nextDayStart[Calendar.HOUR_OF_DAY] = Preferences.dayStart.value.hour
+            nextDayStart[Calendar.MINUTE] = Preferences.dayStart.value.minute
+            nextDayStart[Calendar.SECOND] = 0
+
+            return nextDayStart.timeInMillis
+        }
+
         fun setup24Periodic(context: Context) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return
 
@@ -45,7 +68,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
             if (!alarmManager.canScheduleExactAlarms()) return
 
-            val nextUpdateMillis = Preferences.nextUpdateDateInMillis()
+            val nextUpdateMillis = this.nextUpdateDateInMillis()
 
             val formatter = DateFormat.getDateTimeInstance()
             Log.d(

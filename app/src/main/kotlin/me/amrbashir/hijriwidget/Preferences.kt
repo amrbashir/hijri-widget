@@ -183,22 +183,21 @@ object Preferences {
 
     fun nextUpdateDateInMillis(): Long {
         val nextDayStart = Calendar.getInstance()
+
         if (
             nextDayStart[Calendar.HOUR_OF_DAY] >= this.dayStart.value.hour &&
             nextDayStart[Calendar.MINUTE] >= this.dayStart.value.minute
         ) {
             nextDayStart[Calendar.DAY_OF_MONTH] = nextDayStart[Calendar.DAY_OF_MONTH] + 1
         }
+
         nextDayStart[Calendar.HOUR_OF_DAY] = this.dayStart.value.hour
         nextDayStart[Calendar.MINUTE] = this.dayStart.value.minute
         nextDayStart[Calendar.SECOND] = 0
 
-        val now = Calendar.getInstance()
-
-        val millisToNextDay = nextDayStart.timeInMillis - now.timeInMillis
-
-        return System.currentTimeMillis() + millisToNextDay
+        return nextDayStart.timeInMillis
     }
+
 
     fun migratePreferences(context: Context) {
         val sharedPreferences = context.getSharedPreferences(PREF, 0)

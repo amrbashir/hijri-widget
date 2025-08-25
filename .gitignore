@@ -11,6 +11,8 @@
 local.properties
 keystore.properties
 
+*.apk
+
 *.jks
 .env
 
