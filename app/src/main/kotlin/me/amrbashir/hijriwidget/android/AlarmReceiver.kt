@@ -41,12 +41,6 @@ class AlarmReceiver : BroadcastReceiver() {
         fun nextUpdateDateInMillis(): Long {
             val nextDayStart = Calendar.getInstance()
 
-            Log.d("AlarmReceiver","ph: " + Preferences.dayStart.value.hour )
-            Log.d("AlarmReceiver","pm: " + Preferences.dayStart.value.minute )
-            Log.d("AlarmReceiver","d: " + nextDayStart[Calendar.DAY_OF_MONTH].toString() )
-            Log.d("AlarmReceiver","h: " + nextDayStart[Calendar.HOUR_OF_DAY].toString() )
-            Log.d("AlarmReceiver","m: " + nextDayStart[Calendar.MINUTE].toString() )
-
             val currentTime = nextDayStart[Calendar.HOUR_OF_DAY] * 60 + nextDayStart[Calendar.MINUTE]
             val dayStartTime = Preferences.dayStart.value.hour * 60 + Preferences.dayStart.value.minute
             if (currentTime >= dayStartTime) {
