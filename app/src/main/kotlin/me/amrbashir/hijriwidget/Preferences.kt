@@ -52,7 +52,8 @@ object Preferences {
     object Defaults {
         val bgColorMode =
             ColorMode.Transparent
-        val textColorMode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) ColorMode.Dynamic else ColorMode.System
+        val textColorMode =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) ColorMode.Dynamic else ColorMode.System
         const val textSize = 22F
         const val textShadow = true
         val textFormat = FORMAT_PRESETES[0]
