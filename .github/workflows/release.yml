@@ -78,3 +78,4 @@ jobs:
           name: Hijri Widget ${{ github.ref_name }}
           files: hijri-widget-${{ github.ref_name }}.apk
           body_path: RELEASE_NOTES.md
+          draft: true
