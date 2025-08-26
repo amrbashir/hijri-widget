@@ -19,7 +19,7 @@ import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.dp
-import me.amrbashir.hijriwidget.FORMAT_PRESETES
+import me.amrbashir.hijriwidget.DATE_FORMAT_PRESETES
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.formatDate
@@ -28,8 +28,8 @@ import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
 import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
 
 @Composable
-fun Format() {
-    val savedFormat = Preferences.textFormat.value
+fun DateFormat() {
+    val savedFormat = Preferences.dateFormat.value
 
     Column(
         Modifier
@@ -39,14 +39,14 @@ fun Format() {
             .verticalScroll(rememberScrollState())
     ) {
         PreferencesGroup(label = "Format") {
-            for (format in FORMAT_PRESETES) {
+            for (format in DATE_FORMAT_PRESETES) {
                 PreferenceButton(
                     label = format.formatDate(HijriDate.today()),
                     description = format,
-                    icon = { RadioIcon(selected = !Preferences.textIsCustomFormat.value && savedFormat == format) },
+                    icon = { RadioIcon(selected = !Preferences.dateIsCustomFormat.value && savedFormat == format) },
                     onClick = {
-                        Preferences.textIsCustomFormat.value = false
-                        Preferences.textFormat.value = format
+                        Preferences.dateIsCustomFormat.value = false
+                        Preferences.dateFormat.value = format
                     }
                 )
             }
@@ -54,25 +54,25 @@ fun Format() {
             PreferenceButton(
                 label = "Custom",
                 description = "Specify custom date format pattern (e.g., 'dd/MM/yyyy', 'EEEE, MMMM d')",
-                icon = { RadioIcon(selected = Preferences.textIsCustomFormat.value) },
+                icon = { RadioIcon(selected = Preferences.dateIsCustomFormat.value) },
                 onClick = {
-                    Preferences.textIsCustomFormat.value = true
+                    Preferences.dateIsCustomFormat.value = true
                 }
             ) {
                 OutlinedTextField(
                     modifier = Modifier
                         .padding(start = 48.dp)
                         .fillMaxWidth(),
-                    enabled = Preferences.textIsCustomFormat.value,
-                    value = Preferences.textCustomFormat.value,
+                    enabled = Preferences.dateIsCustomFormat.value,
+                    value = Preferences.dateCustomFormat.value,
                     onValueChange = {
-                        Preferences.textCustomFormat.value = it
+                        Preferences.dateCustomFormat.value = it
                     }
                 )
             }
         }
 
-        if (Preferences.textIsCustomFormat.value) {
+        if (Preferences.dateIsCustomFormat.value) {
             Spacer(Modifier.requiredHeight(16.dp))
 
             val annotatedString = buildAnnotatedString {

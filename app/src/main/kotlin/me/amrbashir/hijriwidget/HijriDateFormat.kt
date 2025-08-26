@@ -5,7 +5,7 @@ import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.icu.util.ULocale
 
-val FORMAT_PRESETES = arrayOf(
+val DATE_FORMAT_PRESETES = arrayOf(
     "d MMMM yyyy",
     "en-GB{d MMMM yyyy}",
     "en-GB{d} ar-SA{MMMM} en-GB{yyyy}",

@@ -53,9 +53,9 @@ fun WidgetPreview(context: Context) {
 
     LaunchedEffect(
         Preferences.dayStart.value,
-        Preferences.textFormat.value,
-        Preferences.textCustomFormat.value,
-        Preferences.textIsCustomFormat.value,
+        Preferences.dateFormat.value,
+        Preferences.dateCustomFormat.value,
+        Preferences.dateIsCustomFormat.value,
         Preferences.dayOffset.value,
         Preferences.calendarCalculationMethod.value,
         HijriDate.today.value

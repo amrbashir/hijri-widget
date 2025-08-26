@@ -2,7 +2,6 @@ package me.amrbashir.hijriwidget
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.icu.util.Calendar
 import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -24,9 +23,9 @@ private const val TEXT_COLOR_MODE_KEY = "TEXT_COLOR_MODE"
 private const val TEXT_CUSTOM_COLOR_KEY = "TEXT_CUSTOM_COLOR"
 private const val TEXT_SIZE_KEY = "TEXT_SIZE"
 private const val TEXT_SHADOW_KEY = "TEXT_SHADOW"
-private const val TEXT_FORMAT_KEY = "TEXT_FORMAT"
-private const val TEXT_IS_CUSTOM_FORMAT_KEY = "TEXT_IS_CUSTOM_FORMAT"
-private const val TEXT_CUSTOM_FORMAT_KEY = "TEXT_CUSTOM_FORMAT"
+private const val DATE_FORMAT_KEY = "DATE_FORMAT"
+private const val DATE_IS_CUSTOM_FORMAT_KEY = "DATE_IS_CUSTOM_FORMAT"
+private const val DATE_CUSTOM_FORMAT_KEY = "DATE_CUSTOM_FORMAT"
 private const val DAY_START_HOUR_KEY = "DAY_START_HOUR"
 private const val DAY_START_MINUTE_KEY = "DAY_START_MINUTE"
 private const val CALENDAR_CALCULATION_METHOD_KEY = "CALENDAR_CALCULATION_METHOD"
@@ -40,9 +39,9 @@ object Preferences {
     val textCustomColor: MutableState<Int> = mutableIntStateOf(Color.White.toArgb())
     val textSize: MutableState<Float> = mutableFloatStateOf(Defaults.textSize)
     val textShadow: MutableState<Boolean> = mutableStateOf(Defaults.textShadow)
-    val textFormat: MutableState<String> = mutableStateOf(Defaults.textFormat)
-    val textIsCustomFormat: MutableState<Boolean> = mutableStateOf(Defaults.textIsCustomFormat)
-    val textCustomFormat: MutableState<String> = mutableStateOf(Defaults.textCustomFormat)
+    val dateFormat: MutableState<String> = mutableStateOf(Defaults.dateFormat)
+    val dateIsCustomFormat: MutableState<Boolean> = mutableStateOf(Defaults.dateIsCustomFormat)
+    val dateCustomFormat: MutableState<String> = mutableStateOf(Defaults.dateCustomFormat)
     val dayStart: MutableState<DayStart> = mutableStateOf(Defaults.dayStart)
     val calendarCalculationMethod: MutableState<String> =
         mutableStateOf(Defaults.calendarCalculationMethod)
@@ -56,9 +55,9 @@ object Preferences {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) ColorMode.Dynamic else ColorMode.System
         const val textSize = 22F
         const val textShadow = true
-        val textFormat = FORMAT_PRESETES[0]
-        const val textIsCustomFormat = false
-        const val textCustomFormat = ""
+        val dateFormat = DATE_FORMAT_PRESETES[0]
+        const val dateIsCustomFormat = false
+        const val dateCustomFormat = ""
         val dayStart = DayStart(0, 0)
         val calendarCalculationMethod = HijriDateCalculationMethod.ISLAMIC_UMALQURA.id
         const val dayOffset = 0
@@ -72,8 +71,8 @@ object Preferences {
         this.dayStart.value = Defaults.dayStart
         this.dayOffset.value = Defaults.dayOffset
         this.calendarCalculationMethod.value = Defaults.calendarCalculationMethod
-        this.textFormat.value = Defaults.textFormat
-        this.textIsCustomFormat.value = Defaults.textIsCustomFormat
+        this.dateFormat.value = Defaults.dateFormat
+        this.dateIsCustomFormat.value = Defaults.dateIsCustomFormat
     }
 
     fun load(context: Context) {
@@ -99,11 +98,11 @@ object Preferences {
 
         this.textShadow.value = sharedPreferences.getBoolean(TEXT_SHADOW_KEY, true)
 
-        this.textFormat.value =
-            sharedPreferences.getString(TEXT_FORMAT_KEY, Defaults.textFormat) ?: Defaults.textFormat
-        this.textIsCustomFormat.value =
-            sharedPreferences.getBoolean(TEXT_IS_CUSTOM_FORMAT_KEY, Defaults.textIsCustomFormat)
-        this.textCustomFormat.value = sharedPreferences.getString(TEXT_CUSTOM_FORMAT_KEY, "") ?: ""
+        this.dateFormat.value =
+            sharedPreferences.getString(DATE_FORMAT_KEY, Defaults.dateFormat) ?: Defaults.dateFormat
+        this.dateIsCustomFormat.value =
+            sharedPreferences.getBoolean(DATE_IS_CUSTOM_FORMAT_KEY, Defaults.dateIsCustomFormat)
+        this.dateCustomFormat.value = sharedPreferences.getString(DATE_CUSTOM_FORMAT_KEY, "") ?: ""
 
         this.dayStart.value = DayStart(
             sharedPreferences.getInt(DAY_START_HOUR_KEY, 0),
@@ -133,9 +132,9 @@ object Preferences {
 
             putBoolean(TEXT_SHADOW_KEY, this@Preferences.textShadow.value)
 
-            putString(TEXT_FORMAT_KEY, this@Preferences.textFormat.value)
-            putBoolean(TEXT_IS_CUSTOM_FORMAT_KEY, this@Preferences.textIsCustomFormat.value)
-            putString(TEXT_CUSTOM_FORMAT_KEY, this@Preferences.textCustomFormat.value)
+            putString(DATE_FORMAT_KEY, this@Preferences.dateFormat.value)
+            putBoolean(DATE_IS_CUSTOM_FORMAT_KEY, this@Preferences.dateIsCustomFormat.value)
+            putString(DATE_CUSTOM_FORMAT_KEY, this@Preferences.dateCustomFormat.value)
 
             putInt(DAY_START_HOUR_KEY, this@Preferences.dayStart.value.hour)
             putInt(DAY_START_MINUTE_KEY, this@Preferences.dayStart.value.minute)
@@ -182,38 +181,20 @@ object Preferences {
         }
     }
 
-    fun nextUpdateDateInMillis(): Long {
-        val nextDayStart = Calendar.getInstance()
-
-        if (
-            nextDayStart[Calendar.HOUR_OF_DAY] >= this.dayStart.value.hour &&
-            nextDayStart[Calendar.MINUTE] >= this.dayStart.value.minute
-        ) {
-            nextDayStart[Calendar.DAY_OF_MONTH] = nextDayStart[Calendar.DAY_OF_MONTH] + 1
-        }
-
-        nextDayStart[Calendar.HOUR_OF_DAY] = this.dayStart.value.hour
-        nextDayStart[Calendar.MINUTE] = this.dayStart.value.minute
-        nextDayStart[Calendar.SECOND] = 0
-
-        return nextDayStart.timeInMillis
-    }
-
-
     fun migratePreferences(context: Context) {
         val sharedPreferences = context.getSharedPreferences(PREF, 0)
 
-        if (!sharedPreferences.contains(TEXT_FORMAT_KEY)) {
+        if (!sharedPreferences.contains(DATE_FORMAT_KEY)) {
             sharedPreferences.getString("LANG", null)?.let {
                 sharedPreferences.edit(commit = true) {
                     when (it) {
                         "Arabic" -> putString(
-                            TEXT_FORMAT_KEY,
+                            DATE_FORMAT_KEY,
                             "d MMMM yyyy"
                         )
 
                         "English" -> putString(
-                            TEXT_FORMAT_KEY,
+                            DATE_FORMAT_KEY,
                             "en-GB{d MMMM yyyy}"
                         )
 
