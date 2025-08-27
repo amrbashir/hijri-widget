@@ -19,7 +19,7 @@
 
 ### Removed
 
-- Removed "Language" option, use the new "Format" option instead
+- Removed "Language" option, use the new "Date Format" option instead
 
 ## [v0.11.2] - 2025-03-06
 
