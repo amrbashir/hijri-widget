@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-## Added
+### Added
 
 - Added "Calendar Calculation Method" to choose between "Islamic", "Islamic Umm al-Qura" or "Islamic Civil" methods
 - Added "Day Offset" option to adjust Hijri date by ±1 day to match local moon sightings or personal observance
@@ -10,12 +10,12 @@
 - Added "Date Format" option to choose between pre-defined presets or fine-tune using manual format pattern.
 - New Look and Feel for the settings app.
 
-## Changed
+### Changed
 
 - Allow using a transparent text color when using the "Custom Color" option
 - Use `AlarmManager` instead of `WorkManager` for accurate date updates
 
-## Removed
+### Removed
 
 - Removed "Language" option, use the new "Format" option instead
 

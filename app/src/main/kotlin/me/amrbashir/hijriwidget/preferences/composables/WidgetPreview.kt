@@ -1,7 +1,6 @@
 package me.amrbashir.hijriwidget.preferences.composables
 
 import android.app.WallpaperManager
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,6 +23,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
@@ -36,7 +36,9 @@ import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.widgetCornerRadius
 
 @Composable
-fun WidgetPreview(context: Context) {
+fun WidgetPreview() {
+    val context = LocalContext.current
+
     var date by remember {
         mutableStateOf(
             HijriDate.todayStr()

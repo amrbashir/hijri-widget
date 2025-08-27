@@ -1,5 +1,6 @@
-package me.amrbashir.hijriwidget.preferences.routes
+package me.amrbashir.hijriwidget.preferences.routes.preferences
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,20 +20,38 @@ import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+import kotlinx.serialization.Serializable
 import me.amrbashir.hijriwidget.DATE_FORMAT_PRESETES
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.formatDate
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceButton
+import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceCategory
 import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
 import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
 
+
+@Serializable
+object DateFormatRoute
+
+fun NavGraphBuilder.dateFormatRoute() {
+    composable<DateFormatRoute> { Route() }
+}
+
+fun NavController.navigateToDateFormat() {
+    navigate(route = DateFormatRoute)
+}
+
+
 @Composable
-fun DateFormat() {
+private fun Route() {
     val savedFormat = Preferences.dateFormat.value
 
     Column(
-        Modifier
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier
             .padding(horizontal = 16.dp)
             .padding(bottom = 16.dp)
             .fillMaxSize()
@@ -40,7 +59,7 @@ fun DateFormat() {
     ) {
         PreferencesGroup(label = "Format") {
             for (format in DATE_FORMAT_PRESETES) {
-                PreferenceButton(
+                PreferenceCategory(
                     label = format.formatDate(HijriDate.today()),
                     description = format,
                     icon = { RadioIcon(selected = !Preferences.dateIsCustomFormat.value && savedFormat == format) },
@@ -51,7 +70,7 @@ fun DateFormat() {
                 )
             }
 
-            PreferenceButton(
+            PreferenceCategory(
                 label = "Custom",
                 description = "Specify custom date format pattern (e.g., 'dd/MM/yyyy', 'EEEE, MMMM d')",
                 icon = { RadioIcon(selected = Preferences.dateIsCustomFormat.value) },

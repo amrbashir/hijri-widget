@@ -1,5 +1,6 @@
-package me.amrbashir.hijriwidget.preferences.routes
+package me.amrbashir.hijriwidget.preferences.routes.preferences
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,15 +12,31 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+import kotlinx.serialization.Serializable
 import me.amrbashir.hijriwidget.ColorMode
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.preferences.composables.ui.ColorPicker
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceButton
+import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceCategory
 import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
 import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
 
+@Serializable
+object ColorRoute
+
+fun NavGraphBuilder.colorRoute() {
+    composable<ColorRoute> { Route() }
+}
+
+fun NavController.navigateToColor() {
+    navigate(route = ColorRoute)
+}
+
+
 @Composable
-fun Color() {
+private fun Route() {
     val savedTextColorMode = Preferences.textColorMode.value
     val textColorModes = ColorMode.all()
 
@@ -27,7 +44,8 @@ fun Color() {
     val bgColorModes = ColorMode.allForBg()
 
     Column(
-        Modifier
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier
             .padding(horizontal = 16.dp)
             .padding(bottom = 16.dp)
             .fillMaxSize()
@@ -35,7 +53,7 @@ fun Color() {
     ) {
         PreferencesGroup(label = "Text Color") {
             for (mode in textColorModes) {
-                PreferenceButton(
+                PreferenceCategory(
                     label = mode.prettyName,
                     description = mode.description,
                     icon = { RadioIcon(selected = savedTextColorMode == mode) },
@@ -60,7 +78,7 @@ fun Color() {
 
         PreferencesGroup(label = "Background Color") {
             for (mode in bgColorModes) {
-                PreferenceButton(
+                PreferenceCategory(
                     label = mode.prettyName,
                     description = mode.description,
                     icon = { RadioIcon(selected = savedBgColorMode == mode) },

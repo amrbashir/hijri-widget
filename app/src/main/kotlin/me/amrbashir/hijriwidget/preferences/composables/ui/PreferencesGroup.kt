@@ -17,20 +17,24 @@ fun PreferencesGroup(
     label: String? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    label?.let {
-        Text(
-            label,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(16.dp)
-        )
-    }
-
     Column(
-        modifier = Modifier.clip(RoundedCornerShape(20.dp)),
-        verticalArrangement = Arrangement.spacedBy(2.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        label?.let {
+            Text(
+                label,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+        }
 
-        content()
+        Column(
+            modifier = Modifier.clip(RoundedCornerShape(20.dp)),
+            verticalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+
+            content()
+        }
     }
 }

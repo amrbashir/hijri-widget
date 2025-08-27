@@ -4,8 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -33,9 +31,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
@@ -45,21 +41,15 @@ import me.amrbashir.hijriwidget.PreferencesTheme
 import me.amrbashir.hijriwidget.android.AlarmReceiver
 import me.amrbashir.hijriwidget.isDark
 import me.amrbashir.hijriwidget.preferences.composables.WidgetPreview
-import me.amrbashir.hijriwidget.preferences.routes.CalendarCalculation
-import me.amrbashir.hijriwidget.preferences.routes.Color
-import me.amrbashir.hijriwidget.preferences.routes.Format
-import me.amrbashir.hijriwidget.preferences.routes.Home
 import me.amrbashir.hijriwidget.widget.HijriWidget
 
-object Route {
-    const val HOME = "/"
-    const val CALENDAR_CALCULATION_METHOD = "CalendarCalculationMethod"
-    const val DATE_FORMAT = "DateFormat"
-    const val COLOR_MODE = "ColorMode"
+
+val LocalNavController = staticCompositionLocalOf<NavHostController> {
+    error("CompositionLocal LocalNavController not present")
 }
 
-val LocalNavController = staticCompositionLocalOf<NavController> {
-    error("CompositionLocal LocalNavController not present")
+val LocalSnackbarHostState = staticCompositionLocalOf<SnackbarHostState> {
+    error("CompositionLocal LocalSnackbarHostState not present")
 }
 
 class MainActivity : WidgetConfiguration(false)
@@ -87,115 +77,105 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
     @Composable
     private fun Content() {
         val navController = rememberNavController()
-        val currentBackStackEntry by navController.currentBackStackEntryAsState()
-
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
         val snackBarHostState = remember { SnackbarHostState() }
-
-        val coroutineScope = rememberCoroutineScope()
-
-        val state = rememberTopAppBarState()
-        val topAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(state)
+        val topAppBarState = rememberTopAppBarState()
+        val topAppBarScrollBehavior =
+            TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
 
         PreferencesTheme {
-            val containerColor =
-                if (navController.context.isDark()) MaterialTheme.colorScheme.surfaceContainer else MaterialTheme.colorScheme.surfaceContainerLow
+            val isDark = navController.context.isDark()
+            val darkColor = MaterialTheme.colorScheme.surfaceContainer
+            val lightColor = MaterialTheme.colorScheme.surfaceContainerLow
+            val containerColor = if (isDark) darkColor else lightColor
 
-            Scaffold(
-                containerColor = containerColor,
-                snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-                topBar = {
-                    LargeTopAppBar(
-                        title = { Text("Hijri Widget") },
-                        colors = TopAppBarDefaults.topAppBarColors(
-                            containerColor = containerColor,
-                            scrolledContainerColor = containerColor,
-                        ),
-                        scrollBehavior = topAppBarScrollBehavior,
-                        navigationIcon = {
-                            if (currentBackStackEntry?.destination?.route != Route.HOME) {
-                                IconButton(onClick = { navController.popBackStack() }) {
-                                    Icon(
-                                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                        contentDescription = null
-                                    )
-                                }
-                            }
-                        },
-                        actions = {
-                            IconButton(onClick = {
-                                Preferences.save(this@WidgetConfiguration.baseContext)
-                                coroutineScope.launch {
-                                    HijriWidget.update(this@WidgetConfiguration.baseContext)
+            CompositionLocalProvider(
+                LocalNavController provides navController,
+                LocalSnackbarHostState provides snackBarHostState
+            ) {
 
-                                    AlarmReceiver.setup24Periodic(this@WidgetConfiguration.baseContext)
-
-                                    if (this@WidgetConfiguration.autoClose) {
-                                        this@WidgetConfiguration.finish()
-                                    } else {
-                                        snackBarHostState.showSnackbar("Widget updated!")
-                                    }
-                                }
-                            }) {
-                                Icon(
-                                    Icons.Default.Check,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onSurface
-                                )
-                            }
-                        }
-                    )
-                },
-                modifier = Modifier.nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
-            ) { padding ->
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    modifier = Modifier
-                        .consumeWindowInsets(padding)
-                        .padding(padding)
+                Scaffold(
+                    containerColor = containerColor,
+                    snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
+                    topBar = {
+                        LargeTopAppBar(
+                            title = { Text("Hijri Widget") },
+                            colors = TopAppBarDefaults.topAppBarColors(
+                                containerColor = containerColor,
+                                scrolledContainerColor = containerColor,
+                            ),
+                            scrollBehavior = topAppBarScrollBehavior,
+                            navigationIcon = { GoBackButton() },
+                            actions = { SaveButton() }
+                        )
+                    },
+                    modifier = Modifier.nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
                 ) {
-                    WidgetPreview(navController.context)
-
-                    CompositionLocalProvider(
-                        LocalNavController provides navController,
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        modifier = Modifier
+                            .consumeWindowInsets(it)
+                            .padding(it)
                     ) {
-                        NavHost(
-                            navController = navController,
-                            startDestination = Route.HOME,
-                            enterTransition = {
-                                slideIntoContainer(
-                                    AnimatedContentTransitionScope.SlideDirection.Left,
-                                    animationSpec = tween(500)
-                                )
-                            },
-                            exitTransition = {
-                                slideOutOfContainer(
-                                    AnimatedContentTransitionScope.SlideDirection.Left,
-                                    animationSpec = tween(500)
-                                )
-                            },
-                            popEnterTransition = {
-                                slideIntoContainer(
-                                    AnimatedContentTransitionScope.SlideDirection.Right,
-                                    animationSpec = tween(500)
-                                )
-                            },
-                            popExitTransition = {
-                                slideOutOfContainer(
-                                    AnimatedContentTransitionScope.SlideDirection.Right,
-                                    animationSpec = tween(500)
-                                )
-                            }
+                        val preferencesRoute =
+                            "me.amrbashir.hijriwidget.preferences.routes.preferences"
+                        if (navBackStackEntry?.destination?.route?.startsWith(preferencesRoute)
+                                ?: false
                         ) {
-                            composable(Route.HOME) { Home() }
-                            composable(Route.CALENDAR_CALCULATION_METHOD) { CalendarCalculation() }
-                            composable(Route.DATE_FORMAT) { Format() }
-                            composable(Route.COLOR_MODE) { Color() }
+                            WidgetPreview()
                         }
+
+                        Router()
                     }
                 }
             }
         }
     }
 
+    @Composable
+    private fun GoBackButton() {
+        val homeRoute =
+            "me.amrbashir.hijriwidget.preferences.routes.preferences.PreferencesIndexRoute"
+        val navController = LocalNavController.current
 
+        IconButton(onClick = {
+            if (navController.currentDestination?.route == homeRoute) {
+                this@WidgetConfiguration.finish()
+            } else {
+                navController.navigateUp()
+            }
+        }) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = null
+            )
+        }
+    }
+
+    @Composable
+    private fun SaveButton() {
+        val coroutineScope = rememberCoroutineScope()
+
+        val snackBarHostState = LocalSnackbarHostState.current
+
+        IconButton(onClick = {
+            Preferences.save(this@WidgetConfiguration.baseContext)
+            coroutineScope.launch {
+                HijriWidget.update(this@WidgetConfiguration.baseContext)
+
+                AlarmReceiver.setup24Periodic(this@WidgetConfiguration.baseContext)
+
+                if (this@WidgetConfiguration.autoClose) {
+                    this@WidgetConfiguration.finish()
+                } else {
+                    snackBarHostState.showSnackbar("Widget updated!")
+                }
+            }
+        }) {
+            Icon(
+                Icons.Default.Check,
+                contentDescription = null,
+            )
+        }
+    }
 }

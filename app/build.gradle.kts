@@ -5,16 +5,20 @@ plugins {
     kotlin("plugin.serialization") version "1.9.23"
 }
 
+
 android {
     namespace = "me.amrbashir.hijriwidget"
     compileSdk = 36
 
     defaultConfig {
+        val gitSha = "git rev-parse --short HEAD".execute(project.rootDir)
+
         applicationId = "me.amrbashir.hijriwidget"
         minSdk = 26
         targetSdk = 36
         versionCode = 14
         versionName = "0.11.2"
+        buildConfigField("String", "GIT_SHA", "\"${gitSha}\"")
     }
 
     signingConfigs {
@@ -41,16 +45,41 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     buildFeatures {
         compose = true
         buildConfig = true
     }
+
+    sourceSets.getByName("main") {
+        kotlin.srcDir("build/generated/source")
+    }
+}
+
+tasks.register("generateChangelogFile") {
+    doLast {
+        val fileContent = file("../CHANGELOG.md").readText()
+
+        val generatedCode = """
+            package me.amrbashir.hijriwidget
+
+            val CHANGELOG = ""${'"'}$fileContent""${'"'}
+        """.trimIndent()
+
+        val outputFile = file("build/generated/source/me/amrbashir/hijriwidget/CHANGELOG.kt")
+        println(outputFile)
+        outputFile.parentFile.mkdirs()
+        outputFile.writeText(generatedCode)
+    }
+}
+
+tasks.named("preBuild") {
+    dependsOn("generateChangelogFile")
 }
 
 dependencies {
@@ -66,4 +95,13 @@ dependencies {
     implementation("androidx.glance:glance-material3:1.2.0-alpha01")
     implementation("androidx.navigation:navigation-compose:2.9.3")
     implementation("com.github.skydoves:colorpicker-compose:1.1.2")
+    implementation("com.github.jeziellago:compose-markdown:0.5.7")
+}
+
+fun String.execute(workingDir: File = rootDir): String {
+    val process = ProcessBuilder(*this.split(" ").toTypedArray())
+        .directory(workingDir)
+        .redirectErrorStream(true)
+        .start()
+    return process.inputStream.bufferedReader().readText().trim()
 }
