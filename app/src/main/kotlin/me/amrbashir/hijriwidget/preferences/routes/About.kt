@@ -133,7 +133,7 @@ private fun Route() {
         }
 
         MarkdownText(
-            CHANGELOG,
+            CHANGELOG.replace("## [Unreleased]", ""),
             syntaxHighlightColor = MaterialTheme.colorScheme.surfaceBright
         )
     }
