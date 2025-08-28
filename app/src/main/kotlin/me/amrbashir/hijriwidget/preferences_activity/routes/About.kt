@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preferences.routes
+package me.amrbashir.hijriwidget.preferences_activity.routes
 
 import android.content.Intent
 import androidx.compose.foundation.Image
@@ -33,8 +33,8 @@ import kotlinx.serialization.Serializable
 import me.amrbashir.hijriwidget.BuildConfig
 import me.amrbashir.hijriwidget.CHANGELOG
 import me.amrbashir.hijriwidget.R
-import me.amrbashir.hijriwidget.preferences.LocalNavController
-import me.amrbashir.hijriwidget.preferences.composables.ui.adaptiveIconPainterResource
+import me.amrbashir.hijriwidget.composables.adaptiveIconPainterResource
+import me.amrbashir.hijriwidget.preferences_activity.LocalNavController
 
 @Serializable
 object AboutRoute

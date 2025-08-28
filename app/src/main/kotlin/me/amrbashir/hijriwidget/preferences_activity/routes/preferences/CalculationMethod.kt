@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preferences.routes.preferences
+package me.amrbashir.hijriwidget.preferences_activity.routes.preferences
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,9 +15,9 @@ import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
 import me.amrbashir.hijriwidget.HijriDateCalculationMethod
 import me.amrbashir.hijriwidget.Preferences
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceCategory
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
-import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
+import me.amrbashir.hijriwidget.composables.PreferenceCategory
+import me.amrbashir.hijriwidget.composables.PreferencesGroup
+import me.amrbashir.hijriwidget.composables.RadioIcon
 
 @Serializable
 object CalendarCalculationRoute

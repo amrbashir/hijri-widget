@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preferences.routes.preferences
+package me.amrbashir.hijriwidget.preferences_activity.routes.preferences
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,13 +21,13 @@ import kotlinx.serialization.Serializable
 import me.amrbashir.hijriwidget.DayStart
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.R
-import me.amrbashir.hijriwidget.preferences.LocalNavController
-import me.amrbashir.hijriwidget.preferences.composables.DayOffset
-import me.amrbashir.hijriwidget.preferences.composables.TextSize
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceCategory
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
-import me.amrbashir.hijriwidget.preferences.composables.ui.TimePickerDialog
-import me.amrbashir.hijriwidget.preferences.routes.navigateToAbout
+import me.amrbashir.hijriwidget.composables.PreferenceCategory
+import me.amrbashir.hijriwidget.composables.PreferencesGroup
+import me.amrbashir.hijriwidget.composables.TimePickerDialog
+import me.amrbashir.hijriwidget.preferences.DayOffset
+import me.amrbashir.hijriwidget.preferences.TextSize
+import me.amrbashir.hijriwidget.preferences_activity.LocalNavController
+import me.amrbashir.hijriwidget.preferences_activity.routes.navigateToAbout
 
 @Serializable
 object PreferencesRoute

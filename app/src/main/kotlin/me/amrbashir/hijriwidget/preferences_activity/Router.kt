@@ -1,18 +1,18 @@
-package me.amrbashir.hijriwidget.preferences
+package me.amrbashir.hijriwidget.preferences_activity
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.navigation
-import me.amrbashir.hijriwidget.preferences.routes.aboutRoute
-import me.amrbashir.hijriwidget.preferences.routes.indexRoute
-import me.amrbashir.hijriwidget.preferences.routes.preferences.PreferencesIndexRoute
-import me.amrbashir.hijriwidget.preferences.routes.preferences.PreferencesRoute
-import me.amrbashir.hijriwidget.preferences.routes.preferences.calendarCalculationRoute
-import me.amrbashir.hijriwidget.preferences.routes.preferences.colorRoute
-import me.amrbashir.hijriwidget.preferences.routes.preferences.dateFormatRoute
-import me.amrbashir.hijriwidget.preferences.routes.preferences.preferencesIndexRoute
+import me.amrbashir.hijriwidget.preferences_activity.routes.aboutRoute
+import me.amrbashir.hijriwidget.preferences_activity.routes.indexRoute
+import me.amrbashir.hijriwidget.preferences_activity.routes.preferences.PreferencesIndexRoute
+import me.amrbashir.hijriwidget.preferences_activity.routes.preferences.PreferencesRoute
+import me.amrbashir.hijriwidget.preferences_activity.routes.preferences.calendarCalculationRoute
+import me.amrbashir.hijriwidget.preferences_activity.routes.preferences.colorRoute
+import me.amrbashir.hijriwidget.preferences_activity.routes.preferences.dateFormatRoute
+import me.amrbashir.hijriwidget.preferences_activity.routes.preferences.preferencesIndexRoute
 
 
 @Composable

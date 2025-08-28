@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preferences
+package me.amrbashir.hijriwidget.preferences_activity
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -39,9 +39,12 @@ import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.PreferencesTheme
 import me.amrbashir.hijriwidget.android.AlarmReceiver
+import me.amrbashir.hijriwidget.composables.WidgetPreview
 import me.amrbashir.hijriwidget.isDark
-import me.amrbashir.hijriwidget.preferences.composables.WidgetPreview
 import me.amrbashir.hijriwidget.widget.HijriWidget
+
+
+class PreferencesActivity : PreferencesActivityInternal(false)
 
 
 val LocalNavController = staticCompositionLocalOf<NavHostController> {
@@ -52,9 +55,8 @@ val LocalSnackbarHostState = staticCompositionLocalOf<SnackbarHostState> {
     error("CompositionLocal LocalSnackbarHostState not present")
 }
 
-class MainActivity : WidgetConfiguration(false)
-
-open class WidgetConfiguration(private val autoClose: Boolean = true) : ComponentActivity() {
+open class PreferencesActivityInternal(private val autoClose: Boolean = true) :
+    ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -140,7 +142,7 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
 
         IconButton(onClick = {
             if (navController.currentDestination?.route == homeRoute) {
-                this@WidgetConfiguration.finish()
+                this@PreferencesActivityInternal.finish()
             } else {
                 navController.navigateUp()
             }
@@ -159,14 +161,14 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
         val snackBarHostState = LocalSnackbarHostState.current
 
         IconButton(onClick = {
-            Preferences.save(this@WidgetConfiguration.baseContext)
+            Preferences.save(this@PreferencesActivityInternal.baseContext)
             coroutineScope.launch {
-                HijriWidget.update(this@WidgetConfiguration.baseContext)
+                HijriWidget.update(this@PreferencesActivityInternal.baseContext)
 
-                AlarmReceiver.setup24Periodic(this@WidgetConfiguration.baseContext)
+                AlarmReceiver.setup24Periodic(this@PreferencesActivityInternal.baseContext)
 
-                if (this@WidgetConfiguration.autoClose) {
-                    this@WidgetConfiguration.finish()
+                if (this@PreferencesActivityInternal.autoClose) {
+                    this@PreferencesActivityInternal.finish()
                 } else {
                     snackBarHostState.showSnackbar("Widget updated!")
                 }

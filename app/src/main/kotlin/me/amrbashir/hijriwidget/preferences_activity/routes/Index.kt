@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preferences.routes
+package me.amrbashir.hijriwidget.preferences_activity.routes
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder

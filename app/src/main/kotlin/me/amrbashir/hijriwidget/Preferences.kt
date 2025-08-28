@@ -2,6 +2,7 @@ package me.amrbashir.hijriwidget
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -16,6 +17,33 @@ import androidx.glance.unit.ColorProvider
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
+
+class Preference<T>(
+    val key: String,
+    val default: T,
+    private val loader: (SharedPreferences, String, T) -> T,
+    private val saver: (SharedPreferences.Editor, String, T) -> Unit,
+) {
+    private val _value: MutableState<T> = mutableStateOf(default)
+    var value: T
+        get() = this._value.value
+        set(newValue) {
+            this._value.value = newValue
+        }
+
+    fun save(prefsEditor: SharedPreferences.Editor) {
+        this.saver(prefsEditor, this.key, this.value)
+    }
+
+    fun load(prefs: SharedPreferences) {
+        this.value = this.loader(prefs, this.key, this.default)
+    }
+
+    fun restoreDefault() {
+        this.value = this.default
+    }
+}
+
 private const val PREF = "HijriWidgetPref"
 private const val BG_COLOR_MODE_KEY = "BG_COLOR_MODE"
 private const val BG_CUSTOM_COLOR_KEY = "BG_CUSTOM_COLOR"
@@ -29,7 +57,6 @@ private const val DATE_CUSTOM_FORMAT_KEY = "DATE_CUSTOM_FORMAT"
 private const val DAY_START_HOUR_KEY = "DAY_START_HOUR"
 private const val DAY_START_MINUTE_KEY = "DAY_START_MINUTE"
 private const val CALENDAR_CALCULATION_METHOD_KEY = "CALENDAR_CALCULATION_METHOD"
-private const val DAY_OFFSET_KEY = "DAY_OFFSET"
 
 
 object Preferences {
@@ -45,7 +72,6 @@ object Preferences {
     val dayStart: MutableState<DayStart> = mutableStateOf(Defaults.dayStart)
     val calendarCalculationMethod: MutableState<String> =
         mutableStateOf(Defaults.calendarCalculationMethod)
-    val dayOffset: MutableState<Int> = mutableIntStateOf(Defaults.dayOffset)
 
     @Suppress("ConstPropertyName")
     object Defaults {
@@ -60,7 +86,6 @@ object Preferences {
         const val dateCustomFormat = ""
         val dayStart = DayStart(0, 0)
         val calendarCalculationMethod = HijriDateCalculationMethod.ISLAMIC_UMALQURA.id
-        const val dayOffset = 0
     }
 
     fun restoreDefaults() {
@@ -69,7 +94,6 @@ object Preferences {
         this.textSize.value = Defaults.textSize
         this.textShadow.value = Defaults.textShadow
         this.dayStart.value = Defaults.dayStart
-        this.dayOffset.value = Defaults.dayOffset
         this.calendarCalculationMethod.value = Defaults.calendarCalculationMethod
         this.dateFormat.value = Defaults.dateFormat
         this.dateIsCustomFormat.value = Defaults.dateIsCustomFormat
@@ -115,8 +139,6 @@ object Preferences {
                 Defaults.calendarCalculationMethod
             )
                 ?: Defaults.calendarCalculationMethod
-
-        this.dayOffset.value = sharedPreferences.getInt(DAY_OFFSET_KEY, 0)
     }
 
     fun save(context: Context) {
@@ -143,8 +165,6 @@ object Preferences {
                 CALENDAR_CALCULATION_METHOD_KEY,
                 this@Preferences.calendarCalculationMethod.value
             )
-
-            putInt(DAY_OFFSET_KEY, this@Preferences.dayOffset.value)
         }
     }
 
