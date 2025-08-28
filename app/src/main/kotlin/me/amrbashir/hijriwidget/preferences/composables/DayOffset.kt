@@ -27,8 +27,8 @@ fun DayOffset() {
         Slider(
             modifier = Modifier.weight(1F),
             value = Preferences.dayOffset.value.toFloat(),
-            valueRange = -1F..1F,
-            steps = 1,
+            valueRange = -2F..2F,
+            steps = 3,
             onValueChange = {
                 Preferences.dayOffset.value = it.toInt()
             },

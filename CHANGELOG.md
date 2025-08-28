@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Increased the "Day offset" option limit from ±1 to ±2
+
 ## [1.0.0] - 2025-08-27
 
 ### Added
