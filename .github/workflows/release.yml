@@ -60,7 +60,6 @@ jobs:
           track: "internal"
           status: draft
           inAppUpdatePriority: 5
-          mappingFile: "app/build/outputs/mapping/release/mapping.txt"
 
       - name: Build APK
         run: ./gradlew assembleRelease --stacktrace
