@@ -119,11 +119,12 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
                     ) {
                         val preferencesRoute =
                             "me.amrbashir.hijriwidget.preferences.routes.preferences"
-                        if (navBackStackEntry?.destination?.route?.startsWith(preferencesRoute)
-                                ?: false
-                        ) {
-                            WidgetPreview()
-                        }
+
+                        WidgetPreview(
+                            visible = navBackStackEntry?.destination?.route?.startsWith(
+                                preferencesRoute
+                            ) ?: false
+                        )
 
                         Router()
                     }
