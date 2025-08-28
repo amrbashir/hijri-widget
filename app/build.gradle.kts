@@ -17,7 +17,7 @@ android {
         minSdk = 26
         targetSdk = 36
         versionCode = 15
-        versionName = "1.0.0"
+        versionName = "0.11.2"
         buildConfigField("String", "GIT_SHA", "\"${gitSha}\"")
     }
 

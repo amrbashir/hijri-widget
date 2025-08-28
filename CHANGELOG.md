@@ -2,16 +2,10 @@
 
 ## [Unreleased]
 
-### Changed
-
-- Increased the "Day offset" option limit from ±1 to ±2
-
-## [1.0.0] - 2025-08-27
-
 ### Added
 
 - Added "Calendar Calculation Method" to choose between "Islamic", "Islamic Umm al-Qura" or "Islamic Civil" methods
-- Added "Day Offset" option to adjust Hijri date by ±1 day to match local moon sightings or personal observance
+- Added "Day Offset" option to adjust Hijri date by ±2 day to match local moon sightings or personal observance
 - Added "Background Color" option to adjust the widget background color
 - Added "Date Format" option to choose between pre-defined presets or fine-tune using manual format pattern.
 - New Look and Feel for the settings app.
