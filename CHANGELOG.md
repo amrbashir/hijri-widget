@@ -13,7 +13,7 @@
 ### Changed
 
 - Allow using a transparent text color when using the "Custom Color" option
-- Use `AlarmManager` instead of `WorkManager` for accurate date updates
+- Improved date update reliability to ensure the widget always shows the current date
 
 ### Removed
 
