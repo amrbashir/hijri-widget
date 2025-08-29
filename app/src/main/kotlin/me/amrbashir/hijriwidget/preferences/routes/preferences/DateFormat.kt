@@ -108,10 +108,13 @@ private fun Route() {
                     • MMMM = full month name (Muharram, Safar...)
                     • yy = short year (47, 48...)
                     • yyyy = full year (1447, 1448...)
+                    • EE = short week day (Thu, Fri...)
+                    • EEEE = full week day (Thursday, Friday...)
 
                     Examples:
                     • dd/MM/yyyy = 21/02/1447
                     • MMMM d, yyyy = Safar 21, 1447
+                    • EE, MMMM d, yyyy = Fri, Safar 21, 1447
                     • d-M-yy = 21-2-47
 
                     Mix and match these codes with slashes, dashes, spaces, or commas to create your preferred date style.
@@ -122,10 +125,11 @@ private fun Route() {
 
                     Examples:
                     • en-GB{dd/MMMM/yyyy} = 21/Safar/1447
-                    • ar-SA{dd/MMMM/yyyy} = ${"\u200F"}۲۱/صفر/۱٤٤۷
+                    • ar-SA{dd MMMM yyyy} = ${"\u200F"}۲۱ صفر ۱٤٤۷
 
                     You can also mix and match multiple languages:
-                    • en-GB{dd}/ar-SA{MMMM}/en-GB{yyyy} = 21/صفر ${"\u200E"}/1447
+                    • en-GB{dd}/ar-SA{MMMM}/en-GB{yyyy} = 21/صفر${"\u200E"}/1447
+                    • en-GB{dd} ar-SA{MMMM} en-GB{yyyy} = 21 صفر${"\u200E"} 1447
 
                     For the full list of language identifiers:
                 """.trimIndent()
