@@ -126,6 +126,7 @@ private fun Route() {
                     Examples:
                     • en-GB{dd/MMMM/yyyy} = 21/Safar/1447
                     • ar-SA{dd MMMM yyyy} = ${"\u200F"}۲۱ صفر ۱٤٤۷
+                    • hi-IN{dd MMMM yyyy} = 06 सफर 1447
                     • tr-TR{dd MMMM yyyy} = 06 Rebiülevvel 1447
 
                     You can also mix and match multiple languages:
