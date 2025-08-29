@@ -16,8 +16,8 @@ android {
         applicationId = "me.amrbashir.hijriwidget"
         minSdk = 26
         targetSdk = 36
-        versionCode = 17
-        versionName = "1.0.0"
+        versionCode = 18
+        versionName = "1.0.1"
         buildConfigField("String", "GIT_SHA", "\"${gitSha}\"")
     }
 
