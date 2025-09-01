@@ -24,7 +24,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.staticCompositionLocalOf
@@ -52,6 +54,11 @@ val LocalSnackbarHostState = staticCompositionLocalOf<SnackbarHostState> {
     error("CompositionLocal LocalSnackbarHostState not present")
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+val LocalAppBarTitle = staticCompositionLocalOf<MutableState<String>> {
+    error("CompositionLocal LocalAppBarTitle not present")
+}
+
 class MainActivity : WidgetConfiguration(false)
 
 open class WidgetConfiguration(private val autoClose: Boolean = true) : ComponentActivity() {
@@ -76,12 +83,14 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun Content() {
+        val appBarTitle = remember { mutableStateOf("Hijri Widget") }
         val navController = rememberNavController()
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val snackBarHostState = remember { SnackbarHostState() }
         val topAppBarState = rememberTopAppBarState()
         val topAppBarScrollBehavior =
             TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
+
 
         PreferencesTheme {
             val isDark = navController.context.isDark()
@@ -91,7 +100,8 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
 
             CompositionLocalProvider(
                 LocalNavController provides navController,
-                LocalSnackbarHostState provides snackBarHostState
+                LocalSnackbarHostState provides snackBarHostState,
+                LocalAppBarTitle provides appBarTitle,
             ) {
 
                 Scaffold(
@@ -99,7 +109,7 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
                     snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
                     topBar = {
                         LargeTopAppBar(
-                            title = { Text("Hijri Widget") },
+                            title = { Text(appBarTitle.value) },
                             colors = TopAppBarDefaults.topAppBarColors(
                                 containerColor = containerColor,
                                 scrolledContainerColor = containerColor,

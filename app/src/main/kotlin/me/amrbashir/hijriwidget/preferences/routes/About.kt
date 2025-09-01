@@ -1,7 +1,6 @@
 package me.amrbashir.hijriwidget.preferences.routes
 
 import android.content.Intent
-import android.text.util.Linkify
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -32,6 +32,7 @@ import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
 import me.amrbashir.hijriwidget.BuildConfig
 import me.amrbashir.hijriwidget.R
+import me.amrbashir.hijriwidget.preferences.LocalAppBarTitle
 import me.amrbashir.hijriwidget.preferences.LocalNavController
 import me.amrbashir.hijriwidget.preferences.composables.Changelog
 import me.amrbashir.hijriwidget.preferences.composables.ui.adaptiveIconPainterResource
@@ -65,8 +66,11 @@ val QUIKC_LINKS = arrayOf(
     ),
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Route() {
+    LocalAppBarTitle.current.value = "About"
+
     val navController = LocalNavController.current
 
     Column(

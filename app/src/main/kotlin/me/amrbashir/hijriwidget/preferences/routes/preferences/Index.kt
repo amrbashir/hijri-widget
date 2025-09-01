@@ -21,6 +21,7 @@ import kotlinx.serialization.Serializable
 import me.amrbashir.hijriwidget.DayStart
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.R
+import me.amrbashir.hijriwidget.preferences.LocalAppBarTitle
 import me.amrbashir.hijriwidget.preferences.LocalNavController
 import me.amrbashir.hijriwidget.preferences.composables.DayOffset
 import me.amrbashir.hijriwidget.preferences.composables.TextSize
@@ -42,6 +43,8 @@ fun NavGraphBuilder.preferencesIndexRoute() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Route() {
+    LocalAppBarTitle.current.value = "Hijri Widget"
+
     val navController = LocalNavController.current
     var showDayStartPicker by remember { mutableStateOf(false) }
 
