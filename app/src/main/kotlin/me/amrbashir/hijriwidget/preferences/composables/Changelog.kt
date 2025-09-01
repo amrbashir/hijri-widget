@@ -56,7 +56,7 @@ fun Changelog() {
     for (entry in entries) {
         Text(
             entry.header,
-            style = MaterialTheme.typography.bodySmall
+            style = MaterialTheme.typography.labelLarge
         )
         Card {
             MarkdownText(

@@ -23,7 +23,7 @@ fun PreferencesGroup(
         label?.let {
             Text(
                 label,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
