@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Improve About page look and feel
+
 ## [1.0.1] - 2025-08-29
 
 ### Fixed
@@ -27,17 +29,17 @@
 
 - Removed "Language" option, use the new "Date Format" option instead
 
-## [v0.11.2] - 2025-03-06
+## [0.11.2] - 2025-03-06
 
 ### Changed
 - Minor updates and improvements
 
-## [v0.11.1] - 2025-02-28
+## [0.11.1] - 2025-02-28
 
 ### Added
 - Update widget on click functionality
 
-## [v0.11.0] - 2024-12-11
+## [0.11.0] - 2024-12-11
 
 ### Added
 - Option to change when the new day starts
@@ -45,7 +47,7 @@
 ### Fixed
 - Fixed Arabic names for Jumada months
 
-## [v0.10.0] - 2024-10-25
+## [0.10.0] - 2024-10-25
 
 ### Changed
 - Improved workers functionality
@@ -76,7 +78,7 @@
 ### Fixed
 - Fixed text overlapping in widget preview when using a large text size
 
-## [0.7] - 2024-06-07
+## [0.7.0] - 2024-06-07
 
 ### Added
 - Enable or disable widget shadow
@@ -87,17 +89,17 @@
 - Switched the hijri date source to use Android built-in algorithm
 - Reduced widget shadow blur to 1px
 
-## [0.6] - 2024-05-17
+## [0.6.0] - 2024-05-17
 
 ### Changed
 - New look for settings app
 
-## [0.5] - 2024-05-13
+## [0.5.0] - 2024-05-13
 
 ### Added
 - Change launcher icon each day with an icon that showcases the current day of the hijri month
 
-## [0.4] - 2024-05-12
+## [0.4.0] - 2024-05-12
 
 ### Added
 - Support for Dynamic (Material You), system, Dark and Light themes for the widget
@@ -106,7 +108,7 @@
 ### Changed
 - New updated icon
 
-## [0.3] - 2024-05-07
+## [0.3.0] - 2024-05-07
 
 ### Added
 - Preview image
@@ -117,14 +119,14 @@
 ### Fixed
 - Fixed empty text in widget after first install, which required manual sync of database
 
-## [0.2] - 2024-05-06
+## [0.2.0] - 2024-05-06
 
 ### Added
 - Support dark theme in settings
 - Support Material You in settings
 - New app icon
 
-## [0.1] - 2024-05-05
+## [0.1.0] - 2024-05-05
 
 ### Added
 - Initial Release

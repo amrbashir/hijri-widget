@@ -61,6 +61,9 @@ android {
 tasks.register("generateChangelogFile") {
     doLast {
         val fileContent = file("../CHANGELOG.md").readText()
+            .replace("# Changelog", "")
+            .replace("## [Unreleased]", "")
+            .trimStart()
 
         val generatedCode = """
             package me.amrbashir.hijriwidget

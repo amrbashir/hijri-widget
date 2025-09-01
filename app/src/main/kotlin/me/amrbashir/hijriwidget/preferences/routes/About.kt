@@ -1,6 +1,7 @@
 package me.amrbashir.hijriwidget.preferences.routes
 
 import android.content.Intent
+import android.text.util.Linkify
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -28,12 +29,11 @@ import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import dev.jeziellago.compose.markdowntext.MarkdownText
 import kotlinx.serialization.Serializable
 import me.amrbashir.hijriwidget.BuildConfig
-import me.amrbashir.hijriwidget.CHANGELOG
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preferences.LocalNavController
+import me.amrbashir.hijriwidget.preferences.composables.Changelog
 import me.amrbashir.hijriwidget.preferences.composables.ui.adaptiveIconPainterResource
 
 @Serializable
@@ -70,7 +70,6 @@ private fun Route() {
     val navController = LocalNavController.current
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -79,21 +78,27 @@ private fun Route() {
             .verticalScroll(rememberScrollState())
     ) {
 
-        Image(
-            painter = adaptiveIconPainterResource(R.mipmap.ic_launcher),
-            contentDescription = null,
-            modifier = Modifier.requiredSize(64.dp)
-        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Image(
+                painter = adaptiveIconPainterResource(R.mipmap.ic_launcher),
+                contentDescription = null,
+                modifier = Modifier.requiredSize(64.dp)
+            )
 
-        Text(
-            "Hijri Widget",
-            style = MaterialTheme.typography.titleLarge
-        )
+            Text(
+                "Hijri Widget",
+                style = MaterialTheme.typography.titleLarge
+            )
 
-        Text(
-            "${BuildConfig.VERSION_NAME} (${BuildConfig.GIT_SHA})",
-            style = MaterialTheme.typography.bodyMedium
-        )
+            Text(
+                "${BuildConfig.VERSION_NAME} (${BuildConfig.GIT_SHA})",
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
 
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
@@ -133,9 +138,6 @@ private fun Route() {
             }
         }
 
-        MarkdownText(
-            CHANGELOG.replace("## [Unreleased]", ""),
-            syntaxHighlightColor = MaterialTheme.colorScheme.surfaceBright
-        )
+        Changelog()
     }
 }
