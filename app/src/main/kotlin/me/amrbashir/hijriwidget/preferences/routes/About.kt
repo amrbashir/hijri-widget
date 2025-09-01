@@ -91,7 +91,7 @@ private fun Route() {
         )
 
         Text(
-            "${BuildConfig.VERSION_NAME} (12dqwe2)",
+            "${BuildConfig.VERSION_NAME} (${BuildConfig.GIT_SHA})",
             style = MaterialTheme.typography.bodyMedium
         )
 
