@@ -59,7 +59,7 @@ val QUIKC_LINKS = arrayOf(
     QuickLink("Twitter", R.drawable.ic_fab_twitter, "https://twitter.com/amrbashir_dev"),
     QuickLink("LinkedIn", R.drawable.ic_fab_linkedin, "https://www.linkedin.com/in/amrbashir-dev"),
     QuickLink(
-        "Privacy Policy",
+        "Privacy",
         R.drawable.baseline_privacy_tip_24,
         "https://hijri-widget.amrbashir.me/PRIVACY.md"
     ),
@@ -96,7 +96,7 @@ private fun Route() {
         )
 
         Row(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier
                 .clip(RoundedCornerShape(20.dp))
                 .fillMaxWidth()
@@ -105,6 +105,7 @@ private fun Route() {
         ) {
             for (link in QUIKC_LINKS) {
                 TextButton(
+                    modifier = Modifier.weight(1F),
                     colors = ButtonDefaults.textButtonColors()
                         .copy(contentColor = MaterialTheme.colorScheme.onSurface),
                     shape = RoundedCornerShape(12.dp),
