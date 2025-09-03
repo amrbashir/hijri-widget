@@ -2,7 +2,6 @@ package me.amrbashir.hijriwidget.preferences.routes
 
 import android.content.Intent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -107,7 +106,6 @@ private fun Route() {
             modifier = Modifier
                 .clip(RoundedCornerShape(20.dp))
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surfaceBright)
                 .padding(8.dp)
         ) {
             for (link in QUIKC_LINKS) {
