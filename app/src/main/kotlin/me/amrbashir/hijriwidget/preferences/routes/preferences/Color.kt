@@ -14,9 +14,9 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
 import me.amrbashir.hijriwidget.ColorMode
 import me.amrbashir.hijriwidget.Preferences
+import me.amrbashir.hijriwidget.preferences.composableWithAnimatedContentScope
 import me.amrbashir.hijriwidget.preferences.composables.ui.ColorPicker
 import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceCategory
 import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
@@ -25,7 +25,7 @@ import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
 const val COLOR_ROUTE = "/preferences/color"
 
 fun NavGraphBuilder.colorRoute() {
-    composable(route = COLOR_ROUTE) { Route() }
+    composableWithAnimatedContentScope(route = COLOR_ROUTE) { Route() }
 }
 
 fun NavController.navigateToColor() {
@@ -41,62 +41,64 @@ private fun Route() {
     val savedBgColorMode = Preferences.bgColorMode.value
     val bgColorModes = ColorMode.allForBg()
 
-    Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .padding(bottom = 16.dp)
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-    ) {
-        PreferencesGroup(label = "Text Color") {
-            for (mode in textColorModes) {
-                PreferenceCategory(
-                    label = mode.prettyName,
-                    description = mode.description,
-                    icon = { RadioIcon(selected = savedTextColorMode == mode) },
-                    onClick = {
-                        Preferences.textColorMode.value = mode
+    PreferenceRouteLayout {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 16.dp)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            PreferencesGroup(label = "Text Color") {
+                for (mode in textColorModes) {
+                    PreferenceCategory(
+                        label = mode.prettyName,
+                        description = mode.description,
+                        icon = { RadioIcon(selected = savedTextColorMode == mode) },
+                        onClick = {
+                            Preferences.textColorMode.value = mode
+                        }
+                    )
+                }
+
+            }
+
+            if (Preferences.textColorMode.value == ColorMode.Custom) {
+                Spacer(Modifier.requiredHeight(16.dp))
+
+                ColorPicker(
+                    Preferences.textCustomColor.value,
+                    onColorChanged = {
+                        Preferences.textCustomColor.value = it.toArgb()
                     }
                 )
             }
 
-        }
-
-        if (Preferences.textColorMode.value == ColorMode.Custom) {
-            Spacer(Modifier.requiredHeight(16.dp))
-
-            ColorPicker(
-                Preferences.textCustomColor.value,
-                onColorChanged = {
-                    Preferences.textCustomColor.value = it.toArgb()
+            PreferencesGroup(label = "Background Color") {
+                for (mode in bgColorModes) {
+                    PreferenceCategory(
+                        label = mode.prettyName,
+                        description = mode.description,
+                        icon = { RadioIcon(selected = savedBgColorMode == mode) },
+                        onClick = {
+                            Preferences.bgColorMode.value = mode
+                        }
+                    )
                 }
-            )
-        }
 
-        PreferencesGroup(label = "Background Color") {
-            for (mode in bgColorModes) {
-                PreferenceCategory(
-                    label = mode.prettyName,
-                    description = mode.description,
-                    icon = { RadioIcon(selected = savedBgColorMode == mode) },
-                    onClick = {
-                        Preferences.bgColorMode.value = mode
+            }
+
+            if (Preferences.bgColorMode.value == ColorMode.Custom) {
+                Spacer(Modifier.requiredHeight(16.dp))
+
+                ColorPicker(
+                    Preferences.bgCustomColor.value,
+                    onColorChanged = {
+                        Preferences.bgCustomColor.value = it.toArgb()
                     }
                 )
             }
-
-        }
-
-        if (Preferences.bgColorMode.value == ColorMode.Custom) {
-            Spacer(Modifier.requiredHeight(16.dp))
-
-            ColorPicker(
-                Preferences.bgCustomColor.value,
-                onColorChanged = {
-                    Preferences.bgCustomColor.value = it.toArgb()
-                }
-            )
         }
     }
 }

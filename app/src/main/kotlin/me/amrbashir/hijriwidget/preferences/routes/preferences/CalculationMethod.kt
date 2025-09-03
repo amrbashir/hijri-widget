@@ -11,9 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
 import me.amrbashir.hijriwidget.HijriDateCalculationMethod
 import me.amrbashir.hijriwidget.Preferences
+import me.amrbashir.hijriwidget.preferences.composableWithAnimatedContentScope
 import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceCategory
 import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
 import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
@@ -21,7 +21,9 @@ import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
 const val CALENDAR_CALCULATION_METHOD_ROUTE = "/preferences/calendar-calculation-method"
 
 fun NavGraphBuilder.calendarCalculationRoute() {
-    composable(route = CALENDAR_CALCULATION_METHOD_ROUTE) { Route() }
+    composableWithAnimatedContentScope(route = CALENDAR_CALCULATION_METHOD_ROUTE) {
+        Route()
+    }
 }
 
 fun NavController.navigateToCalendarCalculation() {
@@ -33,25 +35,27 @@ fun NavController.navigateToCalendarCalculation() {
 private fun Route() {
     val savedMethod = Preferences.calendarCalculationMethod.value
 
-    Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .padding(bottom = 16.dp)
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-    ) {
-        PreferencesGroup(label = "Calendar Calculation Method") {
-            for (method in HijriDateCalculationMethod.entries) {
+    PreferenceRouteLayout {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 16.dp)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            PreferencesGroup(label = "Calendar Calculation Method") {
+                for (method in HijriDateCalculationMethod.entries) {
 
-                PreferenceCategory(
-                    label = method.label,
-                    description = method.description,
-                    icon = { RadioIcon(selected = savedMethod == method.id) },
-                    onClick = {
-                        Preferences.calendarCalculationMethod.value = method.id
-                    }
-                )
+                    PreferenceCategory(
+                        label = method.label,
+                        description = method.description,
+                        icon = { RadioIcon(selected = savedMethod == method.id) },
+                        onClick = {
+                            Preferences.calendarCalculationMethod.value = method.id
+                        }
+                    )
+                }
             }
         }
     }

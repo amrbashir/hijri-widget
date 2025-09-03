@@ -3,7 +3,10 @@ package me.amrbashir.hijriwidget.preferences
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import me.amrbashir.hijriwidget.preferences.routes.aboutRoute
 import me.amrbashir.hijriwidget.preferences.routes.indexRoute
@@ -13,6 +16,20 @@ import me.amrbashir.hijriwidget.preferences.routes.preferences.calendarCalculati
 import me.amrbashir.hijriwidget.preferences.routes.preferences.colorRoute
 import me.amrbashir.hijriwidget.preferences.routes.preferences.dateFormatRoute
 import me.amrbashir.hijriwidget.preferences.routes.preferences.preferencesIndexRoute
+
+
+fun NavGraphBuilder.composableWithAnimatedContentScope(
+    route: String,
+    content: @Composable () -> Unit
+) {
+    composable(route) {
+        CompositionLocalProvider(
+            LocalAnimatedContentScope provides this
+        ) {
+            content()
+        }
+    }
+}
 
 
 @Composable

@@ -22,11 +22,11 @@ import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
 import me.amrbashir.hijriwidget.DATE_FORMAT_PRESETES
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.formatDate
+import me.amrbashir.hijriwidget.preferences.composableWithAnimatedContentScope
 import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceCategory
 import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
 import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
@@ -34,7 +34,7 @@ import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
 const val DATE_FORMAT_ROUTE = "/preferences/date-format"
 
 fun NavGraphBuilder.dateFormatRoute() {
-    composable(route = DATE_FORMAT_ROUTE) { Route() }
+    composableWithAnimatedContentScope(route = DATE_FORMAT_ROUTE) { Route() }
 }
 
 fun NavController.navigateToDateFormat() {
@@ -46,54 +46,55 @@ fun NavController.navigateToDateFormat() {
 private fun Route() {
     val savedFormat = Preferences.dateFormat.value
 
-    Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .padding(bottom = 16.dp)
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-    ) {
-        PreferencesGroup(label = "Format") {
-            for (format in DATE_FORMAT_PRESETES) {
-                PreferenceCategory(
-                    label = format.formatDate(HijriDate.today()),
-                    description = format,
-                    icon = { RadioIcon(selected = !Preferences.dateIsCustomFormat.value && savedFormat == format) },
-                    onClick = {
-                        Preferences.dateIsCustomFormat.value = false
-                        Preferences.dateFormat.value = format
-                    }
-                )
-            }
-
-            PreferenceCategory(
-                label = "Custom",
-                description = "Specify custom date format pattern (e.g., 'dd/MM/yyyy', 'EEEE, MMMM d')",
-                icon = { RadioIcon(selected = Preferences.dateIsCustomFormat.value) },
-                onClick = {
-                    Preferences.dateIsCustomFormat.value = true
+    PreferenceRouteLayout {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 16.dp)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            PreferencesGroup(label = "Format") {
+                for (format in DATE_FORMAT_PRESETES) {
+                    PreferenceCategory(
+                        label = format.formatDate(HijriDate.today()),
+                        description = format,
+                        icon = { RadioIcon(selected = !Preferences.dateIsCustomFormat.value && savedFormat == format) },
+                        onClick = {
+                            Preferences.dateIsCustomFormat.value = false
+                            Preferences.dateFormat.value = format
+                        }
+                    )
                 }
-            ) {
-                OutlinedTextField(
-                    modifier = Modifier
-                        .padding(start = 48.dp)
-                        .fillMaxWidth(),
-                    enabled = Preferences.dateIsCustomFormat.value,
-                    value = Preferences.dateCustomFormat.value,
-                    onValueChange = {
-                        Preferences.dateCustomFormat.value = it
+
+                PreferenceCategory(
+                    label = "Custom",
+                    description = "Specify custom date format pattern (e.g., 'dd/MM/yyyy', 'EEEE, MMMM d')",
+                    icon = { RadioIcon(selected = Preferences.dateIsCustomFormat.value) },
+                    onClick = {
+                        Preferences.dateIsCustomFormat.value = true
                     }
-                )
+                ) {
+                    OutlinedTextField(
+                        modifier = Modifier
+                            .padding(start = 48.dp)
+                            .fillMaxWidth(),
+                        enabled = Preferences.dateIsCustomFormat.value,
+                        value = Preferences.dateCustomFormat.value,
+                        onValueChange = {
+                            Preferences.dateCustomFormat.value = it
+                        }
+                    )
+                }
             }
-        }
 
-        if (Preferences.dateIsCustomFormat.value) {
-            Spacer(Modifier.requiredHeight(16.dp))
+            if (Preferences.dateIsCustomFormat.value) {
+                Spacer(Modifier.requiredHeight(16.dp))
 
-            val annotatedString = buildAnnotatedString {
-                append(
-                    """
+                val annotatedString = buildAnnotatedString {
+                    append(
+                        """
                     Customize how the date appears on your widget
 
                     You can use these codes:
@@ -132,33 +133,33 @@ private fun Route() {
 
                     For the full list of language identifiers:
                 """.trimIndent()
-                )
-                withLink(
-                    LinkAnnotation.Url(
-                        "http://www.i18nguy.com/unicode/language-identifiers.html",
-                        TextLinkStyles(
-                            style = SpanStyle(
-                                color = MaterialTheme.colorScheme.primary.copy(
-                                    alpha = 0.7F
+                    )
+                    withLink(
+                        LinkAnnotation.Url(
+                            "http://www.i18nguy.com/unicode/language-identifiers.html",
+                            TextLinkStyles(
+                                style = SpanStyle(
+                                    color = MaterialTheme.colorScheme.primary.copy(
+                                        alpha = 0.7F
+                                    )
                                 )
                             )
                         )
-                    )
-                ) {
-                    append("http://www.i18nguy.com/unicode/language-identifiers.html")
+                    ) {
+                        append("http://www.i18nguy.com/unicode/language-identifiers.html")
+                    }
                 }
+
+                Text(
+                    annotatedString,
+                    modifier = Modifier.fillMaxWidth(),
+                    style = MaterialTheme.typography.bodyMedium.merge(
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
+                            alpha = 0.7F
+                        )
+                    ),
+                )
             }
-
-            Text(
-                annotatedString,
-                modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.bodyMedium.merge(
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
-                        alpha = 0.7F
-                    )
-                ),
-            )
         }
-
     }
 }

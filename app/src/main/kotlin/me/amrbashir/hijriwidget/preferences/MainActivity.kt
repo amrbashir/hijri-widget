@@ -4,8 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -25,16 +27,13 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import me.amrbashir.hijriwidget.HijriDate
@@ -42,23 +41,30 @@ import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.PreferencesTheme
 import me.amrbashir.hijriwidget.android.AlarmReceiver
 import me.amrbashir.hijriwidget.isDark
-import me.amrbashir.hijriwidget.preferences.composables.WidgetPreview
 import me.amrbashir.hijriwidget.preferences.routes.preferences.PREFERENCES_INDEX_ROUTE
-import me.amrbashir.hijriwidget.preferences.routes.preferences.PREFERENCES_ROUTE
 import me.amrbashir.hijriwidget.widget.HijriWidget
 
 
-val LocalNavController = staticCompositionLocalOf<NavHostController> {
+val LocalNavController = compositionLocalOf<NavHostController> {
     error("CompositionLocal LocalNavController not present")
 }
 
-val LocalSnackbarHostState = staticCompositionLocalOf<SnackbarHostState> {
+val LocalSnackbarHostState = compositionLocalOf<SnackbarHostState> {
     error("CompositionLocal LocalSnackbarHostState not present")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-val LocalAppBarTitle = staticCompositionLocalOf<MutableState<String>> {
+val LocalAppBarTitle = compositionLocalOf<MutableState<String>> {
     error("CompositionLocal LocalAppBarTitle not present")
+}
+
+@OptIn(ExperimentalSharedTransitionApi::class)
+val LocalSharedTransitionScope = compositionLocalOf<SharedTransitionScope> {
+    error("CompositionLocal LocalSharedTransitionScope not present")
+}
+
+val LocalAnimatedContentScope = compositionLocalOf<AnimatedContentScope> {
+    error("CompositionLocal LocalAnimatedContentScope not present")
 }
 
 class MainActivity : WidgetConfiguration(false)
@@ -82,12 +88,11 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
         super.onDestroy()
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
     @Composable
     private fun Content() {
         val appBarTitle = remember { mutableStateOf("Hijri Widget") }
         val navController = rememberNavController()
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
         val snackBarHostState = remember { SnackbarHostState() }
         val topAppBarState = rememberTopAppBarState()
         val topAppBarScrollBehavior =
@@ -105,7 +110,6 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
                 LocalSnackbarHostState provides snackBarHostState,
                 LocalAppBarTitle provides appBarTitle,
             ) {
-
                 Scaffold(
                     containerColor = containerColor,
                     snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
@@ -123,19 +127,16 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
                     },
                     modifier = Modifier.nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
                 ) {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                    SharedTransitionLayout(
                         modifier = Modifier
                             .consumeWindowInsets(it)
                             .padding(it)
                     ) {
-                        WidgetPreview(
-                            visible = navBackStackEntry?.destination?.route?.startsWith(
-                                PREFERENCES_ROUTE
-                            ) ?: false
-                        )
-
-                        Router()
+                        CompositionLocalProvider(
+                            LocalSharedTransitionScope provides this
+                        ) {
+                            Router()
+                        }
                     }
                 }
             }

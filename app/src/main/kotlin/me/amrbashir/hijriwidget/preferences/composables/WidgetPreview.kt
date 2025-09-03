@@ -1,9 +1,6 @@
 package me.amrbashir.hijriwidget.preferences.composables
 
 import android.app.WallpaperManager
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,7 +37,7 @@ import me.amrbashir.hijriwidget.widgetCornerRadius
 
 @Composable
 fun WidgetPreview(
-    visible: Boolean = true
+    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
 
@@ -71,66 +68,56 @@ fun WidgetPreview(
     }
 
     // Wallpaper container
-    AnimatedVisibility(
-        visible = visible,
-        enter = slideInHorizontally(
-            initialOffsetX = { -it }
-        ),
-        exit = slideOutHorizontally(
-            targetOffsetX = { -it }
-        )
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(20.dp))
+            .height(150.dp)
+            .fillMaxWidth()
+            .drawBehind {
+                val imageWidth = builtinWallpaper.width.toFloat()
+                val imageHeight = builtinWallpaper.height.toFloat()
+                val canvasWidth = size.width
+                val canvasHeight = size.height
+
+                val scale = maxOf(canvasWidth / imageWidth, canvasHeight / imageHeight)
+
+                val scaledWidth = imageWidth * scale
+                val scaledHeight = imageHeight * scale
+
+                val offsetX = (canvasWidth - scaledWidth) / 2
+                val offsetY = (canvasHeight - scaledHeight) / 2
+
+                drawImage(
+                    image = builtinWallpaper,
+                    dstSize = IntSize(scaledWidth.toInt(), scaledHeight.toInt()),
+                    dstOffset = IntOffset(offsetX.toInt(), offsetY.toInt())
+                )
+            }
     ) {
+
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .clip(RoundedCornerShape(20.dp))
-                .height(150.dp)
-                .fillMaxWidth()
-                .drawBehind {
-                    val imageWidth = builtinWallpaper.width.toFloat()
-                    val imageHeight = builtinWallpaper.height.toFloat()
-                    val canvasWidth = size.width
-                    val canvasHeight = size.height
-
-                    val scale = maxOf(canvasWidth / imageWidth, canvasHeight / imageHeight)
-
-                    val scaledWidth = imageWidth * scale
-                    val scaledHeight = imageHeight * scale
-
-                    val offsetX = (canvasWidth - scaledWidth) / 2
-                    val offsetY = (canvasHeight - scaledHeight) / 2
-
-                    drawImage(
-                        image = builtinWallpaper,
-                        dstSize = IntSize(scaledWidth.toInt(), scaledHeight.toInt()),
-                        dstOffset = IntOffset(offsetX.toInt(), offsetY.toInt())
-                    )
-                }
+                .height(110.dp)
+                .width(175.dp)
+                .widgetCornerRadius(context)
+                .background(bgColor.getColor(context))
         ) {
-
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .height(110.dp)
-                    .width(175.dp)
-                    .widgetCornerRadius(context)
-                    .background(bgColor.getColor(context))
-            ) {
-                Text(
-                    date,
-                    color = textColor,
-                    style = TextStyle(
-                        textAlign = TextAlign.Center,
-                        fontSize = textSize,
-                        shadow = if (Preferences.textShadow.value) Shadow(
-                            color = Color(0, 0, 0, 128),
-                            offset = Offset(x = 1f, y = 1f),
-                            blurRadius = 1f,
-                        ) else null,
-                    ),
-                )
-            }
+            Text(
+                date,
+                color = textColor,
+                style = TextStyle(
+                    textAlign = TextAlign.Center,
+                    fontSize = textSize,
+                    shadow = if (Preferences.textShadow.value) Shadow(
+                        color = Color(0, 0, 0, 128),
+                        offset = Offset(x = 1f, y = 1f),
+                        blurRadius = 1f,
+                    ) else null,
+                ),
+            )
         }
     }
 }
