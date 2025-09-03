@@ -64,10 +64,44 @@ tasks.register("generateChangelogFile") {
             .replace("## [Unreleased]", "")
             .trimStart()
 
+        /** Pattern to find `## [1.0.1] - 2025-08-29` */
+        val versionPattern = Regex("""## \[(\d+\.\d+\.\d+)] - (\d{4}-\d{2}-\d{2})""")
+
+        val matches = versionPattern.findAll(fileContent).toList()
+
+
+        val entries = mutableListOf<String>()
+
+        // Handle optional "Unreleased" section
+        if (matches.isNotEmpty() && matches.first().range.first > 0) {
+            val unreleasedContent = fileContent.substring(0, matches.first().range.first).trim()
+            if (unreleasedContent.isNotEmpty()) {
+                entries.add("""ChangelogEntry("Unreleased", ""${'"'}$unreleasedContent""${'"'})""")
+            }
+        }
+
+        // Handle versioned sections
+        matches.forEachIndexed { index, match ->
+            val version = match.groupValues[1]
+            val date = match.groupValues[2]
+            val start = match.range.last + 1
+            val end =
+                if (index + 1 < matches.size) matches[index + 1].range.first else fileContent.length
+            val content = fileContent.substring(start, end).trim()
+            entries.add("""ChangelogEntry("$version - $date", ""${'"'}$content""${'"'})""")
+        }
+
         val generatedCode = """
             package me.amrbashir.hijriwidget
 
-            val CHANGELOG = ""${'"'}$fileContent""${'"'}
+            data class ChangelogEntry(
+                val header: String,
+                val content: String
+            )
+
+            val CHANGELOG = arrayOf<ChangelogEntry>(
+                ${entries.joinToString(", ")}
+            )
         """.trimIndent()
 
         val outputFile = file("build/generated/source/me/amrbashir/hijriwidget/CHANGELOG.kt")

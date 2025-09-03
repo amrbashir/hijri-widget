@@ -13,39 +13,8 @@ import androidx.compose.ui.unit.dp
 import dev.jeziellago.compose.markdowntext.MarkdownText
 import me.amrbashir.hijriwidget.CHANGELOG
 
-data class ChangelogEntry(
-    val header: String,
-    val content: String
-)
-
-/** Pattern to find `## [1.0.1] - 2025-08-29` */
-val VERSION_PATTERN = Regex("""## \[(\d+\.\d+\.\d+)] - (\d{4}-\d{2}-\d{2})""")
-
 @Composable
 fun Changelog() {
-    val matches = VERSION_PATTERN.findAll(CHANGELOG).toList()
-
-    val entries = mutableListOf<ChangelogEntry>()
-
-    // Handle optional "Unreleased" section
-    if (matches.isNotEmpty() && matches.first().range.first > 0) {
-        val unreleasedContent = CHANGELOG.substring(0, matches.first().range.first).trim()
-        if (unreleasedContent.isNotEmpty()) {
-            entries.add(ChangelogEntry("Unreleased", unreleasedContent))
-        }
-    }
-
-    // Handle versioned sections
-    matches.forEachIndexed { index, match ->
-        val version = match.groupValues[1]
-        val date = match.groupValues[2]
-        val start = match.range.last + 1
-        val end =
-            if (index + 1 < matches.size) matches[index + 1].range.first else CHANGELOG.length
-        val content = CHANGELOG.substring(start, end).trim()
-        entries.add(ChangelogEntry("$version - $date", content))
-    }
-
     Text(
         "Changelog",
         modifier = Modifier.fillMaxWidth(),
@@ -53,7 +22,7 @@ fun Changelog() {
         style = MaterialTheme.typography.headlineLarge
     )
 
-    for (entry in entries) {
+    for (entry in CHANGELOG) {
         Text(
             entry.header,
             style = MaterialTheme.typography.labelLarge
