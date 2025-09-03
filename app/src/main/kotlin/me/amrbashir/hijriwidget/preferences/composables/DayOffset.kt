@@ -42,7 +42,7 @@ fun DayOffset() {
             }
         ) {
             Icon(
-                painter = painterResource(R.drawable.baseline_settings_backup_restore_24),
+                painter = painterResource(R.drawable.outline_settings_backup_restore_24),
                 contentDescription = "Reset to default"
             )
         }

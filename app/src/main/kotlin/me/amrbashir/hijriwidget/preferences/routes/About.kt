@@ -59,7 +59,7 @@ val QUIKC_LINKS = arrayOf(
     QuickLink("LinkedIn", R.drawable.ic_fab_linkedin, "https://www.linkedin.com/in/amrbashir-dev"),
     QuickLink(
         "Privacy",
-        R.drawable.baseline_privacy_tip_24,
+        R.drawable.outline_privacy_tip_24,
         "https://hijri-widget.amrbashir.me/PRIVACY.md"
     ),
 )
