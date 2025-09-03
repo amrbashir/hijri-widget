@@ -7,8 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.navigation
 import me.amrbashir.hijriwidget.preferences.routes.aboutRoute
 import me.amrbashir.hijriwidget.preferences.routes.indexRoute
-import me.amrbashir.hijriwidget.preferences.routes.preferences.PreferencesIndexRoute
-import me.amrbashir.hijriwidget.preferences.routes.preferences.PreferencesRoute
+import me.amrbashir.hijriwidget.preferences.routes.preferences.PREFERENCES_INDEX_ROUTE
+import me.amrbashir.hijriwidget.preferences.routes.preferences.PREFERENCES_ROUTE
 import me.amrbashir.hijriwidget.preferences.routes.preferences.calendarCalculationRoute
 import me.amrbashir.hijriwidget.preferences.routes.preferences.colorRoute
 import me.amrbashir.hijriwidget.preferences.routes.preferences.dateFormatRoute
@@ -21,7 +21,7 @@ fun Router() {
 
     NavHost(
         navController = navController,
-        startDestination = PreferencesRoute,
+        startDestination = PREFERENCES_ROUTE,
         enterTransition = {
             slideIntoContainer(
                 AnimatedContentTransitionScope.SlideDirection.Left,
@@ -48,9 +48,8 @@ fun Router() {
         }
     ) {
         indexRoute()
-        preferencesIndexRoute()
         aboutRoute()
-        navigation<PreferencesRoute>(startDestination = PreferencesIndexRoute) {
+        navigation(route = PREFERENCES_ROUTE, startDestination = PREFERENCES_INDEX_ROUTE) {
             preferencesIndexRoute()
             dateFormatRoute()
             calendarCalculationRoute()

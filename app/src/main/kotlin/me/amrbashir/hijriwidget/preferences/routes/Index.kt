@@ -3,13 +3,11 @@ package me.amrbashir.hijriwidget.preferences.routes
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import kotlinx.serialization.Serializable
 
-@Serializable
-object IndexRoute
+const val INDEX_ROUTE = "/"
 
 fun NavGraphBuilder.indexRoute() {
-    composable<IndexRoute> { Route() }
+    composable(route = INDEX_ROUTE) { Route() }
 }
 
 @Composable

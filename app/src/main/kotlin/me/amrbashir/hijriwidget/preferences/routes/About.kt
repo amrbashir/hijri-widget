@@ -29,7 +29,6 @@ import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import kotlinx.serialization.Serializable
 import me.amrbashir.hijriwidget.BuildConfig
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preferences.LocalAppBarTitle
@@ -37,15 +36,14 @@ import me.amrbashir.hijriwidget.preferences.LocalNavController
 import me.amrbashir.hijriwidget.preferences.composables.Changelog
 import me.amrbashir.hijriwidget.preferences.composables.ui.adaptiveIconPainterResource
 
-@Serializable
-object AboutRoute
+const val ABOUT_ROUTE = "/About"
 
 fun NavGraphBuilder.aboutRoute() {
-    composable<AboutRoute> { Route() }
+    composable(route = ABOUT_ROUTE) { Route() }
 }
 
 fun NavController.navigateToAbout() {
-    navigate(route = AboutRoute)
+    navigate(route = ABOUT_ROUTE)
 }
 
 

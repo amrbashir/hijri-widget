@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import kotlinx.serialization.Serializable
 import me.amrbashir.hijriwidget.ColorMode
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.preferences.composables.ui.ColorPicker
@@ -23,15 +22,14 @@ import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceCategory
 import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
 import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
 
-@Serializable
-object ColorRoute
+const val COLOR_ROUTE = "/preferences/color"
 
 fun NavGraphBuilder.colorRoute() {
-    composable<ColorRoute> { Route() }
+    composable(route = COLOR_ROUTE) { Route() }
 }
 
 fun NavController.navigateToColor() {
-    navigate(route = ColorRoute)
+    navigate(route = COLOR_ROUTE)
 }
 
 

@@ -43,6 +43,8 @@ import me.amrbashir.hijriwidget.PreferencesTheme
 import me.amrbashir.hijriwidget.android.AlarmReceiver
 import me.amrbashir.hijriwidget.isDark
 import me.amrbashir.hijriwidget.preferences.composables.WidgetPreview
+import me.amrbashir.hijriwidget.preferences.routes.preferences.PREFERENCES_INDEX_ROUTE
+import me.amrbashir.hijriwidget.preferences.routes.preferences.PREFERENCES_ROUTE
 import me.amrbashir.hijriwidget.widget.HijriWidget
 
 
@@ -127,12 +129,9 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
                             .consumeWindowInsets(it)
                             .padding(it)
                     ) {
-                        val preferencesRoute =
-                            "me.amrbashir.hijriwidget.preferences.routes.preferences"
-
                         WidgetPreview(
                             visible = navBackStackEntry?.destination?.route?.startsWith(
-                                preferencesRoute
+                                PREFERENCES_ROUTE
                             ) ?: false
                         )
 
@@ -145,12 +144,10 @@ open class WidgetConfiguration(private val autoClose: Boolean = true) : Componen
 
     @Composable
     private fun GoBackButton() {
-        val homeRoute =
-            "me.amrbashir.hijriwidget.preferences.routes.preferences.PreferencesIndexRoute"
         val navController = LocalNavController.current
 
         IconButton(onClick = {
-            if (navController.currentDestination?.route == homeRoute) {
+            if (navController.currentDestination?.route == PREFERENCES_INDEX_ROUTE) {
                 this@WidgetConfiguration.finish()
             } else {
                 navController.navigateUp()

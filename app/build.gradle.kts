@@ -2,7 +2,6 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
-    kotlin("plugin.serialization") version "2.2.10"
 }
 
 val gitSha = "git rev-parse --short HEAD".execute(project.rootDir)
@@ -94,7 +93,6 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.9.3")
     implementation("com.github.skydoves:colorpicker-compose:1.1.2")
     implementation("com.github.jeziellago:compose-markdown:0.5.7")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
 }

@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import kotlinx.serialization.Serializable
 import me.amrbashir.hijriwidget.DATE_FORMAT_PRESETES
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.Preferences
@@ -32,16 +31,14 @@ import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceCategory
 import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
 import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
 
-
-@Serializable
-object DateFormatRoute
+const val DATE_FORMAT_ROUTE = "/preferences/date-format"
 
 fun NavGraphBuilder.dateFormatRoute() {
-    composable<DateFormatRoute> { Route() }
+    composable(route = DATE_FORMAT_ROUTE) { Route() }
 }
 
 fun NavController.navigateToDateFormat() {
-    navigate(route = DateFormatRoute)
+    navigate(route = DATE_FORMAT_ROUTE)
 }
 
 

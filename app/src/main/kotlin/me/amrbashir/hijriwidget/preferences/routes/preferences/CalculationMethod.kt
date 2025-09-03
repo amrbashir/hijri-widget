@@ -12,22 +12,20 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import kotlinx.serialization.Serializable
 import me.amrbashir.hijriwidget.HijriDateCalculationMethod
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceCategory
 import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
 import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
 
-@Serializable
-object CalendarCalculationRoute
+const val CALENDAR_CALCULATION_METHOD_ROUTE = "/preferences/calendar-calculation-method"
 
 fun NavGraphBuilder.calendarCalculationRoute() {
-    composable<CalendarCalculationRoute> { Route() }
+    composable(route = CALENDAR_CALCULATION_METHOD_ROUTE) { Route() }
 }
 
 fun NavController.navigateToCalendarCalculation() {
-    navigate(route = CalendarCalculationRoute)
+    navigate(route = CALENDAR_CALCULATION_METHOD_ROUTE)
 }
 
 

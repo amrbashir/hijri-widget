@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import kotlinx.serialization.Serializable
 import me.amrbashir.hijriwidget.DayStart
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.R
@@ -30,14 +29,11 @@ import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
 import me.amrbashir.hijriwidget.preferences.composables.ui.TimePickerDialog
 import me.amrbashir.hijriwidget.preferences.routes.navigateToAbout
 
-@Serializable
-object PreferencesRoute
-
-@Serializable
-object PreferencesIndexRoute
+const val PREFERENCES_ROUTE = "/preferences"
+const val PREFERENCES_INDEX_ROUTE = "/preferences/"
 
 fun NavGraphBuilder.preferencesIndexRoute() {
-    composable<PreferencesIndexRoute> { Route() }
+    composable(route = PREFERENCES_INDEX_ROUTE) { Route() }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
