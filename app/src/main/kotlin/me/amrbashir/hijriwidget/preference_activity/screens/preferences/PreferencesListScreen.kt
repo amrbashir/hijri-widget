@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preferences.routes.preferences
+package me.amrbashir.hijriwidget.preference_activity.screens.preferences
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,42 +9,36 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
-import me.amrbashir.hijriwidget.DayStart
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.R
-import me.amrbashir.hijriwidget.preferences.LocalAppBarTitle
-import me.amrbashir.hijriwidget.preferences.LocalNavController
-import me.amrbashir.hijriwidget.preferences.composableWithAnimatedContentScope
-import me.amrbashir.hijriwidget.preferences.composables.DayOffset
-import me.amrbashir.hijriwidget.preferences.composables.TextSize
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceTemplate
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceGroup
-import me.amrbashir.hijriwidget.preferences.composables.ui.TimePickerDialog
-import me.amrbashir.hijriwidget.preferences.routes.navigateToAbout
+import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
+import me.amrbashir.hijriwidget.preference_activity.LocalNavController
+import me.amrbashir.hijriwidget.preference_activity.components.DayOffset
+import me.amrbashir.hijriwidget.preference_activity.components.PreferenceScreenLayout
+import me.amrbashir.hijriwidget.preference_activity.components.TextSize
+import me.amrbashir.hijriwidget.preference_activity.composableWithAnimatedContentScopeProvider
+import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceGroup
+import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceTemplate
+import me.amrbashir.hijriwidget.preference_activity.screens.navigateToAbout
 
-const val PREFERENCES_ROUTE = "/preferences"
-const val PREFERENCES_INDEX_ROUTE = "/preferences/"
+const val PREFERENCES_DESTINATION = "/preferences"
+const val PREFERENCES_LIST_DESTINATION = "/preferences/"
 
-fun NavGraphBuilder.preferencesIndexRoute() {
-    composableWithAnimatedContentScope(route = PREFERENCES_INDEX_ROUTE) { Route() }
+fun NavGraphBuilder.preferenceListDestination() {
+    composableWithAnimatedContentScopeProvider(route = PREFERENCES_LIST_DESTINATION) { PreferenceListScreen() }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun Route() {
+internal fun PreferenceListScreen() {
     LocalAppBarTitle.current.value = "Hijri Widget"
 
     val navController = LocalNavController.current
-    var showDayStartPicker by remember { mutableStateOf(false) }
 
-    PreferenceRouteLayout {
+    PreferenceScreenLayout {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier
@@ -68,28 +62,16 @@ private fun Route() {
                     description = "Set when the Hijri day begins based on your local or religious preference",
                     iconResId = R.drawable.outline_access_time_24,
                     onClick = {
-                        showDayStartPicker = true
+                        navController.navigateToDayStart()
                     }
-                ) {
-                    if (showDayStartPicker) {
-                        TimePickerDialog(
-                            initialHour = Preferences.dayStart.value.hour,
-                            initialMinute = Preferences.dayStart.value.minute,
-                            onConfirm = { state ->
-                                Preferences.dayStart.value = DayStart(state.hour, state.minute)
-                                showDayStartPicker = false
-                            },
-                            onDismiss = { showDayStartPicker = false }
-                        )
-                    }
-                }
+                )
 
                 PreferenceTemplate(
                     label = "Calendar Calculation Method",
                     description = "Choose the method used to calculate Hijri dates",
                     iconResId = R.drawable.outline_calendar_month_24,
                     onClick = {
-                        navController.navigateToCalendarCalculation()
+                        navController.navigateToCalendarCalculationMethod()
                     }
                 )
 

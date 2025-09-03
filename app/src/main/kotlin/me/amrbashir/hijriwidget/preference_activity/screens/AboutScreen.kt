@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preferences.routes
+package me.amrbashir.hijriwidget.preference_activity.screens
 
 import android.content.Intent
 import androidx.compose.foundation.Image
@@ -30,19 +30,19 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import me.amrbashir.hijriwidget.BuildConfig
 import me.amrbashir.hijriwidget.R
-import me.amrbashir.hijriwidget.preferences.LocalAppBarTitle
-import me.amrbashir.hijriwidget.preferences.LocalNavController
-import me.amrbashir.hijriwidget.preferences.composables.Changelog
-import me.amrbashir.hijriwidget.preferences.composables.ui.adaptiveIconPainterResource
+import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
+import me.amrbashir.hijriwidget.preference_activity.LocalNavController
+import me.amrbashir.hijriwidget.preference_activity.components.Changelog
+import me.amrbashir.hijriwidget.preference_activity.composables.adaptiveIconPainterResource
 
-const val ABOUT_ROUTE = "/About"
+const val ABOUT_DESTINATION = "/About"
 
-fun NavGraphBuilder.aboutRoute() {
-    composable(route = ABOUT_ROUTE) { Route() }
+fun NavGraphBuilder.aboutDestination() {
+    composable(route = ABOUT_DESTINATION) { AboutScreen() }
 }
 
 fun NavController.navigateToAbout() {
-    navigate(route = ABOUT_ROUTE)
+    navigate(route = ABOUT_DESTINATION)
 }
 
 
@@ -65,7 +65,7 @@ val QUIKC_LINKS = arrayOf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun Route() {
+internal fun AboutScreen() {
     LocalAppBarTitle.current.value = "About"
 
     val navController = LocalNavController.current

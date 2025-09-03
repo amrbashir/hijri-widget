@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preferences.routes.preferences
+package me.amrbashir.hijriwidget.preference_activity.components
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.layout.Arrangement
@@ -6,14 +6,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import me.amrbashir.hijriwidget.preferences.LocalAnimatedContentScope
-import me.amrbashir.hijriwidget.preferences.LocalSharedTransitionScope
-import me.amrbashir.hijriwidget.preferences.composables.WidgetPreview
+import me.amrbashir.hijriwidget.preference_activity.LocalAnimatedContentScope
+import me.amrbashir.hijriwidget.preference_activity.LocalSharedTransitionScope
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun PreferenceRouteLayout(
+fun PreferenceScreenLayout(
     content: @Composable () -> Unit
 ) {
     val sharedTransitionScope = LocalSharedTransitionScope.current

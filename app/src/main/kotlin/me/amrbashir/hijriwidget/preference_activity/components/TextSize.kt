@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preferences.composables
+package me.amrbashir.hijriwidget.preference_activity.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

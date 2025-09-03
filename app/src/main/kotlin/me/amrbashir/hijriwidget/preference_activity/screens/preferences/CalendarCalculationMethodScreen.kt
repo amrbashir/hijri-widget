@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preferences.routes.preferences
+package me.amrbashir.hijriwidget.preference_activity.screens.preferences
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,29 +13,30 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import me.amrbashir.hijriwidget.HijriDateCalculationMethod
 import me.amrbashir.hijriwidget.Preferences
-import me.amrbashir.hijriwidget.preferences.composableWithAnimatedContentScope
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceTemplate
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceGroup
-import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
+import me.amrbashir.hijriwidget.preference_activity.components.PreferenceScreenLayout
+import me.amrbashir.hijriwidget.preference_activity.composableWithAnimatedContentScopeProvider
+import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceGroup
+import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceTemplate
+import me.amrbashir.hijriwidget.preference_activity.composables.RadioIcon
 
-const val CALENDAR_CALCULATION_METHOD_ROUTE = "/preferences/calendar-calculation-method"
+const val CALENDAR_CALCULATION_METHOD_DESTINATION = "/preferences/calendar-calculation-method"
 
-fun NavGraphBuilder.calendarCalculationRoute() {
-    composableWithAnimatedContentScope(route = CALENDAR_CALCULATION_METHOD_ROUTE) {
-        Route()
+fun NavGraphBuilder.calendarCalculationMethodDestination() {
+    composableWithAnimatedContentScopeProvider(route = CALENDAR_CALCULATION_METHOD_DESTINATION) {
+        CalendarCalculationMethodScreen()
     }
 }
 
-fun NavController.navigateToCalendarCalculation() {
-    navigate(route = CALENDAR_CALCULATION_METHOD_ROUTE)
+fun NavController.navigateToCalendarCalculationMethod() {
+    navigate(route = CALENDAR_CALCULATION_METHOD_DESTINATION)
 }
 
 
 @Composable
-private fun Route() {
+internal fun CalendarCalculationMethodScreen() {
     val savedMethod = Preferences.calendarCalculationMethod.value
 
-    PreferenceRouteLayout {
+    PreferenceScreenLayout {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier

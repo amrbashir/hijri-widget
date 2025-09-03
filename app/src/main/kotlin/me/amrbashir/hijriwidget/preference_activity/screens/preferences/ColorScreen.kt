@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preferences.routes.preferences
+package me.amrbashir.hijriwidget.preference_activity.screens.preferences
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,32 +16,33 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import me.amrbashir.hijriwidget.ColorMode
 import me.amrbashir.hijriwidget.Preferences
-import me.amrbashir.hijriwidget.preferences.composableWithAnimatedContentScope
-import me.amrbashir.hijriwidget.preferences.composables.ui.ColorPicker
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceTemplate
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceGroup
-import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
+import me.amrbashir.hijriwidget.preference_activity.components.PreferenceScreenLayout
+import me.amrbashir.hijriwidget.preference_activity.composableWithAnimatedContentScopeProvider
+import me.amrbashir.hijriwidget.preference_activity.composables.ColorPicker
+import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceGroup
+import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceTemplate
+import me.amrbashir.hijriwidget.preference_activity.composables.RadioIcon
 
-const val COLOR_ROUTE = "/preferences/color"
+const val COLOR_DESTINATION = "/preferences/color"
 
-fun NavGraphBuilder.colorRoute() {
-    composableWithAnimatedContentScope(route = COLOR_ROUTE) { Route() }
+fun NavGraphBuilder.colorDestination() {
+    composableWithAnimatedContentScopeProvider(route = COLOR_DESTINATION) { ColorScreen() }
 }
 
 fun NavController.navigateToColor() {
-    navigate(route = COLOR_ROUTE)
+    navigate(route = COLOR_DESTINATION)
 }
 
 
 @Composable
-private fun Route() {
+internal fun ColorScreen() {
     val savedTextColorMode = Preferences.textColorMode.value
     val textColorModes = ColorMode.all()
 
     val savedBgColorMode = Preferences.bgColorMode.value
     val bgColorModes = ColorMode.allForBg()
 
-    PreferenceRouteLayout {
+    PreferenceScreenLayout {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier

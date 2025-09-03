@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget
+package me.amrbashir.hijriwidget.preference_activity
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

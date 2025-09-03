@@ -41,7 +41,7 @@
         </receiver>
 
         <activity
-            android:name=".preferences.MainActivity"
+            android:name=".preference_activity.PreferenceActivity"
             android:exported="true"
             android:theme="@style/Theme.HijriWidget"
             android:windowSoftInputMode="adjustResize">
@@ -54,7 +54,7 @@
         </activity>
 
         <activity
-            android:name=".preferences.WidgetConfiguration"
+            android:name=".widget.WidgetConfigurationActivity"
             android:autoRemoveFromRecents="true"
             android:excludeFromRecents="true"
             android:exported="false"
@@ -70,7 +70,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_1"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -81,7 +81,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_2"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -92,7 +92,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_3"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -103,7 +103,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_4"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -114,7 +114,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_5"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -125,7 +125,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_6"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -136,7 +136,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_7"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -147,7 +147,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_8"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -158,7 +158,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_9"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -169,7 +169,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_10"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -180,7 +180,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_11"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -191,7 +191,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_12"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -202,7 +202,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_13"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -213,7 +213,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_14"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -224,7 +224,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_15"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -235,7 +235,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_16"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -246,7 +246,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_17"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -257,7 +257,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_18"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -268,7 +268,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_19"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -279,7 +279,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_20"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -290,7 +290,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_21"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -301,7 +301,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_22"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -312,7 +312,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_23"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -323,7 +323,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_24"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -334,7 +334,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_25"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -345,7 +345,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_26"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -356,7 +356,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_27"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -367,7 +367,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_28"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -378,7 +378,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_29"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -389,7 +389,7 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/calendar_30"
-            android:targetActivity=".preferences.MainActivity">
+            android:targetActivity=".preference_activity.PreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

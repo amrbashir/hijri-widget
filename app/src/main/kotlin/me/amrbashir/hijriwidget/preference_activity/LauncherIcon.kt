@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preferences
+package me.amrbashir.hijriwidget.preference_activity
 
 import android.content.ComponentName
 import android.content.Context

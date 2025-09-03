@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preferences.composables.ui
+package me.amrbashir.hijriwidget.preference_activity.composables
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background

@@ -12,7 +12,7 @@ import android.os.Build
 import android.util.Log
 import kotlinx.coroutines.runBlocking
 import me.amrbashir.hijriwidget.Preferences
-import me.amrbashir.hijriwidget.preferences.changeLauncherIcon
+import me.amrbashir.hijriwidget.preference_activity.changeLauncherIcon
 import me.amrbashir.hijriwidget.widget.HijriWidget
 import java.util.Date
 

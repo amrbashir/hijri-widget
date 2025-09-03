@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preferences.routes.preferences
+package me.amrbashir.hijriwidget.preference_activity.screens.preferences
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,28 +25,29 @@ import androidx.navigation.NavGraphBuilder
 import me.amrbashir.hijriwidget.DATE_FORMAT_PRESETES
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.Preferences
-import me.amrbashir.hijriwidget.formatDate
-import me.amrbashir.hijriwidget.preferences.composableWithAnimatedContentScope
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceTemplate
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceGroup
-import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
+import me.amrbashir.hijriwidget.formatHijriDate
+import me.amrbashir.hijriwidget.preference_activity.components.PreferenceScreenLayout
+import me.amrbashir.hijriwidget.preference_activity.composableWithAnimatedContentScopeProvider
+import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceGroup
+import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceTemplate
+import me.amrbashir.hijriwidget.preference_activity.composables.RadioIcon
 
-const val DATE_FORMAT_ROUTE = "/preferences/date-format"
+const val DATE_FORMAT_DESTINATION = "/preferences/date-format"
 
-fun NavGraphBuilder.dateFormatRoute() {
-    composableWithAnimatedContentScope(route = DATE_FORMAT_ROUTE) { Route() }
+fun NavGraphBuilder.dateFormatDestination() {
+    composableWithAnimatedContentScopeProvider(route = DATE_FORMAT_DESTINATION) { DateFormatScreen() }
 }
 
 fun NavController.navigateToDateFormat() {
-    navigate(route = DATE_FORMAT_ROUTE)
+    navigate(route = DATE_FORMAT_DESTINATION)
 }
 
 
 @Composable
-private fun Route() {
+internal fun DateFormatScreen() {
     val savedFormat = Preferences.dateFormat.value
 
-    PreferenceRouteLayout {
+    PreferenceScreenLayout {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier
@@ -58,7 +59,7 @@ private fun Route() {
             PreferenceGroup(label = "Format") {
                 for (format in DATE_FORMAT_PRESETES) {
                     PreferenceTemplate(
-                        label = format.formatDate(HijriDate.today()),
+                        label = format.formatHijriDate(HijriDate.today()),
                         description = format,
                         icon = { RadioIcon(selected = !Preferences.dateIsCustomFormat.value && savedFormat == format) },
                         onClick = {
