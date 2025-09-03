@@ -24,8 +24,8 @@ import me.amrbashir.hijriwidget.preferences.LocalNavController
 import me.amrbashir.hijriwidget.preferences.composableWithAnimatedContentScope
 import me.amrbashir.hijriwidget.preferences.composables.DayOffset
 import me.amrbashir.hijriwidget.preferences.composables.TextSize
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceCategory
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
+import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceTemplate
+import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceGroup
 import me.amrbashir.hijriwidget.preferences.composables.ui.TimePickerDialog
 import me.amrbashir.hijriwidget.preferences.routes.navigateToAbout
 
@@ -53,8 +53,8 @@ private fun Route() {
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
-            PreferencesGroup(label = "Functionality") {
-                PreferenceCategory(
+            PreferenceGroup(label = "Functionality") {
+                PreferenceTemplate(
                     label = "Date Format",
                     description = "Customize how the Hijri date appears by choosing a format pattern",
                     iconResId = R.drawable.outline_translate_24,
@@ -63,7 +63,7 @@ private fun Route() {
                     }
                 )
 
-                PreferenceCategory(
+                PreferenceTemplate(
                     label = "Day Start (${Preferences.dayStart.value})",
                     description = "Set when the Hijri day begins based on your local or religious preference",
                     iconResId = R.drawable.outline_access_time_24,
@@ -84,7 +84,7 @@ private fun Route() {
                     }
                 }
 
-                PreferenceCategory(
+                PreferenceTemplate(
                     label = "Calendar Calculation Method",
                     description = "Choose the method used to calculate Hijri dates",
                     iconResId = R.drawable.outline_calendar_month_24,
@@ -93,7 +93,7 @@ private fun Route() {
                     }
                 )
 
-                PreferenceCategory(
+                PreferenceTemplate(
                     label = "Day Offset",
                     description = "Adjust Hijri date by ±1 day to match local moon sightings or personal observance",
                     iconResId = R.drawable.outline_more_time_24,
@@ -102,8 +102,8 @@ private fun Route() {
                 }
             }
 
-            PreferencesGroup(label = "Appearance") {
-                PreferenceCategory(
+            PreferenceGroup(label = "Appearance") {
+                PreferenceTemplate(
                     label = "Color",
                     description = "Choose the widget text and background color",
                     iconResId = R.drawable.outline_color_lens_24,
@@ -112,7 +112,7 @@ private fun Route() {
                     }
                 )
 
-                PreferenceCategory(
+                PreferenceTemplate(
                     label = "Text Size",
                     description = "Change the widget text size",
                     iconResId = R.drawable.outline_text_increase_24,
@@ -120,7 +120,7 @@ private fun Route() {
                     TextSize()
                 }
 
-                PreferenceCategory(
+                PreferenceTemplate(
                     label = "Text Shadow",
                     description = "Enable or disable the widget text shadow",
                     iconResId = R.drawable.outline_brightness_6_24,
@@ -138,8 +138,8 @@ private fun Route() {
                 )
             }
 
-            PreferencesGroup(label = "Misc.") {
-                PreferenceCategory(
+            PreferenceGroup(label = "Misc.") {
+                PreferenceTemplate(
                     label = "Restore defaults",
                     description = "Restore the default preferences",
                     iconResId = R.drawable.outline_settings_backup_restore_24,
@@ -148,7 +148,7 @@ private fun Route() {
                     }
                 )
 
-                PreferenceCategory(
+                PreferenceTemplate(
                     label = "About",
                     description = "App info, version details, and changelog.",
                     iconResId = R.drawable.outline_info_24,

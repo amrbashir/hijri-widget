@@ -13,7 +13,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun PreferencesGroup(
+fun PreferenceGroup(
     label: String? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {

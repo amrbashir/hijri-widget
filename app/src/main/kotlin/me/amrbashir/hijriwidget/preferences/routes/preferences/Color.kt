@@ -18,8 +18,8 @@ import me.amrbashir.hijriwidget.ColorMode
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.preferences.composableWithAnimatedContentScope
 import me.amrbashir.hijriwidget.preferences.composables.ui.ColorPicker
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceCategory
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
+import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceTemplate
+import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceGroup
 import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
 
 const val COLOR_ROUTE = "/preferences/color"
@@ -50,9 +50,9 @@ private fun Route() {
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            PreferencesGroup(label = "Text Color") {
+            PreferenceGroup(label = "Text Color") {
                 for (mode in textColorModes) {
-                    PreferenceCategory(
+                    PreferenceTemplate(
                         label = mode.prettyName,
                         description = mode.description,
                         icon = { RadioIcon(selected = savedTextColorMode == mode) },
@@ -75,9 +75,9 @@ private fun Route() {
                 )
             }
 
-            PreferencesGroup(label = "Background Color") {
+            PreferenceGroup(label = "Background Color") {
                 for (mode in bgColorModes) {
-                    PreferenceCategory(
+                    PreferenceTemplate(
                         label = mode.prettyName,
                         description = mode.description,
                         icon = { RadioIcon(selected = savedBgColorMode == mode) },

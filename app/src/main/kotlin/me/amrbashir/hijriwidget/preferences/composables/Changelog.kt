@@ -7,8 +7,6 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -20,18 +18,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import dev.jeziellago.compose.markdowntext.MarkdownText
 import me.amrbashir.hijriwidget.CHANGELOG
 import me.amrbashir.hijriwidget.R
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceCategory
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
+import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceTemplate
+import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceGroup
 
 @Composable
 fun Changelog() {
-    PreferencesGroup(
+    PreferenceGroup(
         label = "Changelog"
     ) {
         for ((index, entry) in CHANGELOG.withIndex()) {
@@ -42,7 +39,7 @@ fun Changelog() {
                 label = "accordion-arrow"
             )
 
-            PreferenceCategory(
+            PreferenceTemplate(
                 entry.header,
                 endContent = {
                     Icon(

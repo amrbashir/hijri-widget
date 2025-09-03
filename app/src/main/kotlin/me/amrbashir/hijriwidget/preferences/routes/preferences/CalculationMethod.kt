@@ -14,8 +14,8 @@ import androidx.navigation.NavGraphBuilder
 import me.amrbashir.hijriwidget.HijriDateCalculationMethod
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.preferences.composableWithAnimatedContentScope
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceCategory
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
+import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceTemplate
+import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceGroup
 import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
 
 const val CALENDAR_CALCULATION_METHOD_ROUTE = "/preferences/calendar-calculation-method"
@@ -44,10 +44,10 @@ private fun Route() {
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            PreferencesGroup(label = "Calendar Calculation Method") {
+            PreferenceGroup(label = "Calendar Calculation Method") {
                 for (method in HijriDateCalculationMethod.entries) {
 
-                    PreferenceCategory(
+                    PreferenceTemplate(
                         label = method.label,
                         description = method.description,
                         icon = { RadioIcon(selected = savedMethod == method.id) },

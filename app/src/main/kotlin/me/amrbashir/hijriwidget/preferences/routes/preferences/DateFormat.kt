@@ -27,8 +27,8 @@ import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.formatDate
 import me.amrbashir.hijriwidget.preferences.composableWithAnimatedContentScope
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceCategory
-import me.amrbashir.hijriwidget.preferences.composables.ui.PreferencesGroup
+import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceTemplate
+import me.amrbashir.hijriwidget.preferences.composables.ui.PreferenceGroup
 import me.amrbashir.hijriwidget.preferences.composables.ui.RadioIcon
 
 const val DATE_FORMAT_ROUTE = "/preferences/date-format"
@@ -55,9 +55,9 @@ private fun Route() {
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            PreferencesGroup(label = "Format") {
+            PreferenceGroup(label = "Format") {
                 for (format in DATE_FORMAT_PRESETES) {
-                    PreferenceCategory(
+                    PreferenceTemplate(
                         label = format.formatDate(HijriDate.today()),
                         description = format,
                         icon = { RadioIcon(selected = !Preferences.dateIsCustomFormat.value && savedFormat == format) },
@@ -68,7 +68,7 @@ private fun Route() {
                     )
                 }
 
-                PreferenceCategory(
+                PreferenceTemplate(
                     label = "Custom",
                     description = "Specify custom date format pattern (e.g., 'dd/MM/yyyy', 'EEEE, MMMM d')",
                     icon = { RadioIcon(selected = Preferences.dateIsCustomFormat.value) },

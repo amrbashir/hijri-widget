@@ -28,7 +28,7 @@ import me.amrbashir.hijriwidget.addIf
 
 
 @Composable
-fun PreferenceCategory(
+fun PreferenceTemplate(
     label: String,
     modifier: Modifier = Modifier,
     iconModifier: Modifier = Modifier,
