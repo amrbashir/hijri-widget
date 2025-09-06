@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preference_activity.components
+package me.amrbashir.hijriwidget.preference_activity.composables
 
 import android.app.WallpaperManager
 import androidx.compose.foundation.background

@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preference_activity.composables
+package me.amrbashir.hijriwidget.preference_activity.composables.ui
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState

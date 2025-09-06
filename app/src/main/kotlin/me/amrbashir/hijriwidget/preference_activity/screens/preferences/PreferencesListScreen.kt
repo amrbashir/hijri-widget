@@ -16,12 +16,12 @@ import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
 import me.amrbashir.hijriwidget.preference_activity.LocalNavController
-import me.amrbashir.hijriwidget.preference_activity.components.DayOffset
-import me.amrbashir.hijriwidget.preference_activity.components.PreferenceScreenLayout
-import me.amrbashir.hijriwidget.preference_activity.components.TextSize
+import me.amrbashir.hijriwidget.preference_activity.composables.DayOffset
+import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
+import me.amrbashir.hijriwidget.preference_activity.composables.TextSize
 import me.amrbashir.hijriwidget.preference_activity.composableWithAnimatedContentScopeProvider
-import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceGroup
-import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceTemplate
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceTemplate
 import me.amrbashir.hijriwidget.preference_activity.screens.navigateToAbout
 
 const val PREFERENCES_DESTINATION = "/preferences"

@@ -32,8 +32,8 @@ import me.amrbashir.hijriwidget.BuildConfig
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
 import me.amrbashir.hijriwidget.preference_activity.LocalNavController
-import me.amrbashir.hijriwidget.preference_activity.components.Changelog
-import me.amrbashir.hijriwidget.preference_activity.composables.adaptiveIconPainterResource
+import me.amrbashir.hijriwidget.preference_activity.composables.Changelog
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.adaptiveIconPainterResource
 
 const val ABOUT_DESTINATION = "/About"
 

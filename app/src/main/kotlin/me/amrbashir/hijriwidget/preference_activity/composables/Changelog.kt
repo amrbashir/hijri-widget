@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preference_activity.components
+package me.amrbashir.hijriwidget.preference_activity.composables
 
 import android.text.util.Linkify
 import androidx.compose.animation.AnimatedVisibility
@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.dp
 import dev.jeziellago.compose.markdowntext.MarkdownText
 import me.amrbashir.hijriwidget.CHANGELOG
 import me.amrbashir.hijriwidget.R
-import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceGroup
-import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceTemplate
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceTemplate
 
 @Composable
 fun Changelog() {

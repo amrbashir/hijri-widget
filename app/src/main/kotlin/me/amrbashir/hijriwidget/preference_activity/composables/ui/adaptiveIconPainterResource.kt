@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preference_activity.composables
+package me.amrbashir.hijriwidget.preference_activity.composables.ui
 
 import android.graphics.drawable.AdaptiveIconDrawable
 import androidx.annotation.DrawableRes

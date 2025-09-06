@@ -13,11 +13,11 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import me.amrbashir.hijriwidget.HijriDateCalculationMethod
 import me.amrbashir.hijriwidget.Preferences
-import me.amrbashir.hijriwidget.preference_activity.components.PreferenceScreenLayout
+import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
 import me.amrbashir.hijriwidget.preference_activity.composableWithAnimatedContentScopeProvider
-import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceGroup
-import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceTemplate
-import me.amrbashir.hijriwidget.preference_activity.composables.RadioIcon
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceTemplate
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.RadioIcon
 
 const val CALENDAR_CALCULATION_METHOD_DESTINATION = "/preferences/calendar-calculation-method"
 

@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preference_activity.components
+package me.amrbashir.hijriwidget.preference_activity.composables
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.layout.Arrangement

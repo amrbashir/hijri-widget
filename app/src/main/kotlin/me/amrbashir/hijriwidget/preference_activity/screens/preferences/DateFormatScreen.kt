@@ -26,11 +26,11 @@ import me.amrbashir.hijriwidget.DATE_FORMAT_PRESETES
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.formatHijriDate
-import me.amrbashir.hijriwidget.preference_activity.components.PreferenceScreenLayout
+import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
 import me.amrbashir.hijriwidget.preference_activity.composableWithAnimatedContentScopeProvider
-import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceGroup
-import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceTemplate
-import me.amrbashir.hijriwidget.preference_activity.composables.RadioIcon
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceTemplate
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.RadioIcon
 
 const val DATE_FORMAT_DESTINATION = "/preferences/date-format"
 

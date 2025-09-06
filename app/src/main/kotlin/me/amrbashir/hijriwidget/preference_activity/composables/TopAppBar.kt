@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preference_activity.components
+package me.amrbashir.hijriwidget.preference_activity.composables
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack

@@ -30,7 +30,7 @@ import androidx.navigation.compose.rememberNavController
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.isDark
-import me.amrbashir.hijriwidget.preference_activity.components.TopAppBar
+import me.amrbashir.hijriwidget.preference_activity.composables.TopAppBar
 
 
 val LocalNavController = compositionLocalOf<NavHostController> {
