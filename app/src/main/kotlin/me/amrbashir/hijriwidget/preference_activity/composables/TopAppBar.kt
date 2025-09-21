@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
-import me.amrbashir.hijriwidget.PreferencesManager
 import me.amrbashir.hijriwidget.android.AlarmReceiver
 import me.amrbashir.hijriwidget.isDark
 import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle

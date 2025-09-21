@@ -61,7 +61,10 @@ internal fun DateFormatScreen() {
             PreferenceGroup(label = "Format") {
                 for (format in DATE_FORMAT_PRESETES) {
                     PreferenceTemplate(
-                        label = format.formatHijriDate(HijriDate.today(prefsManager), prefsManager.calendarCalculationMethod.value),
+                        label = format.formatHijriDate(
+                            HijriDate.today(prefsManager),
+                            prefsManager.calendarCalculationMethod.value
+                        ),
                         description = format,
                         icon = { RadioIcon(selected = !prefsManager.dateIsCustomFormat.value && savedFormat == format) },
                         onClick = {

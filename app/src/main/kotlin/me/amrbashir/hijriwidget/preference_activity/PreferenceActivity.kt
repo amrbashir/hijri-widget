@@ -27,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.PreferencesManager
 import me.amrbashir.hijriwidget.isDark
 import me.amrbashir.hijriwidget.preference_activity.composables.TopAppBar

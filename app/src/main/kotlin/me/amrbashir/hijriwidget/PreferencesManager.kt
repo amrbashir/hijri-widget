@@ -336,8 +336,7 @@ fun migratePreferences(sharedPreferences: SharedPreferences) {
                 try {
                     HijriDateCalculationMethod.valueOf(method)
                     // if success, no need for migrations
-                }
-                catch(_: Exception) {
+                } catch (_: Exception) {
                     val methodAsEnum = HijriDateCalculationMethod.fromId(method)
                     putString(CALENDAR_CALCULATION_METHOD_KEY, methodAsEnum.toString())
                 }

@@ -2,8 +2,6 @@ package me.amrbashir.hijriwidget
 
 import android.icu.util.Calendar
 import android.icu.util.ULocale
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 
 object HijriDate {
     fun today(prefsManager: PreferencesManager): Calendar {
@@ -25,7 +23,8 @@ object HijriDate {
 
     fun todayStr(prefsManager: PreferencesManager): String {
         val today = today(prefsManager)
-        val format = if (prefsManager.dateIsCustomFormat.value) prefsManager.dateCustomFormat.value else prefsManager.dateFormat.value
+        val format =
+            if (prefsManager.dateIsCustomFormat.value) prefsManager.dateCustomFormat.value else prefsManager.dateFormat.value
         return format.formatHijriDate(today, prefsManager.calendarCalculationMethod.value)
     }
 
