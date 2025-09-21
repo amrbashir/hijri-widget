@@ -103,7 +103,7 @@ private fun SaveButton(
             if (closeOnSave) {
                 onFinish()
             } else {
-                snackBarHostState.showSnackbar("Widget updated!")
+                snackBarHostState.showSnackbar("Widget updated!", withDismissAction = true)
             }
         }
     }) {
