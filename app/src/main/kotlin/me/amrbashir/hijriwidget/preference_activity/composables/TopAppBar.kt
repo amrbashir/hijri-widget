@@ -15,11 +15,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
-import me.amrbashir.hijriwidget.Preferences
+import me.amrbashir.hijriwidget.PreferencesManager
 import me.amrbashir.hijriwidget.android.AlarmReceiver
 import me.amrbashir.hijriwidget.isDark
 import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
 import me.amrbashir.hijriwidget.preference_activity.LocalNavController
+import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
 import me.amrbashir.hijriwidget.preference_activity.LocalSnackBarHostState
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.PREFERENCES_LIST_DESTINATION
 import me.amrbashir.hijriwidget.widget.HijriWidget
@@ -64,7 +65,6 @@ private fun GoBackButton(
     onFinish: () -> Unit,
 ) {
     val navController = LocalNavController.current
-    val context = navController.context
 
     IconButton(onClick = {
         if (navController.currentDestination?.route == PREFERENCES_LIST_DESTINATION) {
@@ -85,6 +85,8 @@ private fun SaveButton(
     onFinish: () -> Unit,
     closeOnSave: Boolean
 ) {
+    val prefsManager = LocalPreferencesManager.current
+
     val navController = LocalNavController.current
     val snackBarHostState = LocalSnackBarHostState.current
 
@@ -93,11 +95,11 @@ private fun SaveButton(
     val coroutineScope = rememberCoroutineScope()
 
     IconButton(onClick = {
-        Preferences.save(context)
+        prefsManager.save(context)
         coroutineScope.launch {
-            HijriWidget.update(context)
+            HijriWidget.updateAll(context)
 
-            AlarmReceiver.setup24Periodic(context)
+            AlarmReceiver.setup24Periodic(context, prefsManager)
 
             if (closeOnSave) {
                 onFinish()

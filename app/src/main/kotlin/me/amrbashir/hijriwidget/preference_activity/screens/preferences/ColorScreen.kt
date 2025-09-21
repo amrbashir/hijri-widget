@@ -15,9 +15,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import me.amrbashir.hijriwidget.ColorMode
-import me.amrbashir.hijriwidget.Preferences
-import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
+import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
 import me.amrbashir.hijriwidget.preference_activity.composableWithAnimatedContentScopeProvider
+import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.ColorPicker
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceTemplate
@@ -36,10 +36,12 @@ fun NavController.navigateToColor() {
 
 @Composable
 internal fun ColorScreen() {
-    val savedTextColorMode = Preferences.textColorMode.value
+    val prefsManager = LocalPreferencesManager.current
+
+    val savedTextColorMode = prefsManager.textColorMode.value
     val textColorModes = ColorMode.all()
 
-    val savedBgColorMode = Preferences.bgColorMode.value
+    val savedBgColorMode = prefsManager.bgColorMode.value
     val bgColorModes = ColorMode.allForBg()
 
     PreferenceScreenLayout {
@@ -58,20 +60,20 @@ internal fun ColorScreen() {
                         description = mode.description,
                         icon = { RadioIcon(selected = savedTextColorMode == mode) },
                         onClick = {
-                            Preferences.textColorMode.value = mode
+                            prefsManager.textColorMode.value = mode
                         }
                     )
                 }
 
             }
 
-            if (Preferences.textColorMode.value == ColorMode.Custom) {
+            if (prefsManager.textColorMode.value == ColorMode.Custom) {
                 Spacer(Modifier.requiredHeight(16.dp))
 
                 ColorPicker(
-                    Preferences.textCustomColor.value,
+                    prefsManager.textCustomColor.value,
                     onColorChanged = {
-                        Preferences.textCustomColor.value = it.toArgb()
+                        prefsManager.textCustomColor.value = it.toArgb()
                     }
                 )
             }
@@ -83,20 +85,20 @@ internal fun ColorScreen() {
                         description = mode.description,
                         icon = { RadioIcon(selected = savedBgColorMode == mode) },
                         onClick = {
-                            Preferences.bgColorMode.value = mode
+                            prefsManager.bgColorMode.value = mode
                         }
                     )
                 }
 
             }
 
-            if (Preferences.bgColorMode.value == ColorMode.Custom) {
+            if (prefsManager.bgColorMode.value == ColorMode.Custom) {
                 Spacer(Modifier.requiredHeight(16.dp))
 
                 ColorPicker(
-                    Preferences.bgCustomColor.value,
+                    prefsManager.bgCustomColor.value,
                     onColorChanged = {
-                        Preferences.bgCustomColor.value = it.toArgb()
+                        prefsManager.bgCustomColor.value = it.toArgb()
                     }
                 )
             }

@@ -5,9 +5,10 @@ import android.content.Context
 import android.content.pm.PackageManager
 import me.amrbashir.hijriwidget.BuildConfig
 import me.amrbashir.hijriwidget.HijriDate
+import me.amrbashir.hijriwidget.PreferencesManager
 
-fun changeLauncherIcon(context: Context) {
-    val today = HijriDate.todayNumber()
+fun changeLauncherIcon(context: Context, prefsManager: PreferencesManager) {
+    val today = HijriDate.todayNumber(prefsManager)
 
     val packageManager = context.packageManager
 

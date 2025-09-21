@@ -28,7 +28,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import me.amrbashir.hijriwidget.HijriDate
-import me.amrbashir.hijriwidget.Preferences
+import me.amrbashir.hijriwidget.PreferencesManager
 import me.amrbashir.hijriwidget.isDark
 import me.amrbashir.hijriwidget.preference_activity.composables.TopAppBar
 
@@ -55,6 +55,10 @@ val LocalAnimatedContentScope = compositionLocalOf<AnimatedContentScope> {
     error("CompositionLocal LocalAnimatedContentScope not present")
 }
 
+val LocalPreferencesManager = compositionLocalOf<PreferencesManager> {
+    error("CompositionLocal LocalPreferencesManager not present")
+}
+
 open class PreferenceActivity(private val closeOnSave: Boolean = false) :
     ComponentActivity() {
 
@@ -62,22 +66,21 @@ open class PreferenceActivity(private val closeOnSave: Boolean = false) :
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        Preferences.load(this.baseContext)
-        HijriDate.load()
-
         setContent {
             Content()
         }
     }
 
     override fun onDestroy() {
-        changeLauncherIcon(this.baseContext)
+        val prefsManager = PreferencesManager.load(this.baseContext)
+        changeLauncherIcon(this.baseContext, prefsManager)
         super.onDestroy()
     }
 
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
     @Composable
     private fun Content() {
+        val prefsManager = PreferencesManager.load(this.baseContext)
         val appBarTitle = remember { mutableStateOf("Hijri Widget") }
         val navController = rememberNavController()
         val snackBarHostState = remember { SnackbarHostState() }
@@ -95,6 +98,7 @@ open class PreferenceActivity(private val closeOnSave: Boolean = false) :
                 LocalNavController provides navController,
                 LocalSnackBarHostState provides snackBarHostState,
                 LocalAppBarTitle provides appBarTitle,
+                LocalPreferencesManager provides prefsManager,
             ) {
                 Scaffold(
                     containerColor = containerColor,

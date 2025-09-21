@@ -13,12 +13,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.R
+import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
 import kotlin.math.roundToInt
 
 @Composable
 fun TextSize() {
+    val prefsManager = LocalPreferencesManager.current
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -28,19 +30,19 @@ fun TextSize() {
 
         Slider(
             modifier = Modifier.weight(1F),
-            value = Preferences.textSize.value,
+            value = prefsManager.textSize.value,
             valueRange = 1F..50F,
             steps = 50,
             onValueChange = {
-                Preferences.textSize.value = it
+                prefsManager.textSize.value = it
             },
         )
 
-        Text("${Preferences.textSize.value.roundToInt()}")
+        Text("${prefsManager.textSize.value.roundToInt()}")
 
         IconButton(
             onClick = {
-                Preferences.textSize.value = Preferences.Defaults.textSize
+                prefsManager.textSize.reset()
             }
         ) {
             Icon(

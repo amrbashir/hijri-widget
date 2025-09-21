@@ -10,6 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.glance.GlanceModifier
 import androidx.glance.appwidget.cornerRadius
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 fun Char.isRtl(): Boolean = when (Character.getDirectionality(this)) {
     Character.DIRECTIONALITY_RIGHT_TO_LEFT,
@@ -55,4 +57,14 @@ fun Modifier.widgetCornerRadius(context: Context): Modifier {
         }
 
     return this.then(cornerRadiusModifier)
+}
+
+
+fun Int.formatTime(): String? {
+    val hour = this / 60
+    val minute = this % 60
+    val localTime = LocalTime.of(
+        hour, minute
+    )
+    return localTime.format(DateTimeFormatter.ofPattern("hh:mm a"))
 }

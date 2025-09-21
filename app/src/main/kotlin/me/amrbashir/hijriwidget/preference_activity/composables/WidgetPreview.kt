@@ -32,39 +32,40 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
 import me.amrbashir.hijriwidget.HijriDate
-import me.amrbashir.hijriwidget.Preferences
+import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
 import me.amrbashir.hijriwidget.widgetCornerRadius
 
 @Composable
 fun WidgetPreview(
     modifier: Modifier = Modifier
 ) {
+    val prefsManager = LocalPreferencesManager.current
+
     val context = LocalContext.current
 
     var date by remember {
         mutableStateOf(
-            HijriDate.todayStr()
+            HijriDate.todayStr(prefsManager)
         )
     }
 
-    val textSize = Preferences.textSize.value.sp
+    val textSize = prefsManager.textSize.value.sp
 
-    val textColor = Preferences.getTextColor(context)
-    val bgColor = Preferences.getBgColor(context)
+    val textColor = prefsManager.getTextColor(context)
+    val bgColor = prefsManager.getBgColor(context)
 
     val wallpaperManager = WallpaperManager.getInstance(context)
     val builtinWallpaper = wallpaperManager.builtInDrawable.toBitmap().asImageBitmap()
 
     LaunchedEffect(
-        Preferences.dayStart.value,
-        Preferences.dateFormat.value,
-        Preferences.dateCustomFormat.value,
-        Preferences.dateIsCustomFormat.value,
-        Preferences.dayOffset.value,
-        Preferences.calendarCalculationMethod.value,
-        HijriDate.today.value
+        prefsManager.dayStart.value,
+        prefsManager.dateFormat.value,
+        prefsManager.dateCustomFormat.value,
+        prefsManager.dateIsCustomFormat.value,
+        prefsManager.dayOffset.value,
+        prefsManager.calendarCalculationMethod.value,
     ) {
-        date = HijriDate.todayStr()
+        date = HijriDate.todayStr(prefsManager)
     }
 
     // Wallpaper container
@@ -111,7 +112,7 @@ fun WidgetPreview(
                 style = TextStyle(
                     textAlign = TextAlign.Center,
                     fontSize = textSize,
-                    shadow = if (Preferences.textShadow.value) Shadow(
+                    shadow = if (prefsManager.textShadow.value) Shadow(
                         color = Color(0, 0, 0, 128),
                         offset = Offset(x = 1f, y = 1f),
                         blurRadius = 1f,

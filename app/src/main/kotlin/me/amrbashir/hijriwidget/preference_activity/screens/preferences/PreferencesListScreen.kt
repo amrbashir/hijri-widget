@@ -12,14 +12,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
-import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.R
+import me.amrbashir.hijriwidget.formatTime
 import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
 import me.amrbashir.hijriwidget.preference_activity.LocalNavController
+import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
+import me.amrbashir.hijriwidget.preference_activity.composableWithAnimatedContentScopeProvider
 import me.amrbashir.hijriwidget.preference_activity.composables.DayOffset
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
 import me.amrbashir.hijriwidget.preference_activity.composables.TextSize
-import me.amrbashir.hijriwidget.preference_activity.composableWithAnimatedContentScopeProvider
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceTemplate
 import me.amrbashir.hijriwidget.preference_activity.screens.navigateToAbout
@@ -36,6 +37,7 @@ fun NavGraphBuilder.preferenceListDestination() {
 internal fun PreferenceListScreen() {
     LocalAppBarTitle.current.value = "Hijri Widget"
 
+    val prefsManager = LocalPreferencesManager.current
     val navController = LocalNavController.current
 
     PreferenceScreenLayout {
@@ -58,7 +60,7 @@ internal fun PreferenceListScreen() {
                 )
 
                 PreferenceTemplate(
-                    label = "Day Start (${Preferences.dayStart.value})",
+                    label = "Day Start (${prefsManager.dayStart.value.formatTime()})",
                     description = "Set when the Hijri day begins based on your local or religious preference",
                     iconResId = R.drawable.outline_access_time_24,
                     onClick = {
@@ -108,14 +110,14 @@ internal fun PreferenceListScreen() {
                     iconResId = R.drawable.outline_brightness_6_24,
                     endContent = {
                         Switch(
-                            checked = Preferences.textShadow.value,
+                            checked = prefsManager.textShadow.value,
                             onCheckedChange = {
-                                Preferences.textShadow.value = it
+                                prefsManager.textShadow.value = it
                             }
                         )
                     },
                     onClick = {
-                        Preferences.textShadow.value = !Preferences.textShadow.value
+                        prefsManager.textShadow.value = !prefsManager.textShadow.value
                     }
                 )
             }
@@ -126,7 +128,7 @@ internal fun PreferenceListScreen() {
                     description = "Restore the default preferences",
                     iconResId = R.drawable.outline_settings_backup_restore_24,
                     onClick = {
-                        Preferences.restoreDefaults()
+                        prefsManager.reset()
                     }
                 )
 

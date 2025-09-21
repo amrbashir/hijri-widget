@@ -13,11 +13,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.R
+import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
 
 @Composable
 fun DayOffset() {
+    val prefsManager = LocalPreferencesManager.current
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -26,19 +28,19 @@ fun DayOffset() {
 
         Slider(
             modifier = Modifier.weight(1F),
-            value = Preferences.dayOffset.value.toFloat(),
+            value = prefsManager.dayOffset.value.toFloat(),
             valueRange = -2F..2F,
             steps = 3,
             onValueChange = {
-                Preferences.dayOffset.value = it.toInt()
+                prefsManager.dayOffset.value = it.toInt()
             },
         )
 
-        Text("${Preferences.dayOffset.value}")
+        Text("${prefsManager.dayOffset.value}")
 
         IconButton(
             onClick = {
-                Preferences.dayOffset.value = Preferences.Defaults.dayOffset
+                prefsManager.dayOffset.reset()
             }
         ) {
             Icon(

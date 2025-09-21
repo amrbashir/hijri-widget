@@ -15,5 +15,16 @@ enum class HijriDateCalculationMethod(val id: String, val label: String, val des
         "islamic-civil",
         "Islamic Civil",
         "Uses a fixed algorithmic approach with a 30-year cycle"
-    ),
+    );
+
+    companion object {
+        fun fromId(id: String): HijriDateCalculationMethod {
+            return when (id) {
+                "islamic" -> ISLAMIC
+                "islamic-umalqura" -> ISLAMIC_UMALQURA
+                "islamic-civil" -> ISLAMIC_CIVIL
+                else -> ISLAMIC_UMALQURA
+            }
+        }
+    }
 }

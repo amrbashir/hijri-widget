@@ -5,6 +5,8 @@ import android.os.Build
 import android.util.TypedValue
 import android.widget.RemoteViews
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.toArgb
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
@@ -25,7 +27,7 @@ import androidx.glance.layout.fillMaxSize
 import kotlinx.coroutines.runBlocking
 import me.amrbashir.hijriwidget.ColorMode
 import me.amrbashir.hijriwidget.HijriDate
-import me.amrbashir.hijriwidget.Preferences
+import me.amrbashir.hijriwidget.PreferencesManager
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.android.AlarmReceiver
 import me.amrbashir.hijriwidget.widgetCornerRadius
@@ -38,9 +40,6 @@ class HijriWidget : GlanceAppWidget() {
     override val sizeMode: SizeMode = SizeMode.Single
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        Preferences.load(context)
-        HijriDate.load()
-
         provideContent {
             GlanceTheme {
                 Content()
@@ -49,9 +48,6 @@ class HijriWidget : GlanceAppWidget() {
     }
 
     override suspend fun providePreview(context: Context, widgetCategory: Int) {
-        Preferences.load(context)
-        HijriDate.load()
-
         provideContent {
             GlanceTheme {
                 Content()
@@ -63,23 +59,33 @@ class HijriWidget : GlanceAppWidget() {
     private fun Content() {
         val context = LocalContext.current
 
+        val updateSignal = WidgetUpdateSignal.value
+        var prefsManager = PreferencesManager.load(context)
+        LaunchedEffect(updateSignal) {
+            prefsManager = PreferencesManager.load(context)
+        }
+
+
         val remoteViewId =
-            if (Preferences.textShadow.value) R.id.widget_text_shadow else R.id.widget_text
+            if (prefsManager.textShadow.value) R.id.widget_text_shadow else R.id.widget_text
         val remoteViewLayout =
-            if (Preferences.textShadow.value) R.layout.widget_text_shadow else R.layout.widget_text
+            if (prefsManager.textShadow.value) R.layout.widget_text_shadow else R.layout.widget_text
         val remoteViews = RemoteViews(LocalContext.current.packageName, remoteViewLayout)
 
-        remoteViews.setTextViewText(remoteViewId, HijriDate.today.value)
+
+        val date = HijriDate.todayStr(prefsManager)
+        remoteViews.setTextViewText(remoteViewId, date)
+
         remoteViews.setTextViewTextSize(
             remoteViewId,
             TypedValue.COMPLEX_UNIT_SP,
-            Preferences.textSize.value
+            prefsManager.textSize.value
         )
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && Preferences.textColorMode.value == ColorMode.Dynamic) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && prefsManager.textColorMode.value == ColorMode.Dynamic) {
             remoteViews.setColorAttr(remoteViewId, "setTextColor", android.R.attr.colorPrimary)
         } else {
-            remoteViews.setTextColor(remoteViewId, Preferences.getTextColor(context).toArgb())
+            remoteViews.setTextColor(remoteViewId, prefsManager.getTextColor(context).toArgb())
         }
 
         Box(
@@ -87,11 +93,11 @@ class HijriWidget : GlanceAppWidget() {
             modifier = GlanceModifier.fillMaxSize()
                 .appWidgetBackground()
                 .widgetCornerRadius()
-                .background(Preferences.getBgColor(context))
+                .background(prefsManager.getBgColor(context))
                 .clickable {
                     runBlocking {
-                        update(context)
-                        AlarmReceiver.setup24Periodic(context)
+                        HijriWidget.updateAll(context)
+                        AlarmReceiver.setup24Periodic(context, prefsManager)
                     }
                 }
         ) {
@@ -100,12 +106,12 @@ class HijriWidget : GlanceAppWidget() {
     }
 
     companion object {
-        suspend fun update(context: Context) {
-            HijriWidget().apply {
-                Preferences.load(context)
-                HijriDate.load()
-                updateAll(context)
-            }
+        suspend fun updateAll(context: Context) {
+            WidgetUpdateSignal.value = !WidgetUpdateSignal.value
+            HijriWidget().updateAll(context)
         }
     }
 }
+
+
+val WidgetUpdateSignal = mutableStateOf(true)

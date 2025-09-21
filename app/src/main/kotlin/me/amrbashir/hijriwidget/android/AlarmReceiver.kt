@@ -11,7 +11,7 @@ import android.icu.util.Calendar
 import android.os.Build
 import android.util.Log
 import kotlinx.coroutines.runBlocking
-import me.amrbashir.hijriwidget.Preferences
+import me.amrbashir.hijriwidget.PreferencesManager
 import me.amrbashir.hijriwidget.preference_activity.changeLauncherIcon
 import me.amrbashir.hijriwidget.widget.HijriWidget
 import java.util.Date
@@ -26,37 +26,38 @@ class AlarmReceiver : BroadcastReceiver() {
                 .format(Date(System.currentTimeMillis()))
         )
 
+        val prefsManager = PreferencesManager.load(context)
+
         runBlocking {
-            changeLauncherIcon(context)
-            HijriWidget.update(context)
+            changeLauncherIcon(context, prefsManager)
+            HijriWidget.updateAll(context)
         }
 
-        setup24Periodic(context)
+        setup24Periodic(context, prefsManager)
     }
 
 
     companion object {
         private const val ALARM_REQUEST_CODE = 1
 
-        fun nextUpdateDateInMillis(): Long {
+        fun nextUpdateDateInMillis(prefsManager: PreferencesManager): Long {
             val nextDayStart = Calendar.getInstance()
 
             val currentTime =
                 nextDayStart[Calendar.HOUR_OF_DAY] * 60 + nextDayStart[Calendar.MINUTE]
-            val dayStartTime =
-                Preferences.dayStart.value.hour * 60 + Preferences.dayStart.value.minute
+            val dayStartTime = prefsManager.dayStart.value
             if (currentTime >= dayStartTime) {
                 nextDayStart[Calendar.DAY_OF_MONTH] = nextDayStart[Calendar.DAY_OF_MONTH] + 1
             }
 
-            nextDayStart[Calendar.HOUR_OF_DAY] = Preferences.dayStart.value.hour
-            nextDayStart[Calendar.MINUTE] = Preferences.dayStart.value.minute
+            nextDayStart[Calendar.HOUR_OF_DAY] = prefsManager.dayStart.value / 60
+            nextDayStart[Calendar.MINUTE] = prefsManager.dayStart.value % 60
             nextDayStart[Calendar.SECOND] = 0
 
             return nextDayStart.timeInMillis
         }
 
-        fun setup24Periodic(context: Context) {
+        fun setup24Periodic(context: Context, prefsManager: PreferencesManager) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return
 
             val alarmManager: AlarmManager =
@@ -64,7 +65,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
             if (!alarmManager.canScheduleExactAlarms()) return
 
-            val nextUpdateMillis = this.nextUpdateDateInMillis()
+            val nextUpdateMillis = this.nextUpdateDateInMillis(prefsManager)
 
             val formatter = DateFormat.getDateTimeInstance()
             Log.d(

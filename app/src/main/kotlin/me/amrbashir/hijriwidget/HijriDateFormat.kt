@@ -48,10 +48,9 @@ fun parseFormatString(input: String): List<FormatSegment> {
 
 
 @SuppressLint("SimpleDateFormat")
-fun String.formatHijriDate(date: Calendar): String {
-    val calcMethod = Preferences.calendarCalculationMethod.value
+fun String.formatHijriDate(date: Calendar, calcMethod: HijriDateCalculationMethod): String {
     return parseFormatString(this).fold("") { acc, it ->
-        val locale = ULocale("${it.langCode ?: "ar-SA"}@calendar=$calcMethod")
+        val locale = ULocale("${it.langCode ?: "ar-SA"}@calendar=${calcMethod}")
         try {
             val dateFormatter = SimpleDateFormat(it.format, locale)
             val formatted = dateFormatter.format(date)

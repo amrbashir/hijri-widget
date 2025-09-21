@@ -24,10 +24,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import me.amrbashir.hijriwidget.DATE_FORMAT_PRESETES
 import me.amrbashir.hijriwidget.HijriDate
-import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.formatHijriDate
-import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
+import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
 import me.amrbashir.hijriwidget.preference_activity.composableWithAnimatedContentScopeProvider
+import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceTemplate
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.RadioIcon
@@ -45,7 +45,9 @@ fun NavController.navigateToDateFormat() {
 
 @Composable
 internal fun DateFormatScreen() {
-    val savedFormat = Preferences.dateFormat.value
+    val prefsManager = LocalPreferencesManager.current
+
+    val savedFormat = prefsManager.dateFormat.value
 
     PreferenceScreenLayout {
         Column(
@@ -59,12 +61,12 @@ internal fun DateFormatScreen() {
             PreferenceGroup(label = "Format") {
                 for (format in DATE_FORMAT_PRESETES) {
                     PreferenceTemplate(
-                        label = format.formatHijriDate(HijriDate.today()),
+                        label = format.formatHijriDate(HijriDate.today(prefsManager), prefsManager.calendarCalculationMethod.value),
                         description = format,
-                        icon = { RadioIcon(selected = !Preferences.dateIsCustomFormat.value && savedFormat == format) },
+                        icon = { RadioIcon(selected = !prefsManager.dateIsCustomFormat.value && savedFormat == format) },
                         onClick = {
-                            Preferences.dateIsCustomFormat.value = false
-                            Preferences.dateFormat.value = format
+                            prefsManager.dateIsCustomFormat.value = false
+                            prefsManager.dateFormat.value = format
                         }
                     )
                 }
@@ -72,25 +74,25 @@ internal fun DateFormatScreen() {
                 PreferenceTemplate(
                     label = "Custom",
                     description = "Specify custom date format pattern (e.g., 'dd/MM/yyyy', 'EEEE, MMMM d')",
-                    icon = { RadioIcon(selected = Preferences.dateIsCustomFormat.value) },
+                    icon = { RadioIcon(selected = prefsManager.dateIsCustomFormat.value) },
                     onClick = {
-                        Preferences.dateIsCustomFormat.value = true
+                        prefsManager.dateIsCustomFormat.value = true
                     }
                 ) {
                     OutlinedTextField(
                         modifier = Modifier
                             .padding(start = 48.dp)
                             .fillMaxWidth(),
-                        enabled = Preferences.dateIsCustomFormat.value,
-                        value = Preferences.dateCustomFormat.value,
+                        enabled = prefsManager.dateIsCustomFormat.value,
+                        value = prefsManager.dateCustomFormat.value,
                         onValueChange = {
-                            Preferences.dateCustomFormat.value = it
+                            prefsManager.dateCustomFormat.value = it
                         }
                     )
                 }
             }
 
-            if (Preferences.dateIsCustomFormat.value) {
+            if (prefsManager.dateIsCustomFormat.value) {
                 Spacer(Modifier.requiredHeight(16.dp))
 
                 val annotatedString = buildAnnotatedString {

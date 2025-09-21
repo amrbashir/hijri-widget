@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,7 +20,6 @@ import com.github.skydoves.colorpicker.compose.BrightnessSlider
 import com.github.skydoves.colorpicker.compose.HsvColorPicker
 import com.github.skydoves.colorpicker.compose.drawColorIndicator
 import com.github.skydoves.colorpicker.compose.rememberColorPickerController
-import me.amrbashir.hijriwidget.Preferences
 
 @Composable
 fun ColorPicker(
@@ -29,11 +27,6 @@ fun ColorPicker(
     onColorChanged: (Color) -> Unit,
 ) {
     val controller = rememberColorPickerController()
-    LaunchedEffect(Unit) {
-        controller.setBrightness(1f, fromUser = false)
-        controller.selectByColor(Color(initialColor), fromUser = false)
-    }
-
     var hexCode by remember { mutableStateOf("") }
 
     Column(
@@ -41,7 +34,7 @@ fun ColorPicker(
     ) {
         HsvColorPicker(
             modifier = Modifier.height(300.dp),
-            initialColor = Color(Preferences.textCustomColor.value),
+            initialColor = Color(initialColor),
             drawOnPosSelected = {
                 drawColorIndicator(
                     controller.selectedPoint.value,

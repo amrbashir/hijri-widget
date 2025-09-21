@@ -20,9 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.dialog
-import me.amrbashir.hijriwidget.DayStart
-import me.amrbashir.hijriwidget.Preferences
 import me.amrbashir.hijriwidget.preference_activity.LocalNavController
+import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
 
 const val DAY_START_DESTINATION = "/preferences/day-start"
 
@@ -38,6 +37,7 @@ fun NavController.navigateToDayStart() {
 @Composable
 internal fun DayStartScreen() {
     val navController = LocalNavController.current
+    val prefsManager = LocalPreferencesManager.current
 
     Card {
         Column(
@@ -46,8 +46,8 @@ internal fun DayStartScreen() {
                 .padding(16.dp)
         ) {
             val timePickerState = rememberTimePickerState(
-                initialHour = Preferences.dayStart.value.hour,
-                initialMinute = Preferences.dayStart.value.minute,
+                initialHour = prefsManager.dayStart.value / 60,
+                initialMinute = prefsManager.dayStart.value % 60,
                 is24Hour = false,
             )
 
@@ -65,8 +65,7 @@ internal fun DayStartScreen() {
                 Spacer(modifier = Modifier.requiredWidth(2.dp))
 
                 Button(onClick = {
-                    val newDayStart = DayStart(timePickerState.hour, timePickerState.minute)
-                    Preferences.dayStart.value = newDayStart
+                    prefsManager.dayStart.value = timePickerState.hour * 60 + timePickerState.minute
                     navController.navigateUp()
                 }) {
                     Text("Confirm")

@@ -12,9 +12,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import me.amrbashir.hijriwidget.HijriDateCalculationMethod
-import me.amrbashir.hijriwidget.Preferences
-import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
+import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
 import me.amrbashir.hijriwidget.preference_activity.composableWithAnimatedContentScopeProvider
+import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceTemplate
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.RadioIcon
@@ -34,7 +34,9 @@ fun NavController.navigateToCalendarCalculationMethod() {
 
 @Composable
 internal fun CalendarCalculationMethodScreen() {
-    val savedMethod = Preferences.calendarCalculationMethod.value
+    val prefsManager = LocalPreferencesManager.current
+
+    val savedMethod = prefsManager.calendarCalculationMethod.value
 
     PreferenceScreenLayout {
         Column(
@@ -51,9 +53,9 @@ internal fun CalendarCalculationMethodScreen() {
                     PreferenceTemplate(
                         label = method.label,
                         description = method.description,
-                        icon = { RadioIcon(selected = savedMethod == method.id) },
+                        icon = { RadioIcon(selected = savedMethod.id == method.id) },
                         onClick = {
-                            Preferences.calendarCalculationMethod.value = method.id
+                            prefsManager.calendarCalculationMethod.value = method
                         }
                     )
                 }
