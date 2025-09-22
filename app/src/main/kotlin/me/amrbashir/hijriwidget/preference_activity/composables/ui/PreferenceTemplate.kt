@@ -12,12 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,9 +28,40 @@ import me.amrbashir.hijriwidget.addIf
 fun PreferenceTemplate(
     label: String,
     modifier: Modifier = Modifier,
+    @DrawableRes iconResId: Int? = null,
     iconModifier: Modifier = Modifier,
     enabled: Boolean = true,
-    @DrawableRes iconResId: Int? = null,
+    description: String? = null,
+    onClick: (() -> Unit)? = null,
+    endContent: (@Composable () -> Unit)? = null,
+    content: (@Composable () -> Unit)? = null
+) {
+    PreferenceTemplate(
+        icon = iconResId?.let {
+            {
+                Icon(
+                    imageVector = ImageVector.vectorResource(iconResId),
+                    contentDescription = null,
+                    modifier = iconModifier.size(24.dp),
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+            }
+        },
+        label = label,
+        modifier = modifier,
+        enabled = enabled,
+        description = description,
+        onClick = onClick,
+        endContent = endContent,
+        content = content,
+    )
+}
+
+@Composable
+fun PreferenceTemplate(
+    label: String,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     icon: (@Composable () -> Unit)? = null,
     description: String? = null,
     onClick: (() -> Unit)? = null,
@@ -51,24 +79,12 @@ fun PreferenceTemplate(
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            if (iconResId != null || icon != null) {
+            icon?.let {
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier.size(32.dp),
                 ) {
-                    iconResId?.let {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(iconResId),
-                            contentDescription = null,
-                            modifier = iconModifier.size(24.dp),
-                            tint = MaterialTheme.colorScheme.primary,
-                        )
-                    }
-
-                    icon?.let {
-                        icon()
-                    }
-
+                    icon()
                 }
             }
 
@@ -79,30 +95,25 @@ fun PreferenceTemplate(
                 Column(
                     modifier = Modifier.weight(1F)
                 ) {
-                    CompositionLocalProvider(
-                        LocalContentColor provides MaterialTheme.colorScheme.onBackground,
-                        LocalTextStyle provides MaterialTheme.typography.bodyLarge,
-                    ) {
-                        Text(label)
-                    }
-
+                    Text(
+                        label,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
 
                     description?.let {
-                        CompositionLocalProvider(
-                            LocalContentColor provides MaterialTheme.colorScheme.onSurfaceVariant,
-                            LocalTextStyle provides MaterialTheme.typography.bodyMedium,
-                        ) {
-                            Text(description)
-                        }
+                        Text(
+                            description,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
                     }
                 }
 
-                if (endContent != null) {
-                    endContent()
-                }
+                if (endContent != null) endContent()
             }
         }
 
-        content?.invoke()
+        if (content != null) content()
     }
 }

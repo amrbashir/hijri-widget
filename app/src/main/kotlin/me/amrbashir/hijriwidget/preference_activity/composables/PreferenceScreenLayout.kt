@@ -15,22 +15,27 @@ import me.amrbashir.hijriwidget.preference_activity.LocalSharedTransitionScope
 fun PreferenceScreenLayout(
     content: @Composable () -> Unit
 ) {
-    val sharedTransitionScope = LocalSharedTransitionScope.current
-    val sharedAnimatedContentScope = LocalAnimatedContentScope.current
-
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        with(sharedTransitionScope) {
-            WidgetPreview(
-                modifier = Modifier
-                    .sharedElement(
-                        rememberSharedContentState(key = "WidgetPreview"),
-                        animatedVisibilityScope = sharedAnimatedContentScope,
-                    )
-            )
-        }
-
+        SharedWidgetPreview()
         content()
+    }
+}
+
+@Composable
+@OptIn(ExperimentalSharedTransitionApi::class)
+private fun SharedWidgetPreview() {
+    val key = "SharedWidgetPreview"
+    val sharedTransitionScope = LocalSharedTransitionScope.current
+    val sharedAnimatedContentScope = LocalAnimatedContentScope.current
+
+    with(receiver = sharedTransitionScope) {
+        WidgetPreview(
+            modifier = Modifier.sharedElement(
+                sharedContentState = rememberSharedContentState(key),
+                animatedVisibilityScope = sharedAnimatedContentScope
+            )
+        )
     }
 }

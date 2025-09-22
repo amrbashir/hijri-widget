@@ -3,6 +3,7 @@ package me.amrbashir.hijriwidget
 import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.icu.text.DateFormat
 import android.os.Build
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -12,6 +13,7 @@ import androidx.glance.GlanceModifier
 import androidx.glance.appwidget.cornerRadius
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.util.Date
 
 fun Char.isRtl(): Boolean = when (Character.getDirectionality(this)) {
     Character.DIRECTIONALITY_RIGHT_TO_LEFT,
@@ -67,4 +69,9 @@ fun Int.formatTime(): String? {
         hour, minute
     )
     return localTime.format(DateTimeFormatter.ofPattern("hh:mm a"))
+}
+
+fun getLocalDateTime(date: Long = System.currentTimeMillis()): String {
+    val dateFormatter = DateFormat.getDateTimeInstance()
+    return dateFormatter.format(Date(date))
 }

@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -20,7 +21,7 @@ import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.res.painterResource
 import com.godaddy.android.colorpicker.ClassicColorPicker
 import com.godaddy.android.colorpicker.HsvColor
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import me.amrbashir.hijriwidget.R
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -29,12 +30,19 @@ fun ColorPicker(
     initialColor: Int,
     onColorChanged: (Color) -> Unit,
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val clipboard = LocalClipboard.current
 
     var initColor by remember { mutableStateOf(Color(initialColor)) }
-    var hexColor by remember {  mutableStateOf(initColor.toHex()) }
+    var hexColor by remember { mutableStateOf(initColor.toHex()) }
 
-    val updateHexColor = { hexStr: String ->
+    val updateColorFromPickerAction = { newHsvColor: HsvColor ->
+        val newColor = newHsvColor.toColor()
+        hexColor = newColor.toHex()
+        onColorChanged(newColor)
+    }
+
+    val updateColorFromHexCodeAction = { hexStr: String ->
         hexColor = hexStr.removePrefix("#").take(8)
         val parsedColor = hexColor.toColor()
         if (parsedColor != null) {
@@ -43,37 +51,34 @@ fun ColorPicker(
         }
     }
 
+    val pasteColorFromClipboardAction: () -> Unit = {
+        coroutineScope.launch {
+            clipboard.getClipEntry()?.clipData?.getItemAt(0)?.let {
+                updateColorFromHexCodeAction(it.text.toString())
+            }
+        }
+    }
+
+
     key(initColor) {
         ClassicColorPicker(
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1F),
             color = HsvColor.from(initColor),
-            onColorChanged = { newHsvColor: HsvColor ->
-                val newColor = newHsvColor.toColor()
-                hexColor = newColor.toHex()
-                onColorChanged(newColor)
-            }
+            onColorChanged = updateColorFromPickerAction
         )
     }
 
     OutlinedTextField(
         label = { Text("Hex Color (#AARRGGBB)") },
         modifier = Modifier.fillMaxWidth(),
-        prefix = { Text("#")},
+        prefix = { Text("#") },
         value = hexColor,
-        onValueChange = updateHexColor,
+        onValueChange = updateColorFromHexCodeAction,
         singleLine = true,
         suffix = {
-            IconButton(
-                onClick = {
-                    runBlocking {
-                        clipboard.getClipEntry()?.clipData?.getItemAt(0)?.let {
-                            updateHexColor(it.text.toString())
-                        }
-                    }
-                }
-            ) {
+            IconButton(onClick = pasteColorFromClipboardAction) {
                 Icon(
                     modifier = Modifier.fillMaxHeight(),
                     painter = painterResource(R.drawable.outline_content_paste_24),
@@ -84,7 +89,7 @@ fun ColorPicker(
     )
 }
 
-fun String.toColor(): Color? {
+private fun String.toColor(): Color? {
     // Remove any leading # if present
     var cleanHex = this.removePrefix("#")
 
@@ -103,7 +108,7 @@ fun String.toColor(): Color? {
     }
 }
 
-fun Color.toHex(): String {
+private fun Color.toHex(): String {
     val alpha = (this.alpha * 255).toInt()
     val red = (this.red * 255).toInt()
     val green = (this.green * 255).toInt()

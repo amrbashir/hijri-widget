@@ -2,12 +2,10 @@ package me.amrbashir.hijriwidget.preference_activity.screens.preferences
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -42,7 +40,6 @@ fun NavGraphBuilder.dateFormatDestination() {
 fun NavController.navigateToDateFormat() {
     navigate(route = DATE_FORMAT_DESTINATION)
 }
-
 
 @Composable
 internal fun DateFormatScreen() {
@@ -98,11 +95,23 @@ internal fun DateFormatScreen() {
             }
 
             if (prefsManager.dateIsCustomFormat.value) {
-                Spacer(Modifier.requiredHeight(16.dp))
+                DateFormatGuideText()
+            }
+        }
+    }
+}
 
-                val annotatedString = buildAnnotatedString {
-                    append(
-                        """
+@Composable
+private fun DateFormatGuideText() {
+    val languageIDsURL = "http://www.i18nguy.com/unicode/language-identifiers.html"
+
+    val linkStyle = TextLinkStyles(
+        style = SpanStyle(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7F))
+    )
+
+    val annotatedString = buildAnnotatedString {
+        append(
+            """
                     Customize how the date appears on your widget
 
                     You can use these codes:
@@ -141,33 +150,19 @@ internal fun DateFormatScreen() {
 
                     For the full list of language identifiers:
                 """.trimIndent()
-                    )
-                    withLink(
-                        LinkAnnotation.Url(
-                            "http://www.i18nguy.com/unicode/language-identifiers.html",
-                            TextLinkStyles(
-                                style = SpanStyle(
-                                    color = MaterialTheme.colorScheme.primary.copy(
-                                        alpha = 0.7F
-                                    )
-                                )
-                            )
-                        )
-                    ) {
-                        append("http://www.i18nguy.com/unicode/language-identifiers.html")
-                    }
-                }
-
-                Text(
-                    annotatedString,
-                    modifier = Modifier.fillMaxWidth(),
-                    style = MaterialTheme.typography.bodyMedium.merge(
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
-                            alpha = 0.7F
-                        )
-                    ),
-                )
-            }
+        )
+        withLink(LinkAnnotation.Url(languageIDsURL, linkStyle)) {
+            append(languageIDsURL)
         }
     }
+
+    Text(
+        annotatedString,
+        modifier = Modifier.fillMaxWidth(),
+        style = MaterialTheme.typography.bodyMedium.merge(
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
+                alpha = 0.7F
+            )
+        ),
+    )
 }

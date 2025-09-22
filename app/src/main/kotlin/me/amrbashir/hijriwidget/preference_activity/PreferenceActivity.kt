@@ -66,7 +66,9 @@ open class PreferenceActivity(private val closeOnSave: Boolean = false) :
         enableEdgeToEdge()
 
         setContent {
-            Content()
+            PreferencesTheme {
+                Content()
+            }
         }
     }
 
@@ -87,47 +89,42 @@ open class PreferenceActivity(private val closeOnSave: Boolean = false) :
         val topAppBarScrollBehavior =
             TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
 
-        PreferencesTheme {
-            val isDark = navController.context.isDark()
-            val darkColor = MaterialTheme.colorScheme.surfaceContainer
-            val lightColor = MaterialTheme.colorScheme.surfaceContainerLow
-            val containerColor = if (isDark) darkColor else lightColor
+        val isDark = navController.context.isDark()
+        val darkColor = MaterialTheme.colorScheme.surfaceContainer
+        val lightColor = MaterialTheme.colorScheme.surfaceContainerLow
 
-            CompositionLocalProvider(
-                LocalNavController provides navController,
-                LocalSnackBarHostState provides snackBarHostState,
-                LocalAppBarTitle provides appBarTitle,
-                LocalPreferencesManager provides prefsManager,
-            ) {
-                Scaffold(
-                    containerColor = containerColor,
-                    snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-                    topBar = {
-                        TopAppBar(
-                            navController = navController,
-                            scrollBehavior = topAppBarScrollBehavior,
-                            closeOnSave = this.closeOnSave,
-                            onFinish = {
-                                this.finish()
-                            }
-                        )
-                    },
-                    modifier = Modifier.nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
-                ) {
-                    SharedTransitionLayout(
-                        modifier = Modifier
-                            .consumeWindowInsets(it)
-                            .padding(it)
-                    ) {
-                        CompositionLocalProvider(
-                            LocalSharedTransitionScope provides this
-                        ) {
-                            Navigation()
+        CompositionLocalProvider(
+            LocalNavController provides navController,
+            LocalSnackBarHostState provides snackBarHostState,
+            LocalAppBarTitle provides appBarTitle,
+            LocalPreferencesManager provides prefsManager,
+        ) {
+            Scaffold(
+                containerColor = if (isDark) darkColor else lightColor,
+                snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
+                topBar = {
+                    TopAppBar(
+                        scrollBehavior = topAppBarScrollBehavior,
+                        closeOnSave = this.closeOnSave,
+                        onFinish = {
+                            this.finish()
                         }
+                    )
+                },
+                modifier = Modifier.nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
+            ) {
+                SharedTransitionLayout(
+                    modifier = Modifier
+                        .consumeWindowInsets(it)
+                        .padding(it)
+                ) {
+                    CompositionLocalProvider(
+                        LocalSharedTransitionScope provides this
+                    ) {
+                        Navigation()
                     }
                 }
             }
         }
     }
-
 }

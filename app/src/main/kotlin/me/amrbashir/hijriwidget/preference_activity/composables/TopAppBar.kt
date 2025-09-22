@@ -13,7 +13,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.navigation.NavController
+import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.launch
 import me.amrbashir.hijriwidget.android.AlarmReceiver
 import me.amrbashir.hijriwidget.isDark
@@ -27,12 +27,11 @@ import me.amrbashir.hijriwidget.widget.HijriWidget
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBar(
-    navController: NavController,
     scrollBehavior: TopAppBarScrollBehavior,
     onFinish: () -> Unit,
     closeOnSave: Boolean = false,
 ) {
-    val isDark = navController.context.isDark()
+    val isDark = LocalContext.current.isDark()
     val darkColor = MaterialTheme.colorScheme.surfaceContainer
     val lightColor = MaterialTheme.colorScheme.surfaceContainerLow
     val containerColor = if (isDark) darkColor else lightColor
@@ -45,9 +44,7 @@ fun TopAppBar(
         ),
         scrollBehavior = scrollBehavior,
         navigationIcon = {
-            GoBackButton(
-                onFinish = onFinish
-            )
+            GoBackButton(onFinish = onFinish)
         },
         actions = {
             SaveButton(
@@ -65,13 +62,15 @@ private fun GoBackButton(
 ) {
     val navController = LocalNavController.current
 
-    IconButton(onClick = {
+    val goBackAction: () -> Unit = {
         if (navController.currentDestination?.route == PREFERENCES_LIST_DESTINATION) {
             onFinish()
         } else {
             navController.navigateUp()
         }
-    }) {
+    }
+
+    IconButton(onClick = goBackAction) {
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
             contentDescription = null
@@ -85,15 +84,11 @@ private fun SaveButton(
     closeOnSave: Boolean
 ) {
     val prefsManager = LocalPreferencesManager.current
-
-    val navController = LocalNavController.current
     val snackBarHostState = LocalSnackBarHostState.current
-
-    val context = navController.context
-
+    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
-    IconButton(onClick = {
+    val saveAction: () -> Unit = {
         prefsManager.save(context)
         coroutineScope.launch {
             HijriWidget.updateAll(context)
@@ -106,9 +101,11 @@ private fun SaveButton(
                 snackBarHostState.showSnackbar("Widget updated!", withDismissAction = true)
             }
         }
-    }) {
+    }
+
+    IconButton(onClick = saveAction) {
         Icon(
-            Icons.Default.Check,
+            imageVector = Icons.Default.Check,
             contentDescription = null,
         )
     }

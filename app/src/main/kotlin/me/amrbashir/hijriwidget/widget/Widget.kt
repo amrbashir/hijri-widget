@@ -5,8 +5,8 @@ import android.os.Build
 import android.util.TypedValue
 import android.widget.RemoteViews
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.toArgb
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
@@ -24,7 +24,7 @@ import androidx.glance.background
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.fillMaxSize
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import me.amrbashir.hijriwidget.ColorMode
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.PreferencesManager
@@ -58,13 +58,12 @@ class HijriWidget : GlanceAppWidget() {
     @Composable
     private fun Content() {
         val context = LocalContext.current
+        val coroutineScope = rememberCoroutineScope()
 
+        // DO NOT REMOVE, needed for glance to recompose when this value is changed
         val updateSignal = WidgetUpdateSignal.value
-        var prefsManager = PreferencesManager.load(context)
-        LaunchedEffect(updateSignal) {
-            prefsManager = PreferencesManager.load(context)
-        }
 
+        val prefsManager = PreferencesManager.load(context)
 
         val remoteViewId =
             if (prefsManager.textShadow.value) R.id.widget_text_shadow else R.id.widget_text
@@ -95,7 +94,7 @@ class HijriWidget : GlanceAppWidget() {
                 .widgetCornerRadius()
                 .background(prefsManager.getBgColor(context))
                 .clickable {
-                    runBlocking {
+                    coroutineScope.launch {
                         HijriWidget.updateAll(context)
                         AlarmReceiver.setup24Periodic(context, prefsManager)
                     }
@@ -114,4 +113,5 @@ class HijriWidget : GlanceAppWidget() {
 }
 
 
+/** Workaround to force the Widget glance to recompose */
 val WidgetUpdateSignal = mutableStateOf(true)

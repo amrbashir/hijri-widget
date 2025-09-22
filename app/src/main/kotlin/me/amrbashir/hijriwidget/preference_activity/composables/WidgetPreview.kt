@@ -10,11 +10,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,34 +34,13 @@ import me.amrbashir.hijriwidget.widgetCornerRadius
 fun WidgetPreview(
     modifier: Modifier = Modifier
 ) {
-    val prefsManager = LocalPreferencesManager.current
-
     val context = LocalContext.current
-
-    var date by remember {
-        mutableStateOf(
-            HijriDate.todayStr(prefsManager)
-        )
-    }
-
-    val textSize = prefsManager.textSize.value.sp
-
-    val textColor = prefsManager.getTextColor(context)
-    val bgColor = prefsManager.getBgColor(context)
-
+    val prefsManager = LocalPreferencesManager.current
     val wallpaperManager = WallpaperManager.getInstance(context)
-    val builtinWallpaper = wallpaperManager.builtInDrawable.toBitmap().asImageBitmap()
 
-    LaunchedEffect(
-        prefsManager.dayStart.value,
-        prefsManager.dateFormat.value,
-        prefsManager.dateCustomFormat.value,
-        prefsManager.dateIsCustomFormat.value,
-        prefsManager.dayOffset.value,
-        prefsManager.calendarCalculationMethod.value,
-    ) {
-        date = HijriDate.todayStr(prefsManager)
-    }
+    val date = HijriDate.todayStr(prefsManager)
+
+    val builtinWallpaper = wallpaperManager.builtInDrawable.toBitmap().asImageBitmap()
 
     // Wallpaper container
     Box(
@@ -104,14 +78,14 @@ fun WidgetPreview(
                 .height(110.dp)
                 .width(175.dp)
                 .widgetCornerRadius(context)
-                .background(bgColor.getColor(context))
+                .background(prefsManager.getBgColor(context).getColor(context))
         ) {
             Text(
                 date,
-                color = textColor,
+                color = prefsManager.getTextColor(context),
                 style = TextStyle(
                     textAlign = TextAlign.Center,
-                    fontSize = textSize,
+                    fontSize = prefsManager.textSize.value.sp,
                     shadow = if (prefsManager.textShadow.value) Shadow(
                         color = Color(0, 0, 0, 128),
                         offset = Offset(x = 1f, y = 1f),

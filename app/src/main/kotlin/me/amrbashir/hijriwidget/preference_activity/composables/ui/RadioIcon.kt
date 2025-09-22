@@ -26,12 +26,12 @@ fun RadioIcon(
     enabled: Boolean = true,
     colors: RadioButtonColors = RadioButtonDefaults.colors(),
 ) {
-
     val dotRadius = animateDpAsState(
         targetValue = if (selected) 12.dp / 2 else 0.dp,
         animationSpec = tween(durationMillis = 100),
         label = ""
     )
+
     val radioColor = colors.radioColor(enabled, selected)
 
     Canvas(
@@ -42,11 +42,13 @@ fun RadioIcon(
             .requiredSize(20.dp)
     ) {
         val strokeWidth = 2.dp.toPx()
+
         drawCircle(
             radioColor.value,
             radius = (20.dp / 2).toPx() - strokeWidth / 2,
             style = Stroke(strokeWidth)
         )
+
         if (dotRadius.value > 0.dp) {
             drawCircle(radioColor.value, dotRadius.value.toPx() - strokeWidth / 2, style = Fill)
         }

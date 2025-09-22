@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -23,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -32,7 +34,6 @@ import androidx.navigation.compose.composable
 import me.amrbashir.hijriwidget.BuildConfig
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
-import me.amrbashir.hijriwidget.preference_activity.LocalNavController
 import me.amrbashir.hijriwidget.preference_activity.composables.Changelog
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.adaptiveIconPainterResource
 
@@ -53,7 +54,7 @@ data class QuickLink(
     val url: String,
 )
 
-val QUIKC_LINKS = arrayOf(
+val QUICK_LINKS = arrayOf(
     QuickLink("GitHub", R.drawable.ic_fab_github, "https://github.com/amrbashir/hijri-widget"),
     QuickLink("Twitter", R.drawable.ic_fab_twitter, "https://twitter.com/amrbashir_dev"),
     QuickLink("LinkedIn", R.drawable.ic_fab_linkedin, "https://www.linkedin.com/in/amrbashir-dev"),
@@ -69,8 +70,6 @@ val QUIKC_LINKS = arrayOf(
 internal fun AboutScreen() {
     LocalAppBarTitle.current.value = "About"
 
-    val navController = LocalNavController.current
-
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier
@@ -81,27 +80,7 @@ internal fun AboutScreen() {
             .verticalScroll(rememberScrollState())
     ) {
 
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Image(
-                painter = adaptiveIconPainterResource(R.mipmap.ic_launcher),
-                contentDescription = null,
-                modifier = Modifier.requiredSize(64.dp)
-            )
-
-            Text(
-                "Hijri Widget",
-                style = MaterialTheme.typography.titleLarge
-            )
-
-            Text(
-                "${BuildConfig.VERSION_NAME} (${BuildConfig.GIT_SHA})",
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
+        AppInfo()
 
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
@@ -110,36 +89,71 @@ internal fun AboutScreen() {
                 .fillMaxWidth()
                 .padding(8.dp)
         ) {
-            for (link in QUIKC_LINKS) {
-                TextButton(
-                    modifier = Modifier.weight(1F),
-                    colors = ButtonDefaults.textButtonColors()
-                        .copy(contentColor = MaterialTheme.colorScheme.onSurface),
-                    shape = RoundedCornerShape(12.dp),
-                    onClick = {
-                        navController.context.startActivity(
-                            Intent(
-                                Intent.ACTION_VIEW,
-                                link.url.toUri()
-                            )
-                        )
-                    },
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Icon(
-                            modifier = Modifier.requiredSize(24.dp),
-                            painter = painterResource(link.icon),
-                            contentDescription = null,
-                        )
-                        Text(link.label)
-                    }
-                }
+            for (link in QUICK_LINKS) {
+                QuickLinkButton(link)
             }
         }
 
         Changelog()
+    }
+}
+
+@Composable
+private fun AppInfo() {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Image(
+            painter = adaptiveIconPainterResource(R.mipmap.ic_launcher),
+            contentDescription = null,
+            modifier = Modifier.requiredSize(64.dp)
+        )
+
+        Text(
+            "Hijri Widget",
+            style = MaterialTheme.typography.titleLarge
+        )
+
+        Text(
+            "${BuildConfig.VERSION_NAME} (${BuildConfig.GIT_SHA})",
+            style = MaterialTheme.typography.bodyMedium
+        )
+    }
+}
+
+@Composable
+private fun RowScope.QuickLinkButton(link: QuickLink) {
+    val context = LocalContext.current
+
+    val openLink = {
+        context.startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                link.url.toUri()
+            )
+        )
+    }
+
+    TextButton(
+        modifier = Modifier.weight(1F),
+        colors = ButtonDefaults.textButtonColors()
+            .copy(contentColor = MaterialTheme.colorScheme.onSurface),
+        shape = RoundedCornerShape(12.dp),
+        onClick = openLink,
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Icon(
+                modifier = Modifier.requiredSize(24.dp),
+                painter = painterResource(link.icon),
+                contentDescription = null,
+            )
+
+            Text(link.label)
+        }
     }
 }

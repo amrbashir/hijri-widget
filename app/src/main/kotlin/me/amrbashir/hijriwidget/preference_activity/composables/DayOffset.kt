@@ -2,8 +2,6 @@ package me.amrbashir.hijriwidget.preference_activity.composables
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Slider
@@ -22,10 +20,8 @@ fun DayOffset() {
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Spacer(modifier = Modifier.requiredWidth(38.dp))
-
         Slider(
             modifier = Modifier.weight(1F),
             value = prefsManager.dayOffset.value.toFloat(),

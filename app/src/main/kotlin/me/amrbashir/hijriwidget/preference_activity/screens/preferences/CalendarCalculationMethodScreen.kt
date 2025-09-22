@@ -51,7 +51,6 @@ internal fun CalendarCalculationMethodScreen() {
         ) {
             PreferenceGroup(label = "Calendar Calculation Method") {
                 for (method in HijriDateCalculationMethod.entries) {
-
                     PreferenceTemplate(
                         label = method.label,
                         description = method.description,

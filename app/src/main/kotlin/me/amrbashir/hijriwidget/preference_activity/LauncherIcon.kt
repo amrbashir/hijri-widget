@@ -13,8 +13,8 @@ fun changeLauncherIcon(context: Context, prefsManager: PreferencesManager) {
     val packageManager = context.packageManager
 
     if (!BuildConfig.DEBUG) {
-        val mainActivity =
-            ComponentName(context, "me.amrbashir.hijriwidget.preferences.MainActivity")
+        val cls = "me.amrbashir.hijriwidget.preference_activity.PreferenceActivity"
+        val mainActivity = ComponentName(context, cls)
         packageManager.setComponentEnabledSetting(
             mainActivity,
             PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
@@ -23,8 +23,8 @@ fun changeLauncherIcon(context: Context, prefsManager: PreferencesManager) {
     }
 
     for (day in 1..30) {
-        val dayActivity =
-            ComponentName(context, "me.amrbashir.hijriwidget.preferences.Calendar_$day")
+        val cls = "me.amrbashir.hijriwidget.preference_activity.Calendar_$day"
+        val dayActivity = ComponentName(context, cls)
         packageManager.setComponentEnabledSetting(
             dayActivity,
             if (today == day) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED,

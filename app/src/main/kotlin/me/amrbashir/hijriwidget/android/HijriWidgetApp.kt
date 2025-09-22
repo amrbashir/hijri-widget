@@ -18,8 +18,10 @@ class HijriWidgetApp : Application() {
         AlarmReceiver.setup24Periodic(this, prefsManager)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            val appWidgetManager = GlanceAppWidgetManager(this)
+
             runBlocking {
-                GlanceAppWidgetManager(this@HijriWidgetApp).setWidgetPreviews(
+                appWidgetManager.setWidgetPreviews(
                     HijriWidgetReceiver::class,
                     intSetOf(AppWidgetProviderInfo.WIDGET_CATEGORY_HOME_SCREEN)
                 )

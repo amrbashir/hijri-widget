@@ -5,16 +5,15 @@ import android.icu.util.ULocale
 
 object HijriDate {
     fun today(prefsManager: PreferencesManager): Calendar {
-        val locale = ULocale("@calendar=${prefsManager.calendarCalculationMethod.value}")
+        val calcMethod = prefsManager.calendarCalculationMethod.value.id
+        val locale = ULocale("@calendar=$calcMethod")
         val calendar = Calendar.getInstance(locale)
-
-        val dayStart = prefsManager.dayStart.value
 
         calendar.add(Calendar.DAY_OF_MONTH, prefsManager.dayOffset.value)
 
         val currentMinutes = calendar[Calendar.HOUR_OF_DAY] * 60 + calendar[Calendar.MINUTE]
 
-        if (currentMinutes < dayStart) {
+        if (currentMinutes < prefsManager.dayStart.value) {
             calendar.add(Calendar.DAY_OF_MONTH, -1)
         }
 

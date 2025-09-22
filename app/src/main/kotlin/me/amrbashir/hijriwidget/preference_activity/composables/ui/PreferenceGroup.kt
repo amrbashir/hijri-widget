@@ -33,7 +33,6 @@ fun PreferenceGroup(
             modifier = Modifier.clip(RoundedCornerShape(20.dp)),
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
-
             content()
         }
     }
