@@ -2,11 +2,9 @@ package me.amrbashir.hijriwidget.preference_activity.screens.preferences
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -64,20 +62,18 @@ internal fun ColorScreen() {
                         onClick = {
                             prefsManager.textColorMode.value = mode
                         }
-                    )
+                    ) {
+                        if (mode == ColorMode.Custom && prefsManager.textColorMode.value == ColorMode.Custom) {
+                            ColorPicker(
+                                initialColor = prefsManager.textCustomColor.value,
+                                onColorChanged = {
+                                    prefsManager.textCustomColor.value = it.toArgb()
+                                }
+                            )
+                        }
+                    }
                 }
 
-            }
-
-            if (prefsManager.textColorMode.value == ColorMode.Custom) {
-                Spacer(Modifier.requiredHeight(16.dp))
-
-                ColorPicker(
-                    prefsManager.textCustomColor.value,
-                    onColorChanged = {
-                        prefsManager.textCustomColor.value = it.toArgb()
-                    }
-                )
             }
 
             PreferenceGroup(label = "Background Color") {
@@ -89,20 +85,18 @@ internal fun ColorScreen() {
                         onClick = {
                             prefsManager.bgColorMode.value = mode
                         }
-                    )
+                    ) {
+                        if (mode == ColorMode.Custom && prefsManager.bgColorMode.value == ColorMode.Custom) {
+                            ColorPicker(
+                                initialColor = prefsManager.bgCustomColor.value,
+                                onColorChanged = {
+                                    prefsManager.bgCustomColor.value = it.toArgb()
+                                }
+                            )
+                        }
+                    }
                 }
 
-            }
-
-            if (prefsManager.bgColorMode.value == ColorMode.Custom) {
-                Spacer(Modifier.requiredHeight(16.dp))
-
-                ColorPicker(
-                    prefsManager.bgCustomColor.value,
-                    onColorChanged = {
-                        prefsManager.bgCustomColor.value = it.toArgb()
-                    }
-                )
             }
         }
     }
