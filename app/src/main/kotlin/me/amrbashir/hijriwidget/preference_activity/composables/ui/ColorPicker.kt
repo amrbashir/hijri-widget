@@ -1,85 +1,96 @@
 package me.amrbashir.hijriwidget.preference_activity.composables.ui
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.core.graphics.toColorInt
-import com.github.skydoves.colorpicker.compose.AlphaSlider
-import com.github.skydoves.colorpicker.compose.BrightnessSlider
-import com.github.skydoves.colorpicker.compose.HsvColorPicker
-import com.github.skydoves.colorpicker.compose.drawColorIndicator
-import com.github.skydoves.colorpicker.compose.rememberColorPickerController
+import androidx.compose.ui.res.painterResource
+import com.godaddy.android.colorpicker.ClassicColorPicker
+import com.godaddy.android.colorpicker.HsvColor
+import me.amrbashir.hijriwidget.R
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ColorPicker(
     initialColor: Int,
     onColorChanged: (Color) -> Unit,
 ) {
-    val controller = rememberColorPickerController()
-    var hexCode by remember { mutableStateOf("") }
+    var initColor by remember { mutableStateOf(Color(initialColor)) }
+    var hexColor by remember {  mutableStateOf(initColor.toHex()) }
 
-    Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
-        HsvColorPicker(
-            modifier = Modifier.height(300.dp),
-            initialColor = Color(initialColor),
-            drawOnPosSelected = {
-                drawColorIndicator(
-                    controller.selectedPoint.value,
-                    controller.selectedColor.value,
-                )
-            },
-            controller = controller,
-            onColorChanged = {
-                hexCode = it.hexCode
-                onColorChanged(it.color)
+    key(initColor) {
+        ClassicColorPicker(
+            modifier = Modifier.fillMaxWidth().aspectRatio(1F),
+            color = HsvColor.from(initColor),
+            onColorChanged = { newHsvColor: HsvColor ->
+                val newColor = newHsvColor.toColor()
+                hexColor = newColor.toHex()
+                onColorChanged(newColor)
             }
-        )
-
-        BrightnessSlider(
-            modifier = Modifier
-                .height(35.dp)
-                .fillMaxWidth(),
-            controller = controller
-        )
-
-
-        AlphaSlider(
-            modifier = Modifier
-                .height(35.dp)
-                .fillMaxWidth(),
-            controller = controller
-        )
-
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            prefix = { Text("#") },
-            value = hexCode,
-            onValueChange = {
-                hexCode = it.take(8)
-                if (hexCode.length == 8) {
-                    try {
-                        val parsedColor = hexCode.toColorInt()
-                        val color = Color(parsedColor)
-                        controller.selectByColor(color, fromUser = false)
-                    } catch (_: Exception) {
-                    }
-                }
-            },
         )
     }
 
+    OutlinedTextField(
+        label = { Text("Hex Color (#AARRGGBB)") },
+        modifier = Modifier.fillMaxWidth(),
+        prefix = { Text("#")},
+        value = hexColor,
+        onValueChange = {
+            hexColor = it.removePrefix("#").take(8)
+            val parsedColor = hexColor.toColor()
+            if (parsedColor != null) initColor = parsedColor
+        },
+        singleLine = true,
+        suffix = {
+            IconButton(
+                onClick = {}
+            ) {
+                Icon(
+                    modifier = Modifier.fillMaxHeight(),
+                    painter = painterResource(R.drawable.outline_content_paste_24),
+                    contentDescription = null,
+                )
+            }
+        }
+    )
+}
+
+fun String.toColor(): Color? {
+    // Remove any leading # if present
+    var cleanHex = this.removePrefix("#")
+
+    // Append F to complete AARRGGBB format
+    if (cleanHex.length < 8) cleanHex += "f".repeat(8 - cleanHex.length)
+
+    try {
+        val a = cleanHex.substring(0, 2).hexToInt()
+        val r = cleanHex.substring(2, 4).hexToInt()
+        val g = cleanHex.substring(4, 6).hexToInt()
+        val b = cleanHex.substring(6, 8).hexToInt()
+
+        return Color(r, g, b, a)
+    } catch (_: Exception) {
+        return null
+    }
+}
+
+fun Color.toHex(): String {
+    val alpha = (this.alpha * 255).toInt()
+    val red = (this.red * 255).toInt()
+    val green = (this.green * 255).toInt()
+    val blue = (this.blue * 255).toInt()
+
+    return String.format("%02x%02x%02x%02x", alpha, red, green, blue)
 }

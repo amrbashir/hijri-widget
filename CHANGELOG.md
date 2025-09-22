@@ -3,6 +3,8 @@
 ## [Unreleased]
 
 - Improve About page look and feel
+- Fix "Shadow" option resetting upon save
+- Fix changing the input color field does not update the color picker
 
 ## [1.0.1] - 2025-08-29
 
