@@ -16,9 +16,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.res.painterResource
 import com.godaddy.android.colorpicker.ClassicColorPicker
 import com.godaddy.android.colorpicker.HsvColor
+import kotlinx.coroutines.runBlocking
 import me.amrbashir.hijriwidget.R
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -27,12 +29,25 @@ fun ColorPicker(
     initialColor: Int,
     onColorChanged: (Color) -> Unit,
 ) {
+    val clipboard = LocalClipboard.current
+
     var initColor by remember { mutableStateOf(Color(initialColor)) }
     var hexColor by remember {  mutableStateOf(initColor.toHex()) }
 
+    val updateHexColor = { hexStr: String ->
+        hexColor = hexStr.removePrefix("#").take(8)
+        val parsedColor = hexColor.toColor()
+        if (parsedColor != null) {
+            initColor = parsedColor
+            onColorChanged(parsedColor)
+        }
+    }
+
     key(initColor) {
         ClassicColorPicker(
-            modifier = Modifier.fillMaxWidth().aspectRatio(1F),
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1F),
             color = HsvColor.from(initColor),
             onColorChanged = { newHsvColor: HsvColor ->
                 val newColor = newHsvColor.toColor()
@@ -47,15 +62,17 @@ fun ColorPicker(
         modifier = Modifier.fillMaxWidth(),
         prefix = { Text("#")},
         value = hexColor,
-        onValueChange = {
-            hexColor = it.removePrefix("#").take(8)
-            val parsedColor = hexColor.toColor()
-            if (parsedColor != null) initColor = parsedColor
-        },
+        onValueChange = updateHexColor,
         singleLine = true,
         suffix = {
             IconButton(
-                onClick = {}
+                onClick = {
+                    runBlocking {
+                        clipboard.getClipEntry()?.clipData?.getItemAt(0)?.let {
+                            updateHexColor(it.text.toString())
+                        }
+                    }
+                }
             ) {
                 Icon(
                     modifier = Modifier.fillMaxHeight(),
