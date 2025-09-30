@@ -12,34 +12,10 @@ import androidx.core.content.edit
 import androidx.glance.GlanceTheme
 import androidx.glance.unit.ColorProvider
 
-const val DARK = 0xFF151515
 private const val PREF = "HijriWidgetPref"
 
-class Preference<T>(
-    val key: String,
-    val default: T,
-    loader: SharedPreferences.(String, T) -> T,
-    saver: SharedPreferences.Editor.(String, T) -> Unit,
-) {
-    private val _value = mutableStateOf(default)
-    var value: T
-        get() = _value.value
-        set(v) {
-            _value.value = v
-        }
+val Color.Companion.Dark: Color get() = Color(0xFF151515)
 
-    val load = { prefs: SharedPreferences ->
-        this.value = loader(prefs, this.key, this.default)
-    }
-
-    val save: SharedPreferences.Editor.() -> Unit = {
-        saver(this, this@Preference.key, this@Preference.value)
-    }
-
-    fun reset() {
-        value = default
-    }
-}
 
 class PreferencesManager {
     private val _preferences: MutableList<Preference<Any>> = mutableListOf()
@@ -112,9 +88,9 @@ class PreferencesManager {
                 context
             )
 
-            this.textColorMode.value == ColorMode.System && context.isDark() -> Color(DARK)
+            this.textColorMode.value == ColorMode.System && context.isDark() -> Color.Dark
             this.textColorMode.value == ColorMode.System && !context.isDark() -> Color.White
-            this.textColorMode.value == ColorMode.Dark -> Color(DARK)
+            this.textColorMode.value == ColorMode.Dark -> Color.Dark
             this.textColorMode.value == ColorMode.Light -> Color.White
             this.textColorMode.value == ColorMode.Custom -> Color(this.textCustomColor.value)
             else -> Color.White
@@ -128,13 +104,11 @@ class PreferencesManager {
         return when {
             this.bgColorMode.value == ColorMode.Dynamic && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> GlanceTheme.colors.widgetBackground
             this.bgColorMode.value == ColorMode.System && context.isDark() -> ColorProvider(
-                Color(
-                    DARK
-                )
+                Color.Dark
             )
 
             this.bgColorMode.value == ColorMode.System && !context.isDark() -> ColorProvider(Color.White)
-            this.bgColorMode.value == ColorMode.Dark -> ColorProvider(Color(DARK))
+            this.bgColorMode.value == ColorMode.Dark -> ColorProvider(Color.Dark)
             this.bgColorMode.value == ColorMode.Light -> ColorProvider(Color.White)
             this.bgColorMode.value == ColorMode.Custom -> ColorProvider(Color(this.bgCustomColor.value))
             else -> ColorProvider(Color.Transparent)
@@ -170,6 +144,9 @@ class PreferencesManager {
         }
     }
 
+    // ======================================= //
+    // Helper methods to construct preferences //
+    // ======================================= //
     fun <T> preference(
         key: String,
         default: T,
@@ -247,7 +224,35 @@ class PreferencesManager {
 
 }
 
-// Keys used for old prefs migrations
+class Preference<T>(
+    val key: String,
+    val default: T,
+    loader: SharedPreferences.(String, T) -> T,
+    saver: SharedPreferences.Editor.(String, T) -> Unit,
+) {
+    private val _value = mutableStateOf(default)
+    var value: T
+        get() = _value.value
+        set(v) {
+            _value.value = v
+        }
+
+    val load = { prefs: SharedPreferences ->
+        this.value = loader(prefs, this.key, this.default)
+    }
+
+    val save: SharedPreferences.Editor.() -> Unit = {
+        saver(this, this@Preference.key, this@Preference.value)
+    }
+
+    fun reset() {
+        value = default
+    }
+}
+
+// ==================== //
+// Old Prefs Migrations //
+// ==================== //
 const val TEXT_COLOR_MODE_KEY = "TEXT_COLOR_MODE"
 const val THEME_KEY = "THEME"
 const val TEXT_CUSTOM_COLOR_KEY = "TEXT_CUSTOM_COLOR"
@@ -262,6 +267,7 @@ const val DAY_START_KEY = "DAY_START"
 const val DAY_START_HOUR_KEY = "DAY_START_HOUR"
 const val DAY_START_MINUTE_KEY = "DAY_START_MINUTE"
 const val CALENDAR_CALCULATION_METHOD_KEY = "CALENDAR_CALCULATION_METHOD"
+
 fun migratePreferences(sharedPreferences: SharedPreferences) {
     sharedPreferences.edit(commit = true) {
         if (!sharedPreferences.contains(DATE_FORMAT_KEY)) {
@@ -346,3 +352,4 @@ fun migratePreferences(sharedPreferences: SharedPreferences) {
 
     }
 }
+
