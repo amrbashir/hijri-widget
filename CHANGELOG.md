@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Choosing a PM time for "Day Start" will now properly change Hijri day **before** Gregorian day.
+
 ## [1.0.2] - 2025-09-22
 
 ### Changed

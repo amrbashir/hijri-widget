@@ -38,7 +38,7 @@ fun WidgetPreview(
     val prefsManager = LocalPreferencesManager.current
     val wallpaperManager = WallpaperManager.getInstance(context)
 
-    val date = HijriDate.todayStr(prefsManager)
+    val date = HijriDate.todayFormatted(prefsManager)
 
     val builtinWallpaper = wallpaperManager.builtInDrawable.toBitmap().asImageBitmap()
 
