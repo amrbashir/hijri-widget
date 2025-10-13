@@ -55,10 +55,13 @@ internal fun DayStartScreen() {
         ) {
             TimePicker(state = timePickerState)
 
-            Text(AnnotatedString.fromHtml("""
+            Text(
+                AnnotatedString.fromHtml(
+                    """
                     <p>- AM: Hijri Day starts <b>after</b> Gregorian Day</p>
                     <p>- PM: Hijri Day starts <b>before</b> Gregorian Day</p>
-                """.trimIndent()),
+                """.trimIndent()
+                ),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
