@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
@@ -40,8 +40,6 @@ fun WidgetPreview(
 
     val date = HijriDate.todayFormatted(prefsManager)
 
-    val builtinWallpaper = wallpaperManager.builtInDrawable.toBitmap().asImageBitmap()
-
     // Wallpaper container
     Box(
         contentAlignment = Alignment.Center,
@@ -50,25 +48,28 @@ fun WidgetPreview(
             .clip(RoundedCornerShape(20.dp))
             .height(150.dp)
             .fillMaxWidth()
-            .drawBehind {
-                val imageWidth = builtinWallpaper.width.toFloat()
-                val imageHeight = builtinWallpaper.height.toFloat()
-                val canvasWidth = size.width
-                val canvasHeight = size.height
+            .drawWithCache {
+                val builtinWallpaper = wallpaperManager.builtInDrawable.toBitmap().asImageBitmap()
+                onDrawBehind {
+                    val imageWidth = builtinWallpaper.width.toFloat()
+                    val imageHeight = builtinWallpaper.height.toFloat()
+                    val canvasWidth = size.width
+                    val canvasHeight = size.height
 
-                val scale = maxOf(canvasWidth / imageWidth, canvasHeight / imageHeight)
+                    val scale = maxOf(canvasWidth / imageWidth, canvasHeight / imageHeight)
 
-                val scaledWidth = imageWidth * scale
-                val scaledHeight = imageHeight * scale
+                    val scaledWidth = imageWidth * scale
+                    val scaledHeight = imageHeight * scale
 
-                val offsetX = (canvasWidth - scaledWidth) / 2
-                val offsetY = (canvasHeight - scaledHeight) / 2
+                    val offsetX = (canvasWidth - scaledWidth) / 2
+                    val offsetY = (canvasHeight - scaledHeight) / 2
 
-                drawImage(
-                    image = builtinWallpaper,
-                    dstSize = IntSize(scaledWidth.toInt(), scaledHeight.toInt()),
-                    dstOffset = IntOffset(offsetX.toInt(), offsetY.toInt())
-                )
+                    drawImage(
+                        image = builtinWallpaper,
+                        dstSize = IntSize(scaledWidth.toInt(), scaledHeight.toInt()),
+                        dstOffset = IntOffset(offsetX.toInt(), offsetY.toInt())
+                    )
+                }
             }
     ) {
 

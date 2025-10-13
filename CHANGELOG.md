@@ -5,6 +5,7 @@
 ### Fixed
 
 - Choosing a PM time for "Day Start" will now properly change Hijri day **before** Gregorian day.
+- Fixed stutter and lag when navigating between screens in the app.
 
 ## [1.0.2] - 2025-09-22
 
