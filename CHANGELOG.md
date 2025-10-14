@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Added "Arabic" translation for the application.
+
 ### Fixed
 
 - Choosing a PM time for "Day Start" will now properly change Hijri day **before** Gregorian day.

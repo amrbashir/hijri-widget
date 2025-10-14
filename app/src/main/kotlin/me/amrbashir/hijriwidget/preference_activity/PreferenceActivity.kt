@@ -82,7 +82,7 @@ open class PreferenceActivity(private val closeOnSave: Boolean = false) :
     @Composable
     private fun Content() {
         val prefsManager = PreferencesManager.load(this.baseContext)
-        val appBarTitle = remember { mutableStateOf("Hijri Widget") }
+        val appBarTitle = remember { mutableStateOf("") }
         val navController = rememberNavController()
         val snackBarHostState = remember { SnackbarHostState() }
         val topAppBarState = rememberTopAppBarState()

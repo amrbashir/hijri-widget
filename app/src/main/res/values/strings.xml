@@ -1,5 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="description">Android widget for displaying Hijri date</string>
-    <string name="preview_date">16 رمضان 1445</string>
+    <string name="app_name">Hijri Widget</string>
+    <string name="app_description">Android widget for displaying Hijri date</string>
+    <string name="widget_preview_date" translatable="false">16 رمضان 1445</string>
+    <string name="home_screen_stub_text">This is a stub for now, in preparation for multi-widget support</string>
+    <string name="color_mode_dynamic" translatable="false">Material You</string>
+    <string name="color_mode_dynamic_description">Dynamic color based on your wallpaper</string>
+    <string name="color_mode_system">System</string>
+    <string name="color_mode_system_description">Light or dark color based on device settings</string>
+    <string name="color_mode_dark">Dark</string>
+    <string name="color_mode_dark_description">Dark color, usually black</string>
+    <string name="color_mode_light">Light</string>
+    <string name="color_mode_light_description">Light color, usually white</string>
+    <string name="color_mode_transparent">Transparent</string>
+    <string name="color_mode_transparent_description">Transparent color</string>
+    <string name="color_mode_custom">Custom</string>
+    <string name="color_mode_custom_description">Pick a custom color</string>
+    <string name="hijri_date_calculation_method_islamic_label">Islamic</string>
+    <string name="hijri_date_calculation_method_islamic_description">Uses pure astronomical calculations to determine when the new moon occurs</string>
+    <string name="hijri_date_calculation_method_islamic_umalqura_label">Islamic Umm al-Qura</string>
+    <string name="hijri_date_calculation_method_islamic_umalqura_description">Based on the calculations used by the Umm al-Qura University in Mecca</string>
+    <string name="hijri_date_calculation_method_islamic_civil_label">Islamic Civil</string>
+    <string name="hijri_date_calculation_method_islamic_civil_description">Uses a fixed algorithmic approach with a 30-year cycle</string>
+    <string name="about_screen_title">About</string>
+    <string name="quick_link_github" translatable="false">GitHub</string>
+    <string name="quick_link_twitter" translatable="false">Twitter</string>
+    <string name="quick_link_linkedin" translatable="false">LinkedIn</string>
+    <string name="quick_link_privacy">Privacy</string>
+    <string name="text_color">Text Color</string>
+    <string name="background_color">Background Color</string>
+    <string name="day_start_description"><![CDATA[
+            <p>- AM: Hijri Day starts <b>after</b> Gregorian Day</p>
+            <p>- PM: Hijri Day starts <b>before</b> Gregorian Day</p>
+            ]]>
+    </string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+    <string name="date_format_group_title">Format</string>
+    <string name="date_format_custom">Custom</string>
+    <string name="date_format_custom_description">"Specify custom date format pattern (e.g., 'dd/MM/yyyy', 'EEEE', 'MMMM d')"</string>
+    <string name="date_format_guide"><![CDATA[
+            Customize how the date appears on your widget
+            <br>
+            <br>
+            You can use these codes:
+            <ul>
+                <li><b>d</b> = day number (1, 2, 3…)</li>
+                <li><b>dd</b> = day with zero (01, 02, 03…)</li>
+                <li><b>M</b> = month number (1, 2, 3…)</li>
+                <li><b>MM</b> = month with zero (01, 02, 03…)</li>
+                <li><b>MMM</b> = short month name (Muh, Saf, Rab…)</li>
+                <li><b>MMMM</b> = full month name (Muharram, Safar…)</li>
+                <li><b>yy</b> = short year (47, 48…)</li>
+                <li><b>yyyy</b> = full year (1447, 1448…)</li>
+                <li><b>EE</b> = short week day (Thu, Fri…)</li>
+                <li><b>EEEE</b> = full week day (Thursday, Friday…)</li>
+            </ul>
+            <br>
+            Examples:
+            <ul>
+                <li><b>dd/MM/yyyy</b> = 21/02/1447</li>
+                <li><b>MMMM d, yyyy</b> = Safar 21, 1447</li>
+                <li><b>EE, MMMM d, yyyy</b> = Fri, Safar 21, 1447</li>
+                <li><b>d-M-yy</b> = 21-2-47</li>
+            </ul>
+            <br>
+            Mix and match these codes with slashes, dashes, spaces, or commas to create your preferred date style.
+            <br>
+            <br>
+            By default the language used for displaying these codes, is ar-SA but you can specify a different language by using this syntax:
+            <br>
+            <br>
+                 &#x2000;&#x2000;&#x2000;&#x2000;<big>&lt;language-code&gt;{date-code}</big>
+            <br>
+            <br>
+            Examples:
+            <ul>
+                <li><b>en-GB{dd/MMMM/yyyy}</b>= 21/Safar/1447</li>
+                <li><b>ar-SA{dd MMMM yyyy}</b>= &#x200F;۲۱ صفر ۱٤٤۷</li>
+                <li><b>hi-IN{dd MMMM yyyy}</b>= 06 सफर 1447</li>
+                <li><b>tr-TR{dd MMMM yyyy}</b>= 06 Rebiülevvel 1447</li>
+            </ul>
+            <br>
+            You can also mix and match multiple languages:
+            <ul>
+            <li><b>en-GB{dd}/ar-SA{MMMM}/en-GB{yyyy}</b> = 21/صفر&#x200E;/1447</li>
+            <li><b>en-GB{dd} ar-SA{MMMM} en-GB{yyyy}</b> = 21 صفر&#x200E; 1447</li>
+            </ul>
+            <br>
+            For the full list of language identifiers:
+            <br>
+            <a href="%1$s">%1$s</a>
+            ]]>
+    </string>
+    <string name="preferences_functionality_group_title">Functionality</string>
+    <string name="preferences_date_format_title">Date Format</string>
+    <string name="preferences_date_format_description">Customize how the Hijri date appears by choosing a format pattern</string>
+    <string name="preferences_day_start_title">Day Start (%s)</string>
+    <string name="preferences_day_start_description">Set when the Hijri day begins based on your local or religious preference</string>
+    <string name="preferences_calendar_calculation_method_title">Calendar Calculation Method</string>
+    <string name="preferences_calendar_calculation_method_description">Choose the method used to calculate Hijri dates</string>
+    <string name="preferences_day_offset_title">Day Offset</string>
+    <string name="preferences_day_offset_description">Adjust Hijri date by ±1 day to match local moon sightings or personal observance</string>
+    <string name="preferences_appearance_group_title">Appearance</string>
+    <string name="preferences_color_title">Color</string>
+    <string name="preferences_color_description">Choose the widget text and background color</string>
+    <string name="preferences_text_size_title">Text Size</string>
+    <string name="preferences_text_size_description">Change the widget text size</string>
+    <string name="preferences_text_shadow_title">Text Shadow</string>
+    <string name="preferences_text_shadow_description">Enable or disable the widget text shadow</string>
+    <string name="preferences_misc_group_title">Misc.</string>
+    <string name="preferences_restore_defaults_title">Restore defaults</string>
+    <string name="preferences_restore_defaults_description">Restore the default preferences</string>
+    <string name="preferences_about_title">About</string>
+    <string name="preferences_about_description">App info, version details, and changelog.</string>
+    <string name="reset_to_default">Reset to default</string>
+    <string name="changelog">Changelog</string>
+    <string name="widget_updated">Widget updated!</string>
 </resources>

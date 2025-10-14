@@ -9,10 +9,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import me.amrbashir.hijriwidget.HijriDateCalculationMethod
+import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
 import me.amrbashir.hijriwidget.preference_activity.composableWithAnimatedContentScopeProvider
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
@@ -49,11 +51,11 @@ internal fun CalendarCalculationMethodScreen() {
                 .imePadding()
                 .verticalScroll(rememberScrollState())
         ) {
-            PreferenceGroup(label = "Calendar Calculation Method") {
+            PreferenceGroup(label = stringResource(R.string.preferences_calendar_calculation_method_title)) {
                 for (method in HijriDateCalculationMethod.entries) {
                     PreferenceTemplate(
-                        label = method.label,
-                        description = method.description,
+                        label = stringResource(method.label),
+                        description = stringResource(method.description),
                         icon = { RadioIcon(selected = savedMethod.id == method.id) },
                         onClick = {
                             prefsManager.calendarCalculationMethod.value = method

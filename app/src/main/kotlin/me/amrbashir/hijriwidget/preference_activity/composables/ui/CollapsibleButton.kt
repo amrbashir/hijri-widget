@@ -1,3 +1,5 @@
+package me.amrbashir.hijriwidget.preference_activity.composables.ui
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
@@ -14,7 +16,6 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import me.amrbashir.hijriwidget.R
-import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceTemplate
 
 @Composable
 fun CollapsibleButton(

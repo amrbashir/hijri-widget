@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">الويدجت الهجري</string>
+    <string name="app_description">ويدجت لعرض التاريخ الهجري</string>
+    <string name="home_screen_stub_text">هذه شاشة مؤقتة، استعدادًا لدعم تعدد الويدجتس</string>
+    <string name="color_mode_dynamic_description">لون ديناميكى بناءً على خلفية جهازك</string>
+    <string name="color_mode_system">النظام</string>
+    <string name="color_mode_system_description">لون فاتح أو داكن بناءً على إعدادات الجهاز</string>
+    <string name="color_mode_dark">داكن</string>
+    <string name="color_mode_dark_description">لون داكن، عادةً أسود</string>
+    <string name="color_mode_light">فاتح</string>
+    <string name="color_mode_light_description">لون فاتح، عادةً أبيض</string>
+    <string name="color_mode_transparent">شفاف</string>
+    <string name="color_mode_transparent_description">لون شفاف</string>
+    <string name="color_mode_custom">مخصص</string>
+    <string name="color_mode_custom_description">اختر لونًا مخصصًا</string>
+    <string name="hijri_date_calculation_method_islamic_label">إسلامي</string>
+    <string name="hijri_date_calculation_method_islamic_description">يستخدم حسابات فلكية بحتة لتحديد متى يظهر القمر الجديد</string>
+    <string name="hijri_date_calculation_method_islamic_umalqura_label">أم القرى</string>
+    <string name="hijri_date_calculation_method_islamic_umalqura_description">بناءً على الحسابات المستخدمة في جامعة أم القرى بمكة المكرمة</string>
+    <string name="hijri_date_calculation_method_islamic_civil_label">مدني</string>
+    <string name="hijri_date_calculation_method_islamic_civil_description">يستخدم نهجًا حسابيًا ثابتًا مع دورة مدتها 30 عامًا</string>
+    <string name="about_screen_title">حول</string>
+    <string name="quick_link_privacy">الخصوصية</string>
+    <string name="text_color">لون النص</string>
+    <string name="background_color">لون الخلفية</string>
+    <string name="day_start_description"><![CDATA[
+            <p>- ص: يبدأ اليوم الهجري <b>بعد</b> اليوم الميلادي</p>
+            <p>- م: يبدأ اليوم الهجري <b>قبل</b> اليوم الميلادي</p>
+            ]]>
+    </string>
+    <string name="cancel">إلغاء</string>
+    <string name="confirm">تأكيد</string>
+    <string name="date_format_group_title">الصيغة</string>
+    <string name="date_format_custom">مخصص</string>
+    <string name="date_format_custom_description">"حدد نمط تنسيق تاريخ مخصص (على سبيل المثال، 'dd/MM/yyyy', 'EEEE', 'MMMM d')"</string>
+    <string name="date_format_guide"><![CDATA[
+            تخصيص كيفية ظهور التاريخ على الويدجت
+            <br>
+            <br>
+            يمكنك استخدام هذه الرموز:
+            <ul>
+                <li><b>d</b> = رقم اليوم (1، 2، 3…)</li>
+                <li><b>dd</b> = رقم اليوم مع صفر (01، 02، 03…)</li>
+                <li><b>M</b> = رقم الشهر (1، 2، 3…)</li>
+                <li><b>MM</b> = رقم الشهر مع صفر (01، 02، 03…)</li>
+                <li><b>MMM</b> = اسم الشهر المختصر (محرم، صفر، ربيع…)</li>
+                <li><b>MMMM</b> = اسم الشهر الكامل (محرم، صفر…)</li>
+                <li><b>yy</b> = السنة مختصرة (47، 48…)</li>
+                <li><b>yyyy</b> = السنة كاملة (1447، 1448…)</li>
+                <li><b>EE</b> = اسم يوم الأسبوع المختصر (خميس، جمعة…)</li>
+                <li><b>EEEE</b> = اسم يوم الأسبوع الكامل (الخميس، الجمعة…)</li>
+            </ul>
+            <br>
+            أمثلة:
+            <ul>
+                <li><b>dd/MM/yyyy</b> = 21/02/1447</li>
+                <li><b>MMMM d, yyyy</b> = 21 صفر، 1447</li>
+                <li><b>EE, MMMM d, yyyy</b> = جمعة، 21 صفر، 1447</li>
+                <li><b>d-M-yy</b> = 21-2-47</li>
+            </ul>
+            <br>
+            اخلط وطابق هذه الرموز مع الشرطات المائلة أو الواصلة أو المسافات أو الفواصل لإنشاء نمط التاريخ المفضل لديك.
+            <br>
+            <br>
+            بشكل افتراضي، اللغة المستخدمة لعرض هذه الرموز هي ar-SA ولكن يمكنك تحديد لغة مختلفة باستخدام هذا النحو:
+            <br>
+            <br>
+                 &#x2000;&#x2000;&#x2000;&#x2000;<big>&lt;language-code&gt;{date-code}</big>
+            <br>
+            <br>
+            أمثلة:
+            <ul>
+                <li><b>en-GB{dd/MMMM/yyyy}</b>= 21/Safar/1447</li>
+                <li><b>ar-SA{dd MMMM yyyy}</b>= &#x200F;۲۱ صفر ۱٤٤۷</li>
+                <li><b>hi-IN{dd MMMM yyyy}</b>= 06 सफर 1447</li>
+                <li><b>tr-TR{dd MMMM yyyy}</b>= 06 Rebiülevvel 1447</li>
+            </ul>
+            <br>
+            يمكنك أيضًا خلط ومطابقة لغات متعددة:
+            <ul>
+            <li><b>en-GB{dd}/ar-SA{MMMM}/en-GB{yyyy}</b> = 21/صفر&#x200E;/1447</li>
+            <li><b>en-GB{dd} ar-SA{MMMM} en-GB{yyyy}</b> = 21 صفر&#x200E; 1447</li>
+            </ul>
+            <br>
+            للحصول على القائمة الكاملة لمعرفات اللغة:
+            <br>
+            <a href="%1$s">%1$s</a>
+            ]]>
+    </string>
+    <string name="preferences_functionality_group_title">الوظائف</string>
+    <string name="preferences_date_format_title">صيغة التاريخ</string>
+    <string name="preferences_date_format_description">خصص كيفية ظهور التاريخ الهجري باختيار نمط تنسيق</string>
+    <string name="preferences_day_start_title">بداية اليوم (%s)</string>
+    <string name="preferences_day_start_description">حدد متى يبدأ اليوم الهجري بناءً على تفضيلك المحلي أو الديني</string>
+    <string name="preferences_calendar_calculation_method_title">طريقة حساب التقويم</string>
+    <string name="preferences_calendar_calculation_method_description">اختر الطريقة المستخدمة لحساب التواريخ الهجرية</string>
+    <string name="preferences_day_offset_title">تعديل اليوم</string>
+    <string name="preferences_day_offset_description">اضبط التاريخ الهجري بمقدار ± 1 يوم لمطابقة رؤية الهلال المحلية أو المراعاة الشخصية</string>
+    <string name="preferences_appearance_group_title">المظهر</string>
+    <string name="preferences_color_title">اللون</string>
+    <string name="preferences_color_description">اختر لون نص الويدجت وخلفيته</string>
+    <string name="preferences_text_size_title">حجم النص</string>
+    <string name="preferences_text_size_description">غيّر حجم نص الويدجت</string>
+    <string name="preferences_text_shadow_title">ظل النص</string>
+    <string name="preferences_text_shadow_description">تمكين أو تعطيل ظل نص الويدجت</string>
+    <string name="preferences_misc_group_title">متنوع</string>
+    <string name="preferences_restore_defaults_title">استعادة الإعدادات الافتراضية</string>
+    <string name="preferences_restore_defaults_description">استعادة الإعدادات الافتراضية للوظائف</string>
+    <string name="preferences_about_title">حول</string>
+    <string name="preferences_about_description">معلومات التطبيق وتفاصيل الإصدار وسجل التغييرات.</string>
+    <string name="reset_to_default">إعادة تعيين إلى الافتراضي</string>
+    <string name="changelog">سجل التغييرات</string>
+    <string name="widget_updated">تم تحديث الويدجت!</string>
+</resources>

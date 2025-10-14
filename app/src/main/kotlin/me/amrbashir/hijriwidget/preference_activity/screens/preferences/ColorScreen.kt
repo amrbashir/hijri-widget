@@ -10,10 +10,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import me.amrbashir.hijriwidget.ColorMode
+import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
 import me.amrbashir.hijriwidget.preference_activity.composableWithAnimatedContentScopeProvider
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
@@ -53,11 +55,11 @@ internal fun ColorScreen() {
                 .imePadding()
                 .verticalScroll(rememberScrollState())
         ) {
-            PreferenceGroup(label = "Text Color") {
+            PreferenceGroup(label = stringResource(R.string.text_color)) {
                 for (mode in textColorModes) {
                     PreferenceTemplate(
-                        label = mode.prettyName,
-                        description = mode.description,
+                        label = stringResource(mode.label),
+                        description = stringResource(mode.description),
                         icon = { RadioIcon(selected = savedTextColorMode == mode) },
                         onClick = {
                             prefsManager.textColorMode.value = mode
@@ -76,11 +78,11 @@ internal fun ColorScreen() {
 
             }
 
-            PreferenceGroup(label = "Background Color") {
+            PreferenceGroup(label = stringResource(R.string.background_color)) {
                 for (mode in bgColorModes) {
                     PreferenceTemplate(
-                        label = mode.prettyName,
-                        description = mode.description,
+                        label = stringResource(mode.label),
+                        description = stringResource(mode.description),
                         icon = { RadioIcon(selected = savedBgColorMode == mode) },
                         onClick = {
                             prefsManager.bgColorMode.value = mode

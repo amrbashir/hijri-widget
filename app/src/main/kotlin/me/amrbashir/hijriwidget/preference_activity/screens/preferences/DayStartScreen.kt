@@ -16,12 +16,14 @@ import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.dialog
+import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.LocalNavController
 import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
 
@@ -56,12 +58,7 @@ internal fun DayStartScreen() {
             TimePicker(state = timePickerState)
 
             Text(
-                AnnotatedString.fromHtml(
-                    """
-                    <p>- AM: Hijri Day starts <b>after</b> Gregorian Day</p>
-                    <p>- PM: Hijri Day starts <b>before</b> Gregorian Day</p>
-                """.trimIndent()
-                ),
+                AnnotatedString.fromHtml(stringResource(R.string.day_start_description)),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -73,14 +70,14 @@ internal fun DayStartScreen() {
                 TextButton(onClick = {
                     navController.navigateUp()
                 }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.cancel))
                 }
 
                 Button(onClick = {
                     prefsManager.dayStart.value = timePickerState.hour * 60 + timePickerState.minute
                     navController.navigateUp()
                 }) {
-                    Text("Confirm")
+                    Text(stringResource(R.string.confirm))
                 }
             }
         }

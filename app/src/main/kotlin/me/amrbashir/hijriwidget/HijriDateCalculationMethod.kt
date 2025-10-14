@@ -1,20 +1,26 @@
 package me.amrbashir.hijriwidget
 
-enum class HijriDateCalculationMethod(val id: String, val label: String, val description: String) {
+import androidx.annotation.StringRes
+
+enum class HijriDateCalculationMethod(
+    val id: String,
+    @param:StringRes val label: Int,
+    @param:StringRes val description: Int
+) {
     ISLAMIC(
         "islamic",
-        "Isalmic",
-        "Uses pure astronomical calculations to determine when the new moon occurs"
+        R.string.hijri_date_calculation_method_islamic_label,
+        R.string.hijri_date_calculation_method_islamic_description,
     ),
     ISLAMIC_UMALQURA(
         "islamic-umalqura",
-        "Islamic Umm al-Qura",
-        "Based on the calculations used by the Umm al-Qura University in Mecca"
+        R.string.hijri_date_calculation_method_islamic_umalqura_label,
+        R.string.hijri_date_calculation_method_islamic_umalqura_description,
     ),
     ISLAMIC_CIVIL(
         "islamic-civil",
-        "Islamic Civil",
-        "Uses a fixed algorithmic approach with a 30-year cycle"
+        R.string.hijri_date_calculation_method_islamic_civil_label,
+        R.string.hijri_date_calculation_method_islamic_civil_description,
     );
 
     companion object {

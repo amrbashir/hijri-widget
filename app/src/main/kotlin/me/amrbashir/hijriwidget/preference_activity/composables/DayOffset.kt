@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
@@ -41,7 +42,7 @@ fun DayOffset() {
         ) {
             Icon(
                 painter = painterResource(R.drawable.outline_settings_backup_restore_24),
-                contentDescription = "Reset to default"
+                contentDescription = stringResource(R.string.reset_to_default)
             )
         }
     }

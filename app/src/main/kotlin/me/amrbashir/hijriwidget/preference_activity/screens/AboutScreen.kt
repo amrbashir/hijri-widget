@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.navigation.NavController
@@ -49,17 +50,29 @@ fun NavController.navigateToAbout() {
 
 
 data class QuickLink(
-    val label: String,
+    val label: Int,
     val icon: Int,
     val url: String,
 )
 
 val QUICK_LINKS = arrayOf(
-    QuickLink("GitHub", R.drawable.ic_fab_github, "https://github.com/amrbashir/hijri-widget"),
-    QuickLink("Twitter", R.drawable.ic_fab_twitter, "https://twitter.com/amrbashir_dev"),
-    QuickLink("LinkedIn", R.drawable.ic_fab_linkedin, "https://www.linkedin.com/in/amrbashir-dev"),
     QuickLink(
-        "Privacy",
+        R.string.quick_link_github,
+        R.drawable.ic_fab_github,
+        "https://github.com/amrbashir/hijri-widget"
+    ),
+    QuickLink(
+        R.string.quick_link_twitter,
+        R.drawable.ic_fab_twitter,
+        "https://twitter.com/amrbashir_dev"
+    ),
+    QuickLink(
+        R.string.quick_link_linkedin,
+        R.drawable.ic_fab_linkedin,
+        "https://www.linkedin.com/in/amrbashir-dev"
+    ),
+    QuickLink(
+        R.string.quick_link_privacy,
         R.drawable.outline_privacy_tip_24,
         "https://hijri-widget.amrbashir.me/PRIVACY.md"
     ),
@@ -68,7 +81,7 @@ val QUICK_LINKS = arrayOf(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AboutScreen() {
-    LocalAppBarTitle.current.value = "About"
+    LocalAppBarTitle.current.value = stringResource(R.string.about_screen_title)
 
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -112,7 +125,7 @@ private fun AppInfo() {
         )
 
         Text(
-            "Hijri Widget",
+            stringResource(R.string.app_name),
             style = MaterialTheme.typography.titleLarge
         )
 
@@ -153,7 +166,7 @@ private fun RowScope.QuickLinkButton(link: QuickLink) {
                 contentDescription = null,
             )
 
-            Text(link.label)
+            Text(stringResource(link.label))
         }
     }
 }

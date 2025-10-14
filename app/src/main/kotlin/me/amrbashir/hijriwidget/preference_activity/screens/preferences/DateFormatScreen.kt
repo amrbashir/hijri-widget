@@ -13,6 +13,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
@@ -22,6 +23,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import me.amrbashir.hijriwidget.DATE_FORMAT_PRESETES
 import me.amrbashir.hijriwidget.HijriDate
+import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.formatHijriDate
 import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
 import me.amrbashir.hijriwidget.preference_activity.composableWithAnimatedContentScopeProvider
@@ -56,7 +58,7 @@ internal fun DateFormatScreen() {
                 .imePadding()
                 .verticalScroll(rememberScrollState())
         ) {
-            PreferenceGroup(label = "Format") {
+            PreferenceGroup(label = stringResource(R.string.date_format_group_title)) {
                 for (format in DATE_FORMAT_PRESETES) {
                     PreferenceTemplate(
                         label = format.formatHijriDate(
@@ -73,8 +75,8 @@ internal fun DateFormatScreen() {
                 }
 
                 PreferenceTemplate(
-                    label = "Custom",
-                    description = "Specify custom date format pattern (e.g., 'dd/MM/yyyy', 'EEEE, MMMM d')",
+                    label = stringResource(R.string.date_format_custom),
+                    description = stringResource(R.string.date_format_custom_description),
                     icon = { RadioIcon(selected = prefsManager.dateIsCustomFormat.value) },
                     onClick = {
                         prefsManager.dateIsCustomFormat.value = true
@@ -110,59 +112,7 @@ private fun DateFormatGuideText() {
 
     Text(
         AnnotatedString.fromHtml(
-            """
-            Customize how the date appears on your widget
-            <br>
-            <br>
-            You can use these codes:
-            <ul>
-                <li><b>d</b> = day number (1, 2, 3...)</li>
-                <li><b>dd</b> = day with zero (01, 02, 03...)</li>
-                <li><b>M</b> = month number (1, 2, 3...)</li>
-                <li><b>MM</b> = month with zero (01, 02, 03...)</li>
-                <li><b>MMM</b> = short month name (Muh, Saf, Rab...)</li>
-                <li><b>MMMM</b> = full month name (Muharram, Safar...)</li>
-                <li><b>yy</b> = short year (47, 48...)</li>
-                <li><b>yyyy</b> = full year (1447, 1448...)</li>
-                <li><b>EE</b> = short week day (Thu, Fri...)</li>
-                <li><b>EEEE</b> = full week day (Thursday, Friday...)</li>
-            </ul>
-            <br>
-            Examples:
-            <ul>
-                <li><b>dd/MM/yyyy</b> = 21/02/1447</li>
-                <li><b>MMMM d, yyyy</b> = Safar 21, 1447</li>
-                <li><b>EE, MMMM d, yyyy</b> = Fri, Safar 21, 1447</li>
-                <li><b>d-M-yy</b> = 21-2-47</li>
-            </ul>
-            <br>
-            Mix and match these codes with slashes, dashes, spaces, or commas to create your preferred date style.
-            <br>
-            <br>
-            By default the language used for displaying these codes, is ar-SA but you can specify a different language by using this syntax:
-            <br>
-            <br>
-                 ${"\u2000\u2000\u2000\u2000"}<big>&lt;language-code&gt;{date-code}</big>
-            <br>
-            <br>
-            Examples:
-            <ul>
-                <li><b>en-GB{dd/MMMM/yyyy}</b>= 21/Safar/1447</li>
-                <li><b>ar-SA{dd MMMM yyyy}</b>= ${"\u200F"}۲۱ صفر ۱٤٤۷</li>
-                <li><b>hi-IN{dd MMMM yyyy}</b>= 06 सफर 1447</li>
-                <li><b>tr-TR{dd MMMM yyyy}</b>= 06 Rebiülevvel 1447</li>
-            </ul>
-            <br>
-            You can also mix and match multiple languages:
-            <ul>
-            <li><b>en-GB{dd}/ar-SA{MMMM}/en-GB{yyyy}</b> = 21/صفر${"\u200E"}/1447</li>
-            <li><b>en-GB{dd} ar-SA{MMMM} en-GB{yyyy}</b> = 21 صفر${"\u200E"} 1447</li>
-            </ul>
-            <br>
-            For the full list of language identifiers:
-            <br>
-            <a href="$languageIDsURL">$languageIDsURL</a>
-            """.trimIndent(),
+            stringResource(id = R.string.date_format_guide, languageIDsURL),
             linkStyles,
         ),
         modifier = Modifier.fillMaxWidth(),

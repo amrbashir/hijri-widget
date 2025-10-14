@@ -14,7 +14,9 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import kotlinx.coroutines.launch
+import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.android.AlarmReceiver
 import me.amrbashir.hijriwidget.isDark
 import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
@@ -87,6 +89,7 @@ private fun SaveButton(
     val snackBarHostState = LocalSnackBarHostState.current
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+    val widgetUpdatedMessage = stringResource(R.string.widget_updated)
 
     val saveAction: () -> Unit = {
         prefsManager.save(context)
@@ -98,7 +101,7 @@ private fun SaveButton(
             if (closeOnSave) {
                 onFinish()
             } else {
-                snackBarHostState.showSnackbar("Widget updated!", withDismissAction = true)
+                snackBarHostState.showSnackbar(widgetUpdatedMessage, withDismissAction = true)
             }
         }
     }
