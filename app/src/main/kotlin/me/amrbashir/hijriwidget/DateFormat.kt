@@ -13,11 +13,12 @@ val DATE_FORMAT_PRESETES = arrayOf(
     "en-GB{d / MM / yy}",
 )
 
-data class FormatSegment(val langCode: String?, val format: String)
+data class DateFormatSegment(val langCode: String?, val format: String)
 
-fun parseFormatString(input: String): List<FormatSegment> {
+fun parseDateFormat(input: String): List<DateFormatSegment> {
+    // Regex to parse a string like "en-GB{dd}"
     val regex = Regex("""([a-z-A-Z]{2}-[a-z-A-Z]{2})\{([^}]+)\}""")
-    val result = mutableListOf<FormatSegment>()
+    val result = mutableListOf<DateFormatSegment>()
     var currentIndex = 0
 
     for (match in regex.findAll(input)) {
@@ -25,22 +26,32 @@ fun parseFormatString(input: String): List<FormatSegment> {
         val matchEnd = match.range.last + 1
 
         // Add literal text before the match
+        // for example: dd MMMM en-GB{yyyy}
+        //              ^^^^^^^^
+        // or for example: en-GB{dd} MMMM en-GB{yyyy}
+        //                           ^^^^
         if (matchStart > currentIndex) {
             val literal = input.substring(currentIndex, matchStart)
-            result.add(FormatSegment(null, literal))
+            result.add(DateFormatSegment(null, literal))
         }
 
         // Add the language-format pair
         val langCode = match.groupValues[1]
         val formatStr = match.groupValues[2]
-        result.add(FormatSegment(langCode, formatStr))
+        result.add(DateFormatSegment(langCode, formatStr))
 
+        // Update the current index for the next iteration
         currentIndex = matchEnd
     }
 
     // Add any trailing literal text
+    // for example: en-GB{dd MMMM} yyyy
+    //                             ^^^^
+    // or in case there was never language-format pair, add whole string
+    // for example: dd MMMM yyyy
+    //              ^^^^^^^^^^^^^
     if (currentIndex < input.length) {
-        result.add(FormatSegment(null, input.substring(currentIndex)))
+        result.add(DateFormatSegment(null, input.substring(currentIndex)))
     }
 
     return result
@@ -49,18 +60,22 @@ fun parseFormatString(input: String): List<FormatSegment> {
 
 @SuppressLint("SimpleDateFormat")
 fun String.formatHijriDate(date: Calendar, calcMethod: HijriDateCalculationMethod): String {
-    return parseFormatString(this).fold("") { acc, it ->
+    return parseDateFormat(this).fold("") { acc, it ->
         val locale = ULocale("${it.langCode ?: "ar-SA"}@calendar=${calcMethod.id}")
         try {
             val dateFormatter = SimpleDateFormat(it.format, locale)
-            val formatted = dateFormatter.format(date)
+            var formatted = dateFormatter.format(date)
+
             // In mixed languages, like `en-GB{dd} ar-SA{MMMM} en-GB{yyyy}`,
             // adding LTR marker after the output of RTL segments `ar-SA{MMMM}` -> `صفر\u2000E`
             // will force the flow of characters to stay consistent i.e left-to-right, while keeping flow
             // from right-to-left, if the formatted output is all RTL like `ar-SA{dd MMMM yyyy}`
-            val leftToRightMarker = if (formatted.any { it.isRtl() }) "\u200E" else ""
-            acc + formatted + leftToRightMarker
+            formatted += if (formatted.any { it.isRtl() }) "\u200E" else ""
+
+            acc + formatted
         } catch (_: Exception) {
+            // if failed to format probably due to invalid format
+            // just add the format as is
             acc + it.format
         }
     }
