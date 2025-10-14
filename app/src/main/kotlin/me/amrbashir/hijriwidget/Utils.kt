@@ -14,6 +14,7 @@ import androidx.glance.appwidget.cornerRadius
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Date
+import java.util.Locale
 
 fun Char.isRtl(): Boolean = when (Character.getDirectionality(this)) {
     Character.DIRECTIONALITY_RIGHT_TO_LEFT,
@@ -51,9 +52,9 @@ fun GlanceModifier.widgetCornerRadius(): GlanceModifier {
 fun Modifier.widgetCornerRadius(context: Context): Modifier {
     val cornerRadiusModifier =
         if (Build.VERSION.SDK_INT >= 31) {
-            val radius =
-                context.resources.getDimension(android.R.dimen.system_app_widget_background_radius)
-            Modifier.clip(RoundedCornerShape(radius.toFloat()))
+            val radiusId = android.R.dimen.system_app_widget_background_radius
+            val radius = context.resources.getDimension(radiusId)
+            Modifier.clip(RoundedCornerShape(radius))
         } else {
             Modifier
         }
@@ -65,13 +66,15 @@ fun Modifier.widgetCornerRadius(context: Context): Modifier {
 fun Int.formatTime(): String? {
     val hour = this / 60
     val minute = this % 60
-    val localTime = LocalTime.of(
-        hour, minute
-    )
+    val localTime = LocalTime.of(hour, minute)
     return localTime.format(DateTimeFormatter.ofPattern("hh:mm a"))
 }
 
-fun getLocalDateTime(date: Long = System.currentTimeMillis()): String {
-    val dateFormatter = DateFormat.getDateTimeInstance()
+fun logTimestamp(date: Long = System.currentTimeMillis()): String {
+    val dateFormatter = DateFormat.getDateTimeInstance(
+        DateFormat.DEFAULT,
+        DateFormat.DEFAULT,
+        Locale.ENGLISH
+    )
     return dateFormatter.format(Date(date))
 }

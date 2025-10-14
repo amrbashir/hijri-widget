@@ -11,7 +11,7 @@ import android.os.Build
 import android.util.Log
 import kotlinx.coroutines.runBlocking
 import me.amrbashir.hijriwidget.PreferencesManager
-import me.amrbashir.hijriwidget.getLocalDateTime
+import me.amrbashir.hijriwidget.logTimestamp
 import me.amrbashir.hijriwidget.preference_activity.changeLauncherIcon
 import me.amrbashir.hijriwidget.widget.HijriWidget
 
@@ -19,7 +19,7 @@ import me.amrbashir.hijriwidget.widget.HijriWidget
 class AlarmReceiver : BroadcastReceiver() {
     @SuppressLint("UnsafeProtectedBroadcastReceiver")
     override fun onReceive(context: Context, intent: Intent) {
-        Log.d("AlarmReceiver", "Alarm fired at: ${getLocalDateTime()}")
+        Log.d("AlarmReceiver", "Alarm fired at: ${logTimestamp()}")
 
         val prefsManager = PreferencesManager.load(context)
 
@@ -68,7 +68,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 )
             )
 
-            Log.d("AlarmReceiver", "Next alarm will fire at: ${getLocalDateTime(nextUpdateMillis)}")
+            Log.d("AlarmReceiver", "Next alarm will fire at: ${logTimestamp(nextUpdateMillis)}")
         }
     }
 }
