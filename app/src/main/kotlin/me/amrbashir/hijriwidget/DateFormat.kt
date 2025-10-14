@@ -1,16 +1,19 @@
 package me.amrbashir.hijriwidget
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.icu.util.ULocale
 
 val DATE_FORMAT_PRESETES = arrayOf(
     "d MMMM yyyy",
-    "en-GB{d MMMM yyyy}",
-    "en-GB{d} ar-SA{MMMM} en-GB{yyyy}",
     "d / MM / yy",
+    "ar-SA{d MMMM yyyy}",
+    "en-GB{d MMMM yyyy}",
+    "ar-SA{d / MM / yy}",
     "en-GB{d / MM / yy}",
+    "en-GB{d} ar-SA{MMMM} en-GB{yyyy}",
 )
 
 data class DateFormatSegment(val langCode: String?, val format: String)
@@ -59,9 +62,11 @@ fun parseDateFormat(input: String): List<DateFormatSegment> {
 
 
 @SuppressLint("SimpleDateFormat")
-fun String.formatHijriDate(date: Calendar, calcMethod: HijriDateCalculationMethod): String {
+fun String.formatHijriDate(context: Context, date: Calendar, calcMethod: HijriDateCalculationMethod): String {
+    val currentLocale = context.resources.configuration.locales[0]
+
     return parseDateFormat(this).fold("") { acc, it ->
-        val locale = ULocale("${it.langCode ?: "ar-SA"}@calendar=${calcMethod.id}")
+        val locale = ULocale("${it.langCode ?: currentLocale}@calendar=${calcMethod.id}")
         try {
             val dateFormatter = SimpleDateFormat(it.format, locale)
             var formatted = dateFormatter.format(date)

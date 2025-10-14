@@ -13,6 +13,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -45,6 +46,7 @@ fun NavController.navigateToDateFormat() {
 @Composable
 internal fun DateFormatScreen() {
     val prefsManager = LocalPreferencesManager.current
+    val context = LocalContext.current
 
     val savedFormat = prefsManager.dateFormat.value
 
@@ -62,8 +64,9 @@ internal fun DateFormatScreen() {
                 for (format in DATE_FORMAT_PRESETES) {
                     PreferenceTemplate(
                         label = format.formatHijriDate(
+                            context,
                             HijriDate.today(prefsManager),
-                            prefsManager.calendarCalculationMethod.value
+                            prefsManager.calendarCalculationMethod.value,
                         ),
                         description = format,
                         icon = { RadioIcon(selected = !prefsManager.dateIsCustomFormat.value && savedFormat == format) },

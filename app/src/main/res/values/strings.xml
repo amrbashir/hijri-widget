@@ -68,7 +68,7 @@
             Mix and match these codes with slashes, dashes, spaces, or commas to create your preferred date style.
             <br>
             <br>
-            By default the language used for displaying these codes, is ar-SA but you can specify a different language by using this syntax:
+            By default the language used for displaying these codes, is the device current language but you can specify a different language by using this syntax:
             <br>
             <br>
                  &#x2000;&#x2000;&#x2000;&#x2000;<big>&lt;language-code&gt;{date-code}</big>

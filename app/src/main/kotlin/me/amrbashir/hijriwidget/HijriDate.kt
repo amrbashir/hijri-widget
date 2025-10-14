@@ -1,5 +1,6 @@
 package me.amrbashir.hijriwidget
 
+import android.content.Context
 import android.icu.util.Calendar
 import android.icu.util.ULocale
 
@@ -43,14 +44,14 @@ object HijriDate {
         return calendar
     }
 
-    fun todayFormatted(prefsManager: PreferencesManager): String {
+    fun todayFormatted(context: Context, prefsManager: PreferencesManager): String {
         val format = if (prefsManager.dateIsCustomFormat.value) {
             prefsManager.dateCustomFormat.value
         } else {
             prefsManager.dateFormat.value
         }
         val today = today(prefsManager)
-        return format.formatHijriDate(today, prefsManager.calendarCalculationMethod.value)
+        return format.formatHijriDate(context, today, prefsManager.calendarCalculationMethod.value)
     }
 
     fun todayNumber(prefsManager: PreferencesManager): Int {

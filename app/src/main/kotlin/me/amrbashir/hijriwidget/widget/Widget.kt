@@ -72,7 +72,7 @@ class HijriWidget : GlanceAppWidget() {
         val remoteViews = RemoteViews(LocalContext.current.packageName, remoteViewLayout)
 
 
-        val date = HijriDate.todayFormatted(prefsManager)
+        val date = HijriDate.todayFormatted(context, prefsManager)
         remoteViews.setTextViewText(remoteViewId, date)
 
         remoteViews.setTextViewTextSize(
