@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.1.0] - 2025-10-15
+
 ### Added
 
 - Added "Arabic" translation for the application.
