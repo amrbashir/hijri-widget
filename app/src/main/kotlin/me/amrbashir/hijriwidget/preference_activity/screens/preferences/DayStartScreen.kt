@@ -60,7 +60,7 @@ internal fun DayStartScreen() {
             Text(
                 AnnotatedString.fromHtml(stringResource(R.string.day_start_description)),
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
 
             Row(

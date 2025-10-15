@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed bullet points rendering for Arabic locale
+
 ## [1.1.0] - 2025-10-15
 
 ### Added

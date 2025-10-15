@@ -39,26 +39,22 @@
             <br>
             <br>
             يمكنك استخدام هذه الرموز:
-            <ul>
-                <li><b>d</b> = رقم اليوم (1، 2، 3…)</li>
-                <li><b>dd</b> = رقم اليوم مع صفر (01، 02، 03…)</li>
-                <li><b>M</b> = رقم الشهر (1، 2، 3…)</li>
-                <li><b>MM</b> = رقم الشهر مع صفر (01، 02، 03…)</li>
-                <li><b>MMM</b> = اسم الشهر المختصر (محرم، صفر، ربيع…)</li>
-                <li><b>MMMM</b> = اسم الشهر الكامل (محرم، صفر…)</li>
-                <li><b>yy</b> = السنة مختصرة (47، 48…)</li>
-                <li><b>yyyy</b> = السنة كاملة (1447، 1448…)</li>
-                <li><b>EE</b> = اسم يوم الأسبوع المختصر (خميس، جمعة…)</li>
-                <li><b>EEEE</b> = اسم يوم الأسبوع الكامل (الخميس، الجمعة…)</li>
-            </ul>
+            <p>- <b>d</b> = رقم اليوم (1، 2، 3…)</p>
+            <p>- <b>dd</b> = رقم اليوم مع صفر (01، 02، 03…)</p>
+            <p>- <b>M</b> = رقم الشهر (1، 2، 3…)</p>
+            <p>- <b>MM</b> = رقم الشهر مع صفر (01، 02، 03…)</p>
+            <p>- <b>MMM</b> = اسم الشهر المختصر (محرم، صفر، ربيع…)</p>
+            <p>- <b>MMMM</b> = اسم الشهر الكامل (محرم، صفر…)</p>
+            <p>- <b>yy</b> = السنة مختصرة (47، 48…)</p>
+            <p>- <b>yyyy</b> = السنة كاملة (1447، 1448…)</p>
+            <p>- <b>EE</b> = اسم يوم الأسبوع المختصر (خميس، جمعة…)</p>
+            <p>- <b>EEEE</b> = اسم يوم الأسبوع الكامل (الخميس، الجمعة…)</p>
             <br>
             أمثلة:
-            <ul>
-                <li><b>dd/MM/yyyy</b> = 21/02/1447</li>
-                <li><b>MMMM d, yyyy</b> = 21 صفر، 1447</li>
-                <li><b>EE, MMMM d, yyyy</b> = جمعة، 21 صفر، 1447</li>
-                <li><b>d-M-yy</b> = 21-2-47</li>
-            </ul>
+            <p>- <b>dd/MM/yyyy</b> = 21/02/1447</p>
+            <p>- <b>MMMM d, yyyy</b> = 21 صفر، 1447</p>
+            <p>- <b>EE, MMMM d, yyyy</b> = جمعة، 21 صفر، 1447</p>
+            <p>- <b>d-M-yy</b> = 21-2-47</p>
             <br>
             اخلط وطابق هذه الرموز مع الشرطات المائلة أو الواصلة أو المسافات أو الفواصل لإنشاء نمط التاريخ المفضل لديك.
             <br>
@@ -70,18 +66,14 @@
             <br>
             <br>
             أمثلة:
-            <ul>
-                <li><b>en-GB{dd/MMMM/yyyy}</b>= 21/Safar/1447</li>
-                <li><b>ar-SA{dd MMMM yyyy}</b>= &#x200F;۲۱ صفر ۱٤٤۷</li>
-                <li><b>hi-IN{dd MMMM yyyy}</b>= 06 सफर 1447</li>
-                <li><b>tr-TR{dd MMMM yyyy}</b>= 06 Rebiülevvel 1447</li>
-            </ul>
+            <p>- <b>en-GB{dd/MMMM/yyyy}</b>= 21/Safar/1447</p>
+            <p>- <b>ar-SA{dd MMMM yyyy}</b>= &#x200F;۲۱ صفر ۱٤٤۷</p>
+            <p>- <b>hi-IN{dd MMMM yyyy}</b>= 06 सफर 1447</p>
+            <p>- <b>tr-TR{dd MMMM yyyy}</b>= 06 Rebiülevvel 1447</p>
             <br>
             يمكنك أيضًا خلط ومطابقة لغات متعددة:
-            <ul>
-            <li><b>en-GB{dd}/ar-SA{MMMM}/en-GB{yyyy}</b> = 21/صفر&#x200E;/1447</li>
-            <li><b>en-GB{dd} ar-SA{MMMM} en-GB{yyyy}</b> = 21 صفر&#x200E; 1447</li>
-            </ul>
+            <p>- <b>en-GB{dd}/ar-SA{MMMM}/en-GB{yyyy}</b> = 21/صفر&#x200E;/1447</p>
+            <p>- <b>en-GB{dd} ar-SA{MMMM} en-GB{yyyy}</b> = 21 صفر&#x200E; 1447</p>
             <br>
             للحصول على القائمة الكاملة لمعرفات اللغة:
             <br>
@@ -112,5 +104,5 @@
     <string name="reset_to_default">إعادة تعيين إلى الافتراضي</string>
     <string name="changelog">سجل التغييرات</string>
     <string name="widget_updated">تم تحديث الويدجت!</string>
-    <string name="checkout_the_full_changelog"><![CDATA[Checkout the full Changelog at: <a href=\"%1$s\">%1$s</a>]]></string>
+    <string name="checkout_the_full_changelog"><![CDATA[اطلع على سجل التغييرات الكامل على: <a href="%1$s">%1$s</a>]]></string>
 </resources>

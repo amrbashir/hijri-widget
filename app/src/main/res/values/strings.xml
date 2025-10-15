@@ -44,26 +44,22 @@
             <br>
             <br>
             You can use these codes:
-            <ul>
-                <li><b>d</b> = day number (1, 2, 3…)</li>
-                <li><b>dd</b> = day with zero (01, 02, 03…)</li>
-                <li><b>M</b> = month number (1, 2, 3…)</li>
-                <li><b>MM</b> = month with zero (01, 02, 03…)</li>
-                <li><b>MMM</b> = short month name (Muh, Saf, Rab…)</li>
-                <li><b>MMMM</b> = full month name (Muharram, Safar…)</li>
-                <li><b>yy</b> = short year (47, 48…)</li>
-                <li><b>yyyy</b> = full year (1447, 1448…)</li>
-                <li><b>EE</b> = short week day (Thu, Fri…)</li>
-                <li><b>EEEE</b> = full week day (Thursday, Friday…)</li>
-            </ul>
+            <p>- <b>d</b> = day number (1, 2, 3…)</p>
+            <p>- <b>dd</b> = day with zero (01, 02, 03…)</p>
+            <p>- <b>M</b> = month number (1, 2, 3…)</p>
+            <p>- <b>MM</b> = month with zero (01, 02, 03…)</p>
+            <p>- <b>MMM</b> = short month name (Muh, Saf, Rab…)</p>
+            <p>- <b>MMMM</b> = full month name (Muharram, Safar…)</p>
+            <p>- <b>yy</b> = short year (47, 48…)</p>
+            <p>- <b>yyyy</b> = full year (1447, 1448…)</p>
+            <p>- <b>EE</b> = short week day (Thu, Fri…)</p>
+            <p>- <b>EEEE</b> = full week day (Thursday, Friday…)</p>
             <br>
             Examples:
-            <ul>
-                <li><b>dd/MM/yyyy</b> = 21/02/1447</li>
-                <li><b>MMMM d, yyyy</b> = Safar 21, 1447</li>
-                <li><b>EE, MMMM d, yyyy</b> = Fri, Safar 21, 1447</li>
-                <li><b>d-M-yy</b> = 21-2-47</li>
-            </ul>
+            <p>- <b>dd/MM/yyyy</b> = 21/02/1447</p>
+            <p>- <b>MMMM d, yyyy</b> = Safar 21, 1447</p>
+            <p>- <b>EE, MMMM d, yyyy</b> = Fri, Safar 21, 1447</p>
+            <p>- <b>d-M-yy</b> = 21-2-47</p>
             <br>
             Mix and match these codes with slashes, dashes, spaces, or commas to create your preferred date style.
             <br>
@@ -75,18 +71,14 @@
             <br>
             <br>
             Examples:
-            <ul>
-                <li><b>en-GB{dd/MMMM/yyyy}</b>= 21/Safar/1447</li>
-                <li><b>ar-SA{dd MMMM yyyy}</b>= &#x200F;۲۱ صفر ۱٤٤۷</li>
-                <li><b>hi-IN{dd MMMM yyyy}</b>= 06 सफर 1447</li>
-                <li><b>tr-TR{dd MMMM yyyy}</b>= 06 Rebiülevvel 1447</li>
-            </ul>
+            <p>- <b>en-GB{dd/MMMM/yyyy}</b>= 21/Safar/1447</p>
+            <p>- <b>ar-SA{dd MMMM yyyy}</b>= &#x200F;۲۱ صفر ۱٤٤۷</p>
+            <p>- <b>hi-IN{dd MMMM yyyy}</b>= 06 सफर 1447</p>
+            <p>- <b>tr-TR{dd MMMM yyyy}</b>= 06 Rebiülevvel 1447</p>
             <br>
             You can also mix and match multiple languages:
-            <ul>
-            <li><b>en-GB{dd}/ar-SA{MMMM}/en-GB{yyyy}</b> = 21/صفر&#x200E;/1447</li>
-            <li><b>en-GB{dd} ar-SA{MMMM} en-GB{yyyy}</b> = 21 صفر&#x200E; 1447</li>
-            </ul>
+            <p>- <b>en-GB{dd}/ar-SA{MMMM}/en-GB{yyyy}</b> = 21/صفر&#x200E;/1447</p>
+            <p>- <b>en-GB{dd} ar-SA{MMMM} en-GB{yyyy}</b> = 21 صفر&#x200E; 1447</p>
             <br>
             For the full list of language identifiers:
             <br>
