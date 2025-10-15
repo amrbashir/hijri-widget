@@ -112,4 +112,5 @@
     <string name="reset_to_default">إعادة تعيين إلى الافتراضي</string>
     <string name="changelog">سجل التغييرات</string>
     <string name="widget_updated">تم تحديث الويدجت!</string>
+    <string name="checkout_the_full_changelog"><![CDATA[Checkout the full Changelog at: <a href=\"%1$s\">%1$s</a>]]></string>
 </resources>

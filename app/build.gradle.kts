@@ -61,20 +61,21 @@ tasks.register("generateChangelogFile") {
     doLast {
         val fileContent = file("../CHANGELOG.md").readText()
             .replace("# Changelog", "")
-            .replace("## [Unreleased]", "")
             .trimStart()
 
         /** Pattern to find `## [1.0.1] - 2025-08-29` */
         val versionPattern = Regex("""## \[(\d+\.\d+\.\d+)] - (\d{4}-\d{2}-\d{2})""")
 
-        val matches = versionPattern.findAll(fileContent).toList()
-
+        val matches = versionPattern.findAll(fileContent).toList().take(10)
 
         val entries = mutableListOf<String>()
 
         // Handle optional "Unreleased" section
-        if (matches.isNotEmpty() && matches.first().range.first > 0) {
-            val unreleasedContent = fileContent.substring(0, matches.first().range.first).trim()
+        val unreleasedHeader = "## [Unreleased]";
+        if (fileContent.startsWith(unreleasedHeader)) {
+            val start = unreleasedHeader.length + 1
+            val end = matches.first().range.first
+            val unreleasedContent = fileContent.substring(start, end).trim()
             if (unreleasedContent.isNotEmpty()) {
                 entries.add("""ChangelogEntry("Unreleased", ""${'"'}$unreleasedContent""${'"'})""")
             }

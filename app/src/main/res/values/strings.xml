@@ -117,4 +117,5 @@
     <string name="reset_to_default">Reset to default</string>
     <string name="changelog">Changelog</string>
     <string name="widget_updated">Widget updated!</string>
+    <string name="checkout_the_full_changelog"><![CDATA[Checkout the full Changelog at: <a href=\"%1$s\">%1$s</a>]]></string>
 </resources>
