@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.1.1] - 2025-10-16
+
 ### Fixed
 
 - Fixed bullet points rendering for Arabic locale
