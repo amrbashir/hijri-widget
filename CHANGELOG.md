@@ -5,7 +5,7 @@
 ### Fixed
 
 - Fixed bullet points rendering for Arabic locale
-- Made daily periodic scheduler to work in older than 'S' Android versions
+- Fixed daily periodic scheduler on Android 11 and below which prevented the widget from updating the date automatically. 
 
 ## [1.1.0] - 2025-10-15
 
