@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.res.painterResource
+import androidx.core.graphics.toColorInt
 import com.godaddy.android.colorpicker.ClassicColorPicker
 import com.godaddy.android.colorpicker.HsvColor
 import kotlinx.coroutines.launch
@@ -44,7 +45,7 @@ fun ColorPicker(
 
     val updateColorFromHexCodeAction = { hexStr: String ->
         hexColor = hexStr.removePrefix("#").take(8)
-        val parsedColor = hexColor.toColor()
+        val parsedColor = runCatching { Color(hexColor.toColorInt()) }.getOrNull()
         if (parsedColor != null) {
             initColor = parsedColor
             onColorChanged(parsedColor)
@@ -87,25 +88,6 @@ fun ColorPicker(
             }
         }
     )
-}
-
-private fun String.toColor(): Color? {
-    // Remove any leading # if present
-    var cleanHex = this.removePrefix("#")
-
-    // Append F to complete AARRGGBB format
-    if (cleanHex.length < 8) cleanHex += "f".repeat(8 - cleanHex.length)
-
-    try {
-        val a = cleanHex.substring(0, 2).hexToInt()
-        val r = cleanHex.substring(2, 4).hexToInt()
-        val g = cleanHex.substring(4, 6).hexToInt()
-        val b = cleanHex.substring(6, 8).hexToInt()
-
-        return Color(r, g, b, a)
-    } catch (_: Exception) {
-        return null
-    }
 }
 
 private fun Color.toHex(): String {
