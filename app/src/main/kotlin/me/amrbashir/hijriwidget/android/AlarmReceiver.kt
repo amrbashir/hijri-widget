@@ -7,8 +7,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.icu.util.Calendar
-import android.os.Build
 import android.util.Log
+import androidx.core.app.AlarmManagerCompat
+import androidx.core.content.getSystemService
 import kotlinx.coroutines.runBlocking
 import me.amrbashir.hijriwidget.PreferencesManager
 import me.amrbashir.hijriwidget.logTimestamp
@@ -48,11 +49,8 @@ class AlarmReceiver : BroadcastReceiver() {
         }
 
         fun setup24Periodic(context: Context, prefsManager: PreferencesManager) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return
-
-            val service = Context.ALARM_SERVICE
-            val alarmManager = context.getSystemService(service) as AlarmManager? ?: return
-            if (!alarmManager.canScheduleExactAlarms()) return
+            val alarmManager = context.getSystemService<AlarmManager>() ?: return
+            if (!AlarmManagerCompat.canScheduleExactAlarms(alarmManager)) return
 
             val nextUpdateMillis = nextUpdateDateInMillis(prefsManager)
 

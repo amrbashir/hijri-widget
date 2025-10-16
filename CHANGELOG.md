@@ -5,6 +5,7 @@
 ### Fixed
 
 - Fixed bullet points rendering for Arabic locale
+- Made daily periodic scheduler to work in older than 'S' Android versions
 
 ## [1.1.0] - 2025-10-15
 
