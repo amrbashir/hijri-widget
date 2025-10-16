@@ -38,7 +38,7 @@
     <string name="confirm">Confirm</string>
     <string name="date_format_group_title">Format</string>
     <string name="date_format_custom">Custom</string>
-    <string name="date_format_custom_description">"Specify custom date format pattern (e.g., 'dd/MM/yyyy', 'EEEE', 'MMMM d')"</string>
+    <string name="date_format_custom_description">"Specify custom date format pattern (e.g., 'dd-MM-yyyy', 'EEEE', 'MMMM d')"</string>
     <string name="date_format_guide"><![CDATA[
             Customize how the date appears on your widget
             <br>

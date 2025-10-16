@@ -18,6 +18,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.fromHtml
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -119,7 +120,8 @@ private fun DateFormatGuideText() {
         style = MaterialTheme.typography.bodyMedium.merge(
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
                 alpha = 0.7F
-            )
+            ),
+            textDirection = TextDirection.ContentOrLtr,
         ),
     )
 }

@@ -33,7 +33,7 @@
     <string name="confirm">تأكيد</string>
     <string name="date_format_group_title">الصيغة</string>
     <string name="date_format_custom">مخصص</string>
-    <string name="date_format_custom_description">"حدد نمط تنسيق تاريخ مخصص (على سبيل المثال، 'dd/MM/yyyy', 'EEEE', 'MMMM d')"</string>
+    <string name="date_format_custom_description">"حدد نمط تنسيق تاريخ مخصص (على سبيل المثال، 'dd-MM-yyyy', 'EEEE', 'MMMM d')"</string>
     <string name="date_format_guide"><![CDATA[
             تخصيص كيفية ظهور التاريخ على الويدجت
             <br>
