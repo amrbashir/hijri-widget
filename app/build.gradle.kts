@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.konan.properties.suffix
+import org.jetbrains.kotlin.util.prefixIfNot
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -83,8 +86,8 @@ tasks.register("generateChangelogFile") {
             .replace("# Changelog", "")
             .trimStart()
 
-        /** Pattern to find `## [1.0.1] - 2025-08-29` */
-        val versionPattern = Regex("""## \[(\d+\.\d+\.\d+)] - (\d{4}-\d{2}-\d{2})""")
+        /** Pattern to find `## [1.0.1] - 2025-08-29\n <Release Changelog>` */
+        val versionPattern = Regex("""^##\s*\[([^]]+)]\s*-\s*(\d{4}-\d{2}-\d{2})((?s:.*?))(?=^##\s*\[|\Z)""", RegexOption.MULTILINE)
 
         val matches = versionPattern.findAll(fileContent).toList().take(10)
 
@@ -102,13 +105,10 @@ tasks.register("generateChangelogFile") {
         }
 
         // Handle versioned sections
-        matches.forEachIndexed { index, match ->
+        matches.forEach { match ->
             val version = match.groupValues[1]
             val date = match.groupValues[2]
-            val start = match.range.last + 1
-            val end =
-                if (index + 1 < matches.size) matches[index + 1].range.first else fileContent.length
-            val content = fileContent.substring(start, end).trim()
+            val content = match.groupValues[3].trim()
             entries.add("""ChangelogEntry("$version - $date", ""${'"'}$content""${'"'})""")
         }
 
