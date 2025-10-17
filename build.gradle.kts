@@ -5,6 +5,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose") version "2.2.10" apply false
 }
 
+// Setup environment variables from .env files
 rootProject.file(".env").readLines().forEach { line ->
     if (line.isNotBlank()) {
         val splits = line.split("=")

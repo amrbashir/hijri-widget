@@ -4,7 +4,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
-val gitSha = "git rev-parse --short HEAD".execute(project.rootDir)
+val gitSha = "git rev-parse --short HEAD".executeCommand()
 
 android {
     namespace = "me.amrbashir.hijriwidget"
@@ -58,6 +58,25 @@ android {
     }
 }
 
+dependencies {
+    implementation(platform("androidx.compose:compose-bom:2025.10.00"))
+    implementation("androidx.core:core-ktx:1.17.0")
+    implementation("com.google.android.material:material:1.13.0")
+    implementation("androidx.compose.material3:material3:1.4.0")
+    implementation("androidx.compose.material:material-icons-extended:1.7.8")
+    implementation("androidx.activity:activity-ktx:1.11.0")
+    implementation("androidx.activity:activity-compose:1.11.0")
+    implementation("androidx.glance:glance-appwidget:1.2.0-beta01")
+    implementation("androidx.glance:glance-material3:1.2.0-beta01")
+    implementation("androidx.navigation:navigation-compose:2.9.5")
+    implementation("com.github.jeziellago:compose-markdown:0.5.7")
+    implementation("com.godaddy.android.colorpicker:compose-color-picker:0.7.0")
+
+    debugImplementation("androidx.compose.ui:ui-tooling")
+}
+
+// Generate Changelog file containing last 10 releases from CHANGELOG.md
+// which are embedded and displayed in the app
 tasks.register("generateChangelogFile") {
     doLast {
         val fileContent = file("../CHANGELOG.md").readText()
@@ -72,7 +91,7 @@ tasks.register("generateChangelogFile") {
         val entries = mutableListOf<String>()
 
         // Handle optional "Unreleased" section
-        val unreleasedHeader = "## [Unreleased]";
+        val unreleasedHeader = "## [Unreleased]"
         if (fileContent.startsWith(unreleasedHeader)) {
             val start = unreleasedHeader.length + 1
             val end = matches.first().range.first
@@ -117,23 +136,9 @@ tasks.named("preBuild") {
     dependsOn("generateChangelogFile")
 }
 
-dependencies {
-    implementation(platform("androidx.compose:compose-bom:2025.08.01"))
-    implementation("androidx.core:core-ktx:1.17.0")
-    implementation("androidx.compose.material3:material3:1.3.2")
-    implementation("com.google.android.material:material:1.12.0")
-    implementation("androidx.activity:activity-ktx:1.10.1")
-    implementation("androidx.activity:activity-compose:1.10.1")
-    implementation("androidx.glance:glance-appwidget:1.2.0-beta01")
-    implementation("androidx.glance:glance-material3:1.2.0-beta01")
-    implementation("androidx.navigation:navigation-compose:2.9.3")
-    implementation("com.github.jeziellago:compose-markdown:0.5.7")
-    implementation("com.godaddy.android.colorpicker:compose-color-picker:0.7.0")
 
-    debugImplementation("androidx.compose.ui:ui-tooling")
-}
-
-fun String.execute(workingDir: File = rootDir): String {
+// Utilities
+fun String.executeCommand(workingDir: File = project.rootDir): String {
     val process = ProcessBuilder(*this.split(" ").toTypedArray())
         .directory(workingDir)
         .redirectErrorStream(true)

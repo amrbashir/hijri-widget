@@ -1,8 +1,8 @@
 package me.amrbashir.hijriwidget.preference_activity.composables
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -74,7 +74,7 @@ private fun GoBackButton(
 
     IconButton(onClick = goBackAction) {
         Icon(
-            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+            imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
             contentDescription = null
         )
     }
@@ -108,7 +108,7 @@ private fun SaveButton(
 
     IconButton(onClick = saveAction) {
         Icon(
-            imageVector = Icons.Default.Check,
+            imageVector = Icons.Outlined.Check,
             contentDescription = null,
         )
     }
