@@ -1,6 +1,3 @@
-import org.jetbrains.kotlin.konan.properties.suffix
-import org.jetbrains.kotlin.util.prefixIfNot
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -100,7 +97,11 @@ tasks.register("generateChangelogFile") {
             val end = matches.first().range.first
             val unreleasedContent = fileContent.substring(start, end).trim()
             if (unreleasedContent.isNotEmpty()) {
-                entries.add("""ChangelogEntry("Unreleased", ""${'"'}$unreleasedContent""${'"'})""")
+                entries.add("""ChangelogEntry(
+        header = "Unreleased",
+        content = ""${'"'}$unreleasedContent""${'"'},
+)"""
+                )
             }
         }
 
@@ -109,23 +110,28 @@ tasks.register("generateChangelogFile") {
             val version = match.groupValues[1]
             val date = match.groupValues[2]
             val content = match.groupValues[3].trim()
-            entries.add("""ChangelogEntry("$version - $date", ""${'"'}$content""${'"'})""")
+            entries.add("""ChangelogEntry(
+        header = "$version - $date",
+        content = ""${'"'}$content""${'"'},
+)"""
+            )
         }
 
-        val generatedCode = """
-            package me.amrbashir.hijriwidget
+        val generatedCode = """/**
+ * Automatically generated file. DO NOT MODIFY
+ */
+package me.amrbashir.hijriwidget
 
-            data class ChangelogEntry(
-                val header: String,
-                val content: String
-            )
+data class ChangelogEntry(
+    val header: String,
+    val content: String
+)
 
-            val CHANGELOG = arrayOf<ChangelogEntry>(
-                ${entries.joinToString(", ")}
-            )
-        """.trimIndent()
+val CHANGELOG = arrayOf<ChangelogEntry>(
+    ${entries.joinToString(",\n    ")}
+)"""
 
-        val outputFile = file("build/generated/source/me/amrbashir/hijriwidget/CHANGELOG.kt")
+        val outputFile = file("build/generated/source/changelog/me/amrbashir/hijriwidget/CHANGELOG.kt")
         println(outputFile)
         outputFile.parentFile.mkdirs()
         outputFile.writeText(generatedCode)
