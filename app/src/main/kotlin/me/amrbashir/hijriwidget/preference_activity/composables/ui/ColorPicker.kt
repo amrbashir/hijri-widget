@@ -3,6 +3,8 @@ package me.amrbashir.hijriwidget.preference_activity.composables.ui
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ContentPaste
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -18,11 +20,9 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboard
-import androidx.compose.ui.res.painterResource
 import com.godaddy.android.colorpicker.ClassicColorPicker
 import com.godaddy.android.colorpicker.HsvColor
 import kotlinx.coroutines.launch
-import me.amrbashir.hijriwidget.R
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -81,7 +81,7 @@ fun ColorPicker(
             IconButton(onClick = pasteColorFromClipboardAction) {
                 Icon(
                     modifier = Modifier.fillMaxHeight(),
-                    painter = painterResource(R.drawable.outline_content_paste_24),
+                    imageVector = Icons.Outlined.ContentPaste,
                     contentDescription = null,
                 )
             }

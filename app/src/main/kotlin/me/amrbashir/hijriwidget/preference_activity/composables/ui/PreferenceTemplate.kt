@@ -1,6 +1,5 @@
 package me.amrbashir.hijriwidget.preference_activity.composables.ui
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import me.amrbashir.hijriwidget.addIf
 
@@ -28,7 +26,7 @@ import me.amrbashir.hijriwidget.addIf
 fun PreferenceTemplate(
     label: String,
     modifier: Modifier = Modifier,
-    @DrawableRes iconResId: Int? = null,
+    icon: ImageVector,
     iconModifier: Modifier = Modifier,
     enabled: Boolean = true,
     description: String? = null,
@@ -37,15 +35,13 @@ fun PreferenceTemplate(
     content: (@Composable () -> Unit)? = null
 ) {
     PreferenceTemplate(
-        icon = iconResId?.let {
-            {
-                Icon(
-                    imageVector = ImageVector.vectorResource(iconResId),
-                    contentDescription = null,
-                    modifier = iconModifier.size(24.dp),
-                    tint = MaterialTheme.colorScheme.primary,
-                )
-            }
+        icon = {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = iconModifier.size(24.dp),
+                tint = MaterialTheme.colorScheme.primary,
+            )
         },
         label = label,
         modifier = modifier,

@@ -2,6 +2,8 @@ package me.amrbashir.hijriwidget.preference_activity.composables
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.SettingsBackupRestore
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Slider
@@ -9,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import me.amrbashir.hijriwidget.R
@@ -41,7 +42,7 @@ fun DayOffset() {
             }
         ) {
             Icon(
-                painter = painterResource(R.drawable.outline_settings_backup_restore_24),
+                imageVector = Icons.Outlined.SettingsBackupRestore,
                 contentDescription = stringResource(R.string.reset_to_default)
             )
         }

@@ -7,6 +7,16 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccessTime
+import androidx.compose.material.icons.outlined.Brightness6
+import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.ColorLens
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.MoreTime
+import androidx.compose.material.icons.outlined.SettingsBackupRestore
+import androidx.compose.material.icons.outlined.TextIncrease
+import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
@@ -56,7 +66,7 @@ internal fun PreferenceListScreen() {
                 PreferenceTemplate(
                     label = stringResource(R.string.preferences_date_format_title),
                     description = stringResource(R.string.preferences_date_format_description),
-                    iconResId = R.drawable.outline_translate_24,
+                    icon = Icons.Outlined.Translate,
                     onClick = {
                         navController.navigateToDateFormat()
                     }
@@ -68,7 +78,7 @@ internal fun PreferenceListScreen() {
                         prefsManager.dayStart.value.formatTime() ?: ""
                     ),
                     description = stringResource(R.string.preferences_day_start_description),
-                    iconResId = R.drawable.outline_access_time_24,
+                    icon = Icons.Outlined.AccessTime,
                     onClick = {
                         navController.navigateToDayStart()
                     }
@@ -77,7 +87,7 @@ internal fun PreferenceListScreen() {
                 PreferenceTemplate(
                     label = stringResource(R.string.preferences_calendar_calculation_method_title),
                     description = stringResource(R.string.preferences_calendar_calculation_method_description),
-                    iconResId = R.drawable.outline_calendar_month_24,
+                    icon = Icons.Outlined.CalendarMonth,
                     onClick = {
                         navController.navigateToCalendarCalculationMethod()
                     }
@@ -86,7 +96,7 @@ internal fun PreferenceListScreen() {
                 PreferenceTemplate(
                     label = stringResource(R.string.preferences_day_offset_title),
                     description = stringResource(R.string.preferences_day_offset_description),
-                    iconResId = R.drawable.outline_more_time_24,
+                    icon = Icons.Outlined.MoreTime,
                 ) {
                     DayOffset()
                 }
@@ -96,7 +106,7 @@ internal fun PreferenceListScreen() {
                 PreferenceTemplate(
                     label = stringResource(R.string.preferences_color_title),
                     description = stringResource(R.string.preferences_color_description),
-                    iconResId = R.drawable.outline_color_lens_24,
+                    icon = Icons.Outlined.ColorLens,
                     onClick = {
                         navController.navigateToColor()
                     }
@@ -105,7 +115,7 @@ internal fun PreferenceListScreen() {
                 PreferenceTemplate(
                     label = stringResource(R.string.preferences_text_size_title),
                     description = stringResource(R.string.preferences_text_size_description),
-                    iconResId = R.drawable.outline_text_increase_24,
+                    icon = Icons.Outlined.TextIncrease,
                 ) {
                     TextSize()
                 }
@@ -113,7 +123,7 @@ internal fun PreferenceListScreen() {
                 PreferenceTemplate(
                     label = stringResource(R.string.preferences_text_shadow_title),
                     description = stringResource(R.string.preferences_text_shadow_description),
-                    iconResId = R.drawable.outline_brightness_6_24,
+                    icon = Icons.Outlined.Brightness6,
                     endContent = {
                         Switch(
                             checked = prefsManager.textShadow.value,
@@ -132,7 +142,7 @@ internal fun PreferenceListScreen() {
                 PreferenceTemplate(
                     label = stringResource(R.string.preferences_restore_defaults_title),
                     description = stringResource(R.string.preferences_restore_defaults_description),
-                    iconResId = R.drawable.outline_settings_backup_restore_24,
+                    icon = Icons.Outlined.SettingsBackupRestore,
                     onClick = {
                         prefsManager.reset()
                     }
@@ -141,7 +151,7 @@ internal fun PreferenceListScreen() {
                 PreferenceTemplate(
                     label = stringResource(R.string.preferences_about_title),
                     description = stringResource(R.string.preferences_about_description),
-                    iconResId = R.drawable.outline_info_24,
+                    icon = Icons.Outlined.Info,
                     onClick = {
                         navController.navigateToAbout()
                     }

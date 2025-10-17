@@ -1,6 +1,7 @@
 package me.amrbashir.hijriwidget.preference_activity.screens
 
 import android.content.Intent
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,8 @@ import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.PrivacyTip
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -24,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -51,30 +55,31 @@ fun NavController.navigateToAbout() {
 
 data class QuickLink(
     val label: Int,
-    val icon: Int,
+    @param:DrawableRes val iconResId: Int? = null,
+    val icon: ImageVector? = null,
     val url: String,
 )
 
 val QUICK_LINKS = arrayOf(
     QuickLink(
-        R.string.quick_link_github,
-        R.drawable.ic_fab_github,
-        "https://github.com/amrbashir/hijri-widget"
+        label = R.string.quick_link_github,
+        iconResId = R.drawable.ic_fab_github,
+        url = "https://github.com/amrbashir/hijri-widget"
     ),
     QuickLink(
-        R.string.quick_link_twitter,
-        R.drawable.ic_fab_twitter,
-        "https://twitter.com/amrbashir_dev"
+        label = R.string.quick_link_twitter,
+        iconResId = R.drawable.ic_fab_twitter,
+        url = "https://twitter.com/amrbashir_dev"
     ),
     QuickLink(
-        R.string.quick_link_linkedin,
-        R.drawable.ic_fab_linkedin,
-        "https://www.linkedin.com/in/amrbashir-dev"
+        label = R.string.quick_link_linkedin,
+        iconResId = R.drawable.ic_fab_linkedin,
+        url ="https://www.linkedin.com/in/amrbashir-dev"
     ),
     QuickLink(
-        R.string.quick_link_privacy,
-        R.drawable.outline_privacy_tip_24,
-        "https://hijri-widget.amrbashir.me/PRIVACY.md"
+        label = R.string.quick_link_privacy,
+        icon = Icons.Outlined.PrivacyTip,
+        url ="https://hijri-widget.amrbashir.me/PRIVACY.md"
     ),
 )
 
@@ -160,13 +165,30 @@ private fun RowScope.QuickLinkButton(link: QuickLink) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Icon(
-                modifier = Modifier.requiredSize(24.dp),
-                painter = painterResource(link.icon),
-                contentDescription = null,
-            )
+            QuickLinkButtonIcon(link)
 
             Text(stringResource(link.label))
         }
+    }
+}
+
+@Composable
+private fun QuickLinkButtonIcon(link: QuickLink) {
+    val modifier = Modifier.requiredSize(24.dp)
+
+    link.iconResId?.let {
+        Image(
+            painter = painterResource(link.iconResId),
+            contentDescription = null,
+            modifier = modifier
+        )
+    }
+
+    link.icon?.let {
+        Icon(
+            imageVector = link.icon,
+            contentDescription = null,
+            modifier = modifier
+        )
     }
 }

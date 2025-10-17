@@ -4,6 +4,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -13,9 +15,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
-import me.amrbashir.hijriwidget.R
 
 @Composable
 fun CollapsibleButton(
@@ -34,7 +33,7 @@ fun CollapsibleButton(
         header,
         endContent = {
             Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.outline_keyboard_arrow_down_24),
+                imageVector = Icons.Outlined.KeyboardArrowDown,
                 contentDescription = null,
                 modifier = Modifier.rotate(arrowRotation)
             )
