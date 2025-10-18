@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.icu.text.DateFormat
 import android.os.Build
+import android.util.Log
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -78,3 +79,5 @@ fun logTimestamp(date: Long = System.currentTimeMillis()): String {
     )
     return dateFormatter.format(Date(date))
 }
+
+val logException = fun(tr: Throwable) { Log.e("Exception", null, tr) }

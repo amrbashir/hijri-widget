@@ -339,10 +339,10 @@ fun migratePreferences(sharedPreferences: SharedPreferences) {
         if (sharedPreferences.contains(CALENDAR_CALCULATION_METHOD_KEY)) {
             val method = sharedPreferences.getString(CALENDAR_CALCULATION_METHOD_KEY, null)
             if (!method.isNullOrEmpty()) {
-                try {
+                runCatching {
                     HijriDateCalculationMethod.valueOf(method)
                     // if success, no need for migrations
-                } catch (_: Exception) {
+                }.onFailure(logException).getOrElse {
                     val methodAsEnum = HijriDateCalculationMethod.fromId(method)
                     putString(CALENDAR_CALCULATION_METHOD_KEY, methodAsEnum.toString())
                 }

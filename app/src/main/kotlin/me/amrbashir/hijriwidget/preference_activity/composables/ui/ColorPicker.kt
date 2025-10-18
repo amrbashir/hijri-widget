@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalClipboard
 import com.godaddy.android.colorpicker.ClassicColorPicker
 import com.godaddy.android.colorpicker.HsvColor
 import kotlinx.coroutines.launch
+import me.amrbashir.hijriwidget.logException
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -96,16 +97,14 @@ private fun String.toColor(): Color? {
     // Append F to complete AARRGGBB format
     if (cleanHex.length < 8) cleanHex += "f".repeat(8 - cleanHex.length)
 
-    try {
+    return runCatching {
         val a = cleanHex.substring(0, 2).hexToInt()
         val r = cleanHex.substring(2, 4).hexToInt()
         val g = cleanHex.substring(4, 6).hexToInt()
         val b = cleanHex.substring(6, 8).hexToInt()
 
-        return Color(r, g, b, a)
-    } catch (_: Exception) {
-        return null
-    }
+        Color(r, g, b, a)
+    }.onFailure(logException).getOrNull()
 }
 
 private fun Color.toHex(): String {

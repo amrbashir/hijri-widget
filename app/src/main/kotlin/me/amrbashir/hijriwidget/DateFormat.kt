@@ -62,7 +62,7 @@ fun parseDateFormat(input: String): List<DateFormatSegment> {
 fun String.formatHijriDate(date: Calendar, calcMethod: HijriDateCalculationMethod): String {
     return parseDateFormat(this).fold("") { acc, it ->
         val locale = ULocale("${it.langCode ?: "ar-SA"}@calendar=${calcMethod.id}")
-        try {
+        runCatching {
             val dateFormatter = SimpleDateFormat(it.format, locale)
             var formatted = dateFormatter.format(date)
 
@@ -73,7 +73,7 @@ fun String.formatHijriDate(date: Calendar, calcMethod: HijriDateCalculationMetho
             formatted += if (formatted.any { it.isRtl() }) "\u200E" else ""
 
             acc + formatted
-        } catch (_: Exception) {
+        }.onFailure(logException).getOrElse { _ ->
             // if failed to format probably due to invalid format
             // just add the format as is
             acc + it.format
