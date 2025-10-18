@@ -2,12 +2,16 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Minor updates and improvements
+
 ## [1.1.1] - 2025-10-16
 
 ### Fixed
 
 - Fixed bullet points rendering for Arabic locale
-- Fixed daily periodic scheduler on Android 11 and below which prevented the widget from updating the date automatically. 
+- Fixed daily periodic scheduler on Android 11 and below which prevented the widget from updating the date automatically.
 
 ## [1.1.0] - 2025-10-15
 

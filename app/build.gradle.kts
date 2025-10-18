@@ -79,6 +79,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
 }
 
+// Download top 5 contributors from GitHub and generate a kotlin file containing
+// their avatars and usernames.
 tasks.register("generateGitHubContributors") {
     doFirst {
         val contributorsAPIUrl = "https://api.github.com/repos/amrbashir/hijri-widget/contributors"
