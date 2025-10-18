@@ -13,7 +13,7 @@ fun changeLauncherIcon(context: Context, prefsManager: PreferencesManager) {
         if (!BuildConfig.DEBUG) {
             val cls = "me.amrbashir.hijriwidget.preference_activity.PreferenceActivity"
             val mainActivity = ComponentName(context, cls)
-            add(mainActivity to PackageManager.COMPONENT_ENABLED_STATE_DISABLED)
+            add(Pair(mainActivity, PackageManager.COMPONENT_ENABLED_STATE_DISABLED))
         }
 
         val today = HijriDate.todayNumber(prefsManager)
@@ -22,18 +22,17 @@ fun changeLauncherIcon(context: Context, prefsManager: PreferencesManager) {
             val dayActivity = ComponentName(context, cls)
             val newState = if (today == day) PackageManager.COMPONENT_ENABLED_STATE_ENABLED
             else PackageManager.COMPONENT_ENABLED_STATE_DISABLED
-            add(dayActivity to newState)
+            add(Pair(dayActivity, newState))
         }
     }
 
     val packageManager = context.packageManager
     val flags = PackageManager.DONT_KILL_APP
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        packageManager.setComponentEnabledSettings(
-            actions.map { (componentName, newState) ->
-                PackageManager.ComponentEnabledSetting(componentName, newState, flags)
-            }
-        )
+        val settings = actions.map { (componentName, newState) ->
+            PackageManager.ComponentEnabledSetting(componentName, newState, flags)
+        }
+        packageManager.setComponentEnabledSettings(settings)
     } else {
         actions.forEach { (componentName, newState) ->
             packageManager.setComponentEnabledSetting(componentName, newState, flags)
