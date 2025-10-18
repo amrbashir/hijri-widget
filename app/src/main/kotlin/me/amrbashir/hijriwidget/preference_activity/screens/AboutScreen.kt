@@ -12,11 +12,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.PrivacyTip
+import androidx.compose.material.icons.filled.PrivacyTip
+import androidx.compose.material.icons.outlined.People
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -38,9 +40,12 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import me.amrbashir.hijriwidget.BuildConfig
+import me.amrbashir.hijriwidget.CONTRIBUTORS
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
 import me.amrbashir.hijriwidget.preference_activity.composables.Changelog
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceTemplate
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.adaptiveIconPainterResource
 
 const val ABOUT_DESTINATION = "/About"
@@ -75,12 +80,12 @@ val QUICK_LINKS = arrayOf(
     QuickLink(
         label = R.string.quick_link_linkedin,
         iconResId = R.drawable.ic_fab_linkedin,
-        url ="https://www.linkedin.com/in/amrbashir-dev"
+        url = "https://www.linkedin.com/in/amrbashir-dev"
     ),
     QuickLink(
         label = R.string.quick_link_privacy,
-        icon = Icons.Outlined.PrivacyTip,
-        url ="https://hijri-widget.amrbashir.me/PRIVACY.md"
+        icon = Icons.Filled.PrivacyTip,
+        url = "https://hijri-widget.amrbashir.me/PRIVACY.md"
     ),
 )
 
@@ -112,6 +117,8 @@ internal fun AboutScreen() {
                 QuickLinkButton(link)
             }
         }
+
+        Contributors()
 
         Changelog()
     }
@@ -167,7 +174,6 @@ private fun RowScope.QuickLinkButton(link: QuickLink) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             QuickLinkButtonIcon(link)
-
             Text(stringResource(link.label))
         }
     }
@@ -175,7 +181,7 @@ private fun RowScope.QuickLinkButton(link: QuickLink) {
 
 @Composable
 private fun QuickLinkButtonIcon(link: QuickLink) {
-    val modifier = Modifier.requiredSize(24.dp)
+    val modifier = Modifier.size(24.dp)
 
     link.iconResId?.let {
         Image(
@@ -191,6 +197,48 @@ private fun QuickLinkButtonIcon(link: QuickLink) {
             imageVector = link.icon,
             contentDescription = null,
             modifier = modifier
+        )
+    }
+}
+
+@Composable
+private fun Contributors() {
+    val context = LocalContext.current
+
+    val openLink = { url: String ->
+        context.startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                url.toUri()
+            )
+        )
+    }
+
+    PreferenceGroup(stringResource(R.string.top_contributors)) {
+        for (contributor in CONTRIBUTORS) {
+            PreferenceTemplate(
+                label = contributor.username,
+                description = stringResource(R.string.contributions, contributor.contributions),
+                onClick = { openLink(contributor.url) },
+                icon = {
+                    Image(
+                        modifier = Modifier.clip(RoundedCornerShape(100)),
+                        painter = painterResource(contributor.avatar),
+                        contentDescription = null,
+                    )
+                }
+            )
+        }
+
+        PreferenceTemplate(
+            label = stringResource(R.string.checkout_the_full_list_of_contributors),
+            onClick = { openLink("https://github.com/amrbashir/hijri-widget/graphs/contributors") },
+            icon = {
+                Icon(
+                    imageVector = Icons.Outlined.People,
+                    contentDescription = null,
+                )
+            }
         )
     }
 }

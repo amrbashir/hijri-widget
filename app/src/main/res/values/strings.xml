@@ -110,4 +110,7 @@
     <string name="changelog">Changelog</string>
     <string name="widget_updated">Widget updated!</string>
     <string name="checkout_the_full_changelog"><![CDATA[Checkout the full Changelog at: <a href=\"%1$s\">%1$s</a>]]></string>
+    <string name="top_contributors">Top Contributors</string>
+    <string name="contributions">%1$d contributions</string>
+    <string name="checkout_the_full_list_of_contributors">Checkout the full list of contributors</string>
 </resources>

@@ -1,3 +1,6 @@
+import groovy.json.JsonSlurper
+import java.net.URI
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -55,6 +58,7 @@ android {
 
     sourceSets.getByName("main") {
         kotlin.srcDir("build/generated/source")
+        res.srcDir("build/generated/resources")
     }
 }
 
@@ -75,16 +79,78 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
 }
 
+tasks.register("generateGitHubContributors") {
+    doFirst {
+        val contributorsAPIUrl = "https://api.github.com/repos/amrbashir/hijri-widget/contributors"
+        val response = URI(contributorsAPIUrl).toURL().readText()
+
+        @Suppress("UNCHECKED_CAST")
+        val contributors = JsonSlurper().parseText(response) as List<Map<String, Any>>
+
+        val drawableDir = project.file("build/generated/resources/drawable")
+        drawableDir.deleteRecursively()
+        drawableDir.mkdirs()
+
+        val entries = contributors.take(5).map { contributor ->
+            val login = contributor["login"] as String
+            val avatarUrl = contributor["avatar_url"] as String
+            val contributions = contributor["contributions"] as Int
+            val resourceName = "contributor_${login.replace('-', '_')}"
+
+            URI(avatarUrl).toURL().openStream().use { input ->
+                val avatarFile = File(drawableDir, "$resourceName.png")
+                avatarFile.outputStream().use { output -> input.copyTo(output) }
+            }
+
+            """Contributor(
+        avatar = R.drawable.$resourceName,
+        username = "$login",
+        url = "https://github.com/$login",
+        contributions = $contributions,
+    )"""
+        }
+
+        val generatedCode = """/**
+ * Automatically generated file. DO NOT MODIFY
+ */
+package me.amrbashir.hijriwidget
+
+import androidx.annotation.DrawableRes
+
+data class Contributor(
+    @param:DrawableRes val avatar: Int,
+    val username: String,
+    val url: String,
+    val contributions: Int,
+)
+
+val CONTRIBUTORS = listOf<Contributor>(
+    ${entries.joinToString(",\n    ")}
+)
+"""
+
+        val contributorsKotlinFile =
+            "build/generated/source/contributors/me/amrbashir/hijriwidget/Contributors.kt"
+        val outputFile = project.file(contributorsKotlinFile)
+        outputFile.parentFile.mkdirs()
+        outputFile.writeText(generatedCode)
+    }
+}
+
+
 // Generate Changelog file containing last 10 releases from CHANGELOG.md
 // which are embedded and displayed in the app
 tasks.register("generateChangelogFile") {
-    doLast {
+    doFirst {
         val fileContent = file("../CHANGELOG.md").readText()
             .replace("# Changelog", "")
             .trimStart()
 
         /** Pattern to find `## [1.0.1] - 2025-08-29\n <Release Changelog>` */
-        val versionPattern = Regex("""^##\s*\[([^]]+)]\s*-\s*(\d{4}-\d{2}-\d{2})((?s:.*?))(?=^##\s*\[|\Z)""", RegexOption.MULTILINE)
+        val versionPattern = Regex(
+            """^##\s*\[([^]]+)]\s*-\s*(\d{4}-\d{2}-\d{2})((?s:.*?))(?=^##\s*\[|\Z)""",
+            RegexOption.MULTILINE
+        )
 
         val matches = versionPattern.findAll(fileContent).toList().take(10)
 
@@ -97,7 +163,8 @@ tasks.register("generateChangelogFile") {
             val end = matches.first().range.first
             val unreleasedContent = fileContent.substring(start, end).trim()
             if (unreleasedContent.isNotEmpty()) {
-                entries.add("""ChangelogEntry(
+                entries.add(
+                    """ChangelogEntry(
         header = "Unreleased",
         content = ""${'"'}$unreleasedContent""${'"'},
 )"""
@@ -110,7 +177,8 @@ tasks.register("generateChangelogFile") {
             val version = match.groupValues[1]
             val date = match.groupValues[2]
             val content = match.groupValues[3].trim()
-            entries.add("""ChangelogEntry(
+            entries.add(
+                """ChangelogEntry(
         header = "$version - $date",
         content = ""${'"'}$content""${'"'},
 )"""
@@ -131,15 +199,16 @@ val CHANGELOG = arrayOf<ChangelogEntry>(
     ${entries.joinToString(",\n    ")}
 )"""
 
-        val outputFile = file("build/generated/source/changelog/me/amrbashir/hijriwidget/CHANGELOG.kt")
-        println(outputFile)
+        val changelogKotlinFile =
+            "build/generated/source/changelog/me/amrbashir/hijriwidget/CHANGELOG.kt"
+        val outputFile = project.file(changelogKotlinFile)
         outputFile.parentFile.mkdirs()
         outputFile.writeText(generatedCode)
     }
 }
 
 tasks.named("preBuild") {
-    dependsOn("generateChangelogFile")
+    dependsOn("generateGitHubContributors", "generateChangelogFile")
 }
 
 

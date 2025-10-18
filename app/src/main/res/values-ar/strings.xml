@@ -105,4 +105,7 @@
     <string name="changelog">سجل التغييرات</string>
     <string name="widget_updated">تم تحديث الويدجت!</string>
     <string name="checkout_the_full_changelog"><![CDATA[اطلع على سجل التغييرات الكامل على: <a href="%1$s">%1$s</a>]]></string>
+    <string name="top_contributors">أفضل المساهمين</string>
+    <string name="contributions">مساهمة</string>
+    <string name="checkout_the_full_list_of_contributors">اطلع على قائمة المساهمين</string>
 </resources>
