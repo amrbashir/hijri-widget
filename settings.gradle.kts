@@ -16,5 +16,4 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Hijri Widget"
 include(":app")

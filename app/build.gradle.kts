@@ -1,5 +1,6 @@
-import groovy.json.JsonSlurper
-import java.net.URI
+import me.amrbashir.hijriwidget.build.GenerateChangelogTask
+import me.amrbashir.hijriwidget.build.GenerateContributorsTask
+import java.io.File
 
 plugins {
     id("com.android.application")
@@ -20,7 +21,7 @@ android {
         targetSdk = 36
         versionCode = 21
         versionName = "1.1.1"
-        buildConfigField("String", "GIT_SHA", "\"${gitSha}\"")
+        buildConfigField("String", "GIT_SHA", "\"$gitSha\"")
     }
 
     signingConfigs {
@@ -79,135 +80,16 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
 }
 
-// Download top 5 contributors from GitHub and generate a kotlin file containing
-// their avatars and usernames.
-tasks.register("generateGitHubContributors") {
-    doFirst {
-        val contributorsAPIUrl = "https://api.github.com/repos/amrbashir/hijri-widget/contributors"
-        val response = URI(contributorsAPIUrl).toURL().readText()
-
-        @Suppress("UNCHECKED_CAST")
-        val contributors = JsonSlurper().parseText(response) as List<Map<String, Any>>
-
-        val drawableDir = project.file("build/generated/resources/drawable")
-        drawableDir.deleteRecursively()
-        drawableDir.mkdirs()
-
-        val entries = contributors.take(5).map { contributor ->
-            val login = contributor["login"] as String
-            val avatarUrl = contributor["avatar_url"] as String
-            val contributions = contributor["contributions"] as Int
-            val resourceName = "contributor_${login.replace('-', '_')}"
-
-            URI(avatarUrl).toURL().openStream().use { input ->
-                val avatarFile = File(drawableDir, "$resourceName.png")
-                avatarFile.outputStream().use { output -> input.copyTo(output) }
-            }
-
-            """Contributor(
-        avatar = R.drawable.$resourceName,
-        username = "$login",
-        url = "https://github.com/$login",
-        contributions = $contributions,
-    )"""
-        }
-
-        val generatedCode = """/**
- * Automatically generated file. DO NOT MODIFY
- */
-package me.amrbashir.hijriwidget
-
-import androidx.annotation.DrawableRes
-
-data class Contributor(
-    @param:DrawableRes val avatar: Int,
-    val username: String,
-    val url: String,
-    val contributions: Int,
-)
-
-val CONTRIBUTORS = listOf<Contributor>(
-    ${entries.joinToString(",\n    ")}
-)
-"""
-
-        val contributorsKotlinFile =
-            "build/generated/source/contributors/me/amrbashir/hijriwidget/Contributors.kt"
-        val outputFile = project.file(contributorsKotlinFile)
-        outputFile.parentFile.mkdirs()
-        outputFile.writeText(generatedCode)
-    }
+tasks.register<GenerateContributorsTask>("generateGitHubContributors") {
+    outputDir.set(layout.buildDirectory.dir("generated/source/contributors"))
+    resOutputDir.set(layout.buildDirectory.dir("generated/resources/drawable"))
 }
 
-
-// Generate Changelog file containing last 10 releases from CHANGELOG.md
-// which are embedded and displayed in the app
-tasks.register("generateChangelogFile") {
-    doFirst {
-        val fileContent = file("../CHANGELOG.md").readText()
-            .replace("# Changelog", "")
-            .trimStart()
-
-        /** Pattern to find `## [1.0.1] - 2025-08-29\n <Release Changelog>` */
-        val versionPattern = Regex(
-            """^##\s*\[([^]]+)]\s*-\s*(\d{4}-\d{2}-\d{2})((?s:.*?))(?=^##\s*\[|\Z)""",
-            RegexOption.MULTILINE
-        )
-
-        val matches = versionPattern.findAll(fileContent).toList().take(10)
-
-        val entries = mutableListOf<String>()
-
-        // Handle optional "Unreleased" section
-        val unreleasedHeader = "## [Unreleased]"
-        if (fileContent.startsWith(unreleasedHeader)) {
-            val start = unreleasedHeader.length + 1
-            val end = matches.first().range.first
-            val unreleasedContent = fileContent.substring(start, end).trim()
-            if (unreleasedContent.isNotEmpty()) {
-                entries.add(
-                    """ChangelogEntry(
-        header = "Unreleased",
-        content = ""${'"'}$unreleasedContent""${'"'},
-)"""
-                )
-            }
-        }
-
-        // Handle versioned sections
-        matches.forEach { match ->
-            val version = match.groupValues[1]
-            val date = match.groupValues[2]
-            val content = match.groupValues[3].trim()
-            entries.add(
-                """ChangelogEntry(
-        header = "$version - $date",
-        content = ""${'"'}$content""${'"'},
-)"""
-            )
-        }
-
-        val generatedCode = """/**
- * Automatically generated file. DO NOT MODIFY
- */
-package me.amrbashir.hijriwidget
-
-data class ChangelogEntry(
-    val header: String,
-    val content: String
-)
-
-val CHANGELOG = arrayOf<ChangelogEntry>(
-    ${entries.joinToString(",\n    ")}
-)"""
-
-        val changelogKotlinFile =
-            "build/generated/source/changelog/me/amrbashir/hijriwidget/CHANGELOG.kt"
-        val outputFile = project.file(changelogKotlinFile)
-        outputFile.parentFile.mkdirs()
-        outputFile.writeText(generatedCode)
-    }
+tasks.register<GenerateChangelogTask>("generateChangelogFile") {
+    changelogFile.set(rootProject.file("CHANGELOG.md"))
+    outputFile.set(layout.buildDirectory.file("generated/source/changelog/me/amrbashir/hijriwidget/CHANGELOG.kt"))
 }
+
 
 tasks.named("preBuild") {
     dependsOn("generateGitHubContributors", "generateChangelogFile")
