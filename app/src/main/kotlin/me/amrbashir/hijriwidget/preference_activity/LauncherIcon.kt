@@ -3,33 +3,40 @@ package me.amrbashir.hijriwidget.preference_activity
 import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Build
 import me.amrbashir.hijriwidget.BuildConfig
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.PreferencesManager
 
 fun changeLauncherIcon(context: Context, prefsManager: PreferencesManager) {
-    val today = HijriDate.todayNumber(prefsManager)
+    val actions = buildList {
+        if (!BuildConfig.DEBUG) {
+            val cls = "me.amrbashir.hijriwidget.preference_activity.PreferenceActivity"
+            val mainActivity = ComponentName(context, cls)
+            add(Pair(mainActivity, PackageManager.COMPONENT_ENABLED_STATE_DISABLED))
+        }
 
-    val packageManager = context.packageManager
-
-    if (!BuildConfig.DEBUG) {
-        val cls = "me.amrbashir.hijriwidget.preference_activity.PreferenceActivity"
-        val mainActivity = ComponentName(context, cls)
-        packageManager.setComponentEnabledSetting(
-            mainActivity,
-            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-            PackageManager.DONT_KILL_APP
-        )
+        val today = HijriDate.todayNumber(prefsManager)
+        for (day in 1..30) {
+            val cls = "me.amrbashir.hijriwidget.preference_activity.Calendar_$day"
+            val dayActivity = ComponentName(context, cls)
+            val newState = if (today == day) PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+            else PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+            add(Pair(dayActivity, newState))
+        }
     }
 
-    for (day in 1..30) {
-        val cls = "me.amrbashir.hijriwidget.preference_activity.Calendar_$day"
-        val dayActivity = ComponentName(context, cls)
-        packageManager.setComponentEnabledSetting(
-            dayActivity,
-            if (today == day) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-            PackageManager.DONT_KILL_APP
-        )
+    val packageManager = context.packageManager
+    val flags = PackageManager.DONT_KILL_APP
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        val settings = actions.map { (componentName, newState) ->
+            PackageManager.ComponentEnabledSetting(componentName, newState, flags)
+        }
+        packageManager.setComponentEnabledSettings(settings)
+    } else {
+        actions.forEach { (componentName, newState) ->
+            packageManager.setComponentEnabledSetting(componentName, newState, flags)
+        }
     }
 }
 
