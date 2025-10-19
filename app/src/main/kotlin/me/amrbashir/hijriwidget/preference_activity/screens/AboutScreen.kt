@@ -66,7 +66,7 @@ data class QuickLink(
     val url: String,
 )
 
-val QUICK_LINKS = arrayOf(
+val QUICK_LINKS = listOf(
     QuickLink(
         label = R.string.quick_link_github,
         iconResId = R.drawable.ic_fab_github,

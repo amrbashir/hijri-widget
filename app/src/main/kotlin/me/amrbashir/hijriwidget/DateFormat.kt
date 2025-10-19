@@ -5,7 +5,7 @@ import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.icu.util.ULocale
 
-val DATE_FORMAT_PRESETES = arrayOf(
+val DATE_FORMAT_PRESETES = listOf(
     "d MMMM yyyy",
     "en-GB{d MMMM yyyy}",
     "en-GB{d} ar-SA{MMMM} en-GB{yyyy}",
@@ -15,10 +15,9 @@ val DATE_FORMAT_PRESETES = arrayOf(
 
 data class DateFormatSegment(val langCode: String?, val format: String)
 
-fun parseDateFormat(input: String): List<DateFormatSegment> {
+fun parseDateFormat(input: String): List<DateFormatSegment> = buildList {
     // Regex to parse a string like "en-GB{dd}"
     val regex = Regex("""([a-z-A-Z]{2}-[a-z-A-Z]{2})\{([^}]+)\}""")
-    val result = mutableListOf<DateFormatSegment>()
     var currentIndex = 0
 
     for (match in regex.findAll(input)) {
@@ -32,13 +31,13 @@ fun parseDateFormat(input: String): List<DateFormatSegment> {
         //                           ^^^^
         if (matchStart > currentIndex) {
             val literal = input.substring(currentIndex, matchStart)
-            result.add(DateFormatSegment(null, literal))
+            add(DateFormatSegment(null, literal))
         }
 
         // Add the language-format pair
         val langCode = match.groupValues[1]
         val formatStr = match.groupValues[2]
-        result.add(DateFormatSegment(langCode, formatStr))
+        add(DateFormatSegment(langCode, formatStr))
 
         // Update the current index for the next iteration
         currentIndex = matchEnd
@@ -51,10 +50,8 @@ fun parseDateFormat(input: String): List<DateFormatSegment> {
     // for example: dd MMMM yyyy
     //              ^^^^^^^^^^^^^
     if (currentIndex < input.length) {
-        result.add(DateFormatSegment(null, input.substring(currentIndex)))
+        add(DateFormatSegment(null, input.substring(currentIndex)))
     }
-
-    return result
 }
 
 

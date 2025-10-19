@@ -28,34 +28,35 @@ abstract class GenerateChangelogTask : DefaultTask() {
 
         val matches = versionPattern.findAll(fileContent).toList().take(10)
 
-        val entries = mutableListOf<String>()
+        val entries = buildList {
+            // Handle optional "Unreleased" section
+            val unreleasedHeader = "## [Unreleased]"
+            if (fileContent.startsWith(unreleasedHeader)) {
+                val end =
+                    if (matches.isNotEmpty()) matches.first().range.first else fileContent.length
+                val unreleasedContent = fileContent.substring(unreleasedHeader.length, end).trim()
+                if (unreleasedContent.isNotEmpty()) {
+                    add(
+                        "ChangelogEntry(\n" +
+                                "        header = \"Unreleased\",\n" +
+                                "        content = \"\"\"$unreleasedContent\"\"\"\n" +
+                                ")"
+                    )
+                }
+            }
 
-        // Handle optional "Unreleased" section
-        val unreleasedHeader = "## [Unreleased]"
-        if (fileContent.startsWith(unreleasedHeader)) {
-            val end = if (matches.isNotEmpty()) matches.first().range.first else fileContent.length
-            val unreleasedContent = fileContent.substring(unreleasedHeader.length, end).trim()
-            if (unreleasedContent.isNotEmpty()) {
-                entries.add(
+            // Handle versioned sections
+            matches.forEach { match ->
+                val version = match.groupValues[1]
+                val date = match.groupValues[2]
+                val content = match.groupValues[3].trim()
+                add(
                     "ChangelogEntry(\n" +
-                            "        header = \"Unreleased\",\n" +
-                            "        content = \"\"\"$unreleasedContent\"\"\"\n" +
+                            "        header = \"$version - $date\",\n" +
+                            "        content = \"\"\"$content\"\"\"\n" +
                             ")"
                 )
             }
-        }
-
-        // Handle versioned sections
-        matches.forEach { match ->
-            val version = match.groupValues[1]
-            val date = match.groupValues[2]
-            val content = match.groupValues[3].trim()
-            entries.add(
-                "ChangelogEntry(\n" +
-                        "        header = \"$version - $date\",\n" +
-                        "        content = \"\"\"$content\"\"\"\n" +
-                        ")"
-            )
         }
 
         val generatedCode = """/**
@@ -68,7 +69,7 @@ data class ChangelogEntry(
     val content: String
 )
 
-val CHANGELOG = arrayOf<ChangelogEntry>(
+val CHANGELOG = listOf<ChangelogEntry>(
     ${entries.joinToString(",\n    ")}
 )"""
 
