@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.1.2] - 2025-10-19
+
 ### Fixed
 
 - Fixed widget not working on Realme and Infinix devices
