@@ -37,10 +37,12 @@ abstract class GenerateChangelogTask : DefaultTask() {
                 val unreleasedContent = fileContent.substring(unreleasedHeader.length, end).trim()
                 if (unreleasedContent.isNotEmpty()) {
                     add(
-                        "ChangelogEntry(\n" +
-                                "        header = \"Unreleased\",\n" +
-                                "        content = \"\"\"$unreleasedContent\"\"\"\n" +
-                                ")"
+                        """
+                            ChangelogEntry(
+                                header = "Unreleased",
+                                content = ""${'"'}$unreleasedContent""${'"'}
+                            )
+                        """.trimIndent()
                     )
                 }
             }
@@ -51,10 +53,12 @@ abstract class GenerateChangelogTask : DefaultTask() {
                 val date = match.groupValues[2]
                 val content = match.groupValues[3].trim()
                 add(
-                    "ChangelogEntry(\n" +
-                            "        header = \"$version - $date\",\n" +
-                            "        content = \"\"\"$content\"\"\"\n" +
-                            ")"
+                    """
+                        ChangelogEntry(
+                            header = "$version - $date",
+                            content = ""${'"'}$content""${'"'}
+                        )
+                    """.trimIndent()
                 )
             }
         }
