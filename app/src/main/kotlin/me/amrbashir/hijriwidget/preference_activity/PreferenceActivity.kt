@@ -25,9 +25,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import me.amrbashir.hijriwidget.PreferencesManager
+import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.isDark
 import me.amrbashir.hijriwidget.preference_activity.composables.TopAppBar
 
@@ -58,7 +60,7 @@ val LocalPreferencesManager = compositionLocalOf<PreferencesManager> {
     error("CompositionLocal LocalPreferencesManager not present")
 }
 
-open class PreferenceActivity(private val closeOnSave: Boolean = false) :
+class PreferenceActivity() :
     ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,9 +68,7 @@ open class PreferenceActivity(private val closeOnSave: Boolean = false) :
         enableEdgeToEdge()
 
         setContent {
-            PreferencesTheme {
-                Content()
-            }
+            PreferenceActivityContent()
         }
     }
 
@@ -77,22 +77,33 @@ open class PreferenceActivity(private val closeOnSave: Boolean = false) :
         changeLauncherIcon(this.baseContext, prefsManager)
         super.onDestroy()
     }
+}
 
-    @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
-    @Composable
-    private fun Content() {
-        val prefsManager = PreferencesManager.load(this.baseContext)
-        val appBarTitle = remember { mutableStateOf("") }
-        val navController = rememberNavController()
-        val snackBarHostState = remember { SnackbarHostState() }
-        val topAppBarState = rememberTopAppBarState()
-        val topAppBarScrollBehavior =
-            TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
+@Composable
+fun PreferenceActivityContent(
+    onSave: (suspend () -> Unit)? = null,
+) {
+    val navController = rememberNavController()
 
-        val isDark = navController.context.isDark()
-        val darkColor = MaterialTheme.colorScheme.surfaceContainer
-        val lightColor = MaterialTheme.colorScheme.surfaceContainerLow
+    val prefsManager = PreferencesManager.load(navController.context)
+    val appBarTitle = remember { mutableStateOf("") }
+    val snackBarHostState = remember { SnackbarHostState() }
+    val topAppBarState = rememberTopAppBarState()
+    val topAppBarScrollBehavior =
+        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
 
+    val isDark = navController.context.isDark()
+    val darkColor = MaterialTheme.colorScheme.surfaceContainer
+    val lightColor = MaterialTheme.colorScheme.surfaceContainerLow
+
+
+    val widgetUpdatedMessage = stringResource(R.string.widget_updated)
+    val defaultSaveAction: suspend () -> Unit = {
+        snackBarHostState.showSnackbar(widgetUpdatedMessage)
+    }
+
+    PreferenceActivityTheme {
         CompositionLocalProvider(
             LocalNavController provides navController,
             LocalSnackBarHostState provides snackBarHostState,
@@ -105,10 +116,7 @@ open class PreferenceActivity(private val closeOnSave: Boolean = false) :
                 topBar = {
                     TopAppBar(
                         scrollBehavior = topAppBarScrollBehavior,
-                        closeOnSave = this.closeOnSave,
-                        onFinish = {
-                            this.finish()
-                        }
+                        onSave = onSave ?: defaultSaveAction
                     )
                 },
                 modifier = Modifier.nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)

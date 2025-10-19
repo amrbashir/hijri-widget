@@ -1,5 +1,6 @@
 package me.amrbashir.hijriwidget.preference_activity.composables
 
+import androidx.activity.compose.LocalActivity
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Check
@@ -14,15 +15,12 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import kotlinx.coroutines.launch
-import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.android.AlarmReceiver
 import me.amrbashir.hijriwidget.isDark
 import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
 import me.amrbashir.hijriwidget.preference_activity.LocalNavController
 import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
-import me.amrbashir.hijriwidget.preference_activity.LocalSnackBarHostState
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.PREFERENCES_LIST_DESTINATION
 import me.amrbashir.hijriwidget.widget.HijriWidget
 
@@ -30,8 +28,7 @@ import me.amrbashir.hijriwidget.widget.HijriWidget
 @Composable
 fun TopAppBar(
     scrollBehavior: TopAppBarScrollBehavior,
-    onFinish: () -> Unit,
-    closeOnSave: Boolean = false,
+    onSave: suspend () -> Unit,
 ) {
     val isDark = LocalContext.current.isDark()
     val darkColor = MaterialTheme.colorScheme.surfaceContainer
@@ -45,13 +42,10 @@ fun TopAppBar(
             scrolledContainerColor = containerColor,
         ),
         scrollBehavior = scrollBehavior,
-        navigationIcon = {
-            GoBackButton(onFinish = onFinish)
-        },
+        navigationIcon = { GoBackButton() },
         actions = {
             SaveButton(
-                onFinish = onFinish,
-                closeOnSave = closeOnSave
+                onSave = onSave,
             )
         }
     )
@@ -59,14 +53,13 @@ fun TopAppBar(
 
 
 @Composable
-private fun GoBackButton(
-    onFinish: () -> Unit,
-) {
+private fun GoBackButton() {
     val navController = LocalNavController.current
+    val activity = LocalActivity.current
 
     val goBackAction: () -> Unit = {
         if (navController.currentDestination?.route == PREFERENCES_LIST_DESTINATION) {
-            onFinish()
+            activity?.finish()
         } else {
             navController.navigateUp()
         }
@@ -82,27 +75,18 @@ private fun GoBackButton(
 
 @Composable
 private fun SaveButton(
-    onFinish: () -> Unit,
-    closeOnSave: Boolean
+    onSave: suspend () -> Unit,
 ) {
     val prefsManager = LocalPreferencesManager.current
-    val snackBarHostState = LocalSnackBarHostState.current
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    val widgetUpdatedMessage = stringResource(R.string.widget_updated)
 
     val saveAction: () -> Unit = {
         prefsManager.save(context)
         coroutineScope.launch {
             HijriWidget.updateAll(context)
-
             AlarmReceiver.setup24Periodic(context, prefsManager)
-
-            if (closeOnSave) {
-                onFinish()
-            } else {
-                snackBarHostState.showSnackbar(widgetUpdatedMessage, withDismissAction = true)
-            }
+            onSave()
         }
     }
 

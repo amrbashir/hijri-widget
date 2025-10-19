@@ -59,9 +59,9 @@ fun Navigation() {
         ) {
             preferenceListDestination()
             dateFormatDestination()
+            dayStartDestination()
             calendarCalculationMethodDestination()
             colorDestination()
-            dayStartDestination()
         }
     }
 }

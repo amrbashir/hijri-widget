@@ -1,6 +1,5 @@
 import me.amrbashir.hijriwidget.build.GenerateChangelogTask
 import me.amrbashir.hijriwidget.build.GenerateContributorsTask
-import java.io.File
 
 plugins {
     id("com.android.application")

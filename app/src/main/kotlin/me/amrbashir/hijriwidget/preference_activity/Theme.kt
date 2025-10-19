@@ -471,7 +471,7 @@ val unspecified_scheme = ColorFamily(
 )
 
 @Composable
-fun PreferencesTheme(
+fun PreferenceActivityTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = true,
     content: @Composable() () -> Unit
