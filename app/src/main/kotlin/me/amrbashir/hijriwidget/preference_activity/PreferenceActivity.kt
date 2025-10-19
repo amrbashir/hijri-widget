@@ -93,17 +93,16 @@ fun PreferenceActivityContent(
     val topAppBarScrollBehavior =
         TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
 
-    val isDark = navController.context.isDark()
-    val darkColor = MaterialTheme.colorScheme.surfaceContainer
-    val lightColor = MaterialTheme.colorScheme.surfaceContainerLow
-
-
     val widgetUpdatedMessage = stringResource(R.string.widget_updated)
     val defaultSaveAction: suspend () -> Unit = {
         snackBarHostState.showSnackbar(widgetUpdatedMessage)
     }
 
     PreferenceActivityTheme {
+        val isDark = navController.context.isDark()
+        val darkColor = MaterialTheme.colorScheme.surfaceContainer
+        val lightColor = MaterialTheme.colorScheme.surfaceContainerLow
+
         CompositionLocalProvider(
             LocalNavController provides navController,
             LocalSnackBarHostState provides snackBarHostState,
