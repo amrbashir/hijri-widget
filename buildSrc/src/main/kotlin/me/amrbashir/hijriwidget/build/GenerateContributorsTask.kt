@@ -31,18 +31,27 @@ abstract class GenerateContributorsTask : DefaultTask() {
         val entries = contributors.take(5).map { contributor ->
             val login = contributor["login"] as String
             val avatarUrl = contributor["avatar_url"] as String
+            val url = contributor["html_url"] as String
             val contributions = contributor["contributions"] as Int
             val resourceName = "contributor_${login.replace('-', '_')}"
 
-            URI(avatarUrl).toURL().openStream().use { input ->
-                val avatarFile = File(drawableDir, "$resourceName.png")
+            val connection = URI(avatarUrl).toURL().openConnection()
+            val contentType = connection.contentType ?: "image/png"
+            val extension = when {
+                contentType.contains("jpeg") || contentType.contains("jpg") -> "jpg"
+                contentType.contains("webp") -> "webp"
+                else -> "png" // fallback to png
+            }
+
+            connection.getInputStream().use { input ->
+                val avatarFile = File(drawableDir, "$resourceName.$extension")
                 avatarFile.outputStream().use { output -> input.copyTo(output) }
             }
 
             """Contributor(
         avatar = R.drawable.$resourceName,
         username = "$login",
-        url = "https://github.com/$login",
+        url = "$url",
         contributions = $contributions,
     )"""
         }
