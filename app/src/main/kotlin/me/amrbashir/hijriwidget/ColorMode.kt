@@ -31,18 +31,13 @@ enum class ColorMode(@param:StringRes val label: Int, @param:StringRes val descr
     );
 
     companion object {
-        fun all(): ArrayList<ColorMode> {
-            val modes = arrayListOf(System, Dark, Light, Custom)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                modes.add(0, Dynamic)
-            }
-            return modes
+        fun all(): List<ColorMode> {
+            return listOfNotNull(
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) Dynamic else null,
+                System, Dark, Light, Custom,
+            )
         }
 
-        fun allForBg(): ArrayList<ColorMode> {
-            val modes = this.all()
-            modes.add(0, Transparent)
-            return modes
-        }
+        fun allForBg(): List<ColorMode> = listOf(Transparent) + this.all()
     }
 }
