@@ -3,15 +3,22 @@ package me.amrbashir.hijriwidget.build
 import groovy.json.JsonSlurper
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import java.io.File
 import java.net.URI
 
 abstract class GenerateContributorsTask : DefaultTask() {
 
-    @get:OutputDirectory
-    abstract val outputDir: DirectoryProperty
+    @get:Input
+    abstract val packageName: Property<String>
+
+    @get:OutputFile
+    abstract val outputFile: RegularFileProperty
 
     @get:OutputDirectory
     abstract val resOutputDir: DirectoryProperty
@@ -59,7 +66,7 @@ abstract class GenerateContributorsTask : DefaultTask() {
         val generatedCode = """/**
  * Automatically generated file. DO NOT MODIFY
  */
-package me.amrbashir.hijriwidget
+package ${packageName.get()}
 
 import androidx.annotation.DrawableRes
 
@@ -75,8 +82,8 @@ val CONTRIBUTORS = listOf<Contributor>(
 )
 """
 
-        val kotlinFile = outputDir.file("me/amrbashir/hijriwidget/Contributors.kt").get().asFile
-        kotlinFile.parentFile.mkdirs()
-        kotlinFile.writeText(generatedCode)
+        val outputFile = outputFile.get().asFile
+        outputFile.parentFile.mkdirs()
+        outputFile.writeText(generatedCode)
     }
 }

@@ -2,6 +2,8 @@ package me.amrbashir.hijriwidget.build
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
@@ -10,6 +12,9 @@ abstract class GenerateChangelogTask : DefaultTask() {
 
     @get:InputFile
     abstract val changelogFile: RegularFileProperty
+
+    @get:Input
+    abstract val packageName: Property<String>
 
     @get:OutputFile
     abstract val outputFile: RegularFileProperty
@@ -37,12 +42,10 @@ abstract class GenerateChangelogTask : DefaultTask() {
                 val unreleasedContent = fileContent.substring(unreleasedHeader.length, end).trim()
                 if (unreleasedContent.isNotEmpty()) {
                     add(
-                        """
-                            ChangelogEntry(
-                                header = "Unreleased",
-                                content = ""${'"'}$unreleasedContent""${'"'}
-                            )
-                        """.trimIndent()
+                        """ChangelogEntry(
+        header = "Unreleased",
+        content = ""${'"'}$unreleasedContent""${'"'}
+    )"""
                     )
                 }
             }
@@ -53,12 +56,10 @@ abstract class GenerateChangelogTask : DefaultTask() {
                 val date = match.groupValues[2]
                 val content = match.groupValues[3].trim()
                 add(
-                    """
-                        ChangelogEntry(
-                            header = "$version - $date",
-                            content = ""${'"'}$content""${'"'}
-                        )
-                    """.trimIndent()
+                    """ChangelogEntry(
+        header = "$version - $date",
+        content = ""${'"'}$content""${'"'}
+    )"""
                 )
             }
         }
@@ -66,7 +67,7 @@ abstract class GenerateChangelogTask : DefaultTask() {
         val generatedCode = """/**
  * Automatically generated file. DO NOT MODIFY
  */
-package me.amrbashir.hijriwidget
+package ${packageName.get()}
 
 data class ChangelogEntry(
     val header: String,
@@ -77,8 +78,8 @@ val CHANGELOG = listOf<ChangelogEntry>(
     ${entries.joinToString(",\n    ")}
 )"""
 
-        val kotlinFile = outputFile.get().asFile
-        kotlinFile.parentFile.mkdirs()
-        kotlinFile.writeText(generatedCode)
+        val outputFile = outputFile.get().asFile
+        outputFile.parentFile.mkdirs()
+        outputFile.writeText(generatedCode)
     }
 }

@@ -80,13 +80,15 @@ dependencies {
 }
 
 tasks.register<GenerateContributorsTask>("generateGitHubContributors") {
-    outputDir.set(layout.buildDirectory.dir("generated/source/contributors"))
+    packageName.set("me.amrbashir.hijriwidget")
+    outputFile.set(layout.buildDirectory.file("generated/source/contributors/me/amrbashir/hijriwidget/Contributors.kt"))
     resOutputDir.set(layout.buildDirectory.dir("generated/resources/drawable"))
 }
 
 tasks.register<GenerateChangelogTask>("generateChangelogFile") {
     changelogFile.set(rootProject.file("CHANGELOG.md"))
-    outputFile.set(layout.buildDirectory.file("generated/source/changelog/me/amrbashir/hijriwidget/CHANGELOG.kt"))
+    packageName.set("me.amrbashir.hijriwidget")
+    outputFile.set(layout.buildDirectory.file("generated/source/changelog/me/amrbashir/hijriwidget/Changelog.kt"))
 }
 
 
