@@ -30,11 +30,10 @@ import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
 import me.amrbashir.hijriwidget.preference_activity.LocalNavController
 import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
 import me.amrbashir.hijriwidget.preference_activity.composableWithAnimatedContentScopeProvider
-import me.amrbashir.hijriwidget.preference_activity.composables.DayOffset
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
-import me.amrbashir.hijriwidget.preference_activity.composables.TextSize
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceTemplate
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.ValueSlider
 import me.amrbashir.hijriwidget.preference_activity.screens.navigateToAbout
 
 const val PREFERENCES_DESTINATION = "/preferences"
@@ -98,7 +97,13 @@ internal fun PreferenceListScreen() {
                     description = stringResource(R.string.preferences_day_offset_description),
                     icon = Icons.Outlined.MoreTime,
                 ) {
-                    DayOffset()
+                    ValueSlider(
+                        value = prefsManager.dayOffset.value.toFloat(),
+                        onValueChange = { prefsManager.dayOffset.value = it.toInt() },
+                        default = prefsManager.dayOffset.default.toFloat(),
+                        valueRange = -2F..2F,
+                        steps = 3,
+                    )
                 }
             }
 
@@ -117,7 +122,13 @@ internal fun PreferenceListScreen() {
                     description = stringResource(R.string.preferences_text_size_description),
                     icon = Icons.Outlined.TextIncrease,
                 ) {
-                    TextSize()
+                    ValueSlider(
+                        value = prefsManager.textSize.value,
+                        onValueChange = { prefsManager.textSize.value = it },
+                        default = prefsManager.textSize.default,
+                        valueRange = 1F..50F,
+                        steps = 50,
+                    )
                 }
 
                 PreferenceTemplate(
