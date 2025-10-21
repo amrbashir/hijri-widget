@@ -10,7 +10,7 @@ fun TextSize() {
     ValueSlider(
         value = prefsManager.textSize.value,
         onValueChange = { prefsManager.textSize.value = it },
-        reset = prefsManager.textSize::reset,
+        default = prefsManager.textSize.default,
         valueRange = 1F..50F,
         steps = 50,
     )

@@ -1,7 +1,10 @@
 package me.amrbashir.hijriwidget.preference_activity.composables.ui
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.SettingsBackupRestore
 import androidx.compose.material3.Icon
@@ -20,14 +23,11 @@ import kotlin.math.roundToInt
 fun ValueSlider(
     value: Float,
     onValueChange: (Float) -> Unit,
-    reset: () -> Unit,
+    default: Float,
     valueRange: ClosedFloatingPointRange<Float>,
     steps: Int,
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
         Slider(
             modifier = Modifier.weight(1F),
             value = value,
@@ -36,13 +36,17 @@ fun ValueSlider(
             onValueChange = onValueChange,
         )
 
-        Text("%d".format(value.roundToInt()))
+        Text("%d".format(value.roundToInt()), Modifier.padding(start = 8.dp))
 
-        IconButton(onClick = reset) {
-            Icon(
-                imageVector = Icons.Outlined.SettingsBackupRestore,
-                contentDescription = stringResource(R.string.reset_to_default)
-            )
+        val isDefault = value == default
+        AnimatedVisibility(!isDefault) {
+            IconButton(onClick = { onValueChange(default) }) {
+                Icon(
+                    imageVector = Icons.Outlined.SettingsBackupRestore,
+                    contentDescription = stringResource(R.string.reset_to_default)
+                )
+            }
         }
+        AnimatedVisibility(isDefault) { Spacer(Modifier.width(16.dp)) }
     }
 }

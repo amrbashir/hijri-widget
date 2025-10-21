@@ -10,7 +10,7 @@ fun DayOffset() {
     ValueSlider(
         value = prefsManager.dayOffset.value.toFloat(),
         onValueChange = { prefsManager.dayOffset.value = it.toInt() },
-        reset = prefsManager.dayOffset::reset,
+        default = prefsManager.dayOffset.default.toFloat(),
         valueRange = -2F..2F,
         steps = 3,
     )
