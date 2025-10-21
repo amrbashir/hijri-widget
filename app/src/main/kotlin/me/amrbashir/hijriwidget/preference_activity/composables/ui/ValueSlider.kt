@@ -36,7 +36,7 @@ fun ValueSlider(
             onValueChange = onValueChange,
         )
 
-        Text("${value.roundToInt()}")
+        Text("%d".format(value.roundToInt()))
 
         IconButton(onClick = reset) {
             Icon(
