@@ -1,7 +1,6 @@
 package me.amrbashir.hijriwidget.preference_activity.composables
 
 import androidx.activity.compose.LocalActivity
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Check
@@ -21,6 +20,7 @@ import me.amrbashir.hijriwidget.android.AlarmReceiver
 import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
 import me.amrbashir.hijriwidget.preference_activity.LocalNavController
 import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
+import me.amrbashir.hijriwidget.preference_activity.darkLightContainerColor
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.PREFERENCES_LIST_DESTINATION
 import me.amrbashir.hijriwidget.widget.HijriWidget
 
@@ -30,10 +30,7 @@ fun TopAppBar(
     scrollBehavior: TopAppBarScrollBehavior,
     onSave: suspend () -> Unit,
 ) {
-    val isDark = isSystemInDarkTheme()
-    val darkColor = MaterialTheme.colorScheme.surfaceContainer
-    val lightColor = MaterialTheme.colorScheme.surfaceContainerLow
-    val containerColor = if (isDark) darkColor else lightColor
+    val containerColor = MaterialTheme.colorScheme.darkLightContainerColor
 
     LargeTopAppBar(
         title = { Text(LocalAppBarTitle.current.value) },

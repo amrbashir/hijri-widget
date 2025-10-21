@@ -79,7 +79,7 @@ fun WidgetPreview(
                 .height(110.dp)
                 .width(175.dp)
                 .widgetCornerRadius(context)
-                .background(prefsManager.getBgColor(context).getColor(context))
+                .background(prefsManager.getBgColor().getColor(context))
         ) {
             Text(
                 date,

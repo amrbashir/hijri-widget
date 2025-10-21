@@ -92,7 +92,7 @@ class HijriWidget : GlanceAppWidget() {
             modifier = GlanceModifier.fillMaxSize()
                 .appWidgetBackground()
                 .widgetCornerRadius()
-                .background(prefsManager.getBgColor(context))
+                .background(prefsManager.getBgColor())
                 .clickable {
                     coroutineScope.launch {
                         HijriWidget.updateAll(context)

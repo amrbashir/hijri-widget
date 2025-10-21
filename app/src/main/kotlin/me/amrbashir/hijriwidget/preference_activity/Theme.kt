@@ -2,6 +2,7 @@ package me.amrbashir.hijriwidget.preference_activity
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
@@ -492,3 +493,9 @@ fun PreferenceActivityTheme(
         content = content
     )
 }
+
+
+// Container color that is different based on whether system in dark or light theme
+val ColorScheme.darkLightContainerColor: Color
+    @Composable
+    get() = if (isSystemInDarkTheme()) this.surfaceContainer else this.surfaceContainerLow

@@ -1,8 +1,6 @@
 package me.amrbashir.hijriwidget
 
 import android.content.Context
-import android.content.res.Configuration
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.icu.text.DateFormat
 import android.os.Build
 import android.util.Log
@@ -26,11 +24,6 @@ fun Char.isRtl(): Boolean = when (Character.getDirectionality(this)) {
 
     else -> false
 }
-
-fun Context.isDark(): Boolean {
-    return resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_YES
-}
-
 
 inline fun Modifier.addIf(
     condition: Boolean,

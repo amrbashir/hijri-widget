@@ -30,7 +30,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import me.amrbashir.hijriwidget.PreferencesManager
 import me.amrbashir.hijriwidget.R
-import me.amrbashir.hijriwidget.isDark
 import me.amrbashir.hijriwidget.preference_activity.composables.TopAppBar
 
 
@@ -99,10 +98,6 @@ fun PreferenceActivityContent(
     }
 
     PreferenceActivityTheme {
-        val isDark = navController.context.isDark()
-        val darkColor = MaterialTheme.colorScheme.surfaceContainer
-        val lightColor = MaterialTheme.colorScheme.surfaceContainerLow
-
         CompositionLocalProvider(
             LocalNavController provides navController,
             LocalSnackBarHostState provides snackBarHostState,
@@ -110,7 +105,7 @@ fun PreferenceActivityContent(
             LocalPreferencesManager provides prefsManager,
         ) {
             Scaffold(
-                containerColor = if (isDark) darkColor else lightColor,
+                containerColor = MaterialTheme.colorScheme.darkLightContainerColor,
                 snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
                 topBar = {
                     TopAppBar(

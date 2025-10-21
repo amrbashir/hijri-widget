@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
@@ -88,8 +89,8 @@ class PreferencesManager {
                 context
             )
 
-            this.textColorMode.value == ColorMode.System && context.isDark() -> Color.Dark
-            this.textColorMode.value == ColorMode.System && !context.isDark() -> Color.White
+            this.textColorMode.value == ColorMode.System && isSystemInDarkTheme() -> Color.Dark
+            this.textColorMode.value == ColorMode.System && !isSystemInDarkTheme() -> Color.White
             this.textColorMode.value == ColorMode.Dark -> Color.Dark
             this.textColorMode.value == ColorMode.Light -> Color.White
             this.textColorMode.value == ColorMode.Custom -> Color(this.textCustomColor.value)
@@ -100,14 +101,17 @@ class PreferencesManager {
 
     @SuppressLint("RestrictedApi")
     @Composable
-    fun getBgColor(context: Context): ColorProvider {
+    fun getBgColor(): ColorProvider {
         return when {
             this.bgColorMode.value == ColorMode.Dynamic && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> GlanceTheme.colors.widgetBackground
-            this.bgColorMode.value == ColorMode.System && context.isDark() -> ColorProvider(
+            this.bgColorMode.value == ColorMode.System && isSystemInDarkTheme() -> ColorProvider(
                 Color.Dark
             )
 
-            this.bgColorMode.value == ColorMode.System && !context.isDark() -> ColorProvider(Color.White)
+            this.bgColorMode.value == ColorMode.System && !isSystemInDarkTheme() -> ColorProvider(
+                Color.White
+            )
+
             this.bgColorMode.value == ColorMode.Dark -> ColorProvider(Color.Dark)
             this.bgColorMode.value == ColorMode.Light -> ColorProvider(Color.White)
             this.bgColorMode.value == ColorMode.Custom -> ColorProvider(Color(this.bgCustomColor.value))
