@@ -1,6 +1,7 @@
 package me.amrbashir.hijriwidget.preference_activity.composables
 
 import androidx.activity.compose.LocalActivity
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Check
@@ -17,7 +18,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.launch
 import me.amrbashir.hijriwidget.android.AlarmReceiver
-import me.amrbashir.hijriwidget.isDark
 import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
 import me.amrbashir.hijriwidget.preference_activity.LocalNavController
 import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
@@ -30,7 +30,7 @@ fun TopAppBar(
     scrollBehavior: TopAppBarScrollBehavior,
     onSave: suspend () -> Unit,
 ) {
-    val isDark = LocalContext.current.isDark()
+    val isDark = isSystemInDarkTheme()
     val darkColor = MaterialTheme.colorScheme.surfaceContainer
     val lightColor = MaterialTheme.colorScheme.surfaceContainerLow
     val containerColor = if (isDark) darkColor else lightColor
