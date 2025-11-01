@@ -3,6 +3,8 @@ package me.amrbashir.hijriwidget.preference_activity.composables.ui
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.SettingsBackupRestore
 import androidx.compose.material3.Icon
@@ -27,7 +29,6 @@ fun ValueSlider(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Slider(
             modifier = Modifier.weight(1F),
@@ -37,10 +38,14 @@ fun ValueSlider(
             onValueChange = onValueChange,
         )
 
+        Spacer(modifier = Modifier.width(8.dp))
+
         Text(value.roundToInt().toString())
 
         val isDefault = value == default
         AnimatedVisibility(!isDefault) {
+            Spacer(modifier = Modifier.width(8.dp))
+
             IconButton(onClick = { onValueChange(default) }) {
                 Icon(
                     imageVector = Icons.Outlined.SettingsBackupRestore,
