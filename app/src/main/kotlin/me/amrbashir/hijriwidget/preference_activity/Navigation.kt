@@ -4,10 +4,13 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import me.amrbashir.hijriwidget.preference_activity.screens.HOME_DESTINATION
 import me.amrbashir.hijriwidget.preference_activity.screens.aboutDestination
 import me.amrbashir.hijriwidget.preference_activity.screens.homeDestination
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.PREFERENCES_DESTINATION
@@ -25,7 +28,7 @@ fun Navigation() {
 
     NavHost(
         navController = navController,
-        startDestination = PREFERENCES_DESTINATION,
+        startDestination = HOME_DESTINATION,
         enterTransition = {
             slideIntoContainer(
                 AnimatedContentTransitionScope.SlideDirection.Left,
@@ -55,7 +58,7 @@ fun Navigation() {
         aboutDestination()
         navigation(
             route = PREFERENCES_DESTINATION,
-            startDestination = PREFERENCES_LIST_DESTINATION
+            startDestination = PREFERENCES_LIST_DESTINATION,
         ) {
             preferenceListDestination()
             dateFormatDestination()
@@ -67,15 +70,16 @@ fun Navigation() {
 }
 
 
-fun NavGraphBuilder.composableWithAnimatedContentScopeProvider(
+fun NavGraphBuilder.animatedContentComposable(
     route: String,
-    content: @Composable () -> Unit
+    arguments: List<NamedNavArgument> = emptyList(),
+    content: @Composable (NavBackStackEntry) -> Unit
 ) {
-    composable(route) {
+    composable(route, arguments) {
         CompositionLocalProvider(
             LocalAnimatedContentScope provides this
         ) {
-            content()
+            content(it)
         }
     }
 }

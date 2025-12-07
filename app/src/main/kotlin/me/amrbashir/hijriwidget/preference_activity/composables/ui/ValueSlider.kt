@@ -1,7 +1,6 @@
 package me.amrbashir.hijriwidget.preference_activity.composables.ui
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width

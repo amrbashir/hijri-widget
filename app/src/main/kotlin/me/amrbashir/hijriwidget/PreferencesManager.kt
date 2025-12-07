@@ -15,9 +15,6 @@ import androidx.glance.unit.ColorProvider
 
 private const val PREF = "HijriWidgetPref"
 
-val Color.Companion.Dark: Color get() = Color(0xFF151515)
-
-
 class PreferencesManager {
     private val _preferences: MutableList<Preference<Any>> = mutableListOf()
 
@@ -84,16 +81,16 @@ class PreferencesManager {
 
     @Composable
     fun getTextColor(context: Context): Color {
-        return when {
-            this.textColorMode.value == ColorMode.Dynamic && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> GlanceTheme.colors.primary.getColor(
+        return when (this.textColorMode.value) {
+            ColorMode.Dynamic if Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> GlanceTheme.colors.primary.getColor(
                 context
             )
 
-            this.textColorMode.value == ColorMode.System && isSystemInDarkTheme() -> Color.Dark
-            this.textColorMode.value == ColorMode.System && !isSystemInDarkTheme() -> Color.White
-            this.textColorMode.value == ColorMode.Dark -> Color.Dark
-            this.textColorMode.value == ColorMode.Light -> Color.White
-            this.textColorMode.value == ColorMode.Custom -> Color(this.textCustomColor.value)
+            ColorMode.System if isSystemInDarkTheme() -> Color.Dark
+            ColorMode.System if !isSystemInDarkTheme() -> Color.White
+            ColorMode.Dark -> Color.Dark
+            ColorMode.Light -> Color.White
+            ColorMode.Custom -> Color(this.textCustomColor.value)
             else -> Color.White
         }
 
@@ -102,19 +99,19 @@ class PreferencesManager {
     @SuppressLint("RestrictedApi")
     @Composable
     fun getBgColor(): ColorProvider {
-        return when {
-            this.bgColorMode.value == ColorMode.Dynamic && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> GlanceTheme.colors.widgetBackground
-            this.bgColorMode.value == ColorMode.System && isSystemInDarkTheme() -> ColorProvider(
+        return when (this.bgColorMode.value) {
+            ColorMode.Dynamic if Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> GlanceTheme.colors.widgetBackground
+            ColorMode.System if isSystemInDarkTheme() -> ColorProvider(
                 Color.Dark
             )
 
-            this.bgColorMode.value == ColorMode.System && !isSystemInDarkTheme() -> ColorProvider(
+            ColorMode.System if !isSystemInDarkTheme() -> ColorProvider(
                 Color.White
             )
 
-            this.bgColorMode.value == ColorMode.Dark -> ColorProvider(Color.Dark)
-            this.bgColorMode.value == ColorMode.Light -> ColorProvider(Color.White)
-            this.bgColorMode.value == ColorMode.Custom -> ColorProvider(Color(this.bgCustomColor.value))
+            ColorMode.Dark -> ColorProvider(Color.Dark)
+            ColorMode.Light -> ColorProvider(Color.White)
+            ColorMode.Custom -> ColorProvider(Color(this.bgCustomColor.value))
             else -> ColorProvider(Color.Transparent)
         }
     }

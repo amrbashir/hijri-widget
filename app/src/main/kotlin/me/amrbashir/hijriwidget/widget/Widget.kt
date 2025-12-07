@@ -5,9 +5,11 @@ import android.os.Build
 import android.util.TypedValue
 import android.widget.RemoteViews
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.toArgb
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
@@ -15,19 +17,24 @@ import androidx.glance.LocalContext
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.AndroidRemoteViews
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.provideContent
+import androidx.glance.appwidget.state.getAppWidgetState
 import androidx.glance.appwidget.updateAll
 import androidx.glance.background
+import androidx.glance.currentState
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.fillMaxSize
+import androidx.glance.state.GlanceStateDefinition
+import androidx.glance.state.PreferencesGlanceStateDefinition
 import kotlinx.coroutines.launch
 import me.amrbashir.hijriwidget.ColorMode
 import me.amrbashir.hijriwidget.HijriDate
-import me.amrbashir.hijriwidget.PreferencesManager
+import me.amrbashir.hijriwidget.PreferencesManagerV2
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.android.AlarmReceiver
 import me.amrbashir.hijriwidget.widgetCornerRadius
@@ -38,6 +45,7 @@ class HijriWidgetReceiver : GlanceAppWidgetReceiver() {
 
 class HijriWidget : GlanceAppWidget() {
     override val sizeMode: SizeMode = SizeMode.Single
+    override val stateDefinition: GlanceStateDefinition<*> = PreferencesGlanceStateDefinition
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
@@ -50,7 +58,6 @@ class HijriWidget : GlanceAppWidget() {
     override suspend fun providePreview(context: Context, widgetCategory: Int) {
         provideContent {
             GlanceTheme {
-                Content()
             }
         }
     }
@@ -60,16 +67,21 @@ class HijriWidget : GlanceAppWidget() {
         val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
 
-        // DO NOT REMOVE, needed for glance to recompose when this value is changed
-        val updateSignal = WidgetUpdateSignal.value
 
-        val prefsManager = PreferencesManager.load(context)
+        val prefs = currentState<Preferences>()
+        val prefsManager = PreferencesManagerV2(context, prefs)
+
+        val textShadow = prefsManager.textShadow.value
+        val textSize = prefsManager.textSize.value
+        val textColorMode = prefsManager.textColorMode.value
+        val bgColor = prefsManager.getBgColor()
+        val textColor = prefsManager.getTextColor()
 
         val remoteViewId =
-            if (prefsManager.textShadow.value) R.id.widget_text_shadow else R.id.widget_text
+            if (textShadow) R.id.widget_text_shadow else R.id.widget_text
         val remoteViewLayout =
-            if (prefsManager.textShadow.value) R.layout.widget_text_shadow else R.layout.widget_text
-        val remoteViews = RemoteViews(LocalContext.current.packageName, remoteViewLayout)
+            if (textShadow) R.layout.widget_text_shadow else R.layout.widget_text
+        val remoteViews = RemoteViews(context.packageName, remoteViewLayout)
 
 
         val date = HijriDate.todayFormatted(prefsManager)
@@ -78,13 +90,13 @@ class HijriWidget : GlanceAppWidget() {
         remoteViews.setTextViewTextSize(
             remoteViewId,
             TypedValue.COMPLEX_UNIT_SP,
-            prefsManager.textSize.value
+            textSize
         )
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && prefsManager.textColorMode.value == ColorMode.Dynamic) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && textColorMode == ColorMode.Dynamic) {
             remoteViews.setColorAttr(remoteViewId, "setTextColor", android.R.attr.colorPrimary)
         } else {
-            remoteViews.setTextColor(remoteViewId, prefsManager.getTextColor(context).toArgb())
+            remoteViews.setTextColor(remoteViewId, textColor.toArgb())
         }
 
         Box(
@@ -92,10 +104,10 @@ class HijriWidget : GlanceAppWidget() {
             modifier = GlanceModifier.fillMaxSize()
                 .appWidgetBackground()
                 .widgetCornerRadius()
-                .background(prefsManager.getBgColor())
+                .background(bgColor)
                 .clickable {
                     coroutineScope.launch {
-                        HijriWidget.updateAll(context)
+                        HijriWidget().updateAll(context)
                         AlarmReceiver.setup24Periodic(context, prefsManager)
                     }
                 }
@@ -105,13 +117,28 @@ class HijriWidget : GlanceAppWidget() {
     }
 
     companion object {
-        suspend fun updateAll(context: Context) {
-            WidgetUpdateSignal.value = !WidgetUpdateSignal.value
-            HijriWidget().updateAll(context)
+        /**
+         * Returns the Preferences of the first widget, or an empty Preferences if no widgets exist
+         *
+         * This is useful for getting default settings when no widgets are present
+         */
+        suspend fun firstWidgetOrEmptyPrefs(context: Context): Preferences {
+            val appManager = GlanceAppWidgetManager(context)
+
+            return appManager
+                .getGlanceIds(HijriWidget::class.java)
+                .firstOrNull()
+                ?.let { id ->
+                    getAppWidgetState(
+                        context = context,
+                        definition = PreferencesGlanceStateDefinition,
+                        glanceId = id
+                    )
+                }.let {
+                    it ?: PreferenceDataStoreFactory.create {
+                        context.preferencesDataStoreFile("_empty")
+                    } as Preferences
+                }
         }
     }
 }
-
-
-/** Workaround to force the Widget glance to recompose */
-val WidgetUpdateSignal = mutableStateOf(true)

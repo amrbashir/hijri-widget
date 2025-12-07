@@ -30,7 +30,7 @@ fun CollapsibleButton(
     )
 
     PreferenceTemplate(
-        header,
+        label = header,
         endContent = {
             Icon(
                 imageVector = Icons.Outlined.KeyboardArrowDown,

@@ -10,6 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.glance.GlanceModifier
 import androidx.glance.appwidget.cornerRadius
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Date
@@ -74,3 +76,8 @@ fun logTimestamp(date: Long = System.currentTimeMillis()): String {
 }
 
 val logException = fun(tr: Throwable) { Log.e("Exception", null, tr) }
+
+
+fun NavDestination.hasRouteInHierarchy(route: String): Boolean {
+    return this.hierarchy.any { it.route == route }
+}

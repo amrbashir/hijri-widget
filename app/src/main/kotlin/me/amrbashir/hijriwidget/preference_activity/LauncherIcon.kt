@@ -6,9 +6,9 @@ import android.content.pm.PackageManager
 import android.os.Build
 import me.amrbashir.hijriwidget.BuildConfig
 import me.amrbashir.hijriwidget.HijriDate
-import me.amrbashir.hijriwidget.PreferencesManager
+import me.amrbashir.hijriwidget.PreferencesManagerV2
 
-fun changeLauncherIcon(context: Context, prefsManager: PreferencesManager) {
+fun changeLauncherIcon(context: Context, prefsManager: PreferencesManagerV2) {
     val actions = buildList {
         if (!BuildConfig.DEBUG) {
             val cls = "me.amrbashir.hijriwidget.preference_activity.PreferenceActivity"

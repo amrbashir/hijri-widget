@@ -1,11 +1,12 @@
 package me.amrbashir.hijriwidget.preference_activity.composables
 
 import android.app.WallpaperManager
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -27,25 +28,36 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
 import me.amrbashir.hijriwidget.HijriDate
-import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
+import me.amrbashir.hijriwidget.PreferencesManagerV2
+import me.amrbashir.hijriwidget.addIf
+import me.amrbashir.hijriwidget.preference_activity.LocalAnimatedContentScope
+import me.amrbashir.hijriwidget.preference_activity.LocalSharedTransitionScope
+import me.amrbashir.hijriwidget.preference_activity.LocalWidgetState
 import me.amrbashir.hijriwidget.widgetCornerRadius
 
 @Composable
 fun WidgetPreview(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
 ) {
     val context = LocalContext.current
-    val prefsManager = LocalPreferencesManager.current
+    val widgetState = LocalWidgetState.current
     val wallpaperManager = WallpaperManager.getInstance(context)
 
+    val prefsManager = PreferencesManagerV2(
+        context = context,
+        prefs = widgetState.value.prefs,
+    )
     val date = HijriDate.todayFormatted(prefsManager)
 
     // Wallpaper container
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(20.dp))
+            .addIf(onClick != null) {
+                clickable { onClick?.invoke() }
+            }
             .height(150.dp)
             .fillMaxWidth()
             .drawWithCache {
@@ -83,7 +95,7 @@ fun WidgetPreview(
         ) {
             Text(
                 date,
-                color = prefsManager.getTextColor(context),
+                color = prefsManager.getTextColor(),
                 style = TextStyle(
                     textAlign = TextAlign.Center,
                     fontSize = prefsManager.textSize.value.sp,
@@ -95,5 +107,29 @@ fun WidgetPreview(
                 ),
             )
         }
+    }
+}
+
+
+@Composable
+@OptIn(ExperimentalSharedTransitionApi::class)
+fun SharedWidgetPreview(
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
+) {
+    val sharedTransitionScope = LocalSharedTransitionScope.current
+    val sharedAnimatedContentScope = LocalAnimatedContentScope.current
+    val widgetState = LocalWidgetState.current
+
+    val key = "widget_preview_${widgetState.value.id}"
+
+    with(receiver = sharedTransitionScope) {
+        WidgetPreview(
+            onClick = onClick,
+            modifier = modifier.sharedElement(
+                sharedContentState = rememberSharedContentState(key),
+                animatedVisibilityScope = sharedAnimatedContentScope
+            )
+        )
     }
 }

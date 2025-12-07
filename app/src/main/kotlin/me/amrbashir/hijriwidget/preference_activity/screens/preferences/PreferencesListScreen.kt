@@ -1,10 +1,10 @@
 package me.amrbashir.hijriwidget.preference_activity.screens.preferences
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -12,7 +12,6 @@ import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.Brightness6
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.ColorLens
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.MoreTime
 import androidx.compose.material.icons.outlined.SettingsBackupRestore
 import androidx.compose.material.icons.outlined.TextIncrease
@@ -23,40 +22,63 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.glance.GlanceId
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.formatTime
-import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
+import me.amrbashir.hijriwidget.preference_activity.LocalAnimatedContentScope
 import me.amrbashir.hijriwidget.preference_activity.LocalNavController
 import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
-import me.amrbashir.hijriwidget.preference_activity.composableWithAnimatedContentScopeProvider
+import me.amrbashir.hijriwidget.preference_activity.LocalSharedTransitionScope
+import me.amrbashir.hijriwidget.preference_activity.LocalWidgetState
+import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceTemplate
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.ValueSlider
-import me.amrbashir.hijriwidget.preference_activity.screens.navigateToAbout
 
 const val PREFERENCES_DESTINATION = "/preferences"
 const val PREFERENCES_LIST_DESTINATION = "/preferences/"
 
 fun NavGraphBuilder.preferenceListDestination() {
-    composableWithAnimatedContentScopeProvider(route = PREFERENCES_LIST_DESTINATION) { PreferenceListScreen() }
+    animatedContentComposable(
+        route = "$PREFERENCES_LIST_DESTINATION?sharedKey={sharedKey}",
+        arguments = listOf(
+            navArgument("sharedKey") {
+                type = NavType.StringType
+                nullable = false
+            }
+        )
+
+    ) {
+        val sharedKey = it.arguments?.getString("sharedKey")
+        if (sharedKey != null) SharedPreferencesListScreen(sharedKey)
+    }
+}
+
+fun NavController.navigateToPreferencesList(widgetId: GlanceId, sharedKey: String) {
+    navigate(route = "$PREFERENCES_LIST_DESTINATION?sharedKey=$sharedKey")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun PreferenceListScreen() {
-    LocalAppBarTitle.current.value = stringResource(R.string.app_name)
-
+internal fun PreferenceListScreen(
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
+) {
     val prefsManager = LocalPreferencesManager.current
     val navController = LocalNavController.current
 
-    PreferenceScreenLayout {
+    PreferenceScreenLayout (
+        modifier = modifier,
+        onClick = onClick,
+    ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .padding(bottom = 16.dp)
                 .fillMaxSize()
                 .imePadding()
                 .verticalScroll(rememberScrollState())
@@ -158,16 +180,29 @@ internal fun PreferenceListScreen() {
                         prefsManager.reset()
                     }
                 )
-
-                PreferenceTemplate(
-                    label = stringResource(R.string.preferences_about_title),
-                    description = stringResource(R.string.preferences_about_description),
-                    icon = Icons.Outlined.Info,
-                    onClick = {
-                        navController.navigateToAbout()
-                    }
-                )
             }
         }
+    }
+}
+
+
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Composable
+fun SharedPreferencesListScreen(
+    sharedKey: String,
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
+) {
+    val sharedTransitionScope = LocalSharedTransitionScope.current
+    val sharedAnimatedContentScope = LocalAnimatedContentScope.current
+
+    with(receiver = sharedTransitionScope) {
+        PreferenceListScreen(
+            onClick = onClick,
+            modifier = modifier.sharedElement(
+                sharedContentState = rememberSharedContentState(sharedKey),
+                animatedVisibilityScope = sharedAnimatedContentScope
+            ),
+        )
     }
 }

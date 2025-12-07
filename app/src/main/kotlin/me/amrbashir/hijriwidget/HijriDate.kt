@@ -6,7 +6,7 @@ import android.icu.util.ULocale
 const val TWELVE_HOURS: Int = 720 // 12 * 60
 
 object HijriDate {
-    fun today(prefsManager: PreferencesManager): Calendar {
+    fun today(prefsManager: PreferencesManagerV2): Calendar {
         val calcMethod = prefsManager.calendarCalculationMethod.value.id
         val locale = ULocale("@calendar=$calcMethod")
         val calendar = Calendar.getInstance(locale)
@@ -43,7 +43,7 @@ object HijriDate {
         return calendar
     }
 
-    fun todayFormatted(prefsManager: PreferencesManager): String {
+    fun todayFormatted(prefsManager: PreferencesManagerV2): String {
         val format = if (prefsManager.dateIsCustomFormat.value) {
             prefsManager.dateCustomFormat.value
         } else {
@@ -53,7 +53,7 @@ object HijriDate {
         return format.formatHijriDate(today, prefsManager.calendarCalculationMethod.value)
     }
 
-    fun todayNumber(prefsManager: PreferencesManager): Int {
+    fun todayNumber(prefsManager: PreferencesManagerV2): Int {
         return today(prefsManager)[Calendar.DAY_OF_MONTH]
     }
 }

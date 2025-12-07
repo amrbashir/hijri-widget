@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -16,7 +15,7 @@ import androidx.navigation.NavGraphBuilder
 import me.amrbashir.hijriwidget.HijriDateCalculationMethod
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
-import me.amrbashir.hijriwidget.preference_activity.composableWithAnimatedContentScopeProvider
+import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceTemplate
@@ -25,7 +24,7 @@ import me.amrbashir.hijriwidget.preference_activity.composables.ui.RadioIcon
 const val CALENDAR_CALCULATION_METHOD_DESTINATION = "/preferences/calendar-calculation-method"
 
 fun NavGraphBuilder.calendarCalculationMethodDestination() {
-    composableWithAnimatedContentScopeProvider(route = CALENDAR_CALCULATION_METHOD_DESTINATION) {
+    animatedContentComposable(route = CALENDAR_CALCULATION_METHOD_DESTINATION) {
         CalendarCalculationMethodScreen()
     }
 }
@@ -45,8 +44,6 @@ internal fun CalendarCalculationMethodScreen() {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .padding(bottom = 16.dp)
                 .fillMaxSize()
                 .imePadding()
                 .verticalScroll(rememberScrollState())

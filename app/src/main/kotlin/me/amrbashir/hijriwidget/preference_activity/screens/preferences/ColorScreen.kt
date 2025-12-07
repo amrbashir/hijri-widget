@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -17,7 +16,7 @@ import androidx.navigation.NavGraphBuilder
 import me.amrbashir.hijriwidget.ColorMode
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
-import me.amrbashir.hijriwidget.preference_activity.composableWithAnimatedContentScopeProvider
+import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.ColorPicker
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
@@ -27,7 +26,7 @@ import me.amrbashir.hijriwidget.preference_activity.composables.ui.RadioIcon
 const val COLOR_DESTINATION = "/preferences/color"
 
 fun NavGraphBuilder.colorDestination() {
-    composableWithAnimatedContentScopeProvider(route = COLOR_DESTINATION) { ColorScreen() }
+    animatedContentComposable(route = COLOR_DESTINATION) { ColorScreen() }
 }
 
 fun NavController.navigateToColor() {
@@ -49,8 +48,6 @@ internal fun ColorScreen() {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .padding(bottom = 16.dp)
                 .fillMaxSize()
                 .imePadding()
                 .verticalScroll(rememberScrollState())

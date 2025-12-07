@@ -13,6 +13,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -24,10 +25,12 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import me.amrbashir.hijriwidget.DATE_FORMAT_PRESETES
 import me.amrbashir.hijriwidget.HijriDate
+import me.amrbashir.hijriwidget.PreferencesManagerV2
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.formatHijriDate
 import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
-import me.amrbashir.hijriwidget.preference_activity.composableWithAnimatedContentScopeProvider
+import me.amrbashir.hijriwidget.preference_activity.LocalWidgetState
+import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceTemplate
@@ -36,7 +39,7 @@ import me.amrbashir.hijriwidget.preference_activity.composables.ui.RadioIcon
 const val DATE_FORMAT_DESTINATION = "/preferences/date-format"
 
 fun NavGraphBuilder.dateFormatDestination() {
-    composableWithAnimatedContentScopeProvider(route = DATE_FORMAT_DESTINATION) { DateFormatScreen() }
+    animatedContentComposable(route = DATE_FORMAT_DESTINATION) { DateFormatScreen() }
 }
 
 fun NavController.navigateToDateFormat() {
@@ -45,7 +48,16 @@ fun NavController.navigateToDateFormat() {
 
 @Composable
 internal fun DateFormatScreen() {
+    val context = LocalContext.current
+
     val prefsManager = LocalPreferencesManager.current
+
+
+    val widgetState = LocalWidgetState.current
+    val prefsManagerV2 = PreferencesManagerV2(
+        context = context,
+        prefs = widgetState.value.prefs,
+    )
 
     val savedFormat = prefsManager.dateFormat.value
 
@@ -53,8 +65,6 @@ internal fun DateFormatScreen() {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .padding(bottom = 16.dp)
                 .fillMaxSize()
                 .imePadding()
                 .verticalScroll(rememberScrollState())
@@ -63,7 +73,7 @@ internal fun DateFormatScreen() {
                 for (format in DATE_FORMAT_PRESETES) {
                     PreferenceTemplate(
                         label = format.formatHijriDate(
-                            HijriDate.today(prefsManager),
+                            HijriDate.today(prefsManagerV2),
                             prefsManager.calendarCalculationMethod.value
                         ),
                         description = format,
