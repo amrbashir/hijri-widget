@@ -34,4 +34,4 @@ The Service Provider is concerned about safeguarding the confidentiality of your
 
 **Contact Us**
 
-If you have any questions regarding privacy while using the Application, or have questions about the practices, please contact the Service Provider via email at contact@amrbashir.me.
+If you have any questions regarding privacy while using the Application, or have questions about the practices, please contact the Service Provider via email at amr@amrbashir.me.
