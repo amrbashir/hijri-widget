@@ -85,7 +85,7 @@ val QUICK_LINKS = listOf(
     QuickLink(
         label = R.string.quick_link_privacy,
         icon = Icons.Filled.PrivacyTip,
-        url = "https://hijri-widget.amrbashir.me/PRIVACY.md"
+        url = "https://raw.githubusercontent.com/amrbashir/hijri-widget/refs/heads/master/PRIVACY.md"
     ),
 )
 
