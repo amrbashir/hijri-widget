@@ -24,11 +24,14 @@ android {
     }
 
     signingConfigs {
-        create("config") {
-            storeFile = rootProject.file(System.getProperty("KEYSTORE_FILE_PATH"))
-            storePassword = System.getProperty("KEYSTORE_PASSWORD")
-            keyAlias = System.getProperty("KEY_ALIAS")
-            keyPassword = System.getProperty("KEY_PASSWORD")
+       val keystorePath = System.getProperty("KEYSTORE_FILE_PATH")
+        if (!keystorePath.isNullOrEmpty()) {
+            create("config") {
+                storeFile = rootProject.file(keystorePath)
+                storePassword = System.getProperty("KEYSTORE_PASSWORD")
+                keyAlias = System.getProperty("KEY_ALIAS")
+                keyPassword = System.getProperty("KEY_PASSWORD")
+            }
         }
     }
 
@@ -40,13 +43,18 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
-            signingConfig = signingConfigs.getByName("config")
+
+            if (!System.getProperty("KEYSTORE_FILE_PATH").isNullOrEmpty()) {
+                signingConfig = signingConfigs.getByName("config")
+            }
+
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
@@ -75,6 +83,9 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.9.5")
     implementation("com.github.jeziellago:compose-markdown:0.5.7")
     implementation("com.godaddy.android.colorpicker:compose-color-picker:0.7.0")
+
+    implementation("com.batoulapps.adhan:adhan2:0.0.6")
+    implementation("com.google.android.gms:play-services-location:21.2.0")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
 }

@@ -17,10 +17,33 @@ private const val PREF = "HijriWidgetPref"
 
 val Color.Companion.Dark: Color get() = Color(0xFF151515)
 
-
 class PreferencesManager {
     private val _preferences: MutableList<Preference<Any>> = mutableListOf()
 
+    val autoSilentEnabled = booleanPreference(
+        key = "AUTO_SILENT_ENABLED",
+        default = false
+    )
+
+    val silentDuration = intPreference(
+        key = "SILENT_DURATION",
+        default = 15
+    )
+
+    val prayerLatitude = floatPreference(
+        key = "PRAYER_LATITUDE",
+        default = -5.1476f
+    )
+
+    val prayerLongitude = floatPreference(
+        key = "PRAYER_LONGITUDE",
+        default = 119.4327f
+    )
+
+    val prayerCalcMethod = stringPreference(
+        key = "PRAYER_CALC_METHOD",
+        default = "MUSLIM_WORLD_LEAGUE"
+    )
 
     var bgColorMode = enumPreference(
         key = "BG_COLOR_MODE",
@@ -69,7 +92,7 @@ class PreferencesManager {
 
     val dayStart = intPreference(
         key = "DAY_START",
-        default = 0, // 12:00 AM
+        default = 0,
     )
 
     val calendarCalculationMethod = enumPreference(
@@ -148,9 +171,6 @@ class PreferencesManager {
         }
     }
 
-    // ======================================= //
-    // Helper methods to construct preferences //
-    // ======================================= //
     fun <T> preference(
         key: String,
         default: T,
@@ -224,8 +244,6 @@ class PreferencesManager {
             putString(k, v.toString())
         }
     )
-
-
 }
 
 class Preference<T>(
@@ -254,9 +272,6 @@ class Preference<T>(
     }
 }
 
-// ==================== //
-// Old Prefs Migrations //
-// ==================== //
 const val TEXT_COLOR_MODE_KEY = "TEXT_COLOR_MODE"
 const val THEME_KEY = "THEME"
 const val TEXT_CUSTOM_COLOR_KEY = "TEXT_CUSTOM_COLOR"
@@ -277,83 +292,43 @@ fun migratePreferences(sharedPreferences: SharedPreferences) {
         if (!sharedPreferences.contains(DATE_FORMAT_KEY)) {
             sharedPreferences.getString(LANG_KEY, null)?.let {
                 when (it) {
-                    "Arabic" -> putString(
-                        DATE_FORMAT_KEY,
-                        "d MMMM yyyy"
-                    )
-
-                    "English" -> putString(
-                        DATE_FORMAT_KEY,
-                        "en-GB{d MMMM yyyy}"
-                    )
-
+                    "Arabic" -> putString("DATE_FORMAT", "d MMMM yyyy")
+                    "English" -> putString("DATE_FORMAT", "en-GB{d MMMM yyyy}")
                     else -> {}
                 }
-
             }
         }
-
         if (!sharedPreferences.contains(TEXT_COLOR_MODE_KEY)) {
-            sharedPreferences.getString(THEME_KEY, null)?.let {
-                putString(
-                    TEXT_COLOR_MODE_KEY,
-                    it
-                )
-            }
+            sharedPreferences.getString(THEME_KEY, null)?.let { putString(TEXT_COLOR_MODE_KEY, it) }
         }
-
         if (!sharedPreferences.contains(TEXT_CUSTOM_COLOR_KEY)) {
             val color = sharedPreferences.getInt(CUSTOM_COLOR_KEY, -1)
-            if (color != -1) {
-                putInt(
-                    TEXT_CUSTOM_COLOR_KEY,
-                    color
-                )
-            }
+            if (color != -1) { putInt(TEXT_CUSTOM_COLOR_KEY, color) }
         }
-
         if (!sharedPreferences.contains(TEXT_SIZE_KEY)) {
             val size = sharedPreferences.getFloat(CUSTOM_TEXT_SIZE_KEY, -1F)
-            if (size != -1F) {
-                putFloat(
-                    TEXT_SIZE_KEY,
-                    size
-                )
-            }
+            if (size != -1F) { putFloat(TEXT_SIZE_KEY, size) }
         }
-
         if (!sharedPreferences.contains(TEXT_SHADOW_KEY)) {
-            putBoolean(
-                TEXT_SHADOW_KEY,
-                sharedPreferences.getBoolean(SHADOW_KEY, true)
-            )
+            putBoolean(TEXT_SHADOW_KEY, sharedPreferences.getBoolean(SHADOW_KEY, true))
         }
-
         if (!sharedPreferences.contains(DAY_START_KEY)) {
             val hour = sharedPreferences.getInt(DAY_START_HOUR_KEY, -1)
             val minute = sharedPreferences.getInt(DAY_START_MINUTE_KEY, -1)
             if (hour != -1 && minute != -1) {
-                putInt(
-                    DAY_START_KEY,
-                    hour * 60 + minute
-                )
+                putInt(DAY_START_KEY, hour * 60 + minute)
             }
         }
-
         if (sharedPreferences.contains(CALENDAR_CALCULATION_METHOD_KEY)) {
             val method = sharedPreferences.getString(CALENDAR_CALCULATION_METHOD_KEY, null)
             if (!method.isNullOrEmpty()) {
                 runCatching {
                     HijriDateCalculationMethod.valueOf(method)
-                    // if success, no need for migrations
                 }.onFailure(logException).getOrElse {
                     val methodAsEnum = HijriDateCalculationMethod.fromId(method)
                     putString(CALENDAR_CALCULATION_METHOD_KEY, methodAsEnum.toString())
                 }
             }
-
         }
-
     }
 }
-
