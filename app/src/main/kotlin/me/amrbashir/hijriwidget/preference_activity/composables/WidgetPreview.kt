@@ -25,10 +25,12 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.font.FontWeight
 import androidx.core.graphics.drawable.toBitmap
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
 import me.amrbashir.hijriwidget.widgetCornerRadius
+import kotlin.math.roundToInt
 
 @Composable
 fun WidgetPreview(
@@ -87,6 +89,7 @@ fun WidgetPreview(
                 style = TextStyle(
                     textAlign = TextAlign.Center,
                     fontSize = prefsManager.textSize.value.sp,
+                    fontWeight = FontWeight(prefsManager.textWeight.value.roundToInt()),
                     shadow = if (prefsManager.textShadow.value) Shadow(
                         color = Color(0, 0, 0, 128),
                         offset = Offset(x = 1f, y = 1f),
