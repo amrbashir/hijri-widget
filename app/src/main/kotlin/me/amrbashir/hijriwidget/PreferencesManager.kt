@@ -47,6 +47,11 @@ class PreferencesManager {
         default = 22F,
     )
 
+    val textWeight = floatPreference(
+        key = "TEXT_WEIGHT",
+        default = 400f
+    )
+
     val textShadow = booleanPreference(
         key = "TEXT_SHADOW",
         default = true

@@ -1,7 +1,10 @@
 package me.amrbashir.hijriwidget.widget
 
 import android.content.Context
+import android.graphics.Typeface
 import android.os.Build
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.widget.RemoteViews
 import androidx.compose.runtime.Composable
@@ -31,6 +34,7 @@ import me.amrbashir.hijriwidget.PreferencesManager
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.android.AlarmReceiver
 import me.amrbashir.hijriwidget.widgetCornerRadius
+import kotlin.math.roundToInt
 
 class HijriWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = HijriWidget()
@@ -73,7 +77,14 @@ class HijriWidget : GlanceAppWidget() {
 
 
         val date = HijriDate.todayFormatted(prefsManager)
-        remoteViews.setTextViewText(remoteViewId, date)
+        val spannableDate = SpannableString(date)
+
+        // Apply Bold if weight is high, since RemoteViews has limited support for exact weights
+        if (prefsManager.textWeight.value >= 600f) {
+            spannableDate.setSpan(StyleSpan(Typeface.BOLD), 0, date.length, 0)
+        }
+
+        remoteViews.setTextViewText(remoteViewId, spannableDate)
 
         remoteViews.setTextViewTextSize(
             remoteViewId,
