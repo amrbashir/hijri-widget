@@ -19,40 +19,41 @@ import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGro
 
 @Composable
 fun Changelog() {
-    PreferenceGroup(
-        label = stringResource(R.string.changelog)
-    ) {
-        for ((index, entry) in CHANGELOG.withIndex()) {
-            CollapsibleButton(
-                header = entry.header,
-                collapsed = index != 0 /* expand first by default */
-            ) {
-                MarkdownText(
-                    markdown = entry.content,
-                    modifier = Modifier.fillMaxWidth(),
-                    syntaxHighlightColor = MaterialTheme.colorScheme.surfaceBright,
-                    linkifyMask = Linkify.WEB_URLS
-                )
-            }
-        }
+	PreferenceGroup(
+		label = stringResource(R.string.changelog),
+	) {
+		for ((index, entry) in CHANGELOG.withIndex()) {
+			CollapsibleButton(
+				header = entry.header,
+				collapsed = index != 0, // expand first by default
+			) {
+				MarkdownText(
+					markdown = entry.content,
+					modifier = Modifier.fillMaxWidth(),
+					syntaxHighlightColor = MaterialTheme.colorScheme.surfaceBright,
+					linkifyMask = Linkify.WEB_URLS,
+				)
+			}
+		}
+	}
 
+	val linkStyles =
+		TextLinkStyles(
+			style = SpanStyle(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7F)),
+		)
+	val changelogUrl = "https://github.com/amrbashir/hijri-widget/blob/master/CHANGELOG.md"
 
-    }
-
-    val linkStyles = TextLinkStyles(
-        style = SpanStyle(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7F))
-    )
-    val changelogUrl = "https://github.com/amrbashir/hijri-widget/blob/master/CHANGELOG.md"
-
-    Text(
-        AnnotatedString.fromHtml(
-            stringResource(R.string.checkout_the_full_changelog, changelogUrl),
-            linkStyles,
-        ),
-        style = MaterialTheme.typography.bodyMedium.merge(
-            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
-                alpha = 0.7F
-            )
-        ),
-    )
+	Text(
+		AnnotatedString.fromHtml(
+			stringResource(R.string.checkout_the_full_changelog, changelogUrl),
+			linkStyles,
+		),
+		style =
+			MaterialTheme.typography.bodyMedium.merge(
+				color =
+					MaterialTheme.colorScheme.onSurfaceVariant.copy(
+						alpha = 0.7F,
+					),
+			),
+	)
 }

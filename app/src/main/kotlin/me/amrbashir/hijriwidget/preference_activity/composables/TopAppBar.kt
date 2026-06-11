@@ -27,70 +27,68 @@ import me.amrbashir.hijriwidget.widget.HijriWidget
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBar(
-    scrollBehavior: TopAppBarScrollBehavior,
-    onSave: suspend () -> Unit,
+	scrollBehavior: TopAppBarScrollBehavior,
+	onSave: suspend () -> Unit,
 ) {
-    val containerColor = MaterialTheme.colorScheme.darkLightContainerColor
+	val containerColor = MaterialTheme.colorScheme.darkLightContainerColor
 
-    LargeTopAppBar(
-        title = { Text(LocalAppBarTitle.current.value) },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = containerColor,
-            scrolledContainerColor = containerColor,
-        ),
-        scrollBehavior = scrollBehavior,
-        navigationIcon = { GoBackButton() },
-        actions = {
-            SaveButton(
-                onSave = onSave,
-            )
-        }
-    )
+	LargeTopAppBar(
+		title = { Text(LocalAppBarTitle.current.value) },
+		colors =
+			TopAppBarDefaults.topAppBarColors(
+				containerColor = containerColor,
+				scrolledContainerColor = containerColor,
+			),
+		scrollBehavior = scrollBehavior,
+		navigationIcon = { GoBackButton() },
+		actions = {
+			SaveButton(
+				onSave = onSave,
+			)
+		},
+	)
 }
-
 
 @Composable
 private fun GoBackButton() {
-    val navController = LocalNavController.current
-    val activity = LocalActivity.current
+	val navController = LocalNavController.current
+	val activity = LocalActivity.current
 
-    val goBackAction: () -> Unit = {
-        if (navController.currentDestination?.route == PREFERENCES_LIST_DESTINATION) {
-            activity?.finish()
-        } else {
-            navController.navigateUp()
-        }
-    }
+	val goBackAction: () -> Unit = {
+		if (navController.currentDestination?.route == PREFERENCES_LIST_DESTINATION) {
+			activity?.finish()
+		} else {
+			navController.navigateUp()
+		}
+	}
 
-    IconButton(onClick = goBackAction) {
-        Icon(
-            imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-            contentDescription = null
-        )
-    }
+	IconButton(onClick = goBackAction) {
+		Icon(
+			imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+			contentDescription = null,
+		)
+	}
 }
 
 @Composable
-private fun SaveButton(
-    onSave: suspend () -> Unit,
-) {
-    val prefsManager = LocalPreferencesManager.current
-    val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
+private fun SaveButton(onSave: suspend () -> Unit) {
+	val prefsManager = LocalPreferencesManager.current
+	val context = LocalContext.current
+	val coroutineScope = rememberCoroutineScope()
 
-    val saveAction: () -> Unit = {
-        prefsManager.save(context)
-        coroutineScope.launch {
-            HijriWidget.updateAll(context)
-            AlarmReceiver.setup24Periodic(context, prefsManager)
-            onSave()
-        }
-    }
+	val saveAction: () -> Unit = {
+		prefsManager.save(context)
+		coroutineScope.launch {
+			HijriWidget.updateAll(context)
+			AlarmReceiver.setup24Periodic(context, prefsManager)
+			onSave()
+		}
+	}
 
-    IconButton(onClick = saveAction) {
-        Icon(
-            imageVector = Icons.Outlined.Check,
-            contentDescription = null,
-        )
-    }
+	IconButton(onClick = saveAction) {
+		Icon(
+			imageVector = Icons.Outlined.Check,
+			contentDescription = null,
+		)
+	}
 }

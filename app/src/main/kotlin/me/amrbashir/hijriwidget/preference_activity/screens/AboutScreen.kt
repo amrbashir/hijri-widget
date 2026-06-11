@@ -51,194 +51,197 @@ import me.amrbashir.hijriwidget.preference_activity.composables.ui.adaptiveIconP
 const val ABOUT_DESTINATION = "/About"
 
 fun NavGraphBuilder.aboutDestination() {
-    composable(route = ABOUT_DESTINATION) { AboutScreen() }
+	composable(route = ABOUT_DESTINATION) { AboutScreen() }
 }
 
 fun NavController.navigateToAbout() {
-    navigate(route = ABOUT_DESTINATION)
+	navigate(route = ABOUT_DESTINATION)
 }
 
-
 data class QuickLink(
-    val label: Int,
-    @param:DrawableRes val iconResId: Int? = null,
-    val icon: ImageVector? = null,
-    val url: String,
+	val label: Int,
+	@param:DrawableRes val iconResId: Int? = null,
+	val icon: ImageVector? = null,
+	val url: String,
 )
 
-val QUICK_LINKS = listOf(
-    QuickLink(
-        label = R.string.quick_link_github,
-        iconResId = R.drawable.ic_fab_github,
-        url = "https://github.com/amrbashir/hijri-widget"
-    ),
-    QuickLink(
-        label = R.string.quick_link_twitter,
-        iconResId = R.drawable.ic_fab_twitter,
-        url = "https://twitter.com/amrbashir_dev"
-    ),
-    QuickLink(
-        label = R.string.quick_link_linkedin,
-        iconResId = R.drawable.ic_fab_linkedin,
-        url = "https://www.linkedin.com/in/amrbashir-dev"
-    ),
-    QuickLink(
-        label = R.string.quick_link_privacy,
-        icon = Icons.Filled.PrivacyTip,
-        url = "https://raw.githubusercontent.com/amrbashir/hijri-widget/refs/heads/master/PRIVACY.md"
-    ),
-)
+val QUICK_LINKS =
+	listOf(
+		QuickLink(
+			label = R.string.quick_link_github,
+			iconResId = R.drawable.ic_fab_github,
+			url = "https://github.com/amrbashir/hijri-widget",
+		),
+		QuickLink(
+			label = R.string.quick_link_twitter,
+			iconResId = R.drawable.ic_fab_twitter,
+			url = "https://twitter.com/amrbashir_dev",
+		),
+		QuickLink(
+			label = R.string.quick_link_linkedin,
+			iconResId = R.drawable.ic_fab_linkedin,
+			url = "https://www.linkedin.com/in/amrbashir-dev",
+		),
+		QuickLink(
+			label = R.string.quick_link_privacy,
+			icon = Icons.Filled.PrivacyTip,
+			url = "https://raw.githubusercontent.com/amrbashir/hijri-widget/refs/heads/master/PRIVACY.md",
+		),
+	)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AboutScreen() {
-    LocalAppBarTitle.current.value = stringResource(R.string.about_screen_title)
+	LocalAppBarTitle.current.value = stringResource(R.string.about_screen_title)
 
-    Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .padding(bottom = 16.dp)
-            .fillMaxSize()
-            .imePadding()
-            .verticalScroll(rememberScrollState())
-    ) {
+	Column(
+		verticalArrangement = Arrangement.spacedBy(16.dp),
+		modifier =
+			Modifier
+				.padding(horizontal = 16.dp)
+				.padding(bottom = 16.dp)
+				.fillMaxSize()
+				.imePadding()
+				.verticalScroll(rememberScrollState()),
+	) {
+		AppInfo()
 
-        AppInfo()
+		Row(
+			horizontalArrangement = Arrangement.SpaceEvenly,
+			modifier =
+				Modifier
+					.clip(RoundedCornerShape(20.dp))
+					.fillMaxWidth()
+					.padding(8.dp),
+		) {
+			for (link in QUICK_LINKS) {
+				QuickLinkButton(link)
+			}
+		}
 
-        Row(
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier
-                .clip(RoundedCornerShape(20.dp))
-                .fillMaxWidth()
-                .padding(8.dp)
-        ) {
-            for (link in QUICK_LINKS) {
-                QuickLinkButton(link)
-            }
-        }
+		Contributors()
 
-        Contributors()
-
-        Changelog()
-    }
+		Changelog()
+	}
 }
 
 @Composable
 private fun AppInfo() {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Image(
-            painter = adaptiveIconPainterResource(R.mipmap.ic_launcher),
-            contentDescription = null,
-            modifier = Modifier.requiredSize(64.dp)
-        )
+	Column(
+		horizontalAlignment = Alignment.CenterHorizontally,
+		verticalArrangement = Arrangement.spacedBy(16.dp),
+		modifier = Modifier.fillMaxSize(),
+	) {
+		Image(
+			painter = adaptiveIconPainterResource(R.mipmap.ic_launcher),
+			contentDescription = null,
+			modifier = Modifier.requiredSize(64.dp),
+		)
 
-        Text(
-            stringResource(R.string.app_name),
-            style = MaterialTheme.typography.titleLarge
-        )
+		Text(
+			stringResource(R.string.app_name),
+			style = MaterialTheme.typography.titleLarge,
+		)
 
-        Text(
-            "${BuildConfig.VERSION_NAME} (${BuildConfig.GIT_SHA})",
-            style = MaterialTheme.typography.bodyMedium
-        )
-    }
+		Text(
+			"${BuildConfig.VERSION_NAME} (${BuildConfig.GIT_SHA})",
+			style = MaterialTheme.typography.bodyMedium,
+		)
+	}
 }
 
 @Composable
 private fun RowScope.QuickLinkButton(link: QuickLink) {
-    val context = LocalContext.current
+	val context = LocalContext.current
 
-    val openLink = {
-        context.startActivity(
-            Intent(
-                Intent.ACTION_VIEW,
-                link.url.toUri()
-            )
-        )
-    }
+	val openLink = {
+		context.startActivity(
+			Intent(
+				Intent.ACTION_VIEW,
+				link.url.toUri(),
+			),
+		)
+	}
 
-    TextButton(
-        modifier = Modifier.weight(1F),
-        colors = ButtonDefaults.textButtonColors()
-            .copy(contentColor = MaterialTheme.colorScheme.onSurface),
-        shape = RoundedCornerShape(12.dp),
-        onClick = openLink,
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            QuickLinkButtonIcon(link)
-            Text(stringResource(link.label))
-        }
-    }
+	TextButton(
+		modifier = Modifier.weight(1F),
+		colors =
+			ButtonDefaults
+				.textButtonColors()
+				.copy(contentColor = MaterialTheme.colorScheme.onSurface),
+		shape = RoundedCornerShape(12.dp),
+		onClick = openLink,
+	) {
+		Column(
+			horizontalAlignment = Alignment.CenterHorizontally,
+			verticalArrangement = Arrangement.spacedBy(8.dp),
+		) {
+			QuickLinkButtonIcon(link)
+			Text(stringResource(link.label))
+		}
+	}
 }
 
 @Composable
 private fun QuickLinkButtonIcon(link: QuickLink) {
-    val modifier = Modifier.size(24.dp)
+	val modifier = Modifier.size(24.dp)
 
-    link.iconResId?.let {
-        Image(
-            painter = painterResource(link.iconResId),
-            contentDescription = null,
-            modifier = modifier,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
-        )
-    }
+	link.iconResId?.let {
+		Image(
+			painter = painterResource(link.iconResId),
+			contentDescription = null,
+			modifier = modifier,
+			colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
+		)
+	}
 
-    link.icon?.let {
-        Icon(
-            imageVector = link.icon,
-            contentDescription = null,
-            modifier = modifier
-        )
-    }
+	link.icon?.let {
+		Icon(
+			imageVector = link.icon,
+			contentDescription = null,
+			modifier = modifier,
+		)
+	}
 }
 
 @Composable
 private fun Contributors() {
-    val context = LocalContext.current
+	val context = LocalContext.current
 
-    val openLink = { url: String ->
-        context.startActivity(
-            Intent(
-                Intent.ACTION_VIEW,
-                url.toUri()
-            )
-        )
-    }
+	val openLink = { url: String ->
+		context.startActivity(
+			Intent(
+				Intent.ACTION_VIEW,
+				url.toUri(),
+			),
+		)
+	}
 
-    PreferenceGroup(stringResource(R.string.top_contributors)) {
-        for (contributor in CONTRIBUTORS) {
-            PreferenceTemplate(
-                label = contributor.username,
-                description = stringResource(R.string.contributions, contributor.contributions),
-                onClick = { openLink(contributor.url) },
-                icon = {
-                    Image(
-                        modifier = Modifier.clip(RoundedCornerShape(100)),
-                        painter = painterResource(contributor.avatar),
-                        contentDescription = null,
-                    )
-                }
-            )
-        }
+	PreferenceGroup(stringResource(R.string.top_contributors)) {
+		for (contributor in CONTRIBUTORS) {
+			PreferenceTemplate(
+				label = contributor.username,
+				description = stringResource(R.string.contributions, contributor.contributions),
+				onClick = { openLink(contributor.url) },
+				icon = {
+					Image(
+						modifier = Modifier.clip(RoundedCornerShape(100)),
+						painter = painterResource(contributor.avatar),
+						contentDescription = null,
+					)
+				},
+			)
+		}
 
-        PreferenceTemplate(
-            label = stringResource(R.string.checkout_the_full_list_of_contributors),
-            onClick = { openLink("https://github.com/amrbashir/hijri-widget/graphs/contributors") },
-            icon = {
-                Icon(
-                    imageVector = Icons.Outlined.People,
-                    contentDescription = null,
-                )
-            }
-        )
-    }
+		PreferenceTemplate(
+			label = stringResource(R.string.checkout_the_full_list_of_contributors),
+			onClick = { openLink("https://github.com/amrbashir/hijri-widget/graphs/contributors") },
+			icon = {
+				Icon(
+					imageVector = Icons.Outlined.People,
+					contentDescription = null,
+				)
+			},
+		)
+	}
 }

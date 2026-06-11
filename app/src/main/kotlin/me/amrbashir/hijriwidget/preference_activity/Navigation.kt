@@ -18,64 +18,62 @@ import me.amrbashir.hijriwidget.preference_activity.screens.preferences.dateForm
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.dayStartDestination
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.preferenceListDestination
 
-
 @Composable
 fun Navigation() {
-    val navController = LocalNavController.current
+	val navController = LocalNavController.current
 
-    NavHost(
-        navController = navController,
-        startDestination = PREFERENCES_DESTINATION,
-        enterTransition = {
-            slideIntoContainer(
-                AnimatedContentTransitionScope.SlideDirection.Left,
-                animationSpec = tween(500)
-            )
-        },
-        exitTransition = {
-            slideOutOfContainer(
-                AnimatedContentTransitionScope.SlideDirection.Left,
-                animationSpec = tween(500)
-            )
-        },
-        popEnterTransition = {
-            slideIntoContainer(
-                AnimatedContentTransitionScope.SlideDirection.Right,
-                animationSpec = tween(500)
-            )
-        },
-        popExitTransition = {
-            slideOutOfContainer(
-                AnimatedContentTransitionScope.SlideDirection.Right,
-                animationSpec = tween(500)
-            )
-        }
-    ) {
-        homeDestination()
-        aboutDestination()
-        navigation(
-            route = PREFERENCES_DESTINATION,
-            startDestination = PREFERENCES_LIST_DESTINATION
-        ) {
-            preferenceListDestination()
-            dateFormatDestination()
-            dayStartDestination()
-            calendarCalculationMethodDestination()
-            colorDestination()
-        }
-    }
+	NavHost(
+		navController = navController,
+		startDestination = PREFERENCES_DESTINATION,
+		enterTransition = {
+			slideIntoContainer(
+				AnimatedContentTransitionScope.SlideDirection.Left,
+				animationSpec = tween(500),
+			)
+		},
+		exitTransition = {
+			slideOutOfContainer(
+				AnimatedContentTransitionScope.SlideDirection.Left,
+				animationSpec = tween(500),
+			)
+		},
+		popEnterTransition = {
+			slideIntoContainer(
+				AnimatedContentTransitionScope.SlideDirection.Right,
+				animationSpec = tween(500),
+			)
+		},
+		popExitTransition = {
+			slideOutOfContainer(
+				AnimatedContentTransitionScope.SlideDirection.Right,
+				animationSpec = tween(500),
+			)
+		},
+	) {
+		homeDestination()
+		aboutDestination()
+		navigation(
+			route = PREFERENCES_DESTINATION,
+			startDestination = PREFERENCES_LIST_DESTINATION,
+		) {
+			preferenceListDestination()
+			dateFormatDestination()
+			dayStartDestination()
+			calendarCalculationMethodDestination()
+			colorDestination()
+		}
+	}
 }
 
-
 fun NavGraphBuilder.composableWithAnimatedContentScopeProvider(
-    route: String,
-    content: @Composable () -> Unit
+	route: String,
+	content: @Composable () -> Unit,
 ) {
-    composable(route) {
-        CompositionLocalProvider(
-            LocalAnimatedContentScope provides this
-        ) {
-            content()
-        }
-    }
+	composable(route) {
+		CompositionLocalProvider(
+			LocalAnimatedContentScope provides this,
+		) {
+			content()
+		}
+	}
 }

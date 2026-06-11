@@ -8,10 +8,10 @@ import me.amrbashir.hijriwidget.R
 const val HOME_DESTINATION = "/"
 
 fun NavGraphBuilder.homeDestination() {
-    composable(route = HOME_DESTINATION) { HomeScreen() }
+	composable(route = HOME_DESTINATION) { HomeScreen() }
 }
 
 @Composable
 private fun HomeScreen() {
-    NotImplementedError(R.string.home_screen_stub_text.toString())
+	NotImplementedError(R.string.home_screen_stub_text.toString())
 }

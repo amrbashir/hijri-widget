@@ -31,69 +31,74 @@ import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
 import me.amrbashir.hijriwidget.widgetCornerRadius
 
 @Composable
-fun WidgetPreview(
-    modifier: Modifier = Modifier
-) {
-    val context = LocalContext.current
-    val prefsManager = LocalPreferencesManager.current
-    val wallpaperManager = WallpaperManager.getInstance(context)
+fun WidgetPreview(modifier: Modifier = Modifier) {
+	val context = LocalContext.current
+	val prefsManager = LocalPreferencesManager.current
+	val wallpaperManager = WallpaperManager.getInstance(context)
 
-    val date = HijriDate.todayFormatted(prefsManager)
+	val date = HijriDate.todayFormatted(prefsManager)
 
-    // Wallpaper container
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .height(150.dp)
-            .fillMaxWidth()
-            .drawWithCache {
-                val builtinWallpaper = wallpaperManager.builtInDrawable.toBitmap().asImageBitmap()
-                onDrawBehind {
-                    val imageWidth = builtinWallpaper.width.toFloat()
-                    val imageHeight = builtinWallpaper.height.toFloat()
-                    val canvasWidth = size.width
-                    val canvasHeight = size.height
+	// Wallpaper container
+	Box(
+		contentAlignment = Alignment.Center,
+		modifier =
+			modifier
+				.padding(horizontal = 16.dp)
+				.clip(RoundedCornerShape(20.dp))
+				.height(150.dp)
+				.fillMaxWidth()
+				.drawWithCache {
+					val builtinWallpaper = wallpaperManager.builtInDrawable.toBitmap().asImageBitmap()
+					onDrawBehind {
+						val imageWidth = builtinWallpaper.width.toFloat()
+						val imageHeight = builtinWallpaper.height.toFloat()
+						val canvasWidth = size.width
+						val canvasHeight = size.height
 
-                    val scale = maxOf(canvasWidth / imageWidth, canvasHeight / imageHeight)
+						val scale = maxOf(canvasWidth / imageWidth, canvasHeight / imageHeight)
 
-                    val scaledWidth = imageWidth * scale
-                    val scaledHeight = imageHeight * scale
+						val scaledWidth = imageWidth * scale
+						val scaledHeight = imageHeight * scale
 
-                    val offsetX = (canvasWidth - scaledWidth) / 2
-                    val offsetY = (canvasHeight - scaledHeight) / 2
+						val offsetX = (canvasWidth - scaledWidth) / 2
+						val offsetY = (canvasHeight - scaledHeight) / 2
 
-                    drawImage(
-                        image = builtinWallpaper,
-                        dstSize = IntSize(scaledWidth.toInt(), scaledHeight.toInt()),
-                        dstOffset = IntOffset(offsetX.toInt(), offsetY.toInt())
-                    )
-                }
-            }
-    ) {
-
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .height(110.dp)
-                .width(175.dp)
-                .widgetCornerRadius(context)
-                .background(prefsManager.getBgColor().getColor(context))
-        ) {
-            Text(
-                date,
-                color = prefsManager.getTextColor(context),
-                style = TextStyle(
-                    textAlign = TextAlign.Center,
-                    fontSize = prefsManager.textSize.value.sp,
-                    shadow = if (prefsManager.textShadow.value) Shadow(
-                        color = Color(0, 0, 0, 128),
-                        offset = Offset(x = 1f, y = 1f),
-                        blurRadius = 1f,
-                    ) else null,
-                ),
-            )
-        }
-    }
+						drawImage(
+							image = builtinWallpaper,
+							dstSize = IntSize(scaledWidth.toInt(), scaledHeight.toInt()),
+							dstOffset = IntOffset(offsetX.toInt(), offsetY.toInt()),
+						)
+					}
+				},
+	) {
+		Box(
+			contentAlignment = Alignment.Center,
+			modifier =
+				Modifier
+					.height(110.dp)
+					.width(175.dp)
+					.widgetCornerRadius(context)
+					.background(prefsManager.getBgColor().getColor(context)),
+		) {
+			Text(
+				date,
+				color = prefsManager.getTextColor(context),
+				style =
+					TextStyle(
+						textAlign = TextAlign.Center,
+						fontSize = prefsManager.textSize.value.sp,
+						shadow =
+							if (prefsManager.textShadow.value) {
+								Shadow(
+									color = Color(0, 0, 0, 128),
+									offset = Offset(x = 1f, y = 1f),
+									blurRadius = 1f,
+								)
+							} else {
+								null
+							},
+					),
+			)
+		}
+	}
 }

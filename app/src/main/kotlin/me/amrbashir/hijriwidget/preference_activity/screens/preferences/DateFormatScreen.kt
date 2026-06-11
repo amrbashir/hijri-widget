@@ -36,92 +36,105 @@ import me.amrbashir.hijriwidget.preference_activity.composables.ui.RadioIcon
 const val DATE_FORMAT_DESTINATION = "/preferences/date-format"
 
 fun NavGraphBuilder.dateFormatDestination() {
-    composableWithAnimatedContentScopeProvider(route = DATE_FORMAT_DESTINATION) { DateFormatScreen() }
+	composableWithAnimatedContentScopeProvider(
+		route = DATE_FORMAT_DESTINATION,
+	) { DateFormatScreen() }
 }
 
 fun NavController.navigateToDateFormat() {
-    navigate(route = DATE_FORMAT_DESTINATION)
+	navigate(route = DATE_FORMAT_DESTINATION)
 }
 
 @Composable
 internal fun DateFormatScreen() {
-    val prefsManager = LocalPreferencesManager.current
+	val prefsManager = LocalPreferencesManager.current
 
-    val savedFormat = prefsManager.dateFormat.value
+	val savedFormat = prefsManager.dateFormat.value
 
-    PreferenceScreenLayout {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .padding(bottom = 16.dp)
-                .fillMaxSize()
-                .imePadding()
-                .verticalScroll(rememberScrollState())
-        ) {
-            PreferenceGroup(label = stringResource(R.string.date_format_group_title)) {
-                for (format in DATE_FORMAT_PRESETES) {
-                    PreferenceTemplate(
-                        label = format.formatHijriDate(
-                            HijriDate.today(prefsManager),
-                            prefsManager.calendarCalculationMethod.value
-                        ),
-                        description = format,
-                        icon = { RadioIcon(selected = !prefsManager.dateIsCustomFormat.value && savedFormat == format) },
-                        onClick = {
-                            prefsManager.dateIsCustomFormat.value = false
-                            prefsManager.dateFormat.value = format
-                        }
-                    )
-                }
+	PreferenceScreenLayout {
+		Column(
+			verticalArrangement = Arrangement.spacedBy(16.dp),
+			modifier =
+				Modifier
+					.padding(horizontal = 16.dp)
+					.padding(bottom = 16.dp)
+					.fillMaxSize()
+					.imePadding()
+					.verticalScroll(rememberScrollState()),
+		) {
+			PreferenceGroup(label = stringResource(R.string.date_format_group_title)) {
+				for (format in DATE_FORMAT_PRESETES) {
+					PreferenceTemplate(
+						label =
+							format.formatHijriDate(
+								HijriDate.today(prefsManager),
+								prefsManager.calendarCalculationMethod.value,
+							),
+						description = format,
+						icon = {
+							RadioIcon(
+								selected =
+									!prefsManager.dateIsCustomFormat.value && savedFormat == format,
+							)
+						},
+						onClick = {
+							prefsManager.dateIsCustomFormat.value = false
+							prefsManager.dateFormat.value = format
+						},
+					)
+				}
 
-                PreferenceTemplate(
-                    label = stringResource(R.string.date_format_custom),
-                    description = stringResource(R.string.date_format_custom_description),
-                    icon = { RadioIcon(selected = prefsManager.dateIsCustomFormat.value) },
-                    onClick = {
-                        prefsManager.dateIsCustomFormat.value = true
-                    }
-                ) {
-                    OutlinedTextField(
-                        modifier = Modifier
-                            .padding(start = 48.dp)
-                            .fillMaxWidth(),
-                        enabled = prefsManager.dateIsCustomFormat.value,
-                        value = prefsManager.dateCustomFormat.value,
-                        onValueChange = {
-                            prefsManager.dateCustomFormat.value = it
-                        }
-                    )
-                }
-            }
+				PreferenceTemplate(
+					label = stringResource(R.string.date_format_custom),
+					description = stringResource(R.string.date_format_custom_description),
+					icon = { RadioIcon(selected = prefsManager.dateIsCustomFormat.value) },
+					onClick = {
+						prefsManager.dateIsCustomFormat.value = true
+					},
+				) {
+					OutlinedTextField(
+						modifier =
+							Modifier
+								.padding(start = 48.dp)
+								.fillMaxWidth(),
+						enabled = prefsManager.dateIsCustomFormat.value,
+						value = prefsManager.dateCustomFormat.value,
+						onValueChange = {
+							prefsManager.dateCustomFormat.value = it
+						},
+					)
+				}
+			}
 
-            if (prefsManager.dateIsCustomFormat.value) {
-                DateFormatGuideText()
-            }
-        }
-    }
+			if (prefsManager.dateIsCustomFormat.value) {
+				DateFormatGuideText()
+			}
+		}
+	}
 }
 
 @Composable
 private fun DateFormatGuideText() {
-    val languageIDsURL = "http://www.i18nguy.com/unicode/language-identifiers.html"
+	val languageIDsURL = "http://www.i18nguy.com/unicode/language-identifiers.html"
 
-    val linkStyles = TextLinkStyles(
-        style = SpanStyle(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7F))
-    )
+	val linkStyles =
+		TextLinkStyles(
+			style = SpanStyle(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7F)),
+		)
 
-    Text(
-        AnnotatedString.fromHtml(
-            stringResource(id = R.string.date_format_guide, languageIDsURL),
-            linkStyles,
-        ),
-        modifier = Modifier.fillMaxWidth(),
-        style = MaterialTheme.typography.bodyMedium.merge(
-            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
-                alpha = 0.7F
-            ),
-            textDirection = TextDirection.ContentOrLtr,
-        ),
-    )
+	Text(
+		AnnotatedString.fromHtml(
+			stringResource(id = R.string.date_format_guide, languageIDsURL),
+			linkStyles,
+		),
+		modifier = Modifier.fillMaxWidth(),
+		style =
+			MaterialTheme.typography.bodyMedium.merge(
+				color =
+					MaterialTheme.colorScheme.onSurfaceVariant.copy(
+						alpha = 0.7F,
+					),
+				textDirection = TextDirection.ContentOrLtr,
+			),
+	)
 }

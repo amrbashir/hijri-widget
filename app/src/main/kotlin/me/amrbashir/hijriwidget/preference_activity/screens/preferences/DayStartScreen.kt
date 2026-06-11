@@ -30,56 +30,58 @@ import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
 const val DAY_START_DESTINATION = "/preferences/day-start"
 
 fun NavGraphBuilder.dayStartDestination() {
-    dialog(route = DAY_START_DESTINATION) { DayStartScreen() }
+	dialog(route = DAY_START_DESTINATION) { DayStartScreen() }
 }
 
 fun NavController.navigateToDayStart() {
-    navigate(route = DAY_START_DESTINATION)
+	navigate(route = DAY_START_DESTINATION)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun DayStartScreen() {
-    val navController = LocalNavController.current
-    val prefsManager = LocalPreferencesManager.current
+	val navController = LocalNavController.current
+	val prefsManager = LocalPreferencesManager.current
 
-    val timePickerState = rememberTimePickerState(
-        initialHour = prefsManager.dayStart.value / 60,
-        initialMinute = prefsManager.dayStart.value % 60,
-        is24Hour = false,
-    )
+	val timePickerState =
+		rememberTimePickerState(
+			initialHour = prefsManager.dayStart.value / 60,
+			initialMinute = prefsManager.dayStart.value % 60,
+			is24Hour = false,
+		)
 
-    Card {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            TimePicker(state = timePickerState)
+	Card {
+		Column(
+			modifier =
+				Modifier
+					.fillMaxWidth()
+					.padding(16.dp),
+		) {
+			TimePicker(state = timePickerState)
 
-            Text(
-                AnnotatedString.fromHtml(stringResource(R.string.day_start_description)),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
+			Text(
+				AnnotatedString.fromHtml(stringResource(R.string.day_start_description)),
+				style = MaterialTheme.typography.bodySmall,
+				color = MaterialTheme.colorScheme.onSurfaceVariant,
+			)
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End)
-            ) {
-                TextButton(onClick = {
-                    navController.navigateUp()
-                }) {
-                    Text(stringResource(R.string.cancel))
-                }
+			Row(
+				modifier = Modifier.fillMaxWidth(),
+				horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End),
+			) {
+				TextButton(onClick = {
+					navController.navigateUp()
+				}) {
+					Text(stringResource(R.string.cancel))
+				}
 
-                Button(onClick = {
-                    prefsManager.dayStart.value = timePickerState.hour * 60 + timePickerState.minute
-                    navController.navigateUp()
-                }) {
-                    Text(stringResource(R.string.confirm))
-                }
-            }
-        }
-    }
+				Button(onClick = {
+					prefsManager.dayStart.value = timePickerState.hour * 60 + timePickerState.minute
+					navController.navigateUp()
+				}) {
+					Text(stringResource(R.string.confirm))
+				}
+			}
+		}
+	}
 }

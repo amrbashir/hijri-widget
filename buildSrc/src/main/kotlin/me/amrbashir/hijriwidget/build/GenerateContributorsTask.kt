@@ -13,57 +13,58 @@ import java.io.File
 import java.net.URI
 
 abstract class GenerateContributorsTask : DefaultTask() {
+	@get:Input
+	abstract val packageName: Property<String>
 
-    @get:Input
-    abstract val packageName: Property<String>
+	@get:OutputFile
+	abstract val outputFile: RegularFileProperty
 
-    @get:OutputFile
-    abstract val outputFile: RegularFileProperty
+	@get:OutputDirectory
+	abstract val resOutputDir: DirectoryProperty
 
-    @get:OutputDirectory
-    abstract val resOutputDir: DirectoryProperty
+	@TaskAction
+	fun generate() {
+		val contributorsAPIUrl = "https://api.github.com/repos/amrbashir/hijri-widget/contributors"
+		val response = URI(contributorsAPIUrl).toURL().readText()
 
-    @TaskAction
-    fun generate() {
-        val contributorsAPIUrl = "https://api.github.com/repos/amrbashir/hijri-widget/contributors"
-        val response = URI(contributorsAPIUrl).toURL().readText()
+		@Suppress("UNCHECKED_CAST")
+		val contributors = JsonSlurper().parseText(response) as List<Map<String, Any>>
 
-        @Suppress("UNCHECKED_CAST")
-        val contributors = JsonSlurper().parseText(response) as List<Map<String, Any>>
+		val drawableDir = resOutputDir.get().asFile
+		drawableDir.deleteRecursively()
+		drawableDir.mkdirs()
 
-        val drawableDir = resOutputDir.get().asFile
-        drawableDir.deleteRecursively()
-        drawableDir.mkdirs()
+		val entries =
+			contributors.take(5).map { contributor ->
+				val login = contributor["login"] as String
+				val avatarUrl = contributor["avatar_url"] as String
+				val url = contributor["html_url"] as String
+				val contributions = contributor["contributions"] as Int
+				val resourceName = "contributor_${login.replace('-', '_')}"
 
-        val entries = contributors.take(5).map { contributor ->
-            val login = contributor["login"] as String
-            val avatarUrl = contributor["avatar_url"] as String
-            val url = contributor["html_url"] as String
-            val contributions = contributor["contributions"] as Int
-            val resourceName = "contributor_${login.replace('-', '_')}"
+				val connection = URI(avatarUrl).toURL().openConnection()
+				val contentType = connection.contentType ?: "image/png"
+				val extension =
+					when {
+						contentType.contains("jpeg") || contentType.contains("jpg") -> "jpg"
+						contentType.contains("webp") -> "webp"
+						else -> "png" // fallback to png
+					}
 
-            val connection = URI(avatarUrl).toURL().openConnection()
-            val contentType = connection.contentType ?: "image/png"
-            val extension = when {
-                contentType.contains("jpeg") || contentType.contains("jpg") -> "jpg"
-                contentType.contains("webp") -> "webp"
-                else -> "png" // fallback to png
-            }
+				connection.getInputStream().use { input ->
+					val avatarFile = File(drawableDir, "$resourceName.$extension")
+					avatarFile.outputStream().use { output -> input.copyTo(output) }
+				}
 
-            connection.getInputStream().use { input ->
-                val avatarFile = File(drawableDir, "$resourceName.$extension")
-                avatarFile.outputStream().use { output -> input.copyTo(output) }
-            }
-
-            """Contributor(
+				"""Contributor(
         avatar = R.drawable.$resourceName,
         username = "$login",
         url = "$url",
         contributions = $contributions,
     )"""
-        }
+			}
 
-        val generatedCode = """/**
+		val generatedCode = """/**
  * Automatically generated file. DO NOT MODIFY
  */
 package ${packageName.get()}
@@ -82,8 +83,8 @@ val CONTRIBUTORS = listOf<Contributor>(
 )
 """
 
-        val outputFile = outputFile.get().asFile
-        outputFile.parentFile.mkdirs()
-        outputFile.writeText(generatedCode)
-    }
+		val outputFile = outputFile.get().asFile
+		outputFile.parentFile.mkdirs()
+		outputFile.writeText(generatedCode)
+	}
 }

@@ -32,101 +32,103 @@ import me.amrbashir.hijriwidget.PreferencesManager
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.composables.TopAppBar
 
+val LocalNavController =
+	compositionLocalOf<NavHostController> {
+		error("CompositionLocal LocalNavController not present")
+	}
 
-val LocalNavController = compositionLocalOf<NavHostController> {
-    error("CompositionLocal LocalNavController not present")
-}
-
-val LocalSnackBarHostState = compositionLocalOf<SnackbarHostState> {
-    error("CompositionLocal LocalSnackBarHostState not present")
-}
+val LocalSnackBarHostState =
+	compositionLocalOf<SnackbarHostState> {
+		error("CompositionLocal LocalSnackBarHostState not present")
+	}
 
 @OptIn(ExperimentalMaterial3Api::class)
-val LocalAppBarTitle = compositionLocalOf<MutableState<String>> {
-    error("CompositionLocal LocalAppBarTitle not present")
-}
+val LocalAppBarTitle =
+	compositionLocalOf<MutableState<String>> {
+		error("CompositionLocal LocalAppBarTitle not present")
+	}
 
 @OptIn(ExperimentalSharedTransitionApi::class)
-val LocalSharedTransitionScope = compositionLocalOf<SharedTransitionScope> {
-    error("CompositionLocal LocalSharedTransitionScope not present")
-}
+val LocalSharedTransitionScope =
+	compositionLocalOf<SharedTransitionScope> {
+		error("CompositionLocal LocalSharedTransitionScope not present")
+	}
 
-val LocalAnimatedContentScope = compositionLocalOf<AnimatedContentScope> {
-    error("CompositionLocal LocalAnimatedContentScope not present")
-}
+val LocalAnimatedContentScope =
+	compositionLocalOf<AnimatedContentScope> {
+		error("CompositionLocal LocalAnimatedContentScope not present")
+	}
 
-val LocalPreferencesManager = compositionLocalOf<PreferencesManager> {
-    error("CompositionLocal LocalPreferencesManager not present")
-}
+val LocalPreferencesManager =
+	compositionLocalOf<PreferencesManager> {
+		error("CompositionLocal LocalPreferencesManager not present")
+	}
 
-class PreferenceActivity() :
-    ComponentActivity() {
+class PreferenceActivity : ComponentActivity() {
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		enableEdgeToEdge()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+		setContent {
+			PreferenceActivityContent()
+		}
+	}
 
-        setContent {
-            PreferenceActivityContent()
-        }
-    }
-
-    override fun onDestroy() {
-        val prefsManager = PreferencesManager.load(this.baseContext)
-        changeLauncherIcon(this.baseContext, prefsManager)
-        super.onDestroy()
-    }
+	override fun onDestroy() {
+		val prefsManager = PreferencesManager.load(this.baseContext)
+		changeLauncherIcon(this.baseContext, prefsManager)
+		super.onDestroy()
+	}
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
-fun PreferenceActivityContent(
-    onSave: (suspend () -> Unit)? = null,
-) {
-    val navController = rememberNavController()
+fun PreferenceActivityContent(onSave: (suspend () -> Unit)? = null) {
+	val navController = rememberNavController()
 
-    val prefsManager = PreferencesManager.load(navController.context)
-    val appBarTitle = remember { mutableStateOf("") }
-    val snackBarHostState = remember { SnackbarHostState() }
-    val topAppBarState = rememberTopAppBarState()
-    val topAppBarScrollBehavior =
-        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
+	val prefsManager = PreferencesManager.load(navController.context)
+	val appBarTitle = remember { mutableStateOf("") }
+	val snackBarHostState = remember { SnackbarHostState() }
+	val topAppBarState = rememberTopAppBarState()
+	val topAppBarScrollBehavior =
+		TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
 
-    val widgetUpdatedMessage = stringResource(R.string.widget_updated)
-    val defaultSaveAction: suspend () -> Unit = {
-        snackBarHostState.showSnackbar(widgetUpdatedMessage)
-    }
+	val widgetUpdatedMessage = stringResource(R.string.widget_updated)
+	val defaultSaveAction: suspend () -> Unit = {
+		snackBarHostState.showSnackbar(widgetUpdatedMessage)
+	}
 
-    PreferenceActivityTheme {
-        CompositionLocalProvider(
-            LocalNavController provides navController,
-            LocalSnackBarHostState provides snackBarHostState,
-            LocalAppBarTitle provides appBarTitle,
-            LocalPreferencesManager provides prefsManager,
-        ) {
-            Scaffold(
-                containerColor = MaterialTheme.colorScheme.darkLightContainerColor,
-                snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-                topBar = {
-                    TopAppBar(
-                        scrollBehavior = topAppBarScrollBehavior,
-                        onSave = onSave ?: defaultSaveAction
-                    )
-                },
-                modifier = Modifier.nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
-            ) {
-                SharedTransitionLayout(
-                    modifier = Modifier
-                        .consumeWindowInsets(it)
-                        .padding(it)
-                ) {
-                    CompositionLocalProvider(
-                        LocalSharedTransitionScope provides this
-                    ) {
-                        Navigation()
-                    }
-                }
-            }
-        }
-    }
+	PreferenceActivityTheme {
+		CompositionLocalProvider(
+			LocalNavController provides navController,
+			LocalSnackBarHostState provides snackBarHostState,
+			LocalAppBarTitle provides appBarTitle,
+			LocalPreferencesManager provides prefsManager,
+		) {
+			Scaffold(
+				containerColor = MaterialTheme.colorScheme.darkLightContainerColor,
+				snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
+				topBar = {
+					TopAppBar(
+						scrollBehavior = topAppBarScrollBehavior,
+						onSave = onSave ?: defaultSaveAction,
+					)
+				},
+				modifier = Modifier.nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
+			) {
+				SharedTransitionLayout(
+					modifier =
+						Modifier
+							.consumeWindowInsets(it)
+							.padding(it),
+				) {
+					CompositionLocalProvider(
+						LocalSharedTransitionScope provides this,
+					) {
+						Navigation()
+					}
+				}
+			}
+		}
+	}
 }

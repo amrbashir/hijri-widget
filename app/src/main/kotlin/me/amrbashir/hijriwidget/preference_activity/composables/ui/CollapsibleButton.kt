@@ -18,34 +18,34 @@ import androidx.compose.ui.draw.rotate
 
 @Composable
 fun CollapsibleButton(
-    header: String,
-    collapsed: Boolean = true,
-    content: @Composable (() -> Unit),
+	header: String,
+	collapsed: Boolean = true,
+	content: @Composable (() -> Unit),
 ) {
-    var collapsed by remember { mutableStateOf(collapsed) }
+	var collapsed by remember { mutableStateOf(collapsed) }
 
-    val arrowRotation by animateFloatAsState(
-        targetValue = if (collapsed) 0f else 180f,
-        label = "accordion-arrow"
-    )
+	val arrowRotation by animateFloatAsState(
+		targetValue = if (collapsed) 0f else 180f,
+		label = "accordion-arrow",
+	)
 
-    PreferenceTemplate(
-        header,
-        endContent = {
-            Icon(
-                imageVector = Icons.Outlined.KeyboardArrowDown,
-                contentDescription = null,
-                modifier = Modifier.rotate(arrowRotation)
-            )
-        },
-        onClick = { collapsed = !collapsed },
-    ) {
-        AnimatedVisibility(
-            visible = !collapsed,
-            enter = expandVertically(expandFrom = Alignment.Top),
-            exit = shrinkVertically(shrinkTowards = Alignment.Top)
-        ) {
-            content()
-        }
-    }
+	PreferenceTemplate(
+		header,
+		endContent = {
+			Icon(
+				imageVector = Icons.Outlined.KeyboardArrowDown,
+				contentDescription = null,
+				modifier = Modifier.rotate(arrowRotation),
+			)
+		},
+		onClick = { collapsed = !collapsed },
+	) {
+		AnimatedVisibility(
+			visible = !collapsed,
+			enter = expandVertically(expandFrom = Alignment.Top),
+			exit = shrinkVertically(shrinkTowards = Alignment.Top),
+		) {
+			content()
+		}
+	}
 }
