@@ -35,80 +35,90 @@ import me.amrbashir.hijriwidget.android.AlarmReceiver
 import me.amrbashir.hijriwidget.widgetCornerRadius
 
 class HijriWidgetReceiver : GlanceAppWidgetReceiver() {
-    override val glanceAppWidget: GlanceAppWidget = HijriWidget()
+	override val glanceAppWidget: GlanceAppWidget = HijriWidget()
 }
 
 class HijriWidget : GlanceAppWidget() {
-    override val sizeMode: SizeMode = SizeMode.Single
-    override val stateDefinition: GlanceStateDefinition<*> = PreferencesGlanceStateDefinition
+	override val sizeMode: SizeMode = SizeMode.Single
+	override val stateDefinition: GlanceStateDefinition<*> = PreferencesGlanceStateDefinition
 
-    override suspend fun provideGlance(context: Context, id: GlanceId) {
-        provideContent {
-            val prefs = currentState<Preferences>()
-            val prefsManager = PreferencesManager.load(prefs)
+	override suspend fun provideGlance(
+		context: Context,
+		id: GlanceId,
+	) {
+		provideContent {
+			val prefs = currentState<Preferences>()
+			val prefsManager = PreferencesManager.load(prefs)
 
-            GlanceTheme {
-                Content(prefsManager, id)
-            }
-        }
-    }
+			GlanceTheme {
+				Content(prefsManager, id)
+			}
+		}
+	}
 
-    override suspend fun providePreview(context: Context, widgetCategory: Int) {
-        provideContent {
-            GlanceTheme {
-                Content(PreferencesManager())
-            }
-        }
-    }
+	override suspend fun providePreview(
+		context: Context,
+		widgetCategory: Int,
+	) {
+		provideContent {
+			GlanceTheme {
+				Content(PreferencesManager())
+			}
+		}
+	}
 
-    @Composable
-    private fun Content(prefsManager: PreferencesManager, id: GlanceId? = null) {
-        val context = LocalContext.current
-        val coroutineScope = rememberCoroutineScope()
+	@Composable
+	private fun Content(
+		prefsManager: PreferencesManager,
+		id: GlanceId? = null,
+	) {
+		val context = LocalContext.current
+		val coroutineScope = rememberCoroutineScope()
 
-        val textShadow = prefsManager.textShadow.value
-        val textSize = prefsManager.textSize.value
-        val textColorMode = prefsManager.textColorMode.value
-        val bgColor = prefsManager.getBgColor()
-        val textColor = prefsManager.getTextColor(context)
+		val textShadow = prefsManager.textShadow.value
+		val textSize = prefsManager.textSize.value
+		val textColorMode = prefsManager.textColorMode.value
+		val bgColor = prefsManager.getBgColor()
+		val textColor = prefsManager.getTextColor(context)
 
-        val remoteViewId =
-            if (textShadow) R.id.widget_text_shadow else R.id.widget_text
-        val remoteViewLayout =
-            if (textShadow) R.layout.widget_text_shadow else R.layout.widget_text
-        val remoteViews = RemoteViews(context.packageName, remoteViewLayout)
+		val remoteViewId =
+			if (textShadow) R.id.widget_text_shadow else R.id.widget_text
+		val remoteViewLayout =
+			if (textShadow) R.layout.widget_text_shadow else R.layout.widget_text
+		val remoteViews = RemoteViews(context.packageName, remoteViewLayout)
 
+		val date = HijriDate.todayFormatted(prefsManager)
+		remoteViews.setTextViewText(remoteViewId, date)
 
-        val date = HijriDate.todayFormatted(prefsManager)
-        remoteViews.setTextViewText(remoteViewId, date)
+		remoteViews.setTextViewTextSize(
+			remoteViewId,
+			TypedValue.COMPLEX_UNIT_SP,
+			textSize,
+		)
 
-        remoteViews.setTextViewTextSize(
-            remoteViewId,
-            TypedValue.COMPLEX_UNIT_SP,
-            textSize
-        )
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && textColorMode == ColorMode.Dynamic) {
+			remoteViews.setColorAttr(remoteViewId, "setTextColor", android.R.attr.colorPrimary)
+		} else {
+			remoteViews.setTextColor(remoteViewId, textColor.toArgb())
+		}
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && textColorMode == ColorMode.Dynamic) {
-            remoteViews.setColorAttr(remoteViewId, "setTextColor", android.R.attr.colorPrimary)
-        } else {
-            remoteViews.setTextColor(remoteViewId, textColor.toArgb())
-        }
-
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = GlanceModifier.fillMaxSize()
-                .appWidgetBackground()
-                .widgetCornerRadius()
-                .background(bgColor)
-                .clickable {
-                    if (id == null) return@clickable
-                    coroutineScope.launch {
-                        update(context, id)
-                        AlarmReceiver.setup24Periodic(context)
-                    }
-                }
-        ) {
-            AndroidRemoteViews(remoteViews)
-        }
-    }
+		Box(
+			contentAlignment = Alignment.Center,
+			modifier =
+				GlanceModifier
+					.fillMaxSize()
+					.appWidgetBackground()
+					.widgetCornerRadius()
+					.background(bgColor)
+					.clickable {
+						if (id == null) return@clickable
+						coroutineScope.launch {
+							update(context, id)
+							AlarmReceiver.setup24Periodic(context)
+						}
+					},
+		) {
+			AndroidRemoteViews(remoteViews)
+		}
+	}
 }

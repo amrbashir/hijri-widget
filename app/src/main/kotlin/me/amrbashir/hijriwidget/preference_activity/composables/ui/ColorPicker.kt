@@ -28,90 +28,90 @@ import me.amrbashir.hijriwidget.logException
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ColorPicker(
-    initialColor: Int,
-    onColorChanged: (Color) -> Unit,
+	initialColor: Int,
+	onColorChanged: (Color) -> Unit,
 ) {
-    val coroutineScope = rememberCoroutineScope()
-    val clipboard = LocalClipboard.current
+	val coroutineScope = rememberCoroutineScope()
+	val clipboard = LocalClipboard.current
 
-    var initColor by remember { mutableStateOf(Color(initialColor)) }
-    var hexColor by remember { mutableStateOf(initColor.toHex()) }
+	var initColor by remember { mutableStateOf(Color(initialColor)) }
+	var hexColor by remember { mutableStateOf(initColor.toHex()) }
 
-    val updateColorFromPickerAction = { newHsvColor: HsvColor ->
-        val newColor = newHsvColor.toColor()
-        hexColor = newColor.toHex()
-        onColorChanged(newColor)
-    }
+	val updateColorFromPickerAction = { newHsvColor: HsvColor ->
+		val newColor = newHsvColor.toColor()
+		hexColor = newColor.toHex()
+		onColorChanged(newColor)
+	}
 
-    val updateColorFromHexCodeAction = { hexStr: String ->
-        hexColor = hexStr.removePrefix("#").take(8)
-        val parsedColor = hexColor.toColor()
-        if (parsedColor != null) {
-            initColor = parsedColor
-            onColorChanged(parsedColor)
-        }
-    }
+	val updateColorFromHexCodeAction = { hexStr: String ->
+		hexColor = hexStr.removePrefix("#").take(8)
+		val parsedColor = hexColor.toColor()
+		if (parsedColor != null) {
+			initColor = parsedColor
+			onColorChanged(parsedColor)
+		}
+	}
 
-    val pasteColorFromClipboardAction: () -> Unit = {
-        coroutineScope.launch {
-            clipboard.getClipEntry()?.clipData?.getItemAt(0)?.let {
-                updateColorFromHexCodeAction(it.text.toString())
-            }
-        }
-    }
+	val pasteColorFromClipboardAction: () -> Unit = {
+		coroutineScope.launch {
+			clipboard.getClipEntry()?.clipData?.getItemAt(0)?.let {
+				updateColorFromHexCodeAction(it.text.toString())
+			}
+		}
+	}
 
+	key(initColor) {
+		ClassicColorPicker(
+			modifier =
+				Modifier
+					.fillMaxWidth()
+					.aspectRatio(1F),
+			color = HsvColor.from(initColor),
+			onColorChanged = updateColorFromPickerAction,
+		)
+	}
 
-    key(initColor) {
-        ClassicColorPicker(
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(1F),
-            color = HsvColor.from(initColor),
-            onColorChanged = updateColorFromPickerAction
-        )
-    }
-
-    OutlinedTextField(
-        label = { Text("Hex Color (#AARRGGBB)") },
-        modifier = Modifier.fillMaxWidth(),
-        prefix = { Text("#") },
-        value = hexColor,
-        onValueChange = updateColorFromHexCodeAction,
-        singleLine = true,
-        suffix = {
-            IconButton(onClick = pasteColorFromClipboardAction) {
-                Icon(
-                    modifier = Modifier.fillMaxHeight(),
-                    imageVector = Icons.Outlined.ContentPaste,
-                    contentDescription = null,
-                )
-            }
-        }
-    )
+	OutlinedTextField(
+		label = { Text("Hex Color (#AARRGGBB)") },
+		modifier = Modifier.fillMaxWidth(),
+		prefix = { Text("#") },
+		value = hexColor,
+		onValueChange = updateColorFromHexCodeAction,
+		singleLine = true,
+		suffix = {
+			IconButton(onClick = pasteColorFromClipboardAction) {
+				Icon(
+					modifier = Modifier.fillMaxHeight(),
+					imageVector = Icons.Outlined.ContentPaste,
+					contentDescription = null,
+				)
+			}
+		},
+	)
 }
 
 private fun String.toColor(): Color? {
-    // Remove any leading # if present
-    var cleanHex = this.removePrefix("#")
+	// Remove any leading # if present
+	var cleanHex = this.removePrefix("#")
 
-    // Append F to complete AARRGGBB format
-    if (cleanHex.length < 8) cleanHex += "f".repeat(8 - cleanHex.length)
+	// Append F to complete AARRGGBB format
+	if (cleanHex.length < 8) cleanHex += "f".repeat(8 - cleanHex.length)
 
-    return runCatching {
-        val a = cleanHex.substring(0, 2).hexToInt()
-        val r = cleanHex.substring(2, 4).hexToInt()
-        val g = cleanHex.substring(4, 6).hexToInt()
-        val b = cleanHex.substring(6, 8).hexToInt()
+	return runCatching {
+		val a = cleanHex.substring(0, 2).hexToInt()
+		val r = cleanHex.substring(2, 4).hexToInt()
+		val g = cleanHex.substring(4, 6).hexToInt()
+		val b = cleanHex.substring(6, 8).hexToInt()
 
-        Color(r, g, b, a)
-    }.onFailure(logException).getOrNull()
+		Color(r, g, b, a)
+	}.onFailure(logException).getOrNull()
 }
 
 private fun Color.toHex(): String {
-    val alpha = (this.alpha * 255).toInt()
-    val red = (this.red * 255).toInt()
-    val green = (this.green * 255).toInt()
-    val blue = (this.blue * 255).toInt()
+	val alpha = (this.alpha * 255).toInt()
+	val red = (this.red * 255).toInt()
+	val green = (this.green * 255).toInt()
+	val blue = (this.blue * 255).toInt()
 
-    return String.format("%02x%02x%02x%02x", alpha, red, green, blue)
+	return String.format("%02x%02x%02x%02x", alpha, red, green, blue)
 }

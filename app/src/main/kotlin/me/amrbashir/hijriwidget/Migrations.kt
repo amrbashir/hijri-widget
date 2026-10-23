@@ -33,35 +33,36 @@ const val CONFIG_VERSION = 2
 
 /** Migrates the stored config to [CONFIG_VERSION], must finish before anything reads preferences */
 suspend fun migrateConfig(context: Context) {
-    val appPrefs = context.getSharedPreferences(APP_PREF, 0)
-    val legacyPrefs = context.getSharedPreferences(LEGACY_PREF, 0)
+	val appPrefs = context.getSharedPreferences(APP_PREF, 0)
+	val legacyPrefs = context.getSharedPreferences(LEGACY_PREF, 0)
 
-    var version = when {
-        appPrefs.contains(CONFIG_VERSION_KEY) -> appPrefs.getInt(CONFIG_VERSION_KEY, CONFIG_VERSION)
-        // Old keys are kept after v0 -> v1, so v0 and v1 can't be told apart,
-        // but v0 -> v1 is a no-op for v1 config
-        legacyPrefs.all.isNotEmpty() -> 0
-        // New install
-        else -> CONFIG_VERSION
-    }
+	var version =
+		when {
+			appPrefs.contains(CONFIG_VERSION_KEY) -> appPrefs.getInt(CONFIG_VERSION_KEY, CONFIG_VERSION)
+			// Old keys are kept after v0 -> v1, so v0 and v1 can't be told apart,
+			// but v0 -> v1 is a no-op for v1 config
+			legacyPrefs.all.isNotEmpty() -> 0
+			// New install
+			else -> CONFIG_VERSION
+		}
 
-    // Config is from a newer app version (i.e. the app was downgraded), leave it untouched
-    if (version > CONFIG_VERSION) return
+	// Config is from a newer app version (i.e. the app was downgraded), leave it untouched
+	if (version > CONFIG_VERSION) return
 
-    while (version < CONFIG_VERSION) {
-        when (version) {
-            0 -> migrateV0ToV1(legacyPrefs)
-            1 -> migrateV1ToV2(context, legacyPrefs)
-        }
-        version++
-        // Saved after each step, so an interrupted migration resumes where it stopped
-        appPrefs.edit(commit = true) { putInt(CONFIG_VERSION_KEY, version) }
-    }
+	while (version < CONFIG_VERSION) {
+		when (version) {
+			0 -> migrateV0ToV1(legacyPrefs)
+			1 -> migrateV1ToV2(context, legacyPrefs)
+		}
+		version++
+		// Saved after each step, so an interrupted migration resumes where it stopped
+		appPrefs.edit(commit = true) { putInt(CONFIG_VERSION_KEY, version) }
+	}
 
-    // New install, nothing to migrate
-    if (!appPrefs.contains(CONFIG_VERSION_KEY)) {
-        appPrefs.edit(commit = true) { putInt(CONFIG_VERSION_KEY, version) }
-    }
+	// New install, nothing to migrate
+	if (!appPrefs.contains(CONFIG_VERSION_KEY)) {
+		appPrefs.edit(commit = true) { putInt(CONFIG_VERSION_KEY, version) }
+	}
 }
 
 // ======== //
@@ -72,33 +73,36 @@ suspend fun migrateConfig(context: Context) {
  * Copies the global preferences into every placed widget that has no state yet.
  * If no widget is placed, they are simply dropped and the app continues as a new install.
  */
-private suspend fun migrateV1ToV2(context: Context, legacyPrefs: SharedPreferences) {
-    val ids = GlanceAppWidgetManager(context).getGlanceIds(HijriWidget::class.java)
-    if (ids.isNotEmpty()) {
-        // v1 keys and value types match the current ones, so parsing them validates
-        // values and drops leftover keys from v0
-        val legacy = PreferencesManager.load(legacyPrefs.toPreferences())
+private suspend fun migrateV1ToV2(
+	context: Context,
+	legacyPrefs: SharedPreferences,
+) {
+	val ids = GlanceAppWidgetManager(context).getGlanceIds(HijriWidget::class.java)
+	if (ids.isNotEmpty()) {
+		// v1 keys and value types match the current ones, so parsing them validates
+		// values and drops leftover keys from v0
+		val legacy = PreferencesManager.load(legacyPrefs.toPreferences())
 
-        for (id in ids) {
-            val state = getAppWidgetState(context, PreferencesGlanceStateDefinition, id)
-            if (state.asMap().isEmpty()) legacy.save(context, id)
-        }
-    }
+		for (id in ids) {
+			val state = getAppWidgetState(context, PreferencesGlanceStateDefinition, id)
+			if (state.asMap().isEmpty()) legacy.save(context, id)
+		}
+	}
 
-    legacyPrefs.edit(commit = true) { clear() }
+	legacyPrefs.edit(commit = true) { clear() }
 }
 
 private fun SharedPreferences.toPreferences(): Preferences {
-    val prefs = mutablePreferencesOf()
-    for ((key, value) in all) {
-        when (value) {
-            is Int -> prefs[intPreferencesKey(key)] = value
-            is Float -> prefs[floatPreferencesKey(key)] = value
-            is Boolean -> prefs[booleanPreferencesKey(key)] = value
-            is String -> prefs[stringPreferencesKey(key)] = value
-        }
-    }
-    return prefs
+	val prefs = mutablePreferencesOf()
+	for ((key, value) in all) {
+		when (value) {
+			is Int -> prefs[intPreferencesKey(key)] = value
+			is Float -> prefs[floatPreferencesKey(key)] = value
+			is Boolean -> prefs[booleanPreferencesKey(key)] = value
+			is String -> prefs[stringPreferencesKey(key)] = value
+		}
+	}
+	return prefs
 }
 
 // ======== //
@@ -122,87 +126,85 @@ private const val CALENDAR_CALCULATION_METHOD_KEY = "CALENDAR_CALCULATION_METHOD
 
 /** Converts old keys to the current ones, e.g. `LANG` into `DATE_FORMAT` */
 private fun migrateV0ToV1(sharedPreferences: SharedPreferences) {
-    sharedPreferences.edit(commit = true) {
-        if (!sharedPreferences.contains(DATE_FORMAT_KEY)) {
-            sharedPreferences.getString(LANG_KEY, null)?.let {
-                when (it) {
-                    "Arabic" -> putString(
-                        DATE_FORMAT_KEY,
-                        "d MMMM yyyy"
-                    )
+	sharedPreferences.edit(commit = true) {
+		if (!sharedPreferences.contains(DATE_FORMAT_KEY)) {
+			sharedPreferences.getString(LANG_KEY, null)?.let {
+				when (it) {
+					"Arabic" ->
+						putString(
+							DATE_FORMAT_KEY,
+							"d MMMM yyyy",
+						)
 
-                    "English" -> putString(
-                        DATE_FORMAT_KEY,
-                        "en-GB{d MMMM yyyy}"
-                    )
+					"English" ->
+						putString(
+							DATE_FORMAT_KEY,
+							"en-GB{d MMMM yyyy}",
+						)
 
-                    else -> {}
-                }
+					else -> {}
+				}
+			}
+		}
 
-            }
-        }
+		if (!sharedPreferences.contains(TEXT_COLOR_MODE_KEY)) {
+			sharedPreferences.getString(THEME_KEY, null)?.let {
+				putString(
+					TEXT_COLOR_MODE_KEY,
+					it,
+				)
+			}
+		}
 
-        if (!sharedPreferences.contains(TEXT_COLOR_MODE_KEY)) {
-            sharedPreferences.getString(THEME_KEY, null)?.let {
-                putString(
-                    TEXT_COLOR_MODE_KEY,
-                    it
-                )
-            }
-        }
+		if (!sharedPreferences.contains(TEXT_CUSTOM_COLOR_KEY)) {
+			val color = sharedPreferences.getInt(CUSTOM_COLOR_KEY, -1)
+			if (color != -1) {
+				putInt(
+					TEXT_CUSTOM_COLOR_KEY,
+					color,
+				)
+			}
+		}
 
-        if (!sharedPreferences.contains(TEXT_CUSTOM_COLOR_KEY)) {
-            val color = sharedPreferences.getInt(CUSTOM_COLOR_KEY, -1)
-            if (color != -1) {
-                putInt(
-                    TEXT_CUSTOM_COLOR_KEY,
-                    color
-                )
-            }
-        }
+		if (!sharedPreferences.contains(TEXT_SIZE_KEY)) {
+			val size = sharedPreferences.getFloat(CUSTOM_TEXT_SIZE_KEY, -1F)
+			if (size != -1F) {
+				putFloat(
+					TEXT_SIZE_KEY,
+					size,
+				)
+			}
+		}
 
-        if (!sharedPreferences.contains(TEXT_SIZE_KEY)) {
-            val size = sharedPreferences.getFloat(CUSTOM_TEXT_SIZE_KEY, -1F)
-            if (size != -1F) {
-                putFloat(
-                    TEXT_SIZE_KEY,
-                    size
-                )
-            }
-        }
+		if (!sharedPreferences.contains(TEXT_SHADOW_KEY)) {
+			putBoolean(
+				TEXT_SHADOW_KEY,
+				sharedPreferences.getBoolean(SHADOW_KEY, true),
+			)
+		}
 
-        if (!sharedPreferences.contains(TEXT_SHADOW_KEY)) {
-            putBoolean(
-                TEXT_SHADOW_KEY,
-                sharedPreferences.getBoolean(SHADOW_KEY, true)
-            )
-        }
+		if (!sharedPreferences.contains(DAY_START_KEY)) {
+			val hour = sharedPreferences.getInt(DAY_START_HOUR_KEY, -1)
+			val minute = sharedPreferences.getInt(DAY_START_MINUTE_KEY, -1)
+			if (hour != -1 && minute != -1) {
+				putInt(
+					DAY_START_KEY,
+					hour * 60 + minute,
+				)
+			}
+		}
 
-        if (!sharedPreferences.contains(DAY_START_KEY)) {
-            val hour = sharedPreferences.getInt(DAY_START_HOUR_KEY, -1)
-            val minute = sharedPreferences.getInt(DAY_START_MINUTE_KEY, -1)
-            if (hour != -1 && minute != -1) {
-                putInt(
-                    DAY_START_KEY,
-                    hour * 60 + minute
-                )
-            }
-        }
-
-        if (sharedPreferences.contains(CALENDAR_CALCULATION_METHOD_KEY)) {
-            val method = sharedPreferences.getString(CALENDAR_CALCULATION_METHOD_KEY, null)
-            if (!method.isNullOrEmpty()) {
-                runCatching {
-                    HijriDateCalculationMethod.valueOf(method)
-                    // if success, no need for migrations
-                }.onFailure(logException).getOrElse {
-                    val methodAsEnum = HijriDateCalculationMethod.fromId(method)
-                    putString(CALENDAR_CALCULATION_METHOD_KEY, methodAsEnum.toString())
-                }
-            }
-
-        }
-
-    }
+		if (sharedPreferences.contains(CALENDAR_CALCULATION_METHOD_KEY)) {
+			val method = sharedPreferences.getString(CALENDAR_CALCULATION_METHOD_KEY, null)
+			if (!method.isNullOrEmpty()) {
+				runCatching {
+					HijriDateCalculationMethod.valueOf(method)
+					// if success, no need for migrations
+				}.onFailure(logException).getOrElse {
+					val methodAsEnum = HijriDateCalculationMethod.fromId(method)
+					putString(CALENDAR_CALCULATION_METHOD_KEY, methodAsEnum.toString())
+				}
+			}
+		}
+	}
 }
-

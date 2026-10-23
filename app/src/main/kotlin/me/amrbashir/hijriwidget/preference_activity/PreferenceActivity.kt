@@ -36,110 +36,117 @@ import me.amrbashir.hijriwidget.preference_activity.composables.TopAppBar
 import me.amrbashir.hijriwidget.preference_activity.screens.HOME_DESTINATION
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.PREFERENCES_DESTINATION
 
+class PreferenceActivity : ComponentActivity() {
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		enableEdgeToEdge()
 
-class PreferenceActivity() : ComponentActivity() {
+		setContent {
+			PreferenceActivityContent()
+		}
+	}
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+	override fun onDestroy() {
+		super.onDestroy()
 
-        setContent {
-            PreferenceActivityContent()
-        }
-    }
+		val context = this.baseContext
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-        val context = this.baseContext
-
-        runBlocking {
-            changeLauncherIcon(context, PreferencesManager.loadPrimary(context))
-        }
-    }
+		runBlocking {
+			changeLauncherIcon(context, PreferencesManager.loadPrimary(context))
+		}
+	}
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun PreferenceActivityContent(
-    appWidgetId: Int? = null,
-    onSave: (suspend () -> Unit)? = null,
+	appWidgetId: Int? = null,
+	onSave: (suspend () -> Unit)? = null,
 ) {
-    val navController = rememberNavController()
-    val context = LocalContext.current
+	val navController = rememberNavController()
+	val context = LocalContext.current
 
-    // Only the id is saved, so the selected widget survives activity recreation
-    val selectedWidgetId = rememberSaveable { mutableStateOf(appWidgetId) }
-    val selectedWidget = remember { mutableStateOf<WidgetState?>(null) }
-    val selectWidget: (WidgetState) -> Unit = {
-        selectedWidget.value = it
-        selectedWidgetId.value = it.appWidgetId
-    }
+	// Only the id is saved, so the selected widget survives activity recreation
+	val selectedWidgetId = rememberSaveable { mutableStateOf(appWidgetId) }
+	val selectedWidget = remember { mutableStateOf<WidgetState?>(null) }
+	val selectWidget: (WidgetState) -> Unit = {
+		selectedWidget.value = it
+		selectedWidgetId.value = it.appWidgetId
+	}
 
-    LaunchedEffect(selectedWidgetId.value) {
-        val id = selectedWidgetId.value ?: return@LaunchedEffect
-        if (selectedWidget.value?.appWidgetId != id) {
-            selectedWidget.value = WidgetState.load(context, id)
-        }
-    }
+	LaunchedEffect(selectedWidgetId.value) {
+		val id = selectedWidgetId.value ?: return@LaunchedEffect
+		if (selectedWidget.value?.appWidgetId != id) {
+			selectedWidget.value = WidgetState.load(context, id)
+		}
+	}
 
-    val appBarTitle = remember { mutableStateOf("") }
-    val snackBarHostState = remember { SnackbarHostState() }
-    val topAppBarState = rememberTopAppBarState()
-    val topAppBarScrollBehavior =
-        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
+	val appBarTitle = remember { mutableStateOf("") }
+	val snackBarHostState = remember { SnackbarHostState() }
+	val topAppBarState = rememberTopAppBarState()
+	val topAppBarScrollBehavior =
+		TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
 
-    val widgetUpdatedMessage = stringResource(R.string.widget_updated)
-    val defaultSaveAction: suspend () -> Unit = {
-        snackBarHostState.showSnackbar(widgetUpdatedMessage)
-    }
+	val widgetUpdatedMessage = stringResource(R.string.widget_updated)
+	val defaultSaveAction: suspend () -> Unit = {
+		snackBarHostState.showSnackbar(widgetUpdatedMessage)
+	}
 
-    val widget = selectedWidget.value
-    val widgetStateProvider = widget?.let { LocalWidgetState provides it }
+	val widget = selectedWidget.value
+	val widgetStateProvider = widget?.let { LocalWidgetState provides it }
 
-    PreferenceActivityTheme {
-        // Wait until the selected widget is loaded, as preferences screens require it
-        if (selectedWidgetId.value != null && widget == null) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.darkLightContainerColor)
-            )
-            return@PreferenceActivityTheme
-        }
+	PreferenceActivityTheme {
+		// Wait until the selected widget is loaded, as preferences screens require it
+		if (selectedWidgetId.value != null && widget == null) {
+			Box(
+				modifier =
+					Modifier
+						.fillMaxSize()
+						.background(MaterialTheme.colorScheme.darkLightContainerColor),
+			)
+			return@PreferenceActivityTheme
+		}
 
-        CompositionLocalProvider(
-            LocalNavController provides navController,
-            LocalSnackBarHostState provides snackBarHostState,
-            LocalAppBarTitle provides appBarTitle,
-            LocalSelectWidget provides selectWidget,
-            *listOfNotNull(widgetStateProvider).toTypedArray(),
-        ) {
-            Scaffold(
-                containerColor = MaterialTheme.colorScheme.darkLightContainerColor,
-                snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-                topBar = {
-                    TopAppBar(
-                        scrollBehavior = topAppBarScrollBehavior,
-                        onSave = onSave ?: defaultSaveAction
-                    )
-                },
-                modifier = Modifier.nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
-            ) {
-                SharedTransitionLayout(
-                    modifier = Modifier
-                        .consumeWindowInsets(it)
-                        .padding(it)
-                ) {
-                    CompositionLocalProvider(
-                        LocalSharedTransitionScope provides this
-                    ) {
-                        Navigation(
-                            startDestination = if (appWidgetId != null) PREFERENCES_DESTINATION else HOME_DESTINATION
-                        )
-                    }
-                }
-            }
-        }
-    }
+		CompositionLocalProvider(
+			LocalNavController provides navController,
+			LocalSnackBarHostState provides snackBarHostState,
+			LocalAppBarTitle provides appBarTitle,
+			LocalSelectWidget provides selectWidget,
+			*listOfNotNull(widgetStateProvider).toTypedArray(),
+		) {
+			Scaffold(
+				containerColor = MaterialTheme.colorScheme.darkLightContainerColor,
+				snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
+				topBar = {
+					TopAppBar(
+						scrollBehavior = topAppBarScrollBehavior,
+						onSave = onSave ?: defaultSaveAction,
+					)
+				},
+				modifier = Modifier.nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
+			) {
+				SharedTransitionLayout(
+					modifier =
+						Modifier
+							.consumeWindowInsets(it)
+							.padding(it),
+				) {
+					CompositionLocalProvider(
+						LocalSharedTransitionScope provides this,
+					) {
+						Navigation(
+							startDestination =
+								if (appWidgetId !=
+									null
+								) {
+									PREFERENCES_DESTINATION
+								} else {
+									HOME_DESTINATION
+								},
+						)
+					}
+				}
+			}
+		}
+	}
 }

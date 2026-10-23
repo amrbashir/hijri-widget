@@ -8,18 +8,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import me.amrbashir.hijriwidget.preference_activity.screenPadding
 
-
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun PreferenceScreenLayout(
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
+	modifier: Modifier = Modifier,
+	content: @Composable () -> Unit,
 ) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = modifier.screenPadding()
-    ) {
-        SharedWidgetPreview()
-        content()
-    }
+	Column(
+		verticalArrangement = Arrangement.spacedBy(16.dp),
+		modifier = modifier.screenPadding(),
+	) {
+		SharedWidgetPreview()
+		content()
+	}
 }

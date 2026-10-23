@@ -9,42 +9,41 @@ import androidx.activity.enableEdgeToEdge
 import me.amrbashir.hijriwidget.preference_activity.PreferenceActivityContent
 
 class WidgetConfigurationActivity : ComponentActivity() {
+	// Get the App Widget ID from the intent that launched the activity
+	private val appWidgetId: Int by lazy {
+		intent?.extras?.getInt(
+			AppWidgetManager.EXTRA_APPWIDGET_ID,
+			AppWidgetManager.INVALID_APPWIDGET_ID,
+		) ?: AppWidgetManager.INVALID_APPWIDGET_ID
+	}
 
-    // Get the App Widget ID from the intent that launched the activity
-    private val appWidgetId: Int by lazy {
-        intent?.extras?.getInt(
-            AppWidgetManager.EXTRA_APPWIDGET_ID,
-            AppWidgetManager.INVALID_APPWIDGET_ID,
-        ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
-    }
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		enableEdgeToEdge()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+		// Set the activity result to RESULT_CANCELED.
+		//
+		// This way, if the user backs out of the activity before reaching the end,
+		// the system notifies the app widget host that the configuration is canceled
+		// and the host doesn't add the widget:
+		val resultValue = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+		setResult(RESULT_CANCELED, resultValue)
 
-        // Set the activity result to RESULT_CANCELED.
-        //
-        // This way, if the user backs out of the activity before reaching the end,
-        // the system notifies the app widget host that the configuration is canceled
-        // and the host doesn't add the widget:
-        val resultValue = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-        setResult(RESULT_CANCELED, resultValue)
+		if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+			finish()
+			return
+		}
 
-        if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-            finish()
-            return
-        }
-
-        setContent {
-            PreferenceActivityContent(
-                appWidgetId = appWidgetId,
-                onSave = {
-                    // Create the return intent, set it with the activity result, and finish the activity:
-                    val res = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                    setResult(RESULT_OK, res)
-                    finish()
-                }
-            )
-        }
-    }
+		setContent {
+			PreferenceActivityContent(
+				appWidgetId = appWidgetId,
+				onSave = {
+					// Create the return intent, set it with the activity result, and finish the activity:
+					val res = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+					setResult(RESULT_OK, res)
+					finish()
+				},
+			)
+		}
+	}
 }

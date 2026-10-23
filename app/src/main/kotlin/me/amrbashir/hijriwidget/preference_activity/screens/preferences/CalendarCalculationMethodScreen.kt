@@ -24,42 +24,44 @@ import me.amrbashir.hijriwidget.preference_activity.composables.ui.RadioIcon
 const val CALENDAR_CALCULATION_METHOD_DESTINATION = "/preferences/calendar-calculation-method"
 
 fun NavGraphBuilder.calendarCalculationMethodDestination() {
-    animatedContentComposable(route = CALENDAR_CALCULATION_METHOD_DESTINATION) {
-        CalendarCalculationMethodScreen()
-    }
+	animatedContentComposable(route = CALENDAR_CALCULATION_METHOD_DESTINATION) {
+		CalendarCalculationMethodScreen()
+	}
 }
 
 fun NavController.navigateToCalendarCalculationMethod() {
-    navigate(route = CALENDAR_CALCULATION_METHOD_DESTINATION)
+	navigate(route = CALENDAR_CALCULATION_METHOD_DESTINATION)
 }
-
 
 @Composable
 internal fun CalendarCalculationMethodScreen() {
-    val prefsManager = LocalWidgetState.current.prefsManager
+	val prefsManager = LocalWidgetState.current.prefsManager
 
-    val savedMethod = prefsManager.calendarCalculationMethod.value
+	val savedMethod = prefsManager.calendarCalculationMethod.value
 
-    PreferenceScreenLayout {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier
-                .fillMaxSize()
-                .imePadding()
-                .verticalScroll(rememberScrollState())
-        ) {
-            PreferenceGroup(label = stringResource(R.string.preferences_calendar_calculation_method_title)) {
-                for (method in HijriDateCalculationMethod.entries) {
-                    PreferenceTemplate(
-                        label = stringResource(method.label),
-                        description = stringResource(method.description),
-                        icon = { RadioIcon(selected = savedMethod.id == method.id) },
-                        onClick = {
-                            prefsManager.calendarCalculationMethod.value = method
-                        }
-                    )
-                }
-            }
-        }
-    }
+	PreferenceScreenLayout {
+		Column(
+			verticalArrangement = Arrangement.spacedBy(16.dp),
+			modifier =
+				Modifier
+					.fillMaxSize()
+					.imePadding()
+					.verticalScroll(rememberScrollState()),
+		) {
+			PreferenceGroup(
+				label = stringResource(R.string.preferences_calendar_calculation_method_title),
+			) {
+				for (method in HijriDateCalculationMethod.entries) {
+					PreferenceTemplate(
+						label = stringResource(method.label),
+						description = stringResource(method.description),
+						icon = { RadioIcon(selected = savedMethod.id == method.id) },
+						onClick = {
+							prefsManager.calendarCalculationMethod.value = method
+						},
+					)
+				}
+			}
+		}
+	}
 }

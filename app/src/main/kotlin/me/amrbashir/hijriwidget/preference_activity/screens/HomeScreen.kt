@@ -60,137 +60,163 @@ import me.amrbashir.hijriwidget.widget.HijriWidgetReceiver
 const val HOME_DESTINATION = "/"
 
 fun NavGraphBuilder.homeDestination() {
-    animatedContentComposable(route = HOME_DESTINATION) { HomeScreen() }
+	animatedContentComposable(route = HOME_DESTINATION) { HomeScreen() }
 }
 
 @Composable
 private fun HomeScreen() {
-    LocalAppBarTitle.current.value = stringResource(R.string.app_name)
+	LocalAppBarTitle.current.value = stringResource(R.string.app_name)
 
-    val navController = LocalNavController.current
-    val selectWidget = LocalSelectWidget.current
-    val context = LocalContext.current
-    val appWidgetManager = remember { AppWidgetManager.getInstance(context) }
+	val navController = LocalNavController.current
+	val selectWidget = LocalSelectWidget.current
+	val context = LocalContext.current
+	val appWidgetManager = remember { AppWidgetManager.getInstance(context) }
 
-    val widgetsStates = remember { mutableStateListOf<WidgetState>() }
-    var loaded by remember { mutableStateOf(false) }
+	val widgetsStates = remember { mutableStateListOf<WidgetState>() }
+	var loaded by remember { mutableStateOf(false) }
 
-    // Reload every time this screen is shown, which also discards unsaved edits,
-    // and when coming back to the app, e.g. after adding a widget
-    val lifecycleState by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
-    LaunchedEffect(lifecycleState) {
-        // Not waiting for `RESUMED`, which is only reached after the navigation transition ends
-        if (!lifecycleState.isAtLeast(Lifecycle.State.STARTED)) return@LaunchedEffect
-        val states = WidgetState.loadAll(context)
-        widgetsStates.clear()
-        widgetsStates.addAll(states)
-        loaded = true
-    }
+	// Reload every time this screen is shown, which also discards unsaved edits,
+	// and when coming back to the app, e.g. after adding a widget
+	val lifecycleState by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
+	LaunchedEffect(lifecycleState) {
+		// Not waiting for `RESUMED`, which is only reached after the navigation transition ends
+		if (!lifecycleState.isAtLeast(Lifecycle.State.STARTED)) return@LaunchedEffect
+		val states = WidgetState.loadAll(context)
+		widgetsStates.clear()
+		widgetsStates.addAll(states)
+		loaded = true
+	}
 
-    // Avoid flashing the empty state before widgets are loaded, but still fill
-    // the screen, as navigation transitions slide relative to its size
-    if (!loaded) {
-        Box(Modifier.fillMaxSize())
-        return
-    }
+	// Avoid flashing the empty state before widgets are loaded, but still fill
+	// the screen, as navigation transitions slide relative to its size
+	if (!loaded) {
+		Box(Modifier.fillMaxSize())
+		return
+	}
 
-    val canAddWidget = appWidgetManager.isRequestPinAppWidgetSupported
-    val addWidget = {
-        appWidgetManager.requestPinAppWidget(ComponentName(context, HijriWidgetReceiver::class.java), null, null)
-        Unit
-    }
-    val openAbout = { navController.navigateToAbout() }
+	val canAddWidget = appWidgetManager.isRequestPinAppWidgetSupported
+	val addWidget = {
+		appWidgetManager.requestPinAppWidget(
+			ComponentName(context, HijriWidgetReceiver::class.java),
+			null,
+			null,
+		)
+		Unit
+	}
+	val openAbout = { navController.navigateToAbout() }
 
-    if (widgetsStates.isEmpty()) {
-        EmptyHomeScreen(canAddWidget, addWidget, openAbout)
-        return
-    }
+	if (widgetsStates.isEmpty()) {
+		EmptyHomeScreen(canAddWidget, addWidget, openAbout)
+		return
+	}
 
-    Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            // Applied after the scroll, so widgets shadows are not clipped
-            .screenPadding()
-    ) {
-        for (state in widgetsStates) {
-            key(state.appWidgetId) {
-                CompositionLocalProvider(LocalWidgetState provides state) {
-                    SharedWidgetPreview(
-                        modifier = Modifier.shadow(6.dp, RoundedCornerShape(20.dp)),
-                        onSettingsClick = {
-                            selectWidget(state)
-                            navController.navigateToPreferences()
-                        },
-                    )
-                }
-            }
-        }
+	Column(
+		verticalArrangement = Arrangement.spacedBy(16.dp),
+		modifier =
+			Modifier
+				.fillMaxSize()
+				.verticalScroll(rememberScrollState())
+				// Applied after the scroll, so widgets shadows are not clipped
+				.screenPadding(),
+	) {
+		for (state in widgetsStates) {
+			key(state.appWidgetId) {
+				CompositionLocalProvider(LocalWidgetState provides state) {
+					SharedWidgetPreview(
+						modifier = Modifier.shadow(6.dp, RoundedCornerShape(20.dp)),
+						onSettingsClick = {
+							selectWidget(state)
+							navController.navigateToPreferences()
+						},
+					)
+				}
+			}
+		}
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            if (canAddWidget) {
-                FlatButton(Icons.Outlined.Add, stringResource(R.string.home_screen_add_widget), addWidget)
-            }
-            FlatButton(Icons.Outlined.Info, stringResource(R.string.preferences_about_title), openAbout)
-        }
-    }
+		Row(
+			horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+			modifier = Modifier.fillMaxWidth(),
+		) {
+			if (canAddWidget) {
+				FlatButton(
+					Icons.Outlined.Add,
+					stringResource(R.string.home_screen_add_widget),
+					addWidget,
+				)
+			}
+			FlatButton(
+				Icons.Outlined.Info,
+				stringResource(R.string.preferences_about_title),
+				openAbout,
+			)
+		}
+	}
 }
 
 @Composable
 private fun EmptyHomeScreen(
-    canAddWidget: Boolean,
-    addWidget: () -> Unit,
-    openAbout: () -> Unit,
+	canAddWidget: Boolean,
+	addWidget: () -> Unit,
+	openAbout: () -> Unit,
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .screenPadding()
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.align(Alignment.Center)
-        ) {
-            Icon(
-                Icons.Outlined.Widgets,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(48.dp)
-            )
-            Spacer(Modifier.height(16.dp))
-            Text(
-                stringResource(R.string.home_screen_no_widgets_title),
-                style = MaterialTheme.typography.titleLarge,
-            )
-            Spacer(Modifier.height(8.dp))
-            if (canAddWidget) {
-                FlatButton(Icons.Outlined.Add, stringResource(R.string.home_screen_add_widget_long), addWidget)
-            } else {
-                Text(
-                    stringResource(R.string.home_screen_no_widgets),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
-            }
-        }
+	Box(
+		modifier =
+			Modifier
+				.fillMaxSize()
+				.screenPadding(),
+	) {
+		Column(
+			horizontalAlignment = Alignment.CenterHorizontally,
+			modifier = Modifier.align(Alignment.Center),
+		) {
+			Icon(
+				Icons.Outlined.Widgets,
+				contentDescription = null,
+				tint = MaterialTheme.colorScheme.onSurfaceVariant,
+				modifier = Modifier.size(48.dp),
+			)
+			Spacer(Modifier.height(16.dp))
+			Text(
+				stringResource(R.string.home_screen_no_widgets_title),
+				style = MaterialTheme.typography.titleLarge,
+			)
+			Spacer(Modifier.height(8.dp))
+			if (canAddWidget) {
+				FlatButton(
+					Icons.Outlined.Add,
+					stringResource(R.string.home_screen_add_widget_long),
+					addWidget,
+				)
+			} else {
+				Text(
+					stringResource(R.string.home_screen_no_widgets),
+					style = MaterialTheme.typography.bodyMedium,
+					color = MaterialTheme.colorScheme.onSurfaceVariant,
+					textAlign = TextAlign.Center,
+					modifier = Modifier.padding(horizontal = 16.dp),
+				)
+			}
+		}
 
-        Box(Modifier.align(Alignment.BottomCenter)) {
-            FlatButton(Icons.Outlined.Info, stringResource(R.string.preferences_about_title), openAbout)
-        }
-    }
+		Box(Modifier.align(Alignment.BottomCenter)) {
+			FlatButton(
+				Icons.Outlined.Info,
+				stringResource(R.string.preferences_about_title),
+				openAbout,
+			)
+		}
+	}
 }
 
 @Composable
-private fun FlatButton(icon: ImageVector, label: String, onClick: () -> Unit) {
-    TextButton(onClick = onClick) {
-        Icon(icon, contentDescription = null, modifier = Modifier.size(18.dp))
-        Spacer(Modifier.width(8.dp))
-        Text(label)
-    }
+private fun FlatButton(
+	icon: ImageVector,
+	label: String,
+	onClick: () -> Unit,
+) {
+	TextButton(onClick = onClick) {
+		Icon(icon, contentDescription = null, modifier = Modifier.size(18.dp))
+		Spacer(Modifier.width(8.dp))
+		Text(label)
+	}
 }

@@ -14,26 +14,26 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun PreferenceGroup(
-    label: String? = null,
-    content: @Composable ColumnScope.() -> Unit,
+	label: String? = null,
+	content: @Composable ColumnScope.() -> Unit,
 ) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        label?.let {
-            Text(
-                label,
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
-        }
+	Column(
+		verticalArrangement = Arrangement.spacedBy(16.dp),
+	) {
+		label?.let {
+			Text(
+				label,
+				style = MaterialTheme.typography.labelLarge,
+				color = MaterialTheme.colorScheme.primary,
+				modifier = Modifier.padding(horizontal = 16.dp),
+			)
+		}
 
-        Column(
-            modifier = Modifier.clip(RoundedCornerShape(20.dp)),
-            verticalArrangement = Arrangement.spacedBy(2.dp)
-        ) {
-            content()
-        }
-    }
+		Column(
+			modifier = Modifier.clip(RoundedCornerShape(20.dp)),
+			verticalArrangement = Arrangement.spacedBy(2.dp),
+		) {
+			content()
+		}
+	}
 }
