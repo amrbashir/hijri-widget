@@ -14,7 +14,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import me.amrbashir.hijriwidget.HijriDateCalculationMethod
 import me.amrbashir.hijriwidget.R
-import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
+import me.amrbashir.hijriwidget.preference_activity.LocalWidgetState
 import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
@@ -36,7 +36,7 @@ fun NavController.navigateToCalendarCalculationMethod() {
 
 @Composable
 internal fun CalendarCalculationMethodScreen() {
-    val prefsManager = LocalPreferencesManager.current
+    val prefsManager = LocalWidgetState.current.prefsManager
 
     val savedMethod = prefsManager.calendarCalculationMethod.value
 

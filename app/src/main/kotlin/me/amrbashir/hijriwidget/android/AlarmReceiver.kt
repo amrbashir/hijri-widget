@@ -11,8 +11,11 @@ import android.util.Log
 import androidx.core.app.AlarmManagerCompat
 import androidx.core.content.getSystemService
 import androidx.glance.appwidget.updateAll
-import kotlinx.coroutines.runBlocking
-import me.amrbashir.hijriwidget.PreferencesManagerV2
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import me.amrbashir.hijriwidget.PreferencesManager
 import me.amrbashir.hijriwidget.logTimestamp
 import me.amrbashir.hijriwidget.preference_activity.changeLauncherIcon
 import me.amrbashir.hijriwidget.widget.HijriWidget
@@ -23,12 +26,16 @@ class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         Log.d("AlarmReceiver", "Alarm fired at: ${logTimestamp()}")
 
-        runBlocking {
-            val prefs = HijriWidget.firstWidgetOrEmptyPrefs(context)
-            val prefsManager = PreferencesManagerV2(context, prefs)
-            changeLauncherIcon(context, prefsManager)
-            HijriWidget().updateAll(context)
-            setup24Periodic(context, prefsManager)
+        // Glance's `updateAll` may need the main thread, so blocking it here would deadlock
+        val pendingResult = goAsync()
+        CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
+            try {
+                changeLauncherIcon(context, PreferencesManager.loadPrimary(context))
+                HijriWidget().updateAll(context)
+                setup24Periodic(context)
+            } finally {
+                pendingResult.finish()
+            }
         }
     }
 
@@ -36,7 +43,7 @@ class AlarmReceiver : BroadcastReceiver() {
     companion object {
         private const val ALARM_REQUEST_CODE = 1
 
-        fun nextUpdateDateInMillis(prefsManager: PreferencesManagerV2): Long {
+        fun nextUpdateDateInMillis(prefsManager: PreferencesManager): Long {
             val nextDay = Calendar.getInstance()
 
             val currentTime = nextDay[Calendar.HOUR_OF_DAY] * 60 + nextDay[Calendar.MINUTE]
@@ -51,11 +58,17 @@ class AlarmReceiver : BroadcastReceiver() {
             return nextDay.timeInMillis
         }
 
-        fun setup24Periodic(context: Context, prefsManager: PreferencesManagerV2) {
+        /**
+         * Schedules the next update at the earliest day start among all widgets
+         * (and the launcher icon, which follows the first widget or defaults).
+         */
+        suspend fun setup24Periodic(context: Context) {
             val alarmManager = context.getSystemService<AlarmManager>() ?: return
             if (!AlarmManagerCompat.canScheduleExactAlarms(alarmManager)) return
 
-            val nextUpdateMillis = nextUpdateDateInMillis(prefsManager)
+            val prefsManagers = PreferencesManager.loadAll(context).map { it.second }
+                .ifEmpty { listOf(PreferencesManager.loadPrimary(context)) }
+            val nextUpdateMillis = prefsManagers.minOf { nextUpdateDateInMillis(it) }
 
             val intent = Intent(context, AlarmReceiver::class.java)
             alarmManager.setExact(

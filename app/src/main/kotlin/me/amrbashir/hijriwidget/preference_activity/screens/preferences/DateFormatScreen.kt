@@ -13,7 +13,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -25,10 +24,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import me.amrbashir.hijriwidget.DATE_FORMAT_PRESETES
 import me.amrbashir.hijriwidget.HijriDate
-import me.amrbashir.hijriwidget.PreferencesManagerV2
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.formatHijriDate
-import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
 import me.amrbashir.hijriwidget.preference_activity.LocalWidgetState
 import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
@@ -48,16 +45,7 @@ fun NavController.navigateToDateFormat() {
 
 @Composable
 internal fun DateFormatScreen() {
-    val context = LocalContext.current
-
-    val prefsManager = LocalPreferencesManager.current
-
-
-    val widgetState = LocalWidgetState.current
-    val prefsManagerV2 = PreferencesManagerV2(
-        context = context,
-        prefs = widgetState.value.prefs,
-    )
+    val prefsManager = LocalWidgetState.current.prefsManager
 
     val savedFormat = prefsManager.dateFormat.value
 
@@ -73,7 +61,7 @@ internal fun DateFormatScreen() {
                 for (format in DATE_FORMAT_PRESETES) {
                     PreferenceTemplate(
                         label = format.formatHijriDate(
-                            HijriDate.today(prefsManagerV2),
+                            HijriDate.today(prefsManager),
                             prefsManager.calendarCalculationMethod.value
                         ),
                         description = format,

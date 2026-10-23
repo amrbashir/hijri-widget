@@ -14,16 +14,12 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
-import androidx.glance.appwidget.state.updateAppWidgetState
-import androidx.glance.appwidget.updateAll
 import androidx.navigation.compose.currentBackStackEntryAsState
 import kotlinx.coroutines.launch
-import me.amrbashir.hijriwidget.PreferencesManagerV2
 import me.amrbashir.hijriwidget.android.AlarmReceiver
 import me.amrbashir.hijriwidget.hasRouteInHierarchy
 import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
 import me.amrbashir.hijriwidget.preference_activity.LocalNavController
-import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
 import me.amrbashir.hijriwidget.preference_activity.LocalWidgetState
 import me.amrbashir.hijriwidget.preference_activity.darkLightContainerColor
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.PREFERENCES_DESTINATION
@@ -85,20 +81,10 @@ private fun SaveButton(
     val coroutineScope = rememberCoroutineScope()
 
     val saveAction: () -> Unit = {
-        val prefsManager = PreferencesManagerV2(
-            context = context,
-            prefs = widgetState.value.prefs,
-        )
-
         coroutineScope.launch {
-            updateAppWidgetState(
-                context = context,
-                glanceId = widgetState.value.id,
-            ) { prefs ->
-                TODO()
-            }
-            HijriWidget().updateAll(context)
-            AlarmReceiver.setup24Periodic(context, prefsManager)
+            widgetState.prefsManager.save(context, widgetState.id)
+            HijriWidget().update(context, widgetState.id)
+            AlarmReceiver.setup24Periodic(context)
             onSave()
         }
     }

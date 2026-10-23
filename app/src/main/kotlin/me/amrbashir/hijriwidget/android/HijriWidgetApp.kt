@@ -5,10 +5,12 @@ import android.appwidget.AppWidgetProviderInfo
 import android.os.Build
 import androidx.collection.intSetOf
 import androidx.glance.appwidget.GlanceAppWidgetManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import me.amrbashir.hijriwidget.PreferencesManager
-import me.amrbashir.hijriwidget.PreferencesManagerV2
-import me.amrbashir.hijriwidget.widget.HijriWidget
+import me.amrbashir.hijriwidget.migrateConfig
 import me.amrbashir.hijriwidget.widget.HijriWidgetReceiver
 
 class HijriWidgetApp : Application() {
@@ -18,11 +20,12 @@ class HijriWidgetApp : Application() {
 
         val context = this
 
-        runBlocking {
-            val prefs = HijriWidget.firstWidgetOrEmptyPrefs(context)
-            val prefsManager = PreferencesManagerV2(context, prefs)
+        // Migration must finish before anything reads widget preferences
+        runBlocking { migrateConfig(context) }
 
-            AlarmReceiver.setup24Periodic(context, prefsManager)
+        // Not needed to show the UI, so don't block the main thread on it
+        CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
+            AlarmReceiver.setup24Periodic(context)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
                 val appWidgetManager = GlanceAppWidgetManager(context)

@@ -1,6 +1,5 @@
 package me.amrbashir.hijriwidget.preference_activity.screens.preferences
 
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,17 +21,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.glance.GlanceId
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.formatTime
-import me.amrbashir.hijriwidget.preference_activity.LocalAnimatedContentScope
+import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
 import me.amrbashir.hijriwidget.preference_activity.LocalNavController
-import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
-import me.amrbashir.hijriwidget.preference_activity.LocalSharedTransitionScope
 import me.amrbashir.hijriwidget.preference_activity.LocalWidgetState
 import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
@@ -44,38 +38,22 @@ const val PREFERENCES_DESTINATION = "/preferences"
 const val PREFERENCES_LIST_DESTINATION = "/preferences/"
 
 fun NavGraphBuilder.preferenceListDestination() {
-    animatedContentComposable(
-        route = "$PREFERENCES_LIST_DESTINATION?sharedKey={sharedKey}",
-        arguments = listOf(
-            navArgument("sharedKey") {
-                type = NavType.StringType
-                nullable = false
-            }
-        )
-
-    ) {
-        val sharedKey = it.arguments?.getString("sharedKey")
-        if (sharedKey != null) SharedPreferencesListScreen(sharedKey)
-    }
+    animatedContentComposable(route = PREFERENCES_LIST_DESTINATION) { PreferenceListScreen() }
 }
 
-fun NavController.navigateToPreferencesList(widgetId: GlanceId, sharedKey: String) {
-    navigate(route = "$PREFERENCES_LIST_DESTINATION?sharedKey=$sharedKey")
+fun NavController.navigateToPreferences() {
+    navigate(route = PREFERENCES_DESTINATION)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun PreferenceListScreen(
-    modifier: Modifier = Modifier,
-    onClick: (() -> Unit)? = null,
-) {
-    val prefsManager = LocalPreferencesManager.current
+internal fun PreferenceListScreen() {
+    LocalAppBarTitle.current.value = stringResource(R.string.app_name)
+
+    val prefsManager = LocalWidgetState.current.prefsManager
     val navController = LocalNavController.current
 
-    PreferenceScreenLayout (
-        modifier = modifier,
-        onClick = onClick,
-    ) {
+    PreferenceScreenLayout {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier
@@ -185,24 +163,3 @@ internal fun PreferenceListScreen(
     }
 }
 
-
-@OptIn(ExperimentalSharedTransitionApi::class)
-@Composable
-fun SharedPreferencesListScreen(
-    sharedKey: String,
-    modifier: Modifier = Modifier,
-    onClick: (() -> Unit)? = null,
-) {
-    val sharedTransitionScope = LocalSharedTransitionScope.current
-    val sharedAnimatedContentScope = LocalAnimatedContentScope.current
-
-    with(receiver = sharedTransitionScope) {
-        PreferenceListScreen(
-            onClick = onClick,
-            modifier = modifier.sharedElement(
-                sharedContentState = rememberSharedContentState(sharedKey),
-                animatedVisibilityScope = sharedAnimatedContentScope
-            ),
-        )
-    }
-}

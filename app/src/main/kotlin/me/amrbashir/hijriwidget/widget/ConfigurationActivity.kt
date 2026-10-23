@@ -30,8 +30,14 @@ class WidgetConfigurationActivity : ComponentActivity() {
         val resultValue = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
         setResult(RESULT_CANCELED, resultValue)
 
+        if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+            finish()
+            return
+        }
+
         setContent {
             PreferenceActivityContent(
+                appWidgetId = appWidgetId,
                 onSave = {
                     // Create the return intent, set it with the activity result, and finish the activity:
                     val res = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)

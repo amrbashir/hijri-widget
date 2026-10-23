@@ -4,13 +4,10 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.navigation.NamedNavArgument
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import me.amrbashir.hijriwidget.preference_activity.screens.HOME_DESTINATION
 import me.amrbashir.hijriwidget.preference_activity.screens.aboutDestination
 import me.amrbashir.hijriwidget.preference_activity.screens.homeDestination
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.PREFERENCES_DESTINATION
@@ -23,12 +20,12 @@ import me.amrbashir.hijriwidget.preference_activity.screens.preferences.preferen
 
 
 @Composable
-fun Navigation() {
+fun Navigation(startDestination: String) {
     val navController = LocalNavController.current
 
     NavHost(
         navController = navController,
-        startDestination = HOME_DESTINATION,
+        startDestination = startDestination,
         enterTransition = {
             slideIntoContainer(
                 AnimatedContentTransitionScope.SlideDirection.Left,
@@ -72,14 +69,13 @@ fun Navigation() {
 
 fun NavGraphBuilder.animatedContentComposable(
     route: String,
-    arguments: List<NamedNavArgument> = emptyList(),
-    content: @Composable (NavBackStackEntry) -> Unit
+    content: @Composable () -> Unit
 ) {
-    composable(route, arguments) {
+    composable(route) {
         CompositionLocalProvider(
             LocalAnimatedContentScope provides this
         ) {
-            content(it)
+            content()
         }
     }
 }

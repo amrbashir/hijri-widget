@@ -3,7 +3,11 @@
     <string name="app_name">Hijri Widget</string>
     <string name="app_description">Android widget for displaying Hijri date</string>
     <string name="widget_preview_date" translatable="false">16 رمضان 1445</string>
-    <string name="home_screen_stub_text">This is a stub for now, in preparation for multi-widget support</string>
+    <string name="home_screen_no_widgets">Add Hijri Widget to your home screen, then come back here to customize it</string>
+    <string name="home_screen_no_widgets_title">No widgets yet</string>
+    <string name="home_screen_widget_settings">Widget settings</string>
+    <string name="home_screen_add_widget">Add widget</string>
+    <string name="home_screen_add_widget_long">Add a new widget to your home screen</string>
     <string name="color_mode_dynamic" translatable="false">Material You</string>
     <string name="color_mode_dynamic_description">Dynamic color based on your wallpaper</string>
     <string name="color_mode_system">System</string>
@@ -105,7 +109,6 @@
     <string name="preferences_restore_defaults_title">Restore defaults</string>
     <string name="preferences_restore_defaults_description">Restore the default preferences</string>
     <string name="preferences_about_title">About</string>
-    <string name="preferences_about_description">App info, version details, and changelog.</string>
     <string name="reset_to_default">Reset to default</string>
     <string name="changelog">Changelog</string>
     <string name="widget_updated">Widget updated!</string>

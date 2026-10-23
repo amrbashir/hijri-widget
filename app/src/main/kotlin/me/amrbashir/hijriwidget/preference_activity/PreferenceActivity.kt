@@ -6,7 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -17,18 +20,21 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.runBlocking
 import me.amrbashir.hijriwidget.PreferencesManager
-import me.amrbashir.hijriwidget.PreferencesManagerV2
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.composables.TopAppBar
-import me.amrbashir.hijriwidget.widget.HijriWidget
+import me.amrbashir.hijriwidget.preference_activity.screens.HOME_DESTINATION
+import me.amrbashir.hijriwidget.preference_activity.screens.preferences.PREFERENCES_DESTINATION
 
 
 class PreferenceActivity() : ComponentActivity() {
@@ -48,9 +54,7 @@ class PreferenceActivity() : ComponentActivity() {
         val context = this.baseContext
 
         runBlocking {
-            val prefs = HijriWidget.firstWidgetOrEmptyPrefs(context)
-            val prefsManager = PreferencesManagerV2(context, prefs)
-            changeLauncherIcon(context, prefsManager)
+            changeLauncherIcon(context, PreferencesManager.loadPrimary(context))
         }
     }
 }
@@ -58,11 +62,27 @@ class PreferenceActivity() : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun PreferenceActivityContent(
+    appWidgetId: Int? = null,
     onSave: (suspend () -> Unit)? = null,
 ) {
     val navController = rememberNavController()
+    val context = LocalContext.current
 
-    val prefsManager = PreferencesManager.load(navController.context)
+    // Only the id is saved, so the selected widget survives activity recreation
+    val selectedWidgetId = rememberSaveable { mutableStateOf(appWidgetId) }
+    val selectedWidget = remember { mutableStateOf<WidgetState?>(null) }
+    val selectWidget: (WidgetState) -> Unit = {
+        selectedWidget.value = it
+        selectedWidgetId.value = it.appWidgetId
+    }
+
+    LaunchedEffect(selectedWidgetId.value) {
+        val id = selectedWidgetId.value ?: return@LaunchedEffect
+        if (selectedWidget.value?.appWidgetId != id) {
+            selectedWidget.value = WidgetState.load(context, id)
+        }
+    }
+
     val appBarTitle = remember { mutableStateOf("") }
     val snackBarHostState = remember { SnackbarHostState() }
     val topAppBarState = rememberTopAppBarState()
@@ -74,12 +94,26 @@ fun PreferenceActivityContent(
         snackBarHostState.showSnackbar(widgetUpdatedMessage)
     }
 
+    val widget = selectedWidget.value
+    val widgetStateProvider = widget?.let { LocalWidgetState provides it }
+
     PreferenceActivityTheme {
+        // Wait until the selected widget is loaded, as preferences screens require it
+        if (selectedWidgetId.value != null && widget == null) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.darkLightContainerColor)
+            )
+            return@PreferenceActivityTheme
+        }
+
         CompositionLocalProvider(
             LocalNavController provides navController,
             LocalSnackBarHostState provides snackBarHostState,
             LocalAppBarTitle provides appBarTitle,
-            LocalPreferencesManager provides prefsManager,
+            LocalSelectWidget provides selectWidget,
+            *listOfNotNull(widgetStateProvider).toTypedArray(),
         ) {
             Scaffold(
                 containerColor = MaterialTheme.colorScheme.darkLightContainerColor,
@@ -100,7 +134,9 @@ fun PreferenceActivityContent(
                     CompositionLocalProvider(
                         LocalSharedTransitionScope provides this
                     ) {
-                        Navigation()
+                        Navigation(
+                            startDestination = if (appWidgetId != null) PREFERENCES_DESTINATION else HOME_DESTINATION
+                        )
                     }
                 }
             }

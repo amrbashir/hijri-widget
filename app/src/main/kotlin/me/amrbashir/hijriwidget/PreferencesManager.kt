@@ -2,24 +2,34 @@ package me.amrbashir.hijriwidget
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.core.content.edit
+import androidx.datastore.preferences.core.MutablePreferences
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.floatPreferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.glance.GlanceId
 import androidx.glance.GlanceTheme
+import androidx.glance.appwidget.GlanceAppWidgetManager
+import androidx.glance.appwidget.state.getAppWidgetState
+import androidx.glance.appwidget.state.updateAppWidgetState
+import androidx.glance.state.PreferencesGlanceStateDefinition
 import androidx.glance.unit.ColorProvider
+import me.amrbashir.hijriwidget.widget.HijriWidget
 
-private const val PREF = "HijriWidgetPref"
+val Color.Companion.Dark: Color get() = Color(0xFF151515)
 
 class PreferencesManager {
-    private val _preferences: MutableList<Preference<Any>> = mutableListOf()
+    private val _preferences: MutableList<Preference<Any, Any>> = mutableListOf()
 
 
-    var bgColorMode = enumPreference(
+    val bgColorMode = enumPreference(
         key = "BG_COLOR_MODE",
         default = ColorMode.Transparent,
     )
@@ -117,25 +127,49 @@ class PreferencesManager {
     }
 
     companion object {
-        fun load(context: Context): PreferencesManager {
-            val sharedPreferences = context.getSharedPreferences(PREF, 0)
-
-            migratePreferences(sharedPreferences)
-
+        /**
+         * Loads preferences from a widget's state.
+         *
+         * A widget without any saved state (e.g. a newly added widget) gets the defaults.
+         */
+        fun load(prefs: Preferences): PreferencesManager {
             val manager = PreferencesManager()
             for (pref in manager._preferences) {
-                pref.load(sharedPreferences)
+                pref.load(prefs)
             }
             return manager
         }
+
+        suspend fun load(context: Context, glanceId: GlanceId): PreferencesManager {
+            val prefs = getAppWidgetState(context, PreferencesGlanceStateDefinition, glanceId)
+            return load(prefs)
+        }
+
+        /** Loads preferences of every placed widget, in placement order */
+        suspend fun loadAll(context: Context): List<Pair<GlanceId, PreferencesManager>> {
+            return GlanceAppWidgetManager(context)
+                .getGlanceIds(HijriWidget::class.java)
+                .map { id -> id to load(context, id) }
+        }
+
+        /**
+         * Loads preferences used for app-wide behavior (e.g. the launcher icon),
+         * which follows the first placed widget, or defaults if no widget is placed.
+         */
+        suspend fun loadPrimary(context: Context): PreferencesManager {
+            return loadAll(context).firstOrNull()?.second ?: PreferencesManager()
+        }
     }
 
-    fun save(context: Context) {
-        val sharedPreferences = context.getSharedPreferences(PREF, 0)
-        sharedPreferences.edit(commit = true) {
-            for (pref in _preferences) {
-                pref.save(this)
-            }
+    suspend fun save(context: Context, glanceId: GlanceId) {
+        updateAppWidgetState(context, PreferencesGlanceStateDefinition, glanceId) { prefs ->
+            prefs.toMutablePreferences().apply { saveInto(this) }
+        }
+    }
+
+    private fun saveInto(prefs: MutablePreferences) {
+        for (pref in _preferences) {
+            pref.save(prefs)
         }
     }
 
@@ -148,20 +182,20 @@ class PreferencesManager {
     // ======================================= //
     // Helper methods to construct preferences //
     // ======================================= //
-    fun <T> preference(
-        key: String,
+    fun <T, K> preference(
+        key: Preferences.Key<K>,
         default: T,
-        loader: SharedPreferences.(String, T) -> T,
-        saver: SharedPreferences.Editor.(String, T) -> Unit,
-    ): Preference<T> {
+        parser: (K) -> T,
+        serializer: (T) -> K,
+    ): Preference<T, K> {
         val p = Preference(
             key,
             default,
-            loader,
-            saver
+            parser,
+            serializer,
         )
         @Suppress("UNCHECKED_CAST")
-        _preferences.add(p as Preference<Any>)
+        _preferences.add(p as Preference<Any, Any>)
         return p
     }
 
@@ -169,67 +203,58 @@ class PreferencesManager {
         key: String,
         default: Int,
     ) = preference(
-        key = key,
+        key = intPreferencesKey(key),
         default = default,
-        loader = SharedPreferences::getInt,
-        saver = SharedPreferences.Editor::putInt,
+        parser = { it },
+        serializer = { it },
     )
 
     fun floatPreference(
         key: String,
         default: Float,
     ) = preference(
-        key = key,
+        key = floatPreferencesKey(key),
         default = default,
-        loader = SharedPreferences::getFloat,
-        saver = SharedPreferences.Editor::putFloat,
+        parser = { it },
+        serializer = { it },
     )
 
     fun stringPreference(
         key: String,
         default: String,
     ) = preference(
-        key = key,
+        key = stringPreferencesKey(key),
         default = default,
-        loader = { k, def ->
-            this.getString(k, def) ?: def
-        },
-        saver = SharedPreferences.Editor::putString,
+        parser = { it },
+        serializer = { it },
     )
 
     fun booleanPreference(
         key: String,
         default: Boolean,
     ) = preference(
-        key = key,
+        key = booleanPreferencesKey(key),
         default = default,
-        loader = SharedPreferences::getBoolean,
-        saver = SharedPreferences.Editor::putBoolean,
+        parser = { it },
+        serializer = { it },
     )
 
     inline fun <reified T : Enum<T>> enumPreference(
         key: String,
         default: T,
     ) = preference(
-        key = key,
+        key = stringPreferencesKey(key),
         default = default,
-        loader = { k, def ->
-            val v = this.getString(k, def.toString()) ?: def.toString()
-            enumValueOf<T>(v)
-        },
-        saver = { k, v ->
-            putString(k, v.toString())
-        }
+        parser = { enumValueOf<T>(it) },
+        serializer = { it.toString() },
     )
-
-
 }
 
-class Preference<T>(
-    val key: String,
+class Preference<T, K>(
+    val key: Preferences.Key<K>,
     val default: T,
-    loader: SharedPreferences.(String, T) -> T,
-    saver: SharedPreferences.Editor.(String, T) -> Unit,
+    private val parser: (K) -> T,
+    private val serializer: (T) -> K,
 ) {
     private val _value = mutableStateOf(default)
     var value: T
@@ -238,119 +263,16 @@ class Preference<T>(
             _value.value = v
         }
 
-    val load = { prefs: SharedPreferences ->
-        this.value = loader(prefs, this.key, this.default)
+    fun load(prefs: Preferences) {
+        this.value = prefs[key]?.let { runCatching { parser(it) }.onFailure(logException).getOrNull() }
+            ?: default
     }
 
-    val save: SharedPreferences.Editor.() -> Unit = {
-        saver(this, this@Preference.key, this@Preference.value)
+    fun save(prefs: MutablePreferences) {
+        prefs[key] = serializer(value)
     }
 
     fun reset() {
         value = default
     }
 }
-
-// ==================== //
-// Old Prefs Migrations //
-// ==================== //
-const val TEXT_COLOR_MODE_KEY = "TEXT_COLOR_MODE"
-const val THEME_KEY = "THEME"
-const val TEXT_CUSTOM_COLOR_KEY = "TEXT_CUSTOM_COLOR"
-const val CUSTOM_COLOR_KEY = "CUSTOM_COLOR"
-const val TEXT_SIZE_KEY = "TEXT_SIZE"
-const val CUSTOM_TEXT_SIZE_KEY = "CUSTOM_TEXT_SIZE"
-const val TEXT_SHADOW_KEY = "TEXT_SHADOW"
-const val SHADOW_KEY = "SHADOW"
-const val DATE_FORMAT_KEY = "DATE_FORMAT"
-const val LANG_KEY = "LANG"
-const val DAY_START_KEY = "DAY_START"
-const val DAY_START_HOUR_KEY = "DAY_START_HOUR"
-const val DAY_START_MINUTE_KEY = "DAY_START_MINUTE"
-const val CALENDAR_CALCULATION_METHOD_KEY = "CALENDAR_CALCULATION_METHOD"
-
-fun migratePreferences(sharedPreferences: SharedPreferences) {
-    sharedPreferences.edit(commit = true) {
-        if (!sharedPreferences.contains(DATE_FORMAT_KEY)) {
-            sharedPreferences.getString(LANG_KEY, null)?.let {
-                when (it) {
-                    "Arabic" -> putString(
-                        DATE_FORMAT_KEY,
-                        "d MMMM yyyy"
-                    )
-
-                    "English" -> putString(
-                        DATE_FORMAT_KEY,
-                        "en-GB{d MMMM yyyy}"
-                    )
-
-                    else -> {}
-                }
-
-            }
-        }
-
-        if (!sharedPreferences.contains(TEXT_COLOR_MODE_KEY)) {
-            sharedPreferences.getString(THEME_KEY, null)?.let {
-                putString(
-                    TEXT_COLOR_MODE_KEY,
-                    it
-                )
-            }
-        }
-
-        if (!sharedPreferences.contains(TEXT_CUSTOM_COLOR_KEY)) {
-            val color = sharedPreferences.getInt(CUSTOM_COLOR_KEY, -1)
-            if (color != -1) {
-                putInt(
-                    TEXT_CUSTOM_COLOR_KEY,
-                    color
-                )
-            }
-        }
-
-        if (!sharedPreferences.contains(TEXT_SIZE_KEY)) {
-            val size = sharedPreferences.getFloat(CUSTOM_TEXT_SIZE_KEY, -1F)
-            if (size != -1F) {
-                putFloat(
-                    TEXT_SIZE_KEY,
-                    size
-                )
-            }
-        }
-
-        if (!sharedPreferences.contains(TEXT_SHADOW_KEY)) {
-            putBoolean(
-                TEXT_SHADOW_KEY,
-                sharedPreferences.getBoolean(SHADOW_KEY, true)
-            )
-        }
-
-        if (!sharedPreferences.contains(DAY_START_KEY)) {
-            val hour = sharedPreferences.getInt(DAY_START_HOUR_KEY, -1)
-            val minute = sharedPreferences.getInt(DAY_START_MINUTE_KEY, -1)
-            if (hour != -1 && minute != -1) {
-                putInt(
-                    DAY_START_KEY,
-                    hour * 60 + minute
-                )
-            }
-        }
-
-        if (sharedPreferences.contains(CALENDAR_CALCULATION_METHOD_KEY)) {
-            val method = sharedPreferences.getString(CALENDAR_CALCULATION_METHOD_KEY, null)
-            if (!method.isNullOrEmpty()) {
-                runCatching {
-                    HijriDateCalculationMethod.valueOf(method)
-                    // if success, no need for migrations
-                }.onFailure(logException).getOrElse {
-                    val methodAsEnum = HijriDateCalculationMethod.fromId(method)
-                    putString(CALENDAR_CALCULATION_METHOD_KEY, methodAsEnum.toString())
-                }
-            }
-
-        }
-
-    }
-}
-

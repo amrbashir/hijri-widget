@@ -15,7 +15,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import me.amrbashir.hijriwidget.ColorMode
 import me.amrbashir.hijriwidget.R
-import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
+import me.amrbashir.hijriwidget.preference_activity.LocalWidgetState
 import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.ColorPicker
@@ -36,7 +36,7 @@ fun NavController.navigateToColor() {
 
 @Composable
 internal fun ColorScreen() {
-    val prefsManager = LocalPreferencesManager.current
+    val prefsManager = LocalWidgetState.current.prefsManager
 
     val savedTextColorMode = prefsManager.textColorMode.value
     val textColorModes = ColorMode.all()
