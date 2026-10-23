@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.toArgb
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
@@ -15,10 +16,12 @@ import androidx.glance.LocalContext
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.AndroidRemoteViews
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.provideContent
+import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.background
 import androidx.glance.currentState
 import androidx.glance.layout.Alignment
@@ -113,12 +116,36 @@ class HijriWidget : GlanceAppWidget() {
 					.clickable {
 						if (id == null) return@clickable
 						coroutineScope.launch {
-							update(context, id)
+							refresh(context, id)
 							AlarmReceiver.setup24Periodic(context)
 						}
 					},
 		) {
 			AndroidRemoteViews(remoteViews)
+		}
+	}
+
+	companion object {
+		/**
+		 * The date is not part of the widget state, so a running widget won't recompose
+		 * when the day changes, bumping this key in its state forces it to.
+		 */
+		private val LAST_REFRESH = longPreferencesKey("LAST_REFRESH")
+
+		suspend fun refresh(
+			context: Context,
+			id: GlanceId,
+		) {
+			updateAppWidgetState(context, PreferencesGlanceStateDefinition, id) { prefs ->
+				prefs.toMutablePreferences().apply { this[LAST_REFRESH] = System.currentTimeMillis() }
+			}
+			HijriWidget().update(context, id)
+		}
+
+		suspend fun refreshAll(context: Context) {
+			for (id in GlanceAppWidgetManager(context).getGlanceIds(HijriWidget::class.java)) {
+				refresh(context, id)
+			}
 		}
 	}
 }
