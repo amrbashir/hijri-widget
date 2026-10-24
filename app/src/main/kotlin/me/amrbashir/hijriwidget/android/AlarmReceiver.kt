@@ -12,6 +12,7 @@ import androidx.core.app.AlarmManagerCompat
 import androidx.core.content.getSystemService
 import kotlinx.coroutines.launch
 import me.amrbashir.hijriwidget.PreferencesManager
+import me.amrbashir.hijriwidget.logException
 import me.amrbashir.hijriwidget.logTimestamp
 import me.amrbashir.hijriwidget.preference_activity.changeLauncherIcon
 import me.amrbashir.hijriwidget.widget.HijriWidget
@@ -27,12 +28,22 @@ class AlarmReceiver : BroadcastReceiver() {
 		// Glance updates may need the main thread, so blocking it here would deadlock
 		val pendingResult = goAsync()
 		HijriWidgetApp.scope.launch {
+			// Each step is guarded, so a failure is logged instead of crashing the app,
+			// and the next update is always scheduled, or the widgets would stop updating
 			try {
-				// Loaded once for both the launcher icon and the next update
-				val prefsManagers = PreferencesManager.loadAll(context)
-				changeLauncherIcon(context, prefsManagers.firstOrNull() ?: PreferencesManager())
-				HijriWidget.refreshAll(context)
-				scheduleNextUpdate(context, prefsManagers)
+				// Loaded once for both the launcher icon and the next update, defaults if it fails
+				val prefsManagers =
+					runCatching { PreferencesManager.loadAll(context) }
+						.onFailure(logException)
+						.getOrDefault(emptyList())
+
+				runCatching {
+					changeLauncherIcon(context, prefsManagers.firstOrNull() ?: PreferencesManager())
+				}.onFailure(logException)
+
+				runCatching { HijriWidget.refreshAll(context) }.onFailure(logException)
+
+				runCatching { scheduleNextUpdate(context, prefsManagers) }.onFailure(logException)
 			} finally {
 				pendingResult.finish()
 			}
