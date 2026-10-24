@@ -29,9 +29,10 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.rememberNavController
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import me.amrbashir.hijriwidget.PreferencesManager
 import me.amrbashir.hijriwidget.R
+import me.amrbashir.hijriwidget.android.HijriWidgetApp
 import me.amrbashir.hijriwidget.preference_activity.composables.TopAppBar
 import me.amrbashir.hijriwidget.preference_activity.screens.HOME_DESTINATION
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.PREFERENCES_DESTINATION
@@ -50,9 +51,10 @@ class PreferenceActivity : ComponentActivity() {
 	override fun onDestroy() {
 		super.onDestroy()
 
-		val context = this.baseContext
+		val context = applicationContext
 
-		runBlocking {
+		// Loading preferences is disk I/O, so don't block the main thread on it
+		HijriWidgetApp.scope.launch {
 			changeLauncherIcon(context, PreferencesManager.loadFirstOrDefault(context))
 		}
 	}
