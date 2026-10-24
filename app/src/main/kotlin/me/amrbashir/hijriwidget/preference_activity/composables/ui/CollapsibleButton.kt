@@ -29,7 +29,7 @@ fun CollapsibleButton(
 		label = "accordion-arrow",
 	)
 
-	PreferenceTemplate(
+	Item(
 		label = header,
 		endContent = {
 			Icon(

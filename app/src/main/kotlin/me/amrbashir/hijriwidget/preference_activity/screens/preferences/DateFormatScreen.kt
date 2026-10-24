@@ -29,8 +29,8 @@ import me.amrbashir.hijriwidget.formatHijriDate
 import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
 import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
-import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
-import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceTemplate
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.Item
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.ItemGroup
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.RadioIcon
 
 const val DATE_FORMAT_DESTINATION = "/preferences/date-format"
@@ -58,9 +58,9 @@ internal fun DateFormatScreen() {
 					.imePadding()
 					.verticalScroll(rememberScrollState()),
 		) {
-			PreferenceGroup(label = stringResource(R.string.date_format_group_title)) {
+			ItemGroup(label = stringResource(R.string.date_format_group_title)) {
 				for (format in DATE_FORMAT_PRESETES) {
-					PreferenceTemplate(
+					Item(
 						label =
 							format.formatHijriDate(
 								HijriDate.today(prefsManager),
@@ -80,7 +80,7 @@ internal fun DateFormatScreen() {
 					)
 				}
 
-				PreferenceTemplate(
+				Item(
 					label = stringResource(R.string.date_format_custom),
 					description = stringResource(R.string.date_format_custom_description),
 					icon = { RadioIcon(selected = prefsManager.dateIsCustomFormat.value) },

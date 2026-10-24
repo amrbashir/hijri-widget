@@ -44,8 +44,8 @@ import me.amrbashir.hijriwidget.CONTRIBUTORS
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
 import me.amrbashir.hijriwidget.preference_activity.composables.Changelog
-import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
-import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceTemplate
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.Item
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.ItemGroup
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.adaptiveIconPainterResource
 import me.amrbashir.hijriwidget.preference_activity.screenPadding
 
@@ -217,9 +217,9 @@ private fun Contributors() {
 		)
 	}
 
-	PreferenceGroup(stringResource(R.string.top_contributors)) {
+	ItemGroup(stringResource(R.string.top_contributors)) {
 		for (contributor in CONTRIBUTORS) {
-			PreferenceTemplate(
+			Item(
 				label = contributor.username,
 				description = stringResource(R.string.contributions, contributor.contributions),
 				onClick = { openLink(contributor.url) },
@@ -233,7 +233,7 @@ private fun Contributors() {
 			)
 		}
 
-		PreferenceTemplate(
+		Item(
 			label = stringResource(R.string.checkout_the_full_list_of_contributors),
 			onClick = { openLink("https://github.com/amrbashir/hijri-widget/graphs/contributors") },
 			icon = {

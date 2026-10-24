@@ -18,6 +18,7 @@ import me.amrbashir.hijriwidget.preference_activity.changeLauncherIcon
 import me.amrbashir.hijriwidget.widget.HijriWidget
 
 class AlarmReceiver : BroadcastReceiver() {
+	// Not exported, so only the system and this app can send it intents
 	@SuppressLint("UnsafeProtectedBroadcastReceiver")
 	override fun onReceive(
 		context: Context,

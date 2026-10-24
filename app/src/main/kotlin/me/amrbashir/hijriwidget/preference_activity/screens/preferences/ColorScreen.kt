@@ -19,8 +19,8 @@ import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
 import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.ColorPicker
-import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
-import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceTemplate
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.Item
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.ItemGroup
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.RadioIcon
 
 const val COLOR_DESTINATION = "/preferences/color"
@@ -52,9 +52,9 @@ internal fun ColorScreen() {
 					.imePadding()
 					.verticalScroll(rememberScrollState()),
 		) {
-			PreferenceGroup(label = stringResource(R.string.text_color)) {
+			ItemGroup(label = stringResource(R.string.text_color)) {
 				for (mode in textColorModes) {
-					PreferenceTemplate(
+					Item(
 						label = stringResource(mode.label),
 						description = stringResource(mode.description),
 						icon = { RadioIcon(selected = savedTextColorMode == mode) },
@@ -76,9 +76,9 @@ internal fun ColorScreen() {
 				}
 			}
 
-			PreferenceGroup(label = stringResource(R.string.background_color)) {
+			ItemGroup(label = stringResource(R.string.background_color)) {
 				for (mode in bgColorModes) {
-					PreferenceTemplate(
+					Item(
 						label = stringResource(mode.label),
 						description = stringResource(mode.description),
 						icon = { RadioIcon(selected = savedBgColorMode == mode) },

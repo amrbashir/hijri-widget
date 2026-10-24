@@ -17,8 +17,8 @@ import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
 import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
-import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
-import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceTemplate
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.Item
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.ItemGroup
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.RadioIcon
 
 const val CALENDAR_CALCULATION_METHOD_DESTINATION = "/preferences/calendar-calculation-method"
@@ -48,11 +48,11 @@ internal fun CalendarCalculationMethodScreen() {
 					.imePadding()
 					.verticalScroll(rememberScrollState()),
 		) {
-			PreferenceGroup(
+			ItemGroup(
 				label = stringResource(R.string.preferences_calendar_calculation_method_title),
 			) {
 				for (method in HijriDateCalculationMethod.entries) {
-					PreferenceTemplate(
+					Item(
 						label = stringResource(method.label),
 						description = stringResource(method.description),
 						icon = { RadioIcon(selected = savedMethod.id == method.id) },

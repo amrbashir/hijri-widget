@@ -15,11 +15,11 @@ import dev.jeziellago.compose.markdowntext.MarkdownText
 import me.amrbashir.hijriwidget.CHANGELOG
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.CollapsibleButton
-import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.ItemGroup
 
 @Composable
 fun Changelog() {
-	PreferenceGroup(
+	ItemGroup(
 		label = stringResource(R.string.changelog),
 	) {
 		for ((index, entry) in CHANGELOG.withIndex()) {

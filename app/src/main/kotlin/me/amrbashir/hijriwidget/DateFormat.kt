@@ -59,6 +59,7 @@ fun parseDateFormat(input: String): List<DateFormatSegment> =
 		}
 	}
 
+// Lint assumes java.text.SimpleDateFormat, this is ICU's, and the locale is always given
 @SuppressLint("SimpleDateFormat")
 fun String.formatHijriDate(
 	date: Calendar,

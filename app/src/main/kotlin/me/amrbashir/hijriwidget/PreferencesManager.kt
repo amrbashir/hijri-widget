@@ -1,6 +1,5 @@
 package me.amrbashir.hijriwidget
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -25,7 +24,7 @@ import me.amrbashir.hijriwidget.widget.HijriWidget
 val Color.Companion.Dark: Color get() = Color(0xFF151515)
 
 class PreferencesManager {
-	private val _preferences: MutableList<Preference<Any, Any>> = mutableListOf()
+	private val _preferences: MutableList<Preference<*, *>> = mutableListOf()
 
 	val bgColorMode =
 		enumPreference(
@@ -122,7 +121,6 @@ class PreferencesManager {
 			else -> Color.White
 		}
 
-	@SuppressLint("RestrictedApi")
 	@Composable
 	fun getBgColor(): ColorProvider =
 		when (this.bgColorMode.value) {
@@ -217,8 +215,7 @@ class PreferencesManager {
 				parser,
 				serializer,
 			)
-		@Suppress("UNCHECKED_CAST")
-		_preferences.add(p as Preference<Any, Any>)
+		_preferences.add(p)
 		return p
 	}
 

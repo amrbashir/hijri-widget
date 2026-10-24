@@ -30,8 +30,8 @@ import me.amrbashir.hijriwidget.preference_activity.LocalNavController
 import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
 import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
-import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
-import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceTemplate
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.Item
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.ItemGroup
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.ValueSlider
 
 const val PREFERENCES_DESTINATION = "/preferences"
@@ -62,10 +62,10 @@ internal fun PreferenceListScreen() {
 					.imePadding()
 					.verticalScroll(rememberScrollState()),
 		) {
-			PreferenceGroup(
+			ItemGroup(
 				label = stringResource(R.string.preferences_functionality_group_title),
 			) {
-				PreferenceTemplate(
+				Item(
 					label = stringResource(R.string.preferences_date_format_title),
 					description = stringResource(R.string.preferences_date_format_description),
 					icon = Icons.Outlined.Translate,
@@ -74,7 +74,7 @@ internal fun PreferenceListScreen() {
 					},
 				)
 
-				PreferenceTemplate(
+				Item(
 					label =
 						stringResource(
 							R.string.preferences_day_start_title,
@@ -87,7 +87,7 @@ internal fun PreferenceListScreen() {
 					},
 				)
 
-				PreferenceTemplate(
+				Item(
 					label = stringResource(R.string.preferences_calendar_calculation_method_title),
 					description =
 						stringResource(
@@ -99,7 +99,7 @@ internal fun PreferenceListScreen() {
 					},
 				)
 
-				PreferenceTemplate(
+				Item(
 					label = stringResource(R.string.preferences_day_offset_title),
 					description = stringResource(R.string.preferences_day_offset_description),
 					icon = Icons.Outlined.MoreTime,
@@ -114,8 +114,8 @@ internal fun PreferenceListScreen() {
 				}
 			}
 
-			PreferenceGroup(label = stringResource(R.string.preferences_appearance_group_title)) {
-				PreferenceTemplate(
+			ItemGroup(label = stringResource(R.string.preferences_appearance_group_title)) {
+				Item(
 					label = stringResource(R.string.preferences_color_title),
 					description = stringResource(R.string.preferences_color_description),
 					icon = Icons.Outlined.ColorLens,
@@ -124,7 +124,7 @@ internal fun PreferenceListScreen() {
 					},
 				)
 
-				PreferenceTemplate(
+				Item(
 					label = stringResource(R.string.preferences_text_size_title),
 					description = stringResource(R.string.preferences_text_size_description),
 					icon = Icons.Outlined.TextIncrease,
@@ -138,7 +138,7 @@ internal fun PreferenceListScreen() {
 					)
 				}
 
-				PreferenceTemplate(
+				Item(
 					label = stringResource(R.string.preferences_text_shadow_title),
 					description = stringResource(R.string.preferences_text_shadow_description),
 					icon = Icons.Outlined.Brightness6,
@@ -156,8 +156,8 @@ internal fun PreferenceListScreen() {
 				)
 			}
 
-			PreferenceGroup(label = stringResource(R.string.preferences_misc_group_title)) {
-				PreferenceTemplate(
+			ItemGroup(label = stringResource(R.string.preferences_misc_group_title)) {
+				Item(
 					label = stringResource(R.string.preferences_restore_defaults_title),
 					description = stringResource(R.string.preferences_restore_defaults_description),
 					icon = Icons.Outlined.SettingsBackupRestore,

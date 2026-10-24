@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import me.amrbashir.hijriwidget.addIfNotNull
 
 @Composable
-fun PreferenceTemplate(
+fun Item(
 	label: String,
 	modifier: Modifier = Modifier,
 	icon: ImageVector,
@@ -33,7 +33,7 @@ fun PreferenceTemplate(
 	endContent: (@Composable () -> Unit)? = null,
 	content: (@Composable () -> Unit)? = null,
 ) {
-	PreferenceTemplate(
+	Item(
 		icon = {
 			Icon(
 				imageVector = icon,
@@ -53,7 +53,7 @@ fun PreferenceTemplate(
 }
 
 @Composable
-fun PreferenceTemplate(
+fun Item(
 	label: String,
 	modifier: Modifier = Modifier,
 	enabled: Boolean = true,
