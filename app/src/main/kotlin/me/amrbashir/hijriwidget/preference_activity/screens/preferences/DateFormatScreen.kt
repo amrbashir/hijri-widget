@@ -26,8 +26,8 @@ import me.amrbashir.hijriwidget.DATE_FORMAT_PRESETES
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.formatHijriDate
-import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
-import me.amrbashir.hijriwidget.preference_activity.composableWithAnimatedContentScopeProvider
+import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
+import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceTemplate
@@ -36,9 +36,7 @@ import me.amrbashir.hijriwidget.preference_activity.composables.ui.RadioIcon
 const val DATE_FORMAT_DESTINATION = "/preferences/date-format"
 
 fun NavGraphBuilder.dateFormatDestination() {
-	composableWithAnimatedContentScopeProvider(
-		route = DATE_FORMAT_DESTINATION,
-	) { DateFormatScreen() }
+	animatedContentComposable(route = DATE_FORMAT_DESTINATION) { DateFormatScreen() }
 }
 
 fun NavController.navigateToDateFormat() {
@@ -47,7 +45,7 @@ fun NavController.navigateToDateFormat() {
 
 @Composable
 internal fun DateFormatScreen() {
-	val prefsManager = LocalPreferencesManager.current
+	val prefsManager = LocalSelectedWidget.current.prefsManager
 
 	val savedFormat = prefsManager.dateFormat.value
 
@@ -56,8 +54,6 @@ internal fun DateFormatScreen() {
 			verticalArrangement = Arrangement.spacedBy(16.dp),
 			modifier =
 				Modifier
-					.padding(horizontal = 16.dp)
-					.padding(bottom = 16.dp)
 					.fillMaxSize()
 					.imePadding()
 					.verticalScroll(rememberScrollState()),

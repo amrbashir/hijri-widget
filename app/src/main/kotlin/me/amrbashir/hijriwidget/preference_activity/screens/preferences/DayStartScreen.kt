@@ -25,7 +25,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.dialog
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.LocalNavController
-import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
+import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
 
 const val DAY_START_DESTINATION = "/preferences/day-start"
 
@@ -41,7 +41,7 @@ fun NavController.navigateToDayStart() {
 @Composable
 internal fun DayStartScreen() {
 	val navController = LocalNavController.current
-	val prefsManager = LocalPreferencesManager.current
+	val prefsManager = LocalSelectedWidget.current.prefsManager
 
 	val timePickerState =
 		rememberTimePickerState(

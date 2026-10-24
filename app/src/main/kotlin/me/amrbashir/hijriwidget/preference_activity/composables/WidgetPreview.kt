@@ -1,6 +1,7 @@
 package me.amrbashir.hijriwidget.preference_activity.composables
 
 import android.app.WallpaperManager
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,6 +9,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.FilledTonalIconButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
@@ -27,13 +33,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
 import me.amrbashir.hijriwidget.HijriDate
-import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
+import me.amrbashir.hijriwidget.R
+import me.amrbashir.hijriwidget.preference_activity.LocalAnimatedContentScope
+import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
+import me.amrbashir.hijriwidget.preference_activity.LocalSharedTransitionScope
 import me.amrbashir.hijriwidget.widgetCornerRadius
 
 @Composable
-fun WidgetPreview(modifier: Modifier = Modifier) {
+fun WidgetPreview(
+	modifier: Modifier = Modifier,
+	onSettingsClick: (() -> Unit)? = null,
+) {
 	val context = LocalContext.current
-	val prefsManager = LocalPreferencesManager.current
+	val prefsManager = LocalSelectedWidget.current.prefsManager
 	val wallpaperManager = WallpaperManager.getInstance(context)
 
 	val date = HijriDate.todayFormatted(prefsManager)
@@ -43,7 +55,6 @@ fun WidgetPreview(modifier: Modifier = Modifier) {
 		contentAlignment = Alignment.Center,
 		modifier =
 			modifier
-				.padding(horizontal = 16.dp)
 				.clip(RoundedCornerShape(20.dp))
 				.height(150.dp)
 				.fillMaxWidth()
@@ -100,5 +111,44 @@ fun WidgetPreview(modifier: Modifier = Modifier) {
 					),
 			)
 		}
+
+		if (onSettingsClick != null) {
+			FilledTonalIconButton(
+				onClick = onSettingsClick,
+				modifier =
+					Modifier
+						.align(Alignment.BottomEnd)
+						.padding(8.dp),
+			) {
+				Icon(
+					Icons.Outlined.Settings,
+					contentDescription = stringResource(R.string.home_screen_widget_settings),
+				)
+			}
+		}
+	}
+}
+
+@Composable
+@OptIn(ExperimentalSharedTransitionApi::class)
+fun SharedWidgetPreview(
+	modifier: Modifier = Modifier,
+	onSettingsClick: (() -> Unit)? = null,
+) {
+	val sharedTransitionScope = LocalSharedTransitionScope.current
+	val sharedAnimatedContentScope = LocalAnimatedContentScope.current
+	val widget = LocalSelectedWidget.current
+
+	val key = "widget_preview_${widget.appWidgetId}"
+
+	with(receiver = sharedTransitionScope) {
+		WidgetPreview(
+			onSettingsClick = onSettingsClick,
+			modifier =
+				modifier.sharedElement(
+					sharedContentState = rememberSharedContentState(key),
+					animatedVisibilityScope = sharedAnimatedContentScope,
+				),
+		)
 	}
 }

@@ -19,12 +19,12 @@ import me.amrbashir.hijriwidget.preference_activity.screens.preferences.dayStart
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.preferenceListDestination
 
 @Composable
-fun Navigation() {
+fun Navigation(startDestination: String) {
 	val navController = LocalNavController.current
 
 	NavHost(
 		navController = navController,
-		startDestination = PREFERENCES_DESTINATION,
+		startDestination = startDestination,
 		enterTransition = {
 			slideIntoContainer(
 				AnimatedContentTransitionScope.SlideDirection.Left,
@@ -65,7 +65,7 @@ fun Navigation() {
 	}
 }
 
-fun NavGraphBuilder.composableWithAnimatedContentScopeProvider(
+fun NavGraphBuilder.animatedContentComposable(
 	route: String,
 	content: @Composable () -> Unit,
 ) {

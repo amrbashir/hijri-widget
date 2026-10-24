@@ -47,6 +47,7 @@ import me.amrbashir.hijriwidget.preference_activity.composables.Changelog
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceTemplate
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.adaptiveIconPainterResource
+import me.amrbashir.hijriwidget.preference_activity.screenPadding
 
 const val ABOUT_DESTINATION = "/About"
 
@@ -85,7 +86,7 @@ val QUICK_LINKS =
 		QuickLink(
 			label = R.string.quick_link_privacy,
 			icon = Icons.Filled.PrivacyTip,
-			url = "https://raw.githubusercontent.com/amrbashir/hijri-widget/refs/heads/master/PRIVACY.md",
+			url = "https://hijri-widget.amrbashir.me/PRIVACY.md",
 		),
 	)
 
@@ -98,8 +99,7 @@ internal fun AboutScreen() {
 		verticalArrangement = Arrangement.spacedBy(16.dp),
 		modifier =
 			Modifier
-				.padding(horizontal = 16.dp)
-				.padding(bottom = 16.dp)
+				.screenPadding()
 				.fillMaxSize()
 				.imePadding()
 				.verticalScroll(rememberScrollState()),

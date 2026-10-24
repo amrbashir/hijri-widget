@@ -10,7 +10,10 @@ import android.icu.util.Calendar
 import android.util.Log
 import androidx.core.app.AlarmManagerCompat
 import androidx.core.content.getSystemService
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import me.amrbashir.hijriwidget.PreferencesManager
 import me.amrbashir.hijriwidget.logTimestamp
 import me.amrbashir.hijriwidget.preference_activity.changeLauncherIcon
@@ -24,11 +27,17 @@ class AlarmReceiver : BroadcastReceiver() {
 	) {
 		Log.d("AlarmReceiver", "Alarm fired at: ${logTimestamp()}")
 
-		val prefsManager = PreferencesManager.load(context)
-
-		changeLauncherIcon(context, prefsManager)
-		runBlocking { HijriWidget.updateAll(context) }
-		setup24Periodic(context, prefsManager)
+		// Glance's `updateAll` may need the main thread, so blocking it here would deadlock
+		val pendingResult = goAsync()
+		CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
+			try {
+				changeLauncherIcon(context, PreferencesManager.loadFirstOrDefault(context))
+				HijriWidget.refreshAll(context)
+				scheduleNextUpdate(context)
+			} finally {
+				pendingResult.finish()
+			}
+		}
 	}
 
 	companion object {
@@ -49,14 +58,19 @@ class AlarmReceiver : BroadcastReceiver() {
 			return nextDay.timeInMillis
 		}
 
-		fun setup24Periodic(
-			context: Context,
-			prefsManager: PreferencesManager,
-		) {
+		/**
+		 * Schedules the next update at the earliest day start among all widgets
+		 * (and the launcher icon, which follows the first widget or defaults).
+		 */
+		suspend fun scheduleNextUpdate(context: Context) {
 			val alarmManager = context.getSystemService<AlarmManager>() ?: return
 			if (!AlarmManagerCompat.canScheduleExactAlarms(alarmManager)) return
 
-			val nextUpdateMillis = nextUpdateDateInMillis(prefsManager)
+			val prefsManagers =
+				PreferencesManager
+					.loadAll(context)
+					.ifEmpty { listOf(PreferencesManager()) }
+			val nextUpdateMillis = prefsManagers.minOf { nextUpdateDateInMillis(it) }
 
 			val intent = Intent(context, AlarmReceiver::class.java)
 			alarmManager.setExact(

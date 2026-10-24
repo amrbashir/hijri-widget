@@ -2,7 +2,11 @@
 <resources>
     <string name="app_name">الويدجت الهجري</string>
     <string name="app_description">ويدجت لعرض التاريخ الهجري</string>
-    <string name="home_screen_stub_text">هذه شاشة مؤقتة، استعدادًا لدعم تعدد الويدجتس</string>
+    <string name="home_screen_no_widgets">أضف الويدجت الهجري إلى شاشتك الرئيسية، ثم عد إلى هنا لتخصيصه</string>
+    <string name="home_screen_no_widgets_title">لا توجد ويدجت بعد</string>
+    <string name="home_screen_widget_settings">إعدادات الويدجت</string>
+    <string name="home_screen_add_widget">إضافة ويدجت</string>
+    <string name="home_screen_add_widget_long">أضف ويدجت جديد إلى شاشتك الرئيسية</string>
     <string name="color_mode_dynamic_description">لون ديناميكى بناءً على خلفية جهازك</string>
     <string name="color_mode_system">النظام</string>
     <string name="color_mode_system_description">لون فاتح أو داكن بناءً على إعدادات الجهاز</string>
@@ -100,7 +104,6 @@
     <string name="preferences_restore_defaults_title">استعادة الإعدادات الافتراضية</string>
     <string name="preferences_restore_defaults_description">استعادة الإعدادات الافتراضية للوظائف</string>
     <string name="preferences_about_title">حول</string>
-    <string name="preferences_about_description">معلومات التطبيق وتفاصيل الإصدار وسجل التغييرات.</string>
     <string name="reset_to_default">إعادة تعيين إلى الافتراضي</string>
     <string name="changelog">سجل التغييرات</string>
     <string name="widget_updated">تم تحديث الويدجت!</string>

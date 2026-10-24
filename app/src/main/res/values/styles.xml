@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.HijriWidget" parent="android:Theme.Material.NoActionBar" />
+    <!-- Material 3 window background follows light/dark and dynamic colors, so no grey window shows before Compose draws -->
+    <style name="Theme.HijriWidget" parent="Theme.Material3.DynamicColors.DayNight.NoActionBar" />
 
     <style name="HijriWidgetTextStyle">
         <item name="android:textSize">22sp</item>

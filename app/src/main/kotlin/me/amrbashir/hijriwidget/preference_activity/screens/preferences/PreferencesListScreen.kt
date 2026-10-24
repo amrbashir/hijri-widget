@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -12,7 +11,6 @@ import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.Brightness6
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.ColorLens
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.MoreTime
 import androidx.compose.material.icons.outlined.SettingsBackupRestore
 import androidx.compose.material.icons.outlined.TextIncrease
@@ -23,26 +21,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.formatTime
 import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
 import me.amrbashir.hijriwidget.preference_activity.LocalNavController
-import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
-import me.amrbashir.hijriwidget.preference_activity.composableWithAnimatedContentScopeProvider
+import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
+import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceTemplate
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.ValueSlider
-import me.amrbashir.hijriwidget.preference_activity.screens.navigateToAbout
 
 const val PREFERENCES_DESTINATION = "/preferences"
 const val PREFERENCES_LIST_DESTINATION = "/preferences/"
 
 fun NavGraphBuilder.preferenceListDestination() {
-	composableWithAnimatedContentScopeProvider(route = PREFERENCES_LIST_DESTINATION) {
-		PreferenceListScreen()
-	}
+	animatedContentComposable(route = PREFERENCES_LIST_DESTINATION) { PreferenceListScreen() }
+}
+
+fun NavController.navigateToPreferences() {
+	navigate(route = PREFERENCES_DESTINATION)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,7 +50,7 @@ fun NavGraphBuilder.preferenceListDestination() {
 internal fun PreferenceListScreen() {
 	LocalAppBarTitle.current.value = stringResource(R.string.app_name)
 
-	val prefsManager = LocalPreferencesManager.current
+	val prefsManager = LocalSelectedWidget.current.prefsManager
 	val navController = LocalNavController.current
 
 	PreferenceScreenLayout {
@@ -58,8 +58,6 @@ internal fun PreferenceListScreen() {
 			verticalArrangement = Arrangement.spacedBy(16.dp),
 			modifier =
 				Modifier
-					.padding(horizontal = 16.dp)
-					.padding(bottom = 16.dp)
 					.fillMaxSize()
 					.imePadding()
 					.verticalScroll(rememberScrollState()),
@@ -165,15 +163,6 @@ internal fun PreferenceListScreen() {
 					icon = Icons.Outlined.SettingsBackupRestore,
 					onClick = {
 						prefsManager.reset()
-					},
-				)
-
-				PreferenceTemplate(
-					label = stringResource(R.string.preferences_about_title),
-					description = stringResource(R.string.preferences_about_description),
-					icon = Icons.Outlined.Info,
-					onClick = {
-						navController.navigateToAbout()
 					},
 				)
 			}

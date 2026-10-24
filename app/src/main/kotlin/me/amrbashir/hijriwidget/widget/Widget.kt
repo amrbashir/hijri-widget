@@ -5,9 +5,10 @@ import android.os.Build
 import android.util.TypedValue
 import android.widget.RemoteViews
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.toArgb
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
@@ -15,15 +16,19 @@ import androidx.glance.LocalContext
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.AndroidRemoteViews
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.provideContent
-import androidx.glance.appwidget.updateAll
+import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.background
+import androidx.glance.currentState
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.fillMaxSize
+import androidx.glance.state.GlanceStateDefinition
+import androidx.glance.state.PreferencesGlanceStateDefinition
 import kotlinx.coroutines.launch
 import me.amrbashir.hijriwidget.ColorMode
 import me.amrbashir.hijriwidget.HijriDate
@@ -38,14 +43,18 @@ class HijriWidgetReceiver : GlanceAppWidgetReceiver() {
 
 class HijriWidget : GlanceAppWidget() {
 	override val sizeMode: SizeMode = SizeMode.Single
+	override val stateDefinition: GlanceStateDefinition<*> = PreferencesGlanceStateDefinition
 
 	override suspend fun provideGlance(
 		context: Context,
 		id: GlanceId,
 	) {
 		provideContent {
+			val prefs = currentState<Preferences>()
+			val prefsManager = PreferencesManager.fromPreferences(prefs)
+
 			GlanceTheme {
-				Content()
+				Content(prefsManager, id)
 			}
 		}
 	}
@@ -56,26 +65,30 @@ class HijriWidget : GlanceAppWidget() {
 	) {
 		provideContent {
 			GlanceTheme {
-				Content()
+				Content(PreferencesManager())
 			}
 		}
 	}
 
 	@Composable
-	private fun Content() {
+	private fun Content(
+		prefsManager: PreferencesManager,
+		id: GlanceId? = null,
+	) {
 		val context = LocalContext.current
 		val coroutineScope = rememberCoroutineScope()
 
-		// DO NOT REMOVE, needed for glance to recompose when this value is changed
-		val updateSignal = WidgetUpdateSignal.value
-
-		val prefsManager = PreferencesManager.load(context)
+		val textShadow = prefsManager.textShadow.value
+		val textSize = prefsManager.textSize.value
+		val textColorMode = prefsManager.textColorMode.value
+		val bgColor = prefsManager.getBgColor()
+		val textColor = prefsManager.getTextColor(context)
 
 		val remoteViewId =
-			if (prefsManager.textShadow.value) R.id.widget_text_shadow else R.id.widget_text
+			if (textShadow) R.id.widget_text_shadow else R.id.widget_text
 		val remoteViewLayout =
-			if (prefsManager.textShadow.value) R.layout.widget_text_shadow else R.layout.widget_text
-		val remoteViews = RemoteViews(LocalContext.current.packageName, remoteViewLayout)
+			if (textShadow) R.layout.widget_text_shadow else R.layout.widget_text
+		val remoteViews = RemoteViews(context.packageName, remoteViewLayout)
 
 		val date = HijriDate.todayFormatted(prefsManager)
 		remoteViews.setTextViewText(remoteViewId, date)
@@ -83,15 +96,13 @@ class HijriWidget : GlanceAppWidget() {
 		remoteViews.setTextViewTextSize(
 			remoteViewId,
 			TypedValue.COMPLEX_UNIT_SP,
-			prefsManager.textSize.value,
+			textSize,
 		)
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-			prefsManager.textColorMode.value == ColorMode.Dynamic
-		) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && textColorMode == ColorMode.Dynamic) {
 			remoteViews.setColorAttr(remoteViewId, "setTextColor", android.R.attr.colorPrimary)
 		} else {
-			remoteViews.setTextColor(remoteViewId, prefsManager.getTextColor(context).toArgb())
+			remoteViews.setTextColor(remoteViewId, textColor.toArgb())
 		}
 
 		Box(
@@ -101,11 +112,12 @@ class HijriWidget : GlanceAppWidget() {
 					.fillMaxSize()
 					.appWidgetBackground()
 					.widgetCornerRadius()
-					.background(prefsManager.getBgColor())
+					.background(bgColor)
 					.clickable {
+						if (id == null) return@clickable
 						coroutineScope.launch {
-							HijriWidget.updateAll(context)
-							AlarmReceiver.setup24Periodic(context, prefsManager)
+							refresh(context, id)
+							AlarmReceiver.scheduleNextUpdate(context)
 						}
 					},
 		) {
@@ -114,12 +126,26 @@ class HijriWidget : GlanceAppWidget() {
 	}
 
 	companion object {
-		suspend fun updateAll(context: Context) {
-			WidgetUpdateSignal.value = !WidgetUpdateSignal.value
-			HijriWidget().updateAll(context)
+		/**
+		 * The date is not part of the widget state, so a running widget won't recompose
+		 * when the day changes, bumping this key in its state forces it to.
+		 */
+		private val LAST_REFRESH = longPreferencesKey("LAST_REFRESH")
+
+		suspend fun refresh(
+			context: Context,
+			id: GlanceId,
+		) {
+			updateAppWidgetState(context, PreferencesGlanceStateDefinition, id) { prefs ->
+				prefs.toMutablePreferences().apply { this[LAST_REFRESH] = System.currentTimeMillis() }
+			}
+			HijriWidget().update(context, id)
+		}
+
+		suspend fun refreshAll(context: Context) {
+			for (id in GlanceAppWidgetManager(context).getGlanceIds(HijriWidget::class.java)) {
+				refresh(context, id)
+			}
 		}
 	}
 }
-
-/** Workaround to force the Widget glance to recompose */
-val WidgetUpdateSignal = mutableStateOf(true)
