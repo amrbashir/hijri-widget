@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -63,8 +64,11 @@ fun TopAppBar(
 @Composable
 private fun GoBackButton() {
 	val navController = LocalNavController.current
+	// previousBackStackEntry isn't observable, reading the current entry
+	// recomposes this on every navigation, so it's never stale
+	val currentBackStackEntry by navController.currentBackStackEntryAsState()
 
-	if (navController.previousBackStackEntry != null) {
+	if (currentBackStackEntry != null && navController.previousBackStackEntry != null) {
 		IconButton(onClick = { navController.navigateUp() }) {
 			Icon(
 				imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
