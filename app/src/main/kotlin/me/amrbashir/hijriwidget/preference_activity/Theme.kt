@@ -512,7 +512,4 @@ val ColorScheme.darkLightContainerColor: Color
 	@Composable
 	get() = if (isSystemInDarkTheme()) this.surfaceContainer else this.surfaceContainerLow
 
-fun Modifier.screenPadding(): Modifier =
-	this
-		.then(Modifier.padding(horizontal = 16.dp))
-		.then(Modifier.padding(bottom = 16.dp))
+fun Modifier.screenPadding(): Modifier = padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
