@@ -1,9 +1,12 @@
 package me.amrbashir.hijriwidget
 
 import android.annotation.SuppressLint
+import android.icu.text.DateFormat
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.icu.util.ULocale
+import java.text.AttributedCharacterIterator
+import java.text.CharacterIterator
 
 val DATE_FORMAT_PRESETES =
 	listOf(
@@ -64,12 +67,13 @@ fun parseDateFormat(input: String): List<DateFormatSegment> =
 fun String.formatHijriDate(
 	date: Calendar,
 	calcMethod: HijriDateCalculationMethod,
+	weekdayDate: Calendar = date,
 ): String =
 	parseDateFormat(this).fold("") { acc, it ->
 		val locale = ULocale("${it.langCode ?: "ar-SA"}@calendar=${calcMethod.id}")
 		runCatching {
 			val dateFormatter = SimpleDateFormat(it.format, locale)
-			var formatted = dateFormatter.format(date)
+			var formatted = dateFormatter.format(date, weekdayDate)
 
 			// In mixed languages, like `en-GB{dd} ar-SA{MMMM} en-GB{yyyy}`,
 			// adding LTR marker after the output of RTL segments `ar-SA{MMMM}` -> `صفر\u2000E`
@@ -84,3 +88,40 @@ fun String.formatHijriDate(
 			acc + it.format
 		}
 	}
+
+private val WEEKDAY_FIELDS = setOf(DateFormat.Field.DAY_OF_WEEK, DateFormat.Field.DOW_LOCAL)
+
+/** Formats [date], but with the weekday of [weekdayDate] */
+private fun SimpleDateFormat.format(
+	date: Calendar,
+	weekdayDate: Calendar,
+): String {
+	// Both outputs come from the same pattern, so their weekday parts appear in the same order
+	val weekdays =
+		formatToCharacterIterator(weekdayDate)
+			.runs()
+			.filter { it.second }
+			.map { it.first }
+			.iterator()
+
+	return formatToCharacterIterator(date).runs().joinToString("") { (text, isWeekday) ->
+		if (isWeekday && weekdays.hasNext()) weekdays.next() else text
+	}
+}
+
+/** Splits the formatted text into runs, each paired with whether it's a weekday */
+private fun AttributedCharacterIterator.runs(): List<Pair<String, Boolean>> {
+	val runs = mutableListOf<Pair<String, Boolean>>()
+	first()
+	while (current() != CharacterIterator.DONE) {
+		val isWeekday = attributes.keys.any { it in WEEKDAY_FIELDS }
+		val limit = getRunLimit(WEEKDAY_FIELDS)
+		val text = StringBuilder()
+		while (index < limit) {
+			text.append(current())
+			next()
+		}
+		runs.add(text.toString() to isWeekday)
+	}
+	return runs
+}

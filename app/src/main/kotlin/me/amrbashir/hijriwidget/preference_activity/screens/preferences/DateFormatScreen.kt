@@ -25,7 +25,6 @@ import androidx.navigation.NavGraphBuilder
 import me.amrbashir.hijriwidget.DATE_FORMAT_PRESETES
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.R
-import me.amrbashir.hijriwidget.formatHijriDate
 import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
 import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
@@ -61,11 +60,7 @@ internal fun DateFormatScreen() {
 			ItemGroup(label = stringResource(R.string.date_format_group_title)) {
 				for (format in DATE_FORMAT_PRESETES) {
 					Item(
-						label =
-							format.formatHijriDate(
-								HijriDate.today(prefsManager),
-								prefsManager.calendarCalculationMethod.value,
-							),
+						label = HijriDate.todayFormatted(prefsManager, format),
 						description = format,
 						icon = {
 							RadioIcon(

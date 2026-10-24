@@ -11,7 +11,7 @@
 ### Fixed
 
 - Fixed a grey screen showing briefly while the app is opening.
-
+- Fixed "Day Offset" also changing the day of the week, it now only shifts the Hijri date.
 ## [1.1.2] - 2025-10-19
 
 ### Fixed

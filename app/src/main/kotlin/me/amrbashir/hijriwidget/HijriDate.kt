@@ -42,15 +42,22 @@ object HijriDate {
 		return calendar
 	}
 
-	fun todayFormatted(prefsManager: PreferencesManager): String {
-		val format =
+	fun todayFormatted(
+		prefsManager: PreferencesManager,
+		format: String =
 			if (prefsManager.dateIsCustomFormat.value) {
 				prefsManager.dateCustomFormat.value
 			} else {
 				prefsManager.dateFormat.value
-			}
+			},
+	): String {
 		val today = today(prefsManager)
-		return format.formatHijriDate(today, prefsManager.calendarCalculationMethod.value)
+		// The offset corrects the Hijri date, it doesn't change what day of the week it is
+		val weekdayDate =
+			(today.clone() as Calendar).apply {
+				add(Calendar.DAY_OF_MONTH, -prefsManager.dayOffset.value)
+			}
+		return format.formatHijriDate(today, prefsManager.calendarCalculationMethod.value, weekdayDate)
 	}
 
 	fun todayNumber(prefsManager: PreferencesManager): Int = today(prefsManager)[Calendar.DAY_OF_MONTH]
