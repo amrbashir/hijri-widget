@@ -23,7 +23,7 @@ class HijriWidgetApp : Application() {
 		runBlocking { migrateConfig(context) }
 
 		// Not needed to show the UI, so don't block the main thread on it
-		CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
+		scope.launch {
 			AlarmReceiver.scheduleNextUpdate(context)
 
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
@@ -34,5 +34,10 @@ class HijriWidgetApp : Application() {
 				)
 			}
 		}
+	}
+
+	companion object {
+		/** App-wide scope for background work that outlives any single component */
+		val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 	}
 }

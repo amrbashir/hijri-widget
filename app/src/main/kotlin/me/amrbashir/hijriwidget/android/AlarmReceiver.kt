@@ -10,9 +10,6 @@ import android.icu.util.Calendar
 import android.util.Log
 import androidx.core.app.AlarmManagerCompat
 import androidx.core.content.getSystemService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import me.amrbashir.hijriwidget.PreferencesManager
 import me.amrbashir.hijriwidget.logTimestamp
@@ -29,7 +26,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
 		// Glance updates may need the main thread, so blocking it here would deadlock
 		val pendingResult = goAsync()
-		CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
+		HijriWidgetApp.scope.launch {
 			try {
 				// Loaded once for both the launcher icon and the next update
 				val prefsManagers = PreferencesManager.loadAll(context)
