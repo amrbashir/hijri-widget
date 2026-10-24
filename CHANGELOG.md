@@ -12,6 +12,14 @@
 
 - Fixed a grey screen showing briefly while the app is opening.
 - Fixed "Day Offset" also changing the day of the week, it now only shifts the Hijri date.
+- Fixed the widget showing the previous Hijri date all day when "Day Start" is set to an AM time.
+- Fixed the widget stopping to update daily if an update fails.
+- Fixed a brief freeze when leaving the app.
+
+### Changed
+
+- Minor updates and improvements
+
 ## [1.1.2] - 2025-10-19
 
 ### Fixed
