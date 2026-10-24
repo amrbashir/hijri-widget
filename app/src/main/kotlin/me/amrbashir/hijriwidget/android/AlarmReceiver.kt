@@ -31,9 +31,11 @@ class AlarmReceiver : BroadcastReceiver() {
 		val pendingResult = goAsync()
 		CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
 			try {
-				changeLauncherIcon(context, PreferencesManager.loadFirstOrDefault(context))
+				// Loaded once for both the launcher icon and the next update
+				val prefsManagers = PreferencesManager.loadAll(context)
+				changeLauncherIcon(context, prefsManagers.firstOrNull() ?: PreferencesManager())
 				HijriWidget.refreshAll(context)
-				scheduleNextUpdate(context)
+				scheduleNextUpdate(context, prefsManagers)
 			} finally {
 				pendingResult.finish()
 			}
@@ -63,14 +65,21 @@ class AlarmReceiver : BroadcastReceiver() {
 		 * (and the launcher icon, which follows the first widget or defaults).
 		 */
 		suspend fun scheduleNextUpdate(context: Context) {
+			scheduleNextUpdate(context, PreferencesManager.loadAll(context))
+		}
+
+		/** Same as [scheduleNextUpdate], with the preferences of all widgets already loaded */
+		fun scheduleNextUpdate(
+			context: Context,
+			prefsManagers: List<PreferencesManager>,
+		) {
 			val alarmManager = context.getSystemService<AlarmManager>() ?: return
 			if (!AlarmManagerCompat.canScheduleExactAlarms(alarmManager)) return
 
-			val prefsManagers =
-				PreferencesManager
-					.loadAll(context)
+			val nextUpdateMillis =
+				prefsManagers
 					.ifEmpty { listOf(PreferencesManager()) }
-			val nextUpdateMillis = prefsManagers.minOf { nextUpdateDateInMillis(it) }
+					.minOf { nextUpdateDateInMillis(it) }
 
 			val intent = Intent(context, AlarmReceiver::class.java)
 			alarmManager.setExact(
