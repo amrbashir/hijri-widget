@@ -35,7 +35,7 @@ object HijriDate {
 		//
 		//   When the clock hits 12:00 AM, Gregorian day becomes 23 while Hijri day
 		//   stays as 22, then when the clock hits 6:00 AM, Hijri day becomes 23.
-		if (currentMinutes <= prefsManager.dayStart.value && !dayStartIsPM) {
+		if (currentMinutes < prefsManager.dayStart.value && !dayStartIsPM) {
 			calendar.add(Calendar.DAY_OF_MONTH, -1)
 		}
 
