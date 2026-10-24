@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import me.amrbashir.hijriwidget.logException
 import me.amrbashir.hijriwidget.migrateConfig
 import me.amrbashir.hijriwidget.widget.HijriWidgetReceiver
 
@@ -19,8 +20,10 @@ class HijriWidgetApp : Application() {
 
 		val context = this
 
-		// Migration must finish before anything reads widget preferences
-		runBlocking { migrateConfig(context) }
+		// Migration must finish before anything reads widget preferences.
+		// A failure is logged instead of crashing every app start, the failed step
+		// isn't marked done, so it's retried on the next start.
+		runBlocking { runCatching { migrateConfig(context) }.onFailure(logException) }
 
 		// Not needed to show the UI, so don't block the main thread on it
 		scope.launch {
