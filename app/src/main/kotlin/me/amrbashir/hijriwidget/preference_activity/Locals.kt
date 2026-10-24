@@ -61,12 +61,16 @@ data class WidgetInstance(
 			return WidgetInstance(glanceId, appWidgetId, PreferencesManager.load(context, glanceId))
 		}
 
-		suspend fun loadAll(context: Context): List<WidgetInstance> {
-			val manager = GlanceAppWidgetManager(context)
-			return manager.getGlanceIds(HijriWidget::class.java).map { id ->
-				WidgetInstance(id, manager.getAppWidgetId(id), PreferencesManager.load(context, id))
-			}
+		suspend fun load(
+			context: Context,
+			glanceId: GlanceId,
+		): WidgetInstance {
+			val appWidgetId = GlanceAppWidgetManager(context).getAppWidgetId(glanceId)
+			return WidgetInstance(glanceId, appWidgetId, PreferencesManager.load(context, glanceId))
 		}
+
+		suspend fun loadAll(context: Context): List<WidgetInstance> =
+			HijriWidget.glanceIds(context).map { load(context, it) }
 	}
 }
 

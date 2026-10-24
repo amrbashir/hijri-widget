@@ -22,15 +22,4 @@ enum class HijriDateCalculationMethod(
 		R.string.hijri_date_calculation_method_islamic_civil_label,
 		R.string.hijri_date_calculation_method_islamic_civil_description,
 	),
-	;
-
-	companion object {
-		fun fromId(id: String): HijriDateCalculationMethod =
-			when (id) {
-				"islamic" -> ISLAMIC
-				"islamic-umalqura" -> ISLAMIC_UMALQURA
-				"islamic-civil" -> ISLAMIC_CIVIL
-				else -> ISLAMIC_UMALQURA
-			}
-	}
 }

@@ -16,7 +16,6 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.glance.GlanceId
 import androidx.glance.GlanceTheme
-import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.getAppWidgetState
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.state.PreferencesGlanceStateDefinition
@@ -169,21 +168,18 @@ class PreferencesManager {
 			return fromPreferences(prefs)
 		}
 
-		/** Loads preferences of every placed widget, in placement order */
+		/** Loads preferences of every placed widget, in the order of [HijriWidget.glanceIds] */
 		suspend fun loadAll(context: Context): List<PreferencesManager> =
-			GlanceAppWidgetManager(context)
-				.getGlanceIds(HijriWidget::class.java)
-				.map { load(context, it) }
+			HijriWidget.glanceIds(context).map { load(context, it) }
 
 		/**
 		 * Loads preferences used for app-wide behavior (e.g. the launcher icon),
-		 * which follows the first placed widget, or defaults if no widget is placed.
+		 * which follows the first widget returned by [HijriWidget.glanceIds],
+		 * or defaults if no widget is placed.
 		 */
 		suspend fun loadFirstOrDefault(context: Context): PreferencesManager =
-			GlanceAppWidgetManager(context)
-				.getGlanceIds(HijriWidget::class.java)
-				.firstOrNull()
-				?.let { load(context, it) } ?: PreferencesManager()
+			HijriWidget.glanceIds(context).firstOrNull()?.let { load(context, it) }
+				?: PreferencesManager()
 	}
 
 	suspend fun save(
@@ -191,13 +187,11 @@ class PreferencesManager {
 		glanceId: GlanceId,
 	) {
 		updateAppWidgetState(context, PreferencesGlanceStateDefinition, glanceId) { prefs ->
-			prefs.toMutablePreferences().apply { saveInto(this) }
-		}
-	}
-
-	private fun saveInto(prefs: MutablePreferences) {
-		for (pref in _preferences) {
-			pref.save(prefs)
+			prefs.toMutablePreferences().apply {
+				for (pref in _preferences) {
+					pref.save(this)
+				}
+			}
 		}
 	}
 

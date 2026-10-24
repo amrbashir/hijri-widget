@@ -27,7 +27,7 @@ class AlarmReceiver : BroadcastReceiver() {
 	) {
 		Log.d("AlarmReceiver", "Alarm fired at: ${logTimestamp()}")
 
-		// Glance's `updateAll` may need the main thread, so blocking it here would deadlock
+		// Glance updates may need the main thread, so blocking it here would deadlock
 		val pendingResult = goAsync()
 		CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
 			try {

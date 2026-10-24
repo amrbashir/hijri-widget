@@ -83,13 +83,12 @@ private fun HomeScreen() {
 	}
 
 	val canAddWidget = appWidgetManager.isRequestPinAppWidgetSupported
-	val addWidget = {
+	val addWidget: () -> Unit = {
 		appWidgetManager.requestPinAppWidget(
 			ComponentName(context, HijriWidgetReceiver::class.java),
 			null,
 			null,
 		)
-		Unit
 	}
 	val openAbout = { navController.navigateToAbout() }
 

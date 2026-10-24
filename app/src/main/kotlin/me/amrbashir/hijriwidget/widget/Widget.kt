@@ -142,8 +142,12 @@ class HijriWidget : GlanceAppWidget() {
 			HijriWidget().update(context, id)
 		}
 
+		/** Ids of all placed widgets, in no guaranteed order */
+		suspend fun glanceIds(context: Context): List<GlanceId> =
+			GlanceAppWidgetManager(context).getGlanceIds(HijriWidget::class.java)
+
 		suspend fun refreshAll(context: Context) {
-			for (id in GlanceAppWidgetManager(context).getGlanceIds(HijriWidget::class.java)) {
+			for (id in glanceIds(context)) {
 				refresh(context, id)
 			}
 		}

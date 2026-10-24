@@ -9,7 +9,6 @@ import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.mutablePreferencesOf
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.getAppWidgetState
 import androidx.glance.state.PreferencesGlanceStateDefinition
 import me.amrbashir.hijriwidget.widget.HijriWidget
@@ -21,7 +20,7 @@ import me.amrbashir.hijriwidget.widget.HijriWidget
  * - v1: global preferences in [LEGACY_PREF]
  * - v2: per-widget preferences, stored in each widget's Glance state
  */
-const val CONFIG_VERSION = 2
+private const val CONFIG_VERSION = 2
 
 /** Name of the [SharedPreferences] file holding app-level state, e.g. [CONFIG_VERSION] */
 private const val APP_PREF = "HijriWidgetApp"
@@ -76,7 +75,7 @@ private suspend fun migrateV1ToV2(
 	context: Context,
 	legacyPrefs: SharedPreferences,
 ) {
-	val ids = GlanceAppWidgetManager(context).getGlanceIds(HijriWidget::class.java)
+	val ids = HijriWidget.glanceIds(context)
 	if (ids.isNotEmpty()) {
 		// v1 keys and value types match the current ones, so parsing them validates values
 		val legacy = PreferencesManager.fromPreferences(legacyPrefs.toPreferences())
