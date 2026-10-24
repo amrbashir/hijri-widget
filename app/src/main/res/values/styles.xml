@@ -2,7 +2,10 @@
 <resources>
 
     <!-- Material 3 window background follows light/dark and dynamic colors, so no grey window shows before Compose draws -->
-    <style name="Theme.HijriWidget" parent="Theme.Material3.DynamicColors.DayNight.NoActionBar" />
+    <style name="Theme.HijriWidget" parent="Theme.Material3.DynamicColors.DayNight.NoActionBar">
+        <!-- The home screen wallpaper behind the window, widget previews punch through to it -->
+        <item name="android:windowShowWallpaper">true</item>
+    </style>
 
     <style name="HijriWidgetTextStyle">
         <item name="android:textSize">22sp</item>

@@ -1,6 +1,5 @@
 package me.amrbashir.hijriwidget.preference_activity.composables
 
-import android.app.WallpaperManager
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -18,20 +17,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.drawable.toBitmap
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.LocalAnimatedContentScope
@@ -46,7 +42,6 @@ fun WidgetPreview(
 ) {
 	val context = LocalContext.current
 	val prefsManager = LocalSelectedWidget.current.prefsManager
-	val wallpaperManager = WallpaperManager.getInstance(context)
 
 	val date = HijriDate.todayFormatted(prefsManager)
 
@@ -58,29 +53,9 @@ fun WidgetPreview(
 				.clip(RoundedCornerShape(20.dp))
 				.height(150.dp)
 				.fillMaxWidth()
-				.drawWithCache {
-					val builtinWallpaper = wallpaperManager.builtInDrawable.toBitmap().asImageBitmap()
-					onDrawBehind {
-						val imageWidth = builtinWallpaper.width.toFloat()
-						val imageHeight = builtinWallpaper.height.toFloat()
-						val canvasWidth = size.width
-						val canvasHeight = size.height
-
-						val scale = maxOf(canvasWidth / imageWidth, canvasHeight / imageHeight)
-
-						val scaledWidth = imageWidth * scale
-						val scaledHeight = imageHeight * scale
-
-						val offsetX = (canvasWidth - scaledWidth) / 2
-						val offsetY = (canvasHeight - scaledHeight) / 2
-
-						drawImage(
-							image = builtinWallpaper,
-							dstSize = IntSize(scaledWidth.toInt(), scaledHeight.toInt()),
-							dstOffset = IntOffset(offsetX.toInt(), offsetY.toInt()),
-						)
-					}
-				},
+				// Clearing the pixels shows the home screen wallpaper behind the window,
+				// reading the wallpaper itself needs permissions not granted to regular apps
+				.drawBehind { drawRect(Color.Transparent, blendMode = BlendMode.Clear) },
 	) {
 		Box(
 			contentAlignment = Alignment.Center,

@@ -1,5 +1,6 @@
 package me.amrbashir.hijriwidget.preference_activity
 
+import android.graphics.PixelFormat
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -42,6 +43,8 @@ class PreferenceActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		enableEdgeToEdge()
+		// Widget previews clear their pixels to show the wallpaper, an opaque window would show black instead
+		window.setFormat(PixelFormat.TRANSLUCENT)
 
 		setContent {
 			PreferenceActivityContent()
