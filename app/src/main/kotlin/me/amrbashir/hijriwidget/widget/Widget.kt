@@ -34,6 +34,7 @@ import me.amrbashir.hijriwidget.ColorMode
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.PreferencesManager
 import me.amrbashir.hijriwidget.R
+import me.amrbashir.hijriwidget.addIfNotNull
 import me.amrbashir.hijriwidget.android.AlarmReceiver
 import me.amrbashir.hijriwidget.widgetCornerRadius
 
@@ -113,11 +114,13 @@ class HijriWidget : GlanceAppWidget() {
 					.appWidgetBackground()
 					.widgetCornerRadius()
 					.background(bgColor)
-					.clickable {
-						if (id == null) return@clickable
-						coroutineScope.launch {
-							refresh(context, id)
-							AlarmReceiver.scheduleNextUpdate(context)
+					// Previews have no id, so nothing to refresh
+					.addIfNotNull(id) { id ->
+						clickable {
+							coroutineScope.launch {
+								refresh(context, id)
+								AlarmReceiver.scheduleNextUpdate(context)
+							}
 						}
 					},
 		) {

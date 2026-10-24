@@ -28,10 +28,15 @@ fun Char.isRtl(): Boolean =
 		else -> false
 	}
 
-inline fun Modifier.addIf(
-	condition: Boolean,
-	crossinline factory: Modifier.() -> Modifier,
-): Modifier = if (condition) factory() else this
+inline fun <T : Any> Modifier.addIfNotNull(
+	value: T?,
+	factory: Modifier.(T) -> Modifier,
+): Modifier = if (value != null) factory(value) else this
+
+inline fun <T : Any> GlanceModifier.addIfNotNull(
+	value: T?,
+	factory: GlanceModifier.(T) -> GlanceModifier,
+): GlanceModifier = if (value != null) factory(value) else this
 
 fun GlanceModifier.widgetCornerRadius(): GlanceModifier {
 	val cornerRadiusModifier =

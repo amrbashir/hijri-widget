@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import me.amrbashir.hijriwidget.addIf
+import me.amrbashir.hijriwidget.addIfNotNull
 
 @Composable
 fun PreferenceTemplate(
@@ -67,7 +67,7 @@ fun PreferenceTemplate(
 		verticalArrangement = Arrangement.spacedBy(8.dp),
 		modifier =
 			modifier
-				.addIf(onClick != null) { clickable(enabled, onClick = onClick!!) }
+				.addIfNotNull(onClick) { clickable(enabled, onClick = it) }
 				.clip(RoundedCornerShape(4.dp))
 				.background(MaterialTheme.colorScheme.surfaceBright)
 				.padding(16.dp),
