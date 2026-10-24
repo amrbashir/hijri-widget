@@ -15,7 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.currentBackStackEntryAsState
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.amrbashir.hijriwidget.android.AlarmReceiver
 import me.amrbashir.hijriwidget.hasRouteInHierarchy
 import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
@@ -80,9 +82,12 @@ private fun SaveButton(onSave: suspend () -> Unit) {
 
 	val saveAction: () -> Unit = {
 		coroutineScope.launch {
-			widget.prefsManager.save(context, widget.id)
-			HijriWidget().update(context, widget.id)
-			AlarmReceiver.scheduleNextUpdate(context)
+			// Leaving the screen right after saving must not cancel it midway
+			withContext(NonCancellable) {
+				widget.prefsManager.save(context, widget.id)
+				HijriWidget().update(context, widget.id)
+				AlarmReceiver.scheduleNextUpdate(context)
+			}
 			onSave()
 		}
 	}
