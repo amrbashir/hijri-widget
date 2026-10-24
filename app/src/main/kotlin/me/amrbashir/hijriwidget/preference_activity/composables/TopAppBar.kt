@@ -20,7 +20,7 @@ import me.amrbashir.hijriwidget.android.AlarmReceiver
 import me.amrbashir.hijriwidget.hasRouteInHierarchy
 import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
 import me.amrbashir.hijriwidget.preference_activity.LocalNavController
-import me.amrbashir.hijriwidget.preference_activity.LocalWidgetState
+import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
 import me.amrbashir.hijriwidget.preference_activity.darkLightContainerColor
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.PREFERENCES_DESTINATION
 import me.amrbashir.hijriwidget.widget.HijriWidget
@@ -75,14 +75,14 @@ private fun GoBackButton() {
 @Composable
 private fun SaveButton(onSave: suspend () -> Unit) {
 	val context = LocalContext.current
-	val widgetState = LocalWidgetState.current
+	val widget = LocalSelectedWidget.current
 	val coroutineScope = rememberCoroutineScope()
 
 	val saveAction: () -> Unit = {
 		coroutineScope.launch {
-			widgetState.prefsManager.save(context, widgetState.id)
-			HijriWidget().update(context, widgetState.id)
-			AlarmReceiver.setup24Periodic(context)
+			widget.prefsManager.save(context, widget.id)
+			HijriWidget().update(context, widget.id)
+			AlarmReceiver.scheduleNextUpdate(context)
 			onSave()
 		}
 	}

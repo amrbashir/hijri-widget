@@ -24,7 +24,7 @@ class HijriWidgetApp : Application() {
 
 		// Not needed to show the UI, so don't block the main thread on it
 		CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
-			AlarmReceiver.setup24Periodic(context)
+			AlarmReceiver.scheduleNextUpdate(context)
 
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
 				val appWidgetManager = GlanceAppWidgetManager(context)

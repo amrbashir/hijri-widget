@@ -148,11 +148,11 @@ class PreferencesManager {
 
 	companion object {
 		/**
-		 * Loads preferences from a widget's state.
+		 * Parses already read preferences, e.g. a widget's state.
 		 *
-		 * A widget without any saved state (e.g. a newly added widget) gets the defaults.
+		 * Missing values (e.g. a newly added widget) get the defaults.
 		 */
-		fun load(prefs: Preferences): PreferencesManager {
+		fun fromPreferences(prefs: Preferences): PreferencesManager {
 			val manager = PreferencesManager()
 			for (pref in manager._preferences) {
 				pref.load(prefs)
@@ -160,26 +160,30 @@ class PreferencesManager {
 			return manager
 		}
 
+		/** Reads and parses the stored preferences of a widget */
 		suspend fun load(
 			context: Context,
 			glanceId: GlanceId,
 		): PreferencesManager {
 			val prefs = getAppWidgetState(context, PreferencesGlanceStateDefinition, glanceId)
-			return load(prefs)
+			return fromPreferences(prefs)
 		}
 
 		/** Loads preferences of every placed widget, in placement order */
-		suspend fun loadAll(context: Context): List<Pair<GlanceId, PreferencesManager>> =
+		suspend fun loadAll(context: Context): List<PreferencesManager> =
 			GlanceAppWidgetManager(context)
 				.getGlanceIds(HijriWidget::class.java)
-				.map { id -> id to load(context, id) }
+				.map { load(context, it) }
 
 		/**
 		 * Loads preferences used for app-wide behavior (e.g. the launcher icon),
 		 * which follows the first placed widget, or defaults if no widget is placed.
 		 */
-		suspend fun loadPrimary(context: Context): PreferencesManager =
-			loadAll(context).firstOrNull()?.second ?: PreferencesManager()
+		suspend fun loadFirstOrDefault(context: Context): PreferencesManager =
+			GlanceAppWidgetManager(context)
+				.getGlanceIds(HijriWidget::class.java)
+				.firstOrNull()
+				?.let { load(context, it) } ?: PreferencesManager()
 	}
 
 	suspend fun save(

@@ -31,9 +31,9 @@ class AlarmReceiver : BroadcastReceiver() {
 		val pendingResult = goAsync()
 		CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
 			try {
-				changeLauncherIcon(context, PreferencesManager.loadPrimary(context))
+				changeLauncherIcon(context, PreferencesManager.loadFirstOrDefault(context))
 				HijriWidget.refreshAll(context)
-				setup24Periodic(context)
+				scheduleNextUpdate(context)
 			} finally {
 				pendingResult.finish()
 			}
@@ -62,15 +62,14 @@ class AlarmReceiver : BroadcastReceiver() {
 		 * Schedules the next update at the earliest day start among all widgets
 		 * (and the launcher icon, which follows the first widget or defaults).
 		 */
-		suspend fun setup24Periodic(context: Context) {
+		suspend fun scheduleNextUpdate(context: Context) {
 			val alarmManager = context.getSystemService<AlarmManager>() ?: return
 			if (!AlarmManagerCompat.canScheduleExactAlarms(alarmManager)) return
 
 			val prefsManagers =
 				PreferencesManager
 					.loadAll(context)
-					.map { it.second }
-					.ifEmpty { listOf(PreferencesManager.loadPrimary(context)) }
+					.ifEmpty { listOf(PreferencesManager()) }
 			val nextUpdateMillis = prefsManagers.minOf { nextUpdateDateInMillis(it) }
 
 			val intent = Intent(context, AlarmReceiver::class.java)

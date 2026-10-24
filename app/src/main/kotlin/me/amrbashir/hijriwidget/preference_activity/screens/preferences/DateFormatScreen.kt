@@ -26,7 +26,7 @@ import me.amrbashir.hijriwidget.DATE_FORMAT_PRESETES
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.formatHijriDate
-import me.amrbashir.hijriwidget.preference_activity.LocalWidgetState
+import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
 import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
@@ -45,7 +45,7 @@ fun NavController.navigateToDateFormat() {
 
 @Composable
 internal fun DateFormatScreen() {
-	val prefsManager = LocalWidgetState.current.prefsManager
+	val prefsManager = LocalSelectedWidget.current.prefsManager
 
 	val savedFormat = prefsManager.dateFormat.value
 

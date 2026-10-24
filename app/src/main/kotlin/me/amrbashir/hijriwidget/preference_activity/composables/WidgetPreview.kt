@@ -35,8 +35,8 @@ import androidx.core.graphics.drawable.toBitmap
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.LocalAnimatedContentScope
+import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
 import me.amrbashir.hijriwidget.preference_activity.LocalSharedTransitionScope
-import me.amrbashir.hijriwidget.preference_activity.LocalWidgetState
 import me.amrbashir.hijriwidget.widgetCornerRadius
 
 @Composable
@@ -45,7 +45,7 @@ fun WidgetPreview(
 	onSettingsClick: (() -> Unit)? = null,
 ) {
 	val context = LocalContext.current
-	val prefsManager = LocalWidgetState.current.prefsManager
+	val prefsManager = LocalSelectedWidget.current.prefsManager
 	val wallpaperManager = WallpaperManager.getInstance(context)
 
 	val date = HijriDate.todayFormatted(prefsManager)
@@ -137,9 +137,9 @@ fun SharedWidgetPreview(
 ) {
 	val sharedTransitionScope = LocalSharedTransitionScope.current
 	val sharedAnimatedContentScope = LocalAnimatedContentScope.current
-	val widgetState = LocalWidgetState.current
+	val widget = LocalSelectedWidget.current
 
-	val key = "widget_preview_${widgetState.appWidgetId}"
+	val key = "widget_preview_${widget.appWidgetId}"
 
 	with(receiver = sharedTransitionScope) {
 		WidgetPreview(

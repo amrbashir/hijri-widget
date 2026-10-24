@@ -51,7 +51,7 @@ class HijriWidget : GlanceAppWidget() {
 	) {
 		provideContent {
 			val prefs = currentState<Preferences>()
-			val prefsManager = PreferencesManager.load(prefs)
+			val prefsManager = PreferencesManager.fromPreferences(prefs)
 
 			GlanceTheme {
 				Content(prefsManager, id)
@@ -117,7 +117,7 @@ class HijriWidget : GlanceAppWidget() {
 						if (id == null) return@clickable
 						coroutineScope.launch {
 							refresh(context, id)
-							AlarmReceiver.setup24Periodic(context)
+							AlarmReceiver.scheduleNextUpdate(context)
 						}
 					},
 		) {

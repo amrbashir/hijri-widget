@@ -35,6 +35,7 @@ import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.composables.TopAppBar
 import me.amrbashir.hijriwidget.preference_activity.screens.HOME_DESTINATION
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.PREFERENCES_DESTINATION
+import me.amrbashir.hijriwidget.preference_activity.screens.preferences.navigateToPreferences
 
 class PreferenceActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +53,7 @@ class PreferenceActivity : ComponentActivity() {
 		val context = this.baseContext
 
 		runBlocking {
-			changeLauncherIcon(context, PreferencesManager.loadPrimary(context))
+			changeLauncherIcon(context, PreferencesManager.loadFirstOrDefault(context))
 		}
 	}
 }
@@ -68,18 +69,23 @@ fun PreferenceActivityContent(
 
 	// Only the id is saved, so the selected widget survives activity recreation
 	val selectedWidgetId = rememberSaveable { mutableStateOf(appWidgetId) }
-	val selectedWidget = remember { mutableStateOf<WidgetState?>(null) }
-	val selectWidget: (WidgetState) -> Unit = {
-		selectedWidget.value = it
-		selectedWidgetId.value = it.appWidgetId
-	}
+	val selectedWidget = remember { mutableStateOf<WidgetInstance?>(null) }
 
+	// Load the selected widget if only its id is known, e.g. when opened from a widget or activity recreated
 	LaunchedEffect(selectedWidgetId.value) {
 		val id = selectedWidgetId.value ?: return@LaunchedEffect
 		if (selectedWidget.value?.appWidgetId != id) {
-			selectedWidget.value = WidgetState.load(context, id)
+			selectedWidget.value = WidgetInstance.load(context, id)
 		}
 	}
+
+	val openWidgetPrefs: (WidgetInstance) -> Unit = {
+		selectedWidget.value = it
+		selectedWidgetId.value = it.appWidgetId
+		navController.navigateToPreferences()
+	}
+
+	val widget = selectedWidget.value
 
 	val appBarTitle = remember { mutableStateOf("") }
 	val snackBarHostState = remember { SnackbarHostState() }
@@ -92,11 +98,11 @@ fun PreferenceActivityContent(
 		snackBarHostState.showSnackbar(widgetUpdatedMessage)
 	}
 
-	val widget = selectedWidget.value
-	val widgetStateProvider = widget?.let { LocalWidgetState provides it }
+	// Opened from a widget goes straight to its preferences
+	val startDestination = if (appWidgetId == null) HOME_DESTINATION else PREFERENCES_DESTINATION
 
 	PreferenceActivityTheme {
-		// Wait until the selected widget is loaded, as preferences screens require it
+		// Show an empty background until the selected widget is loaded, as preferences screens require it
 		if (selectedWidgetId.value != null && widget == null) {
 			Box(
 				modifier =
@@ -111,8 +117,8 @@ fun PreferenceActivityContent(
 			LocalNavController provides navController,
 			LocalSnackBarHostState provides snackBarHostState,
 			LocalAppBarTitle provides appBarTitle,
-			LocalSelectWidget provides selectWidget,
-			*listOfNotNull(widgetStateProvider).toTypedArray(),
+			LocalOpenWidgetPrefs provides openWidgetPrefs,
+			LocalSelectedWidget provides widget,
 		) {
 			Scaffold(
 				containerColor = MaterialTheme.colorScheme.darkLightContainerColor,
@@ -134,16 +140,7 @@ fun PreferenceActivityContent(
 					CompositionLocalProvider(
 						LocalSharedTransitionScope provides this,
 					) {
-						Navigation(
-							startDestination =
-								if (appWidgetId !=
-									null
-								) {
-									PREFERENCES_DESTINATION
-								} else {
-									HOME_DESTINATION
-								},
-						)
+						Navigation(startDestination = startDestination)
 					}
 				}
 			}

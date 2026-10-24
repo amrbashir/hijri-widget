@@ -27,7 +27,7 @@ import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.formatTime
 import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
 import me.amrbashir.hijriwidget.preference_activity.LocalNavController
-import me.amrbashir.hijriwidget.preference_activity.LocalWidgetState
+import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
 import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
@@ -50,7 +50,7 @@ fun NavController.navigateToPreferences() {
 internal fun PreferenceListScreen() {
 	LocalAppBarTitle.current.value = stringResource(R.string.app_name)
 
-	val prefsManager = LocalWidgetState.current.prefsManager
+	val prefsManager = LocalSelectedWidget.current.prefsManager
 	val navController = LocalNavController.current
 
 	PreferenceScreenLayout {

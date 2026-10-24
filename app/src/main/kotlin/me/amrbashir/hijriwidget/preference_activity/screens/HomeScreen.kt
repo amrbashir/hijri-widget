@@ -29,7 +29,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -48,13 +47,12 @@ import androidx.navigation.NavGraphBuilder
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
 import me.amrbashir.hijriwidget.preference_activity.LocalNavController
-import me.amrbashir.hijriwidget.preference_activity.LocalSelectWidget
-import me.amrbashir.hijriwidget.preference_activity.LocalWidgetState
-import me.amrbashir.hijriwidget.preference_activity.WidgetState
+import me.amrbashir.hijriwidget.preference_activity.LocalOpenWidgetPrefs
+import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
+import me.amrbashir.hijriwidget.preference_activity.WidgetInstance
 import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
 import me.amrbashir.hijriwidget.preference_activity.composables.SharedWidgetPreview
 import me.amrbashir.hijriwidget.preference_activity.screenPadding
-import me.amrbashir.hijriwidget.preference_activity.screens.preferences.navigateToPreferences
 import me.amrbashir.hijriwidget.widget.HijriWidgetReceiver
 
 const val HOME_DESTINATION = "/"
@@ -68,12 +66,11 @@ private fun HomeScreen() {
 	LocalAppBarTitle.current.value = stringResource(R.string.app_name)
 
 	val navController = LocalNavController.current
-	val selectWidget = LocalSelectWidget.current
 	val context = LocalContext.current
 	val appWidgetManager = remember { AppWidgetManager.getInstance(context) }
 
-	val widgetsStates = remember { mutableStateListOf<WidgetState>() }
-	var loaded by remember { mutableStateOf(false) }
+	// `null` until loaded, to avoid flashing the empty state
+	var widgets by remember { mutableStateOf<List<WidgetInstance>?>(null) }
 
 	// Reload every time this screen is shown, which also discards unsaved edits,
 	// and when coming back to the app, e.g. after adding a widget
@@ -81,17 +78,8 @@ private fun HomeScreen() {
 	LaunchedEffect(lifecycleState) {
 		// Not waiting for `RESUMED`, which is only reached after the navigation transition ends
 		if (!lifecycleState.isAtLeast(Lifecycle.State.STARTED)) return@LaunchedEffect
-		val states = WidgetState.loadAll(context)
-		widgetsStates.clear()
-		widgetsStates.addAll(states)
-		loaded = true
-	}
 
-	// Avoid flashing the empty state before widgets are loaded, but still fill
-	// the screen, as navigation transitions slide relative to its size
-	if (!loaded) {
-		Box(Modifier.fillMaxSize())
-		return
+		widgets = WidgetInstance.loadAll(context)
 	}
 
 	val canAddWidget = appWidgetManager.isRequestPinAppWidgetSupported
@@ -105,10 +93,26 @@ private fun HomeScreen() {
 	}
 	val openAbout = { navController.navigateToAbout() }
 
-	if (widgetsStates.isEmpty()) {
-		EmptyHomeScreen(canAddWidget, addWidget, openAbout)
-		return
+	// Fills the screen even while loading, as navigation transitions slide relative to its size
+	Box(Modifier.fillMaxSize()) {
+		val widgets = widgets ?: return@Box
+
+		if (widgets.isEmpty()) {
+			EmptyHomeScreen(canAddWidget, addWidget, openAbout)
+		} else {
+			WidgetsHomeScreen(widgets, canAddWidget, addWidget, openAbout)
+		}
 	}
+}
+
+@Composable
+private fun WidgetsHomeScreen(
+	widgets: List<WidgetInstance>,
+	canAddWidget: Boolean,
+	addWidget: () -> Unit,
+	openAbout: () -> Unit,
+) {
+	val openWidgetPrefs = LocalOpenWidgetPrefs.current
 
 	Column(
 		verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -119,15 +123,12 @@ private fun HomeScreen() {
 				// Applied after the scroll, so widgets shadows are not clipped
 				.screenPadding(),
 	) {
-		for (state in widgetsStates) {
-			key(state.appWidgetId) {
-				CompositionLocalProvider(LocalWidgetState provides state) {
+		for (widget in widgets) {
+			key(widget.appWidgetId) {
+				CompositionLocalProvider(LocalSelectedWidget provides widget) {
 					SharedWidgetPreview(
 						modifier = Modifier.shadow(6.dp, RoundedCornerShape(20.dp)),
-						onSettingsClick = {
-							selectWidget(state)
-							navController.navigateToPreferences()
-						},
+						onSettingsClick = { openWidgetPrefs(widget) },
 					)
 				}
 			}
@@ -139,15 +140,16 @@ private fun HomeScreen() {
 		) {
 			if (canAddWidget) {
 				FlatButton(
-					Icons.Outlined.Add,
-					stringResource(R.string.home_screen_add_widget),
-					addWidget,
+					icon = Icons.Outlined.Add,
+					label = stringResource(R.string.home_screen_add_widget),
+					onClick = addWidget,
 				)
 			}
+
 			FlatButton(
-				Icons.Outlined.Info,
-				stringResource(R.string.preferences_about_title),
-				openAbout,
+				icon = Icons.Outlined.Info,
+				label = stringResource(R.string.preferences_about_title),
+				onClick = openAbout,
 			)
 		}
 	}
@@ -180,12 +182,14 @@ private fun EmptyHomeScreen(
 				stringResource(R.string.home_screen_no_widgets_title),
 				style = MaterialTheme.typography.titleLarge,
 			)
+
 			Spacer(Modifier.height(8.dp))
+
 			if (canAddWidget) {
 				FlatButton(
-					Icons.Outlined.Add,
-					stringResource(R.string.home_screen_add_widget_long),
-					addWidget,
+					icon = Icons.Outlined.Add,
+					label = stringResource(R.string.home_screen_add_widget_long),
+					onClick = addWidget,
 				)
 			} else {
 				Text(
@@ -200,9 +204,9 @@ private fun EmptyHomeScreen(
 
 		Box(Modifier.align(Alignment.BottomCenter)) {
 			FlatButton(
-				Icons.Outlined.Info,
-				stringResource(R.string.preferences_about_title),
-				openAbout,
+				icon = Icons.Outlined.Info,
+				label = stringResource(R.string.preferences_about_title),
+				onClick = openAbout,
 			)
 		}
 	}
