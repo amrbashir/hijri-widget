@@ -36,7 +36,6 @@ import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.android.HijriWidgetApp
 import me.amrbashir.hijriwidget.preference_activity.composables.TopAppBar
 import me.amrbashir.hijriwidget.preference_activity.screens.HOME_DESTINATION
-import me.amrbashir.hijriwidget.preference_activity.screens.preferences.PREFERENCES_DESTINATION
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.navigateToPreferences
 
 class PreferenceActivity : ComponentActivity() {
@@ -63,11 +62,55 @@ class PreferenceActivity : ComponentActivity() {
 	}
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PreferenceActivityContent(
-	appWidgetId: Int? = null,
-	onSave: (suspend () -> Unit)? = null,
+private fun PreferenceActivityContent() {
+	PreferenceActivityTheme {
+		PreferencesProvider(
+			appWidgetId = null,
+			loading = { LoadingBackground() },
+		) {
+			val snackBarHostState = LocalSnackBarHostState.current
+			val widgetUpdatedMessage = stringResource(R.string.widget_updated)
+
+			val topAppBarState = rememberTopAppBarState()
+			val topAppBarScrollBehavior =
+				TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
+
+			PreferencesScaffold(
+				startDestination = HOME_DESTINATION,
+				modifier = Modifier.nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
+				topBar = {
+					TopAppBar(
+						scrollBehavior = topAppBarScrollBehavior,
+						onSave = { snackBarHostState.showSnackbar(widgetUpdatedMessage) },
+					)
+				},
+			)
+		}
+	}
+}
+
+/** An empty background shown while the selected widget is loaded */
+@Composable
+private fun LoadingBackground() {
+	Box(
+		modifier =
+			Modifier
+				.fillMaxSize()
+				.background(MaterialTheme.colorScheme.darkLightContainerColor),
+	)
+}
+
+/**
+ * Provides the state shared by the preferences screens to [content],
+ * showing [loading] instead until the selected widget is loaded, as the screens require it.
+ */
+@Composable
+fun PreferencesProvider(
+	appWidgetId: Int?,
+	loading: @Composable () -> Unit,
+	content: @Composable () -> Unit,
 ) {
 	val navController = rememberNavController()
 	val context = LocalContext.current
@@ -91,63 +134,48 @@ fun PreferenceActivityContent(
 	}
 
 	val widget = selectedWidget.value
+	if (selectedWidgetId.value != null && widget == null) {
+		loading()
+		return
+	}
 
 	val appBarTitle = remember { mutableStateOf("") }
 	val snackBarHostState = remember { SnackbarHostState() }
-	val topAppBarState = rememberTopAppBarState()
-	val topAppBarScrollBehavior =
-		TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
 
-	val widgetUpdatedMessage = stringResource(R.string.widget_updated)
-	val defaultSaveAction: suspend () -> Unit = {
-		snackBarHostState.showSnackbar(widgetUpdatedMessage)
-	}
+	CompositionLocalProvider(
+		LocalNavController provides navController,
+		LocalSnackBarHostState provides snackBarHostState,
+		LocalAppBarTitle provides appBarTitle,
+		LocalOpenWidgetPrefs provides openWidgetPrefs,
+		LocalSelectedWidget provides widget,
+		content = content,
+	)
+}
 
-	// Opened from a widget goes straight to its preferences
-	val startDestination = if (appWidgetId == null) HOME_DESTINATION else PREFERENCES_DESTINATION
-
-	PreferenceActivityTheme {
-		// Show an empty background until the selected widget is loaded, as preferences screens require it
-		if (selectedWidgetId.value != null && widget == null) {
-			Box(
-				modifier =
-					Modifier
-						.fillMaxSize()
-						.background(MaterialTheme.colorScheme.darkLightContainerColor),
-			)
-			return@PreferenceActivityTheme
-		}
-
-		CompositionLocalProvider(
-			LocalNavController provides navController,
-			LocalSnackBarHostState provides snackBarHostState,
-			LocalAppBarTitle provides appBarTitle,
-			LocalOpenWidgetPrefs provides openWidgetPrefs,
-			LocalSelectedWidget provides widget,
+/** The preferences screens, starting at [startDestination] */
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Composable
+fun PreferencesScaffold(
+	startDestination: String,
+	modifier: Modifier = Modifier,
+	topBar: @Composable () -> Unit = {},
+) {
+	Scaffold(
+		containerColor = MaterialTheme.colorScheme.darkLightContainerColor,
+		snackbarHost = { SnackbarHost(hostState = LocalSnackBarHostState.current) },
+		topBar = topBar,
+		modifier = modifier,
+	) {
+		SharedTransitionLayout(
+			modifier =
+				Modifier
+					.consumeWindowInsets(it)
+					.padding(it),
 		) {
-			Scaffold(
-				containerColor = MaterialTheme.colorScheme.darkLightContainerColor,
-				snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-				topBar = {
-					TopAppBar(
-						scrollBehavior = topAppBarScrollBehavior,
-						onSave = onSave ?: defaultSaveAction,
-					)
-				},
-				modifier = Modifier.nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
+			CompositionLocalProvider(
+				LocalSharedTransitionScope provides this,
 			) {
-				SharedTransitionLayout(
-					modifier =
-						Modifier
-							.consumeWindowInsets(it)
-							.padding(it),
-				) {
-					CompositionLocalProvider(
-						LocalSharedTransitionScope provides this,
-					) {
-						Navigation(startDestination = startDestination)
-					}
-				}
+				Navigation(startDestination = startDestination)
 			}
 		}
 	}

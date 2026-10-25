@@ -58,7 +58,7 @@
             android:autoRemoveFromRecents="true"
             android:excludeFromRecents="true"
             android:exported="false"
-            android:theme="@style/Theme.HijriWidget"
+            android:theme="@style/Theme.HijriWidget.Sheet"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />

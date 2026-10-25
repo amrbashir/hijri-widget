@@ -7,6 +7,7 @@
 - Each widget can now be customized separately, existing settings are carried over to all placed widgets.
 - Widget settings can now also be opened from the home screen on Pixel and other stock launchers, by long-pressing the widget and choosing "Settings".
 - Added an "Add widget" button in the app to place a new widget on the home screen.
+- Widget previews in the app now show the home screen wallpaper.
 
 ### Fixed
 
@@ -18,6 +19,7 @@
 
 ### Changed
 
+- Widget settings opened from the home screen now show in a sheet floating over it.
 - Minor updates and improvements
 
 ## [1.1.2] - 2025-10-19

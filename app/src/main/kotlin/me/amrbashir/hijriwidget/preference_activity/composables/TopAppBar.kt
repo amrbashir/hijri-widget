@@ -78,13 +78,14 @@ private fun GoBackButton() {
 	}
 }
 
+/** Saves the selected widget's preferences and updates it, then calls [onSave] */
 @Composable
-private fun SaveButton(onSave: suspend () -> Unit) {
+fun rememberSaveAction(onSave: suspend () -> Unit): () -> Unit {
 	val context = LocalContext.current
 	val widget = LocalSelectedWidget.current
 	val coroutineScope = rememberCoroutineScope()
 
-	val saveAction: () -> Unit = {
+	return {
 		coroutineScope.launch {
 			// Leaving the screen right after saving must not cancel it midway
 			withContext(NonCancellable) {
@@ -95,8 +96,11 @@ private fun SaveButton(onSave: suspend () -> Unit) {
 			onSave()
 		}
 	}
+}
 
-	IconButton(onClick = saveAction) {
+@Composable
+private fun SaveButton(onSave: suspend () -> Unit) {
+	IconButton(onClick = rememberSaveAction(onSave)) {
 		Icon(
 			imageVector = Icons.Outlined.Check,
 			contentDescription = null,

@@ -7,6 +7,12 @@
         <item name="android:windowShowWallpaper">true</item>
     </style>
 
+    <!-- Floats over the home screen, the settings are shown in a bottom sheet -->
+    <style name="Theme.HijriWidget.Sheet">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
     <style name="HijriWidgetTextStyle">
         <item name="android:textSize">22sp</item>
         <item name="android:gravity">center</item>

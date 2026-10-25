@@ -94,3 +94,6 @@ val LocalOpenWidgetPrefs =
 	compositionLocalOf<(WidgetInstance) -> Unit> {
 		error("CompositionLocal LocalOpenWidgetPrefs not present")
 	}
+
+/** Whether preferences screens show the widget preview, false when it's shown outside them */
+val LocalShowWidgetPreview = compositionLocalOf { true }
