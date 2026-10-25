@@ -18,7 +18,7 @@ import me.amrbashir.hijriwidget.widget.HijriWidget
  * Bump it and add a migration step in [migrateConfig] whenever the stored config changes shape.
  *
  * - v1: global preferences in [LEGACY_PREF]
- * - v2: per-widget preferences, stored in each widget's Glance state
+ * - v2: per-widget preferences with explicit Arabic locale for saved date formats
  */
 private const val CONFIG_VERSION = 2
 
@@ -79,6 +79,12 @@ private suspend fun migrateV1ToV2(
 	if (ids.isNotEmpty()) {
 		// v1 keys and value types match the current ones, so parsing them validates values
 		val legacy = PreferencesManager.fromPreferences(legacyPrefs.toPreferences())
+		legacy.dateFormat.value = preserveArabicDateFormat(legacy.dateFormat.value)
+		legacy.dateCustomFormat.value = preserveArabicDateFormat(legacy.dateCustomFormat.value)
+		if (!legacy.dateIsCustomFormat.value && legacy.dateFormat.value !in DATE_FORMAT_PRESETES) {
+			legacy.dateCustomFormat.value = legacy.dateFormat.value
+			legacy.dateIsCustomFormat.value = true
+		}
 
 		for (id in ids) {
 			val state = getAppWidgetState(context, PreferencesGlanceStateDefinition, id)
@@ -101,3 +107,9 @@ private fun SharedPreferences.toPreferences(): Preferences {
 	}
 	return prefs
 }
+
+/** Pins old bare segments to Arabic before their default changes to the device locale. */
+private fun preserveArabicDateFormat(format: String): String =
+	parseDateFormat(format).joinToString("") { segment ->
+		"${segment.langCode ?: "ar-SA"}{${segment.format}}"
+	}

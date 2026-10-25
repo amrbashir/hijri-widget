@@ -11,10 +11,12 @@ import java.text.CharacterIterator
 val DATE_FORMAT_PRESETES =
 	listOf(
 		"d MMMM yyyy",
-		"en-GB{d MMMM yyyy}",
-		"en-GB{d} ar-SA{MMMM} en-GB{yyyy}",
 		"d / MM / yy",
+		"ar-SA{d MMMM yyyy}",
+		"ar-SA{d / MM / yy}",
+		"en-GB{d MMMM yyyy}",
 		"en-GB{d / MM / yy}",
+		"en-GB{d} ar-SA{MMMM} en-GB{yyyy}",
 	)
 
 data class DateFormatSegment(
@@ -70,7 +72,8 @@ fun String.formatHijriDate(
 	weekdayDate: Calendar = date,
 ): String =
 	parseDateFormat(this).fold("") { acc, it ->
-		val locale = ULocale("${it.langCode ?: "ar-SA"}@calendar=${calcMethod.id}")
+		val language = it.langCode ?: ULocale.getDefault().toLanguageTag()
+		val locale = ULocale("$language@calendar=${calcMethod.id}")
 		runCatching {
 			val dateFormatter = SimpleDateFormat(it.format, locale)
 			var formatted = dateFormatter.format(date, weekdayDate)

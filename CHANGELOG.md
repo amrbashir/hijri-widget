@@ -19,6 +19,7 @@
 
 ### Changed
 
+- New widgets now display dates in the device language by default, while existing widgets keep their chosen language.
 - Widget settings opened from the home screen now show in a sheet floating over it.
 - Minor updates and improvements
 
