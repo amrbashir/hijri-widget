@@ -1,0 +1,3 @@
+Question: Which visual date editor model should issue #21 use?
+
+Decision: Prototype A from round 1, refined as A in round 2. Edit rendered values directly. Inline + inserts at a boundary. Below-preview inspector has style samples, per-part language, and trash icon. No Earlier/Later buttons. Keep drag arrangement and explicit multiline support. Production implementation is rewritten in Compose, not copied from HTML.

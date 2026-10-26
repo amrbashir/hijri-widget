@@ -1,0 +1,79 @@
+<!doctype html>
+<!-- THROWAWAY UI prototype: three alternatives, ?variant=A/B/C. No persistence.
+Run from repo root: python3 -m http.server 8765
+Question: which model makes multilingual, multiline date editing clearest?
+Round 1 winner: A, direct editing. Round 2 explores its interaction controls. -->
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Date editor alternatives</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font:14px system-ui;color:var(--foreground,#eee)}button,input,select{font:inherit;color:inherit;background:#353540;border:1px solid #66616f;border-radius:8px;padding:8px;cursor:pointer}button:hover{background:#514765}input{cursor:text;min-width:0}p{line-height:1.6}h2{font-size:19px;margin:0 0 8px}h3{font-size:14px;margin:10px 0}.intro{color:var(--muted-foreground,#aaa);font-size:12px}.workspace{display:grid;grid-template-columns:minmax(0,400px) minmax(180px,1fr);gap:20px;align-items:start}.phone{background:#191a22;color:#eee9f5;border-radius:24px;padding:20px;min-height:560px}.header{font-size:19px;display:flex;justify-content:space-between;margin-bottom:20px}.preview{white-space:pre-wrap;background:#050507;border-radius:18px;padding:25px 12px;font-size:28px;text-align:center;line-height:1.7;margin-bottom:16px;overflow-wrap:anywhere}.card{background:#292933;border-radius:17px;padding:15px;margin-top:12px}.actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}.hint,small{color:#bcb6ca;font-size:12px}.active{background:#514565!important;border-color:#d1b8ff!important}.token{background:none;border:0;border-bottom:2px dashed #706377;font-size:27px;padding:0 2px;border-radius:3px}.slot{background:none;border:0;color:#bfa7ed;font-size:17px;padding:0 2px}.entry{display:flex;gap:10px;align-items:center;padding:10px;border:1px solid #5b5364;border-radius:8px;margin:6px 0;cursor:pointer}.entry small{display:block}.entry span:last-child{margin-left:auto}.settings{display:grid;grid-template-columns:1fr 1fr;gap:8px}label{font-size:12px;display:flex;flex-direction:column;gap:5px}select{min-width:0;width:100%}.recipe{border-left:3px solid #bda0e2;padding-left:12px;margin:18px 0}.field{display:grid;grid-template-columns:1fr 1fr 30px;gap:5px;margin:8px 0}.rowhead{display:flex;justify-content:space-between;align-items:center}.notes p{color:var(--muted-foreground,#aaa)}pre{white-space:pre-wrap;word-break:break-word;font:11px ui-monospace,monospace;padding:12px;border-radius:8px;background:var(--muted,#25252c)}details{margin:15px 0}summary{cursor:pointer}.switcher{position:sticky;bottom:15px;margin:0 auto;width:fit-content;background:#eee5ff;color:#22132d;padding:6px;border-radius:35px;display:flex;align-items:center;gap:8px;box-shadow:0 4px 24px #0006;white-space:nowrap}.switcher button{background:transparent;border:0;color:inherit}.switcher span{min-width:170px;text-align:center;font-weight:600}.spacer{height:90px}@media(max-width:560px){.workspace{grid-template-columns:1fr}.phone{min-height:0}}
+.direct{overflow-x:auto;overflow-wrap:normal;text-wrap:nowrap;text-align:left}.token{white-space:pre}.control{margin-top:16px;min-height:64px}.sheet{margin:32px -12px -12px;padding:18px;background:#34313f;border-radius:23px 23px 12px 12px;box-shadow:0 -12px 30px #0005}.handle{width:38px;height:4px;border-radius:8px;background:#8f859c;margin:0 auto 15px}.draftpreview{text-align:center;font-size:32px;padding:18px}.apply{width:100%;margin-top:18px;background:#cfb7f5;color:#261638}.phone{overflow:hidden}.trash{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;background:transparent} </style>
+<p class="intro">THROWAWAY PROTOTYPE · Round 2 · Three refinements of direct editing · In-memory changes only</p>
+<div class="workspace"><main class="phone"><div class="header"><span>‹ &nbsp; Date format</span><span>✓</span></div><div id="editor"></div></main><aside class="notes"><div id="description"></div><details open><summary>Generated pattern</summary><pre id="pattern"></pre></details><details><summary>Full state</summary><pre id="state"></pre></details><button onclick="reset()">Reset this approach</button></aside></div><div class="spacer"></div><nav class="switcher"><button onclick="cycle(-1)" aria-label="Previous approach">←</button><span id="name"></span><button onclick="cycle(1)" aria-label="Next approach">→</button></nav>
+<script>
+const names={A:'Live inspector',B:'Context toolbar',C:'Focus sheet'}, types={d:'Day',M:'Month',y:'Year',E:'Weekday',text:'Text',br:'New line'},langs={device:'Device language',ar:'Arabic',en:'English',tr:'Turkish'},styles={d:['d','dd'],M:['M','MM','MMM','MMMM'],y:['yy','yyyy'],E:['EEE','EEEE']};
+const notes={A:['Live inspector + component picker','Tap a rendered value to edit it. Tap + between values to insert at that position. Remove uses the trash icon.','The preview stays clear, with appearance and language settings directly below it.'],B:['Clean canvas + context toolbar','Tap a value to expose a compact toolbar. Choose Style or Language to open one control at a time. Insert before or after the selection.','A cleaner preview with fewer controls; insertion depends on selecting a neighbor.'],C:['Focused sheet + deliberate apply','Tap a value to open a sheet. Changes are a draft until Apply; Cancel discards them. Insert from the sheet or the Add button.','More room for controls and clear cancellation; editing takes an extra step.']};
+const field=(type='y')=>({type,style:{d:'d',M:'MMMM',y:'yyyy',E:'EEEE'}[type],lang:'device'}),initial=()=>[field('d'),{type:'text',text:' '},field('M'),{type:'text',text:' '},field('y')];
+const models={A:initial(),B:initial(),C:initial()};let v=new URLSearchParams(location.search).get('variant')||'A';if(!names[v])v='A';let sel={A:2,B:2,C:2},at=null,tool='style',sheet=false,draft=null,backup=null;
+const esc=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
+function value(p){if(p.type==='br')return '\n';if(p.type==='text')return p.text;const opts={d:{day:p.style==='dd'?'2-digit':'numeric'},M:{month:{M:'numeric',MM:'2-digit',MMM:'short',MMMM:'long'}[p.style]},y:{year:p.style==='yy'?'2-digit':'numeric'},E:{weekday:p.style==='EEE'?'short':'long'}};return new Intl.DateTimeFormat((p.lang==='device'?'en-GB':p.lang)+'-u-ca-islamic-umalqura',{...opts[p.type],timeZone:'UTC'}).format(new Date('2026-10-26T12:00:00Z')).replace(/ AH| هـ/g,'')}
+function flat(){return models[v]}
+function pattern(){return flat().map(p=>p.type==='br'?'\n':p.type==='text'?(/[a-zA-Z'{}]/.test(p.text)?"'"+p.text.replaceAll("'","''")+"'":p.text):p.lang==='device'?p.style:({ar:'ar-SA',en:'en-GB',tr:'tr-TR'}[p.lang]+'{'+p.style+'}')).join('')}
+function options(obj,current){return Object.entries(obj).map(([k,n])=>'<option value="'+esc(k)+'" '+(k===current?'selected':'')+'>'+esc(n)+'</option>').join('')}
+function palette(){return '<div class="actions">'+Object.entries(types).map(([k,n])=>'<button onclick="add(\''+k+'\')">+ '+(k==='text'?'␣ / text':n)+'</button>').join('')+'</div>'}
+function inspector(){let p=models[v][sel[v]];if(!p)return '';return '<h3>'+types[p.type]+' settings</h3>'+(p.type==='br'?'<p class="hint">Start a new row here.</p>':p.type==='text'?'<label>Literal text<input value="'+esc(p.text)+'" onchange="edit(\'text\',this.value)"></label>':'<div class="settings"><label>Style<select onchange="edit(\'style\',this.value)">'+options(Object.fromEntries(styles[p.type].map(s=>[s,s+' · '+value({...p,style:s})])),p.style)+'</select></label><label>Language<select onchange="edit(\'lang\',this.value)">'+options(langs,p.lang)+'</select></label></div>')+'<div class="actions"><button onclick="move(-1)">← Earlier</button><button onclick="move(1)">Later →</button><button onclick="remove()">Remove</button></div>'}
+
+
+
+function trash(){
+ return '<button class="trash" onclick="remove()" aria-label="Remove selected component" title="Remove selected component"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7M14 10v7"/></svg></button>';
+}
+function liveInspector(){
+ const p=models[v][sel[v]];
+ if(!p)return '<p class="hint">Add a component to begin.</p>';
+ return '<div class="rowhead"><h3>'+types[p.type]+(styles[p.type]?' appearance':'')+'</h3>'+trash()+'</div>'+
+ (styles[p.type]?'<div class="actions">'+styles[p.type].map(x=>'<button class="'+(p.style===x?'active':'')+'" onclick="edit(\'style\',\''+x+'\')">'+esc(value({...p,style:x}))+'<small style="display:block">'+x+'</small></button>').join('')+'</div><div style="margin-top:14px">'+control(p,'lang','edit')+'</div>':control(p,'style','edit'));
+}
+function canvas(){
+ const a=flat();return '<div class="preview direct">'+a.map((p,i)=>
+ (v==='A'?'<button class="slot" aria-label="Insert before part '+(i+1)+'" onclick="insert('+i+')">+</button>':'')+
+ '<button class="token '+(sel[v]===i?'active':'')+'" aria-label="'+types[p.type]+'" onclick="choose('+i+')">'+
+ esc(p.type==='br'?'↵':p.type==='text'&&p.text===' '?'␣':value(p))+'</button>'+(p.type==='br'?'<br>':'')
+ ).join('')+(v==='A'?'<button class="slot" aria-label="Insert at end" onclick="insert('+a.length+')">+</button>':'')+'</div>'
+}
+function control(p,k,fn){
+ if(!p)return '<p class="hint">Tap a date value to begin.</p>';
+ if(p.type==='br')return '<p class="hint">This starts another row.</p>';
+ if(p.type==='text')return '<label>Literal text<input value="'+esc(p.text)+'" onchange="'+fn+'(\'text\',this.value)"></label>';
+ return '<label>'+(k==='style'?'Display style':'Language')+'<select onchange="'+fn+'(\''+k+'\',this.value)">'+
+ (k==='style'?options(Object.fromEntries(styles[p.type].map(x=>[x,x+' · '+value({...p,style:x})])),p.style):options(langs,p.lang))+'</select></label>';
+}
+function render(){
+ const p=models[v][sel[v]],n=notes[v];document.querySelector('#name').textContent=v+' · '+names[v];
+ document.querySelector('#description').innerHTML='<h2>'+n[0]+'</h2><p>'+n[1]+'</p><p>'+n[2]+'</p><p class="hint">Same model in all three: fields, per-field languages, separators, unlimited explicit rows. Sample date: 26 October 2026. Device language: English.</p>';
+ let h=canvas();
+ if(v==='A')h+=at!==null?'<div class="card"><div class="rowhead"><h3>Add component</h3><button onclick="at=null;render()" aria-label="Close component picker">×</button></div><p class="hint">Insert at position '+(at+1)+'.</p>'+palette()+'</div>':'<div class="card">'+liveInspector()+'</div>';
+ if(v==='B'){
+ h+='<p class="hint">Tap a value to select it. The toolbar acts on that value.</p><div class="card toolbar"><h3>'+(p?types[p.type]:'No selection')+'</h3><div class="actions"><button class="'+(tool==='style'?'active':'')+'" onclick="tool=\'style\';at=null;render()">Style</button><button class="'+(tool==='lang'?'active':'')+'" onclick="tool=\'lang\';at=null;render()">Language</button><button onclick="insert(sel[v])">+ Before</button><button onclick="insert(sel[v]+1)">+ After</button></div><div class="control">'+(at===null?control(p,tool,'edit'):palette())+'</div><div class="actions"><button onclick="move(-1)">← Earlier</button><button onclick="move(1)">Later →</button><button onclick="remove()">Remove</button></div></div>';
+ }
+ if(v==='C'){
+ h+='<div class="actions"><button onclick="insert(models[v].length)">+ Add at end</button><button onclick="at=models[v].length;add(\'br\')">↵ New row</button></div><p class="hint">Tap a value to open its editing sheet. Preview updates after Apply.</p>';
+ if(sheet)h+='<div class="sheet"><div class="handle"></div><div class="rowhead"><h2>'+(at===null?'Edit '+types[draft.type]:'Insert at position '+(at+1))+'</h2><button onclick="cancel()">Cancel</button></div>'+(at!==null?palette():'<div class="draftpreview">'+esc(value(draft))+'</div><div class="settings">'+control(draft,'style','draftEdit')+((draft.type==='text'||draft.type==='br')?'':control(draft,'lang','draftEdit'))+'</div><div class="actions"><button onclick="insert(sel[v])">+ Before</button><button onclick="insert(sel[v]+1)">+ After</button><button onclick="remove();sheet=false;render()">Remove</button></div><div class="actions"><button onclick="move(-1)">← Earlier</button><button onclick="move(1)">Later →</button></div><button class="apply" onclick="apply()">Apply changes</button>')+'</div>';
+ }
+ document.querySelector('#editor').innerHTML=h;
+ document.querySelector('#pattern').textContent=pattern();
+ document.querySelector('#state').textContent=JSON.stringify({variant:v,selection:sel[v],insertion:at,sheet,draft,parts:models[v]},null,2);
+ console.log('Round 2 state',v,JSON.stringify(models[v]));
+}
+function choose(i){sel[v]=i;at=null;if(v==='C'){backup=structuredClone(models.C);draft={...models[v][i]};sheet=true}render()}
+function insert(i){at=i;if(v==='C')sheet=true;render()}
+function edit(k,x){models[v][sel[v]][k]=x;render()}
+function draftEdit(k,x){draft[k]=x;render()}
+function apply(){models[v][sel[v]]={...draft};backup=null;sheet=false;draft=null;render()}
+function cancel(){if(backup)models.C=backup;backup=null;sheet=false;draft=null;at=null;render()}
+function add(t){let i=at??sel[v]+1;models[v].splice(i,0,t==='br'?{type:t}:t==='text'?{type:t,text:' '}:field(t));sel[v]=i;at=null;if(v==='C'){draft={...models[v][i]};sheet=false}render()}
+function move(d){let a=models[v],i=sel[v],j=i+d;if(j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]];sel[v]=j;render()}
+function remove(){models[v].splice(sel[v],1);sel[v]=Math.max(0,sel[v]-1);sheet=false;at=null;render()}
+function reset(){models[v]=initial();sel[v]=2;at=null;sheet=false;draft=null;render()}
+function cycle(d){v=['A','B','C'][(['A','B','C'].indexOf(v)+d+3)%3];at=null;sheet=false;draft=null;try{let u=new URL(location.href);u.searchParams.set('variant',v);history.replaceState(null,'',u)}catch(e){}render()}
+document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea,select,[contenteditable]'))return;if(['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();cycle(e.key==='ArrowLeft'?-1:1)}});render();
+</script></html>
