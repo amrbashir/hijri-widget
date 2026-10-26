@@ -1,0 +1,2 @@
+Question: Which Add part picker should the visual editor use?
+Decision: C, a bottom sheet with date field examples, quick space/slash/dash/newline actions, and custom text plus Insert. Choosing inserts at the tapped boundary and closes. Dismissal keeps the format unchanged.
