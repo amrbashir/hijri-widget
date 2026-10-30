@@ -16,3 +16,8 @@ ktlint_standard_backing-property-naming = disabled
 ktlint_standard_filename = disabled
 ktlint_standard_function-naming = disabled
 ktlint_standard_package-name = disabled
+
+[**/generated/**]
+generated_code = true
+ij_formatter_enabled = false
+ktlint = disabled
