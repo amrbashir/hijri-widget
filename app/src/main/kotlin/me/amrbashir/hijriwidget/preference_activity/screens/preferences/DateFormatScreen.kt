@@ -101,7 +101,14 @@ internal fun DateFormatScreen() {
 					description = stringResource(R.string.date_format_custom_description),
 					selected = prefsManager.dateIsCustomFormat.value,
 					modifier = Modifier.fillMaxWidth(),
-					onClick = { prefsManager.dateIsCustomFormat.value = true },
+					onClick = {
+						if (!prefsManager.dateIsCustomFormat.value &&
+							prefsManager.dateCustomFormat.value.isEmpty()
+						) {
+							prefsManager.dateCustomFormat.value = savedFormat
+						}
+						prefsManager.dateIsCustomFormat.value = true
+					},
 				)
 
 				if (prefsManager.dateIsCustomFormat.value) {
@@ -154,7 +161,7 @@ private fun FormatOption(
 			)
 			Text(
 				text = description,
-				style = MaterialTheme.typography.bodyMedium,
+				style = MaterialTheme.typography.bodySmall,
 				color = MaterialTheme.colorScheme.onSurfaceVariant,
 			)
 		}

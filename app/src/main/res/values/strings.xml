@@ -47,7 +47,7 @@
             Customize how the date appears on your widget
             <br>
             <br>
-            You can use these codes:
+            Supported date codes:
             <p>- <b>d</b> = day number (1, 2, 3…)</p>
             <p>- <b>dd</b> = day with zero (01, 02, 03…)</p>
             <p>- <b>M</b> = month number (1, 2, 3…)</p>
@@ -68,11 +68,20 @@
             Mix and match these codes with slashes, dashes, spaces, or commas to create your preferred date style.
             <br>
             <br>
+            <p>Literal text: put text in single quotes so it is not interpreted as date codes or language groups.</p>
+            <p>- <b>d &#39;days&#39;</b> = 21 days</p>
+            <p>- <b>&#39;en-GB{hello}&#39;</b> = en-GB{hello}</p>
+            <p>Use two single quotes (<b>&#39;&#39;</b>) to display one apostrophe.</p>
+            <br>
             By default the language used for displaying these codes is the device language but you can specify a different language by using this syntax:
             <br>
             <br>
                  &#x2000;&#x2000;&#x2000;&#x2000;<big>&lt;language-code&gt;{date-code}</big>
             <br>
+            <br>
+            Language tags can include just a language (<b>ar</b>), a region (<b>en-GB</b>), or a script and region (<b>zh-Hant-TW</b>).
+            <p>- <b>ar{MMMM}</b> displays the month in Arabic.</p>
+            <p>- <b>zh-Hant-TW{MMMM}</b> displays the month in Traditional Chinese.</p>
             <br>
             Examples:
             <p>- <b>en-GB{dd/MMMM/yyyy}</b>= 21/Safar/1447</p>
@@ -83,6 +92,10 @@
             You can also mix and match multiple languages:
             <p>- <b>en-GB{dd}/ar-SA{MMMM}/en-GB{yyyy}</b> = 21/صفر&#x200E;/1447</p>
             <p>- <b>en-GB{dd} ar-SA{MMMM} en-GB{yyyy}</b> = 21 صفر&#x200E; 1447</p>
+            <br>
+            <p>Device-language groups: use <b>{...}</b> without a language tag to keep a component in the device language.</p>
+            <p>- <b>{d} ar{MMMM} {yyyy}</b> uses device-language numbers and an Arabic month.</p>
+            <p>Groups also keep adjacent components separate: <b>{d}{d}</b> displays the day twice, while <b>dd</b> displays one day padded to two digits.</p>
             <br>
             For the full list of language identifiers:
             <br>

@@ -20,17 +20,25 @@ val DATE_FORMAT_PRESETES =
 	)
 
 data class DateFormatSegment(
+	/** null uses the device’s default locale for unwrapped text and anonymous {...} groups. */
 	val langCode: String?,
 	val format: String,
 )
 
 fun parseDateFormat(input: String): List<DateFormatSegment> =
 	buildList {
-		// Regex to parse a string like "en-GB{dd}"
-		val regex = Regex("""([a-z-A-Z]{2}-[a-z-A-Z]{2})\{([^}]+)\}""")
+		// Match quoted text first so braces and language tags inside it stay literal.
+		// Two apostrophes are escaped; an unfinished quote protects the remaining text.
+		val quotedText = """'(?:''|[^'])*(?:'|$)"""
+		val languageTag = """[a-zA-Z]{2,8}(?:-[a-zA-Z0-9]{1,8})*"""
+		val group = """($languageTag)?\{((?:$quotedText|[^'}])+)\}"""
+		val regex = Regex("$quotedText|$group")
 		var currentIndex = 0
 
 		for (match in regex.findAll(input)) {
+			// Quoted matches have no group body. Keep them in the pending text for ICU.
+			if (match.groups[2] == null) continue
+
 			val matchStart = match.range.first
 			val matchEnd = match.range.last + 1
 
@@ -45,7 +53,7 @@ fun parseDateFormat(input: String): List<DateFormatSegment> =
 			}
 
 			// Add the language-format pair
-			val langCode = match.groupValues[1]
+			val langCode = match.groupValues[1].ifEmpty { null }
 			val formatStr = match.groupValues[2]
 			add(DateFormatSegment(langCode, formatStr))
 
