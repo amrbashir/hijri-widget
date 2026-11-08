@@ -2,6 +2,29 @@
 
 ## [Unreleased]
 
+### Added
+
+- Added per-widget text alignment and padding controls.
+- Added a visual date editor with draggable components, editable rows, and component options.
+- Each widget can now be customized separately, existing settings are carried over to all placed widgets.
+- Widget settings can now also be opened from the home screen on Pixel and other stock launchers, by long-pressing the widget and choosing "Settings".
+- Added an "Add widget" button in the app to place a new widget on the home screen.
+- Widget previews in the app now show the home screen wallpaper.
+
+### Fixed
+
+- Fixed a grey screen showing briefly while the app is opening.
+- Fixed "Day Offset" also changing the day of the week, it now only shifts the Hijri date.
+- Fixed the widget showing the previous Hijri date all day when "Day Start" is set to an AM time.
+- Fixed the widget stopping to update daily if an update fails.
+- Fixed a brief freeze when leaving the app.
+
+### Changed
+
+- New widgets now display dates in the device language by default, while existing widgets keep their chosen language.
+- Widget settings opened from the home screen now show in a sheet floating over it.
+- Minor updates and improvements
+
 ## [1.1.2] - 2025-10-19
 
 ### Fixed

@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.HijriWidget" parent="android:Theme.Material.NoActionBar" />
+    <!-- Material 3 window background follows light/dark and dynamic colors, so no grey window shows before Compose draws -->
+    <style name="Theme.HijriWidget" parent="Theme.Material3.DynamicColors.DayNight.NoActionBar">
+        <!-- The home screen wallpaper behind the window, widget previews punch through to it -->
+        <item name="android:windowShowWallpaper">true</item>
+    </style>
+
+    <!-- Floats over the home screen, the settings are shown in a bottom sheet -->
+    <style name="Theme.HijriWidget.Sheet">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
 
     <style name="HijriWidgetTextStyle">
         <item name="android:textSize">22sp</item>

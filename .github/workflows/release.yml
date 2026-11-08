@@ -35,6 +35,9 @@ jobs:
         env:
           GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
 
+      - name: Format check
+        run: ./gradlew fmtCheck && ./gradlew -p buildSrc ktlintCheck
+
       - name: Init secrets
         run: |
           KEYSTORE_FILE_PATH=${{ secrets.KEYSTORE_FILE_PATH }}

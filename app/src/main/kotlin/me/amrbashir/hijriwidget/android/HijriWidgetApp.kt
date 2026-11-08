@@ -5,27 +5,42 @@ import android.appwidget.AppWidgetProviderInfo
 import android.os.Build
 import androidx.collection.intSetOf
 import androidx.glance.appwidget.GlanceAppWidgetManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import me.amrbashir.hijriwidget.PreferencesManager
+import me.amrbashir.hijriwidget.logException
+import me.amrbashir.hijriwidget.migrateConfig
 import me.amrbashir.hijriwidget.widget.HijriWidgetReceiver
 
 class HijriWidgetApp : Application() {
+	override fun onCreate() {
+		super.onCreate()
 
-    override fun onCreate() {
-        super.onCreate()
+		val context = this
 
-        val prefsManager = PreferencesManager.load(this)
-        AlarmReceiver.setup24Periodic(this, prefsManager)
+		// Migration must finish before anything reads widget preferences.
+		// A failure is logged instead of crashing every app start, the failed step
+		// isn't marked done, so it's retried on the next start.
+		runBlocking { runCatching { migrateConfig(context) }.onFailure(logException) }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-            val appWidgetManager = GlanceAppWidgetManager(this)
+		// Not needed to show the UI, so don't block the main thread on it
+		scope.launch {
+			AlarmReceiver.scheduleNextUpdate(context)
 
-            runBlocking {
-                appWidgetManager.setWidgetPreviews(
-                    HijriWidgetReceiver::class,
-                    intSetOf(AppWidgetProviderInfo.WIDGET_CATEGORY_HOME_SCREEN)
-                )
-            }
-        }
-    }
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+				val appWidgetManager = GlanceAppWidgetManager(context)
+				appWidgetManager.setWidgetPreviews(
+					HijriWidgetReceiver::class,
+					intSetOf(AppWidgetProviderInfo.WIDGET_CATEGORY_HOME_SCREEN),
+				)
+			}
+		}
+	}
+
+	companion object {
+		/** App-wide scope for background work that outlives any single component */
+		val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+	}
 }

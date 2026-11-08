@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -16,90 +15,90 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import me.amrbashir.hijriwidget.ColorMode
 import me.amrbashir.hijriwidget.R
-import me.amrbashir.hijriwidget.preference_activity.LocalPreferencesManager
-import me.amrbashir.hijriwidget.preference_activity.composableWithAnimatedContentScopeProvider
+import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
+import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.ColorPicker
-import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceGroup
-import me.amrbashir.hijriwidget.preference_activity.composables.ui.PreferenceTemplate
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.Item
+import me.amrbashir.hijriwidget.preference_activity.composables.ui.ItemGroup
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.RadioIcon
 
 const val COLOR_DESTINATION = "/preferences/color"
 
 fun NavGraphBuilder.colorDestination() {
-    composableWithAnimatedContentScopeProvider(route = COLOR_DESTINATION) { ColorScreen() }
+	animatedContentComposable(route = COLOR_DESTINATION) { ColorScreen() }
 }
 
 fun NavController.navigateToColor() {
-    navigate(route = COLOR_DESTINATION)
+	navigate(route = COLOR_DESTINATION)
 }
-
 
 @Composable
 internal fun ColorScreen() {
-    val prefsManager = LocalPreferencesManager.current
+	val prefsManager = LocalSelectedWidget.current.prefsManager
 
-    val savedTextColorMode = prefsManager.textColorMode.value
-    val textColorModes = ColorMode.all()
+	val savedTextColorMode = prefsManager.textColorMode.value
+	val textColorModes = ColorMode.all()
 
-    val savedBgColorMode = prefsManager.bgColorMode.value
-    val bgColorModes = ColorMode.allForBg()
+	val savedBgColorMode = prefsManager.bgColorMode.value
+	val bgColorModes = ColorMode.allForBg()
 
-    PreferenceScreenLayout {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .padding(bottom = 16.dp)
-                .fillMaxSize()
-                .imePadding()
-                .verticalScroll(rememberScrollState())
-        ) {
-            PreferenceGroup(label = stringResource(R.string.text_color)) {
-                for (mode in textColorModes) {
-                    PreferenceTemplate(
-                        label = stringResource(mode.label),
-                        description = stringResource(mode.description),
-                        icon = { RadioIcon(selected = savedTextColorMode == mode) },
-                        onClick = {
-                            prefsManager.textColorMode.value = mode
-                        }
-                    ) {
-                        if (mode == ColorMode.Custom && prefsManager.textColorMode.value == ColorMode.Custom) {
-                            ColorPicker(
-                                initialColor = prefsManager.textCustomColor.value,
-                                onColorChanged = {
-                                    prefsManager.textCustomColor.value = it.toArgb()
-                                }
-                            )
-                        }
-                    }
-                }
+	PreferenceScreenLayout {
+		Column(
+			verticalArrangement = Arrangement.spacedBy(16.dp),
+			modifier =
+				Modifier
+					.fillMaxSize()
+					.imePadding()
+					.verticalScroll(rememberScrollState()),
+		) {
+			ItemGroup(label = stringResource(R.string.text_color)) {
+				for (mode in textColorModes) {
+					Item(
+						label = stringResource(mode.label),
+						description = stringResource(mode.description),
+						icon = { RadioIcon(selected = savedTextColorMode == mode) },
+						onClick = {
+							prefsManager.textColorMode.value = mode
+						},
+					) {
+						if (mode == ColorMode.Custom &&
+							prefsManager.textColorMode.value == ColorMode.Custom
+						) {
+							ColorPicker(
+								initialColor = prefsManager.textCustomColor.value,
+								onColorChanged = {
+									prefsManager.textCustomColor.value = it.toArgb()
+								},
+							)
+						}
+					}
+				}
+			}
 
-            }
-
-            PreferenceGroup(label = stringResource(R.string.background_color)) {
-                for (mode in bgColorModes) {
-                    PreferenceTemplate(
-                        label = stringResource(mode.label),
-                        description = stringResource(mode.description),
-                        icon = { RadioIcon(selected = savedBgColorMode == mode) },
-                        onClick = {
-                            prefsManager.bgColorMode.value = mode
-                        }
-                    ) {
-                        if (mode == ColorMode.Custom && prefsManager.bgColorMode.value == ColorMode.Custom) {
-                            ColorPicker(
-                                initialColor = prefsManager.bgCustomColor.value,
-                                onColorChanged = {
-                                    prefsManager.bgCustomColor.value = it.toArgb()
-                                }
-                            )
-                        }
-                    }
-                }
-
-            }
-        }
-    }
+			ItemGroup(label = stringResource(R.string.background_color)) {
+				for (mode in bgColorModes) {
+					Item(
+						label = stringResource(mode.label),
+						description = stringResource(mode.description),
+						icon = { RadioIcon(selected = savedBgColorMode == mode) },
+						onClick = {
+							prefsManager.bgColorMode.value = mode
+						},
+					) {
+						if (mode == ColorMode.Custom &&
+							prefsManager.bgColorMode.value == ColorMode.Custom
+						) {
+							ColorPicker(
+								initialColor = prefsManager.bgCustomColor.value,
+								onColorChanged = {
+									prefsManager.bgCustomColor.value = it.toArgb()
+								},
+							)
+						}
+					}
+				}
+			}
+		}
+	}
 }

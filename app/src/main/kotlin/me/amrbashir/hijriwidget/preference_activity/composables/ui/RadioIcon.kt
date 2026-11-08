@@ -22,52 +22,56 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun RadioIcon(
-    selected: Boolean,
-    enabled: Boolean = true,
-    colors: RadioButtonColors = RadioButtonDefaults.colors(),
+	selected: Boolean,
+	enabled: Boolean = true,
+	colors: RadioButtonColors = RadioButtonDefaults.colors(),
 ) {
-    val dotRadius = animateDpAsState(
-        targetValue = if (selected) 12.dp / 2 else 0.dp,
-        animationSpec = tween(durationMillis = 100),
-        label = ""
-    )
+	val dotRadius =
+		animateDpAsState(
+			targetValue = if (selected) 12.dp / 2 else 0.dp,
+			animationSpec = tween(durationMillis = 100),
+			label = "",
+		)
 
-    val radioColor = colors.radioColor(enabled, selected)
+	val radioColor = colors.radioColor(enabled, selected)
 
-    Canvas(
-        Modifier
-            .minimumInteractiveComponentSize()
-            .wrapContentSize(Alignment.Center)
-            .padding(2.dp)
-            .requiredSize(20.dp)
-    ) {
-        val strokeWidth = 2.dp.toPx()
+	Canvas(
+		Modifier
+			.minimumInteractiveComponentSize()
+			.wrapContentSize(Alignment.Center)
+			.padding(2.dp)
+			.requiredSize(20.dp),
+	) {
+		val strokeWidth = 2.dp.toPx()
 
-        drawCircle(
-            radioColor.value,
-            radius = (20.dp / 2).toPx() - strokeWidth / 2,
-            style = Stroke(strokeWidth)
-        )
+		drawCircle(
+			radioColor.value,
+			radius = (20.dp / 2).toPx() - strokeWidth / 2,
+			style = Stroke(strokeWidth),
+		)
 
-        if (dotRadius.value > 0.dp) {
-            drawCircle(radioColor.value, dotRadius.value.toPx() - strokeWidth / 2, style = Fill)
-        }
-    }
+		if (dotRadius.value > 0.dp) {
+			drawCircle(radioColor.value, dotRadius.value.toPx() - strokeWidth / 2, style = Fill)
+		}
+	}
 }
 
-
 @Composable
-fun RadioButtonColors.radioColor(enabled: Boolean, selected: Boolean): State<Color> {
-    val target = when {
-        enabled && selected -> selectedColor
-        enabled && !selected -> unselectedColor
-        !enabled && selected -> disabledSelectedColor
-        else -> disabledUnselectedColor
-    }
+fun RadioButtonColors.radioColor(
+	enabled: Boolean,
+	selected: Boolean,
+): State<Color> {
+	val target =
+		when {
+			enabled && selected -> selectedColor
+			enabled && !selected -> unselectedColor
+			!enabled && selected -> disabledSelectedColor
+			else -> disabledUnselectedColor
+		}
 
-    return if (enabled) {
-        animateColorAsState(target, tween(durationMillis = 100), label = "")
-    } else {
-        rememberUpdatedState(target)
-    }
+	return if (enabled) {
+		animateColorAsState(target, tween(durationMillis = 100), label = "")
+	} else {
+		rememberUpdatedState(target)
+	}
 }

@@ -2,7 +2,11 @@
 <resources>
     <string name="app_name">الويدجت الهجري</string>
     <string name="app_description">ويدجت لعرض التاريخ الهجري</string>
-    <string name="home_screen_stub_text">هذه شاشة مؤقتة، استعدادًا لدعم تعدد الويدجتس</string>
+    <string name="home_screen_no_widgets">أضف الويدجت الهجري إلى شاشتك الرئيسية، ثم عد إلى هنا لتخصيصه</string>
+    <string name="home_screen_no_widgets_title">لا توجد ويدجت بعد</string>
+    <string name="home_screen_widget_settings">إعدادات الويدجت</string>
+    <string name="home_screen_add_widget">إضافة ويدجت</string>
+    <string name="home_screen_add_widget_long">أضف ويدجت جديد إلى شاشتك الرئيسية</string>
     <string name="color_mode_dynamic_description">لون ديناميكى بناءً على خلفية جهازك</string>
     <string name="color_mode_system">النظام</string>
     <string name="color_mode_system_description">لون فاتح أو داكن بناءً على إعدادات الجهاز</string>
@@ -33,12 +37,14 @@
     <string name="confirm">تأكيد</string>
     <string name="date_format_group_title">الصيغة</string>
     <string name="date_format_custom">مخصص</string>
-    <string name="date_format_custom_description">"حدد نمط تنسيق تاريخ مخصص (على سبيل المثال، 'dd-MM-yyyy', 'EEEE', 'MMMM d')"</string>
+    <string name="date_format_custom_description">رتّب أجزاء التاريخ أو أدخل صيغة مخصصة.</string>
+    <string name="date_format_visual">مرئي</string>
+    <string name="date_format_pattern">الصيغة</string>
     <string name="date_format_guide"><![CDATA[
             تخصيص كيفية ظهور التاريخ على الويدجت
             <br>
             <br>
-            يمكنك استخدام هذه الرموز:
+            رموز التاريخ المدعومة:
             <p>- <b>d</b> = رقم اليوم (1، 2، 3…)</p>
             <p>- <b>dd</b> = رقم اليوم مع صفر (01، 02، 03…)</p>
             <p>- <b>M</b> = رقم الشهر (1، 2، 3…)</p>
@@ -59,11 +65,20 @@
             اخلط وطابق هذه الرموز مع الشرطات المائلة أو الواصلة أو المسافات أو الفواصل لإنشاء نمط التاريخ المفضل لديك.
             <br>
             <br>
-            بشكل افتراضي، اللغة المستخدمة لعرض هذه الرموز هي ar-SA ولكن يمكنك تحديد لغة مختلفة باستخدام هذا النحو:
+            <p>النص الحرفي: ضع النص بين علامتي اقتباس مفردتين حتى لا يُفسر كرموز تاريخ أو مجموعات لغة.</p>
+            <p>- <b>d &#39;days&#39;</b> = 21 days</p>
+            <p>- <b>&#39;en-GB{hello}&#39;</b> = en-GB{hello}</p>
+            <p>استخدم علامتي اقتباس مفردتين (<b>&#39;&#39;</b>) لعرض علامة اقتباس واحدة.</p>
+            <br>
+            بشكل افتراضي، اللغة المستخدمة لعرض هذه الرموز هي لغة الجهاز ولكن يمكنك تحديد لغة مختلفة باستخدام هذا النحو:
             <br>
             <br>
                  &#x2000;&#x2000;&#x2000;&#x2000;<big>&lt;language-code&gt;{date-code}</big>
             <br>
+            <br>
+            يمكن أن يتضمن معرّف اللغة لغة فقط (<b>ar</b>)، أو منطقة (<b>en-GB</b>)، أو نظام كتابة ومنطقة (<b>zh-Hant-TW</b>).
+            <p>- <b>ar{MMMM}</b> يعرض الشهر بالعربية.</p>
+            <p>- <b>zh-Hant-TW{MMMM}</b> يعرض الشهر بالصينية التقليدية.</p>
             <br>
             أمثلة:
             <p>- <b>en-GB{dd/MMMM/yyyy}</b>= 21/Safar/1447</p>
@@ -74,6 +89,10 @@
             يمكنك أيضًا خلط ومطابقة لغات متعددة:
             <p>- <b>en-GB{dd}/ar-SA{MMMM}/en-GB{yyyy}</b> = 21/صفر&#x200E;/1447</p>
             <p>- <b>en-GB{dd} ar-SA{MMMM} en-GB{yyyy}</b> = 21 صفر&#x200E; 1447</p>
+            <br>
+            <p>مجموعات لغة الجهاز: استخدم <b>{...}</b> دون معرّف لغة لعرض الجزء بلغة الجهاز.</p>
+            <p>- <b>{d} ar{MMMM} {yyyy}</b> يعرض الأرقام بلغة الجهاز والشهر بالعربية.</p>
+            <p>تفصل المجموعات أيضًا الأجزاء المتجاورة: <b>{d}{d}</b> يعرض اليوم مرتين، بينما يعرض <b>dd</b> اليوم مرة واحدة مع صفر بادئ عند الحاجة.</p>
             <br>
             للحصول على القائمة الكاملة لمعرفات اللغة:
             <br>
@@ -100,7 +119,6 @@
     <string name="preferences_restore_defaults_title">استعادة الإعدادات الافتراضية</string>
     <string name="preferences_restore_defaults_description">استعادة الإعدادات الافتراضية للوظائف</string>
     <string name="preferences_about_title">حول</string>
-    <string name="preferences_about_description">معلومات التطبيق وتفاصيل الإصدار وسجل التغييرات.</string>
     <string name="reset_to_default">إعادة تعيين إلى الافتراضي</string>
     <string name="changelog">سجل التغييرات</string>
     <string name="widget_updated">تم تحديث الويدجت!</string>
@@ -108,4 +126,54 @@
     <string name="top_contributors">أفضل المساهمين</string>
     <string name="contributions">مساهمة</string>
     <string name="checkout_the_full_list_of_contributors">اطلع على قائمة المساهمين</string>
+
+    <string name="date_editor_hint">اضغط على + لإضافة جزء، أو على جزء لتعديله. المس مطولًا واسحب، ثم أفلت عند الخط لنقله داخل الصف أو بين الصفوف. مرّر أفقيًا لرؤية بقية الصف.</string>
+    <string name="date_editor_invalid_pattern">صيغة غير صالحة: أغلق النص المقتبس بعلامة اقتباس مفردة.</string>
+    <string name="date_editor_add">إضافة جزء</string>
+    <string name="date_editor_day">اليوم</string>
+    <string name="date_editor_month">الشهر</string>
+    <string name="date_editor_year">السنة</string>
+    <string name="date_editor_weekday">يوم الأسبوع</string>
+    <string name="date_editor_text">نص</string>
+    <string name="date_editor_pattern">صيغة التاريخ</string>
+    <string name="date_editor_space">مسافة</string>
+    <string name="date_editor_empty_row">سطر فارغ، اسحب هنا أو</string>
+    <string name="date_editor_row">السطر %1$d</string>
+    <string name="date_editor_delete_row">حذف السطر %1$d</string>
+    <string name="date_editor_delete_component">حذف الجزء</string>
+    <string name="date_editor_language">معرّف اللغة</string>
+    <string name="date_editor_language_hint">اتركه فارغًا للغة الجهاز. أمثلة: ar، en-GB، tr-TR.</string>
+    <string name="date_editor_new_line">سطر جديد</string>
+    <string name="date_editor_insert">إدراج</string>
+    <string name="date_editor_text_hint">تُحفظ المسافات وعلامات الترقيم</string>
+    <string name="date_editor_add_text">إضافة نص</string>
+    <string name="date_editor_or">أو</string>
+    <string name="date_editor_text_placeholder">مثال: هـ</string>
+    <string name="date_editor_add_description">اختر جزءًا من التاريخ أو اكتب نصك الخاص</string>
+    <string name="date_editor_slash">شرطة مائلة</string>
+    <string name="date_editor_dash">شرطة</string>
+    <string name="date_editor_comma">فاصلة</string>
+    <string name="date_editor_start_new_line">بدء سطر جديد</string>
+    <string name="date_editor_invalid_group">صيغة غير صالحة: أغلق كل قوس مفتوح. لا يمكن تداخل المجموعات.</string>
+    <string name="date_editor_language_error">تركيب وسم اللغة غير صالح. استخدم ar أو en-GB أو zh-Hant-TW.</string>
+    <string name="date_editor_device_language">لغة الجهاز</string>
+    <string name="date_editor_custom_language">لغة مخصصة</string>
+    <string name="date_editor_device_language_hint">حاليًا %1$s.</string>
+    <string name="date_editor_custom_language_hint">أدخل وسم لغة مثل ar أو en-GB أو zh-Hant-TW.</string>
+    <string name="date_editor_view_language_tags">عرض جميع الوسوم ↗</string>
+    <string name="date_editor_close_options">إغلاق خيارات الجزء</string>
+    <string name="date_editor_pattern_needs_editing">صحّحه في &lt;a href="pattern"&gt;تبويب النمط&lt;/a&gt; أو &lt;a href="fresh"&gt;ابدأ من جديد&lt;/a&gt;.</string>
+    <string name="date_editor_invalid_pattern_title">نمط غير صالح</string>
+    <string name="preferences_layout_title">التخطيط</string>
+    <string name="preferences_layout_description">اضبط محاذاة النص والهوامش الداخلية</string>
+    <string name="layout_alignment">المحاذاة</string>
+    <string name="layout_horizontal">أفقيًا</string>
+    <string name="layout_vertical">رأسيًا</string>
+    <string name="layout_start">البداية</string>
+    <string name="layout_end">النهاية</string>
+    <string name="layout_center">الوسط</string>
+    <string name="layout_top">أعلى</string>
+    <string name="layout_bottom">أسفل</string>
+    <string name="layout_padding">الهوامش الداخلية (dp)</string>
+    <string name="layout_padding_hint">القيم بوحدة dp. تتبع البداية والنهاية اتجاه لغة الجهاز.</string>
 </resources>

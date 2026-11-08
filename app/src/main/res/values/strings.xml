@@ -3,7 +3,11 @@
     <string name="app_name">Hijri Widget</string>
     <string name="app_description">Android widget for displaying Hijri date</string>
     <string name="widget_preview_date" translatable="false">16 رمضان 1445</string>
-    <string name="home_screen_stub_text">This is a stub for now, in preparation for multi-widget support</string>
+    <string name="home_screen_no_widgets">Add Hijri Widget to your home screen, then come back here to customize it</string>
+    <string name="home_screen_no_widgets_title">No widgets yet</string>
+    <string name="home_screen_widget_settings">Widget settings</string>
+    <string name="home_screen_add_widget">Add widget</string>
+    <string name="home_screen_add_widget_long">Add a new widget to your home screen</string>
     <string name="color_mode_dynamic" translatable="false">Material You</string>
     <string name="color_mode_dynamic_description">Dynamic color based on your wallpaper</string>
     <string name="color_mode_system">System</string>
@@ -38,12 +42,14 @@
     <string name="confirm">Confirm</string>
     <string name="date_format_group_title">Format</string>
     <string name="date_format_custom">Custom</string>
-    <string name="date_format_custom_description">"Specify custom date format pattern (e.g., 'dd-MM-yyyy', 'EEEE', 'MMMM d')"</string>
+    <string name="date_format_custom_description">Arrange date components or enter a custom pattern.</string>
+    <string name="date_format_visual">Visual</string>
+    <string name="date_format_pattern">Pattern</string>
     <string name="date_format_guide"><![CDATA[
             Customize how the date appears on your widget
             <br>
             <br>
-            You can use these codes:
+            Supported date codes:
             <p>- <b>d</b> = day number (1, 2, 3…)</p>
             <p>- <b>dd</b> = day with zero (01, 02, 03…)</p>
             <p>- <b>M</b> = month number (1, 2, 3…)</p>
@@ -64,11 +70,20 @@
             Mix and match these codes with slashes, dashes, spaces, or commas to create your preferred date style.
             <br>
             <br>
-            By default the language used for displaying these codes, is ar-SA but you can specify a different language by using this syntax:
+            <p>Literal text: put text in single quotes so it is not interpreted as date codes or language groups.</p>
+            <p>- <b>d &#39;days&#39;</b> = 21 days</p>
+            <p>- <b>&#39;en-GB{hello}&#39;</b> = en-GB{hello}</p>
+            <p>Use two single quotes (<b>&#39;&#39;</b>) to display one apostrophe.</p>
+            <br>
+            By default the language used for displaying these codes is the device language but you can specify a different language by using this syntax:
             <br>
             <br>
                  &#x2000;&#x2000;&#x2000;&#x2000;<big>&lt;language-code&gt;{date-code}</big>
             <br>
+            <br>
+            Language tags can include just a language (<b>ar</b>), a region (<b>en-GB</b>), or a script and region (<b>zh-Hant-TW</b>).
+            <p>- <b>ar{MMMM}</b> displays the month in Arabic.</p>
+            <p>- <b>zh-Hant-TW{MMMM}</b> displays the month in Traditional Chinese.</p>
             <br>
             Examples:
             <p>- <b>en-GB{dd/MMMM/yyyy}</b>= 21/Safar/1447</p>
@@ -79,6 +94,10 @@
             You can also mix and match multiple languages:
             <p>- <b>en-GB{dd}/ar-SA{MMMM}/en-GB{yyyy}</b> = 21/صفر&#x200E;/1447</p>
             <p>- <b>en-GB{dd} ar-SA{MMMM} en-GB{yyyy}</b> = 21 صفر&#x200E; 1447</p>
+            <br>
+            <p>Device-language groups: use <b>{...}</b> without a language tag to keep a component in the device language.</p>
+            <p>- <b>{d} ar{MMMM} {yyyy}</b> uses device-language numbers and an Arabic month.</p>
+            <p>Groups also keep adjacent components separate: <b>{d}{d}</b> displays the day twice, while <b>dd</b> displays one day padded to two digits.</p>
             <br>
             For the full list of language identifiers:
             <br>
@@ -105,7 +124,6 @@
     <string name="preferences_restore_defaults_title">Restore defaults</string>
     <string name="preferences_restore_defaults_description">Restore the default preferences</string>
     <string name="preferences_about_title">About</string>
-    <string name="preferences_about_description">App info, version details, and changelog.</string>
     <string name="reset_to_default">Reset to default</string>
     <string name="changelog">Changelog</string>
     <string name="widget_updated">Widget updated!</string>
@@ -113,4 +131,54 @@
     <string name="top_contributors">Top Contributors</string>
     <string name="contributions">%1$d contributions</string>
     <string name="checkout_the_full_list_of_contributors">Checkout the full list of contributors</string>
+
+    <string name="date_editor_hint">Tap + to add a component or tap one to edit. Hold and drag, then drop at the line to move it within or between rows. Swipe sideways to see more of a row.</string>
+    <string name="date_editor_invalid_pattern">Invalid pattern: close the quoted text with an apostrophe.</string>
+    <string name="date_editor_add">Add component</string>
+    <string name="date_editor_day">Day</string>
+    <string name="date_editor_month">Month</string>
+    <string name="date_editor_year">Year</string>
+    <string name="date_editor_weekday">Weekday</string>
+    <string name="date_editor_text">Text</string>
+    <string name="date_editor_pattern">Date pattern</string>
+    <string name="date_editor_space">Space</string>
+    <string name="date_editor_empty_row">Empty line, drag here or</string>
+    <string name="date_editor_row">Row %1$d</string>
+    <string name="date_editor_delete_row">Delete row %1$d</string>
+    <string name="date_editor_delete_component">Delete component</string>
+    <string name="date_editor_language">Language tag</string>
+    <string name="date_editor_language_hint">Leave empty for device language. Examples: ar, en-GB, tr-TR.</string>
+    <string name="date_editor_new_line">New line</string>
+    <string name="date_editor_insert">Insert</string>
+    <string name="date_editor_text_hint">Spaces and punctuation are preserved</string>
+    <string name="date_editor_add_text">Add text</string>
+    <string name="date_editor_or">or</string>
+    <string name="date_editor_text_placeholder">e.g. AH</string>
+    <string name="date_editor_add_description">Choose a date part or write your own text</string>
+    <string name="date_editor_slash">Slash</string>
+    <string name="date_editor_dash">Dash</string>
+    <string name="date_editor_comma">Comma</string>
+    <string name="date_editor_start_new_line">Start a new line</string>
+    <string name="date_editor_invalid_group">Invalid pattern: match each opening brace with a closing brace. Groups cannot be nested.</string>
+    <string name="date_editor_language_error">Invalid language tag syntax. Use ar, en-GB, or zh-Hant-TW.</string>
+    <string name="date_editor_device_language">Device language</string>
+    <string name="date_editor_custom_language">Custom language</string>
+    <string name="date_editor_device_language_hint">Currently %1$s.</string>
+    <string name="date_editor_custom_language_hint">Enter a language tag, such as ar, en-GB, or zh-Hant-TW.</string>
+    <string name="date_editor_view_language_tags">View all tags ↗</string>
+    <string name="date_editor_close_options">Close component options</string>
+    <string name="date_editor_pattern_needs_editing">Fix it in the &lt;a href="pattern"&gt;Pattern tab&lt;/a&gt; or &lt;a href="fresh"&gt;start fresh&lt;/a&gt;.</string>
+    <string name="date_editor_invalid_pattern_title">Invalid pattern</string>
+    <string name="preferences_layout_title">Layout</string>
+    <string name="preferences_layout_description">Adjust text alignment and padding</string>
+    <string name="layout_alignment">Alignment</string>
+    <string name="layout_horizontal">Horizontal</string>
+    <string name="layout_vertical">Vertical</string>
+    <string name="layout_start">Start</string>
+    <string name="layout_end">End</string>
+    <string name="layout_center">Center</string>
+    <string name="layout_top">Top</string>
+    <string name="layout_bottom">Bottom</string>
+    <string name="layout_padding">Padding (dp)</string>
+    <string name="layout_padding_hint">Values are in dp. Start and end follow the device language.</string>
 </resources>

@@ -10,67 +10,83 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.glance.GlanceModifier
 import androidx.glance.appwidget.cornerRadius
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 
-fun Char.isRtl(): Boolean = when (Character.getDirectionality(this)) {
-    Character.DIRECTIONALITY_RIGHT_TO_LEFT,
-    Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC,
-    Character.DIRECTIONALITY_RIGHT_TO_LEFT_EMBEDDING,
-    Character.DIRECTIONALITY_RIGHT_TO_LEFT_OVERRIDE,
-        -> true
+fun Char.isRtl(): Boolean =
+	when (Character.getDirectionality(this)) {
+		Character.DIRECTIONALITY_RIGHT_TO_LEFT,
+		Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC,
+		Character.DIRECTIONALITY_RIGHT_TO_LEFT_EMBEDDING,
+		Character.DIRECTIONALITY_RIGHT_TO_LEFT_OVERRIDE,
+		-> true
 
-    else -> false
-}
+		else -> false
+	}
 
-inline fun Modifier.addIf(
-    condition: Boolean,
-    crossinline factory: Modifier.() -> Modifier
-): Modifier = if (condition) factory() else this
+inline fun <T : Any> Modifier.addIfNotNull(
+	value: T?,
+	factory: Modifier.(T) -> Modifier,
+): Modifier = if (value != null) factory(value) else this
 
+inline fun <T : Any> GlanceModifier.addIfNotNull(
+	value: T?,
+	factory: GlanceModifier.(T) -> GlanceModifier,
+): GlanceModifier = if (value != null) factory(value) else this
 
 fun GlanceModifier.widgetCornerRadius(): GlanceModifier {
-    val cornerRadiusModifier =
-        if (Build.VERSION.SDK_INT >= 31) {
-            GlanceModifier.cornerRadius(android.R.dimen.system_app_widget_background_radius)
-        } else {
-            GlanceModifier
-        }
+	val cornerRadiusModifier =
+		if (Build.VERSION.SDK_INT >= 31) {
+			GlanceModifier.cornerRadius(android.R.dimen.system_app_widget_background_radius)
+		} else {
+			GlanceModifier
+		}
 
-    return this.then(cornerRadiusModifier)
+	return this.then(cornerRadiusModifier)
 }
 
 @Composable
 fun Modifier.widgetCornerRadius(context: Context): Modifier {
-    val cornerRadiusModifier =
-        if (Build.VERSION.SDK_INT >= 31) {
-            val radiusId = android.R.dimen.system_app_widget_background_radius
-            val radius = context.resources.getDimension(radiusId)
-            Modifier.clip(RoundedCornerShape(radius))
-        } else {
-            Modifier
-        }
+	val cornerRadiusModifier =
+		if (Build.VERSION.SDK_INT >= 31) {
+			val radiusId = android.R.dimen.system_app_widget_background_radius
+			val radius = context.resources.getDimension(radiusId)
+			Modifier.clip(RoundedCornerShape(radius))
+		} else {
+			Modifier
+		}
 
-    return this.then(cornerRadiusModifier)
+	return this.then(cornerRadiusModifier)
 }
 
-
 fun Int.formatTime(): String? {
-    val hour = this / 60
-    val minute = this % 60
-    val localTime = LocalTime.of(hour, minute)
-    return localTime.format(DateTimeFormatter.ofPattern("hh:mm a"))
+	val hour = this / 60
+	val minute = this % 60
+	val localTime = LocalTime.of(hour, minute)
+	return localTime.format(DateTimeFormatter.ofPattern("hh:mm a"))
 }
 
 fun logTimestamp(date: Long = System.currentTimeMillis()): String {
-    val dateFormatter = DateFormat.getDateTimeInstance(
-        DateFormat.DEFAULT,
-        DateFormat.DEFAULT,
-        Locale.ENGLISH
-    )
-    return dateFormatter.format(Date(date))
+	val dateFormatter =
+		DateFormat.getDateTimeInstance(
+			DateFormat.DEFAULT,
+			DateFormat.DEFAULT,
+			Locale.ENGLISH,
+		)
+	return dateFormatter.format(Date(date))
 }
 
-val logException = fun(tr: Throwable) { Log.e("Exception", null, tr) }
+val logException = fun(tr: Throwable) {
+	Log.e("Exception", null, tr)
+}
+
+fun NavDestination.hasRouteInHierarchy(route: String): Boolean =
+	this.hierarchy.any {
+		it.route == route
+	}
+
+internal fun Char.isAsciiLetter(): Boolean = this in 'a'..'z' || this in 'A'..'Z'
