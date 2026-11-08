@@ -127,7 +127,7 @@
     <string name="contributions">مساهمة</string>
     <string name="checkout_the_full_list_of_contributors">اطلع على قائمة المساهمين</string>
 
-    <string name="date_editor_hint">اضغط على + لإضافة جزء. اضغط على جزء لتعديله. المس مطولًا واسحب لنقله. مرّر أفقيًا لرؤية بقية الصف.</string>
+    <string name="date_editor_hint">اضغط على + لإضافة جزء، أو على جزء لتعديله. المس مطولًا واسحب، ثم أفلت عند الخط لنقله داخل الصف أو بين الصفوف. مرّر أفقيًا لرؤية بقية الصف.</string>
     <string name="date_editor_invalid_pattern">صيغة غير صالحة: أغلق النص المقتبس بعلامة اقتباس مفردة.</string>
     <string name="date_editor_add">إضافة جزء</string>
     <string name="date_editor_day">اليوم</string>
