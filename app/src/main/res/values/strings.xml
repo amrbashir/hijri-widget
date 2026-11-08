@@ -169,4 +169,16 @@
     <string name="date_editor_close_options">Close component options</string>
     <string name="date_editor_pattern_needs_editing">Fix it in the &lt;a href="pattern"&gt;Pattern tab&lt;/a&gt; or &lt;a href="fresh"&gt;start fresh&lt;/a&gt;.</string>
     <string name="date_editor_invalid_pattern_title">Invalid pattern</string>
+    <string name="preferences_layout_title">Layout</string>
+    <string name="preferences_layout_description">Adjust text alignment and padding</string>
+    <string name="layout_alignment">Alignment</string>
+    <string name="layout_horizontal">Horizontal</string>
+    <string name="layout_vertical">Vertical</string>
+    <string name="layout_start">Start</string>
+    <string name="layout_end">End</string>
+    <string name="layout_center">Center</string>
+    <string name="layout_top">Top</string>
+    <string name="layout_bottom">Bottom</string>
+    <string name="layout_padding">Padding (dp)</string>
+    <string name="layout_padding_hint">Values are in dp. Start and end follow the device language.</string>
 </resources>

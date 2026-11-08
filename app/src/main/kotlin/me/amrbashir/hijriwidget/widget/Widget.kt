@@ -3,6 +3,7 @@ package me.amrbashir.hijriwidget.widget
 import android.content.Context
 import android.os.Build
 import android.util.TypedValue
+import android.view.View
 import android.widget.RemoteViews
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -38,6 +39,7 @@ import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.addIfNotNull
 import me.amrbashir.hijriwidget.android.AlarmReceiver
 import me.amrbashir.hijriwidget.widgetCornerRadius
+import kotlin.math.roundToInt
 
 class HijriWidgetReceiver : GlanceAppWidgetReceiver() {
 	override val glanceAppWidget: GlanceAppWidget = HijriWidget()
@@ -90,11 +92,6 @@ class HijriWidget : GlanceAppWidget() {
 		val coroutineScope = rememberCoroutineScope()
 
 		val textShadow = prefsManager.textShadow.value
-		val textSize = prefsManager.textSize.value
-		val textColorMode = prefsManager.textColorMode.value
-		val bgColor = prefsManager.getBgColor()
-		val textColor = prefsManager.getTextColor(context)
-
 		val remoteViewId =
 			if (textShadow) R.id.widget_text_shadow else R.id.widget_text
 		val remoteViewLayout =
@@ -104,17 +101,38 @@ class HijriWidget : GlanceAppWidget() {
 		val date = HijriDate.todayFormatted(prefsManager)
 		remoteViews.setTextViewText(remoteViewId, date)
 
+		val horizontalAlignment = prefsManager.horizontalAlignment.value
+		val verticalAlignment = prefsManager.verticalAlignment.value
+		val gravity = horizontalAlignment.gravity or verticalAlignment.gravity
+		remoteViews.setInt(remoteViewId, "setGravity", gravity)
+
+		val density = context.resources.displayMetrics.density
+		val isRtl = context.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
+		val start = (prefsManager.paddingStart.value * density).roundToInt()
+		val end = (prefsManager.paddingEnd.value * density).roundToInt()
+		remoteViews.setViewPadding(
+			remoteViewId,
+			if (isRtl) end else start,
+			(prefsManager.paddingTop.value * density).roundToInt(),
+			if (isRtl) start else end,
+			(prefsManager.paddingBottom.value * density).roundToInt(),
+		)
+
 		remoteViews.setTextViewTextSize(
 			remoteViewId,
 			TypedValue.COMPLEX_UNIT_SP,
-			textSize,
+			prefsManager.textSize.value,
 		)
 
+		val textColorMode = prefsManager.textColorMode.value
+		val textColor = prefsManager.getTextColor(context)
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && textColorMode == ColorMode.Dynamic) {
 			remoteViews.setColorAttr(remoteViewId, "setTextColor", android.R.attr.colorPrimary)
 		} else {
 			remoteViews.setTextColor(remoteViewId, textColor.toArgb())
 		}
+
+		val bgColor = prefsManager.getBgColor()
 
 		Box(
 			contentAlignment = Alignment.Center,
@@ -134,7 +152,7 @@ class HijriWidget : GlanceAppWidget() {
 						}
 					},
 		) {
-			AndroidRemoteViews(remoteViews)
+			AndroidRemoteViews(remoteViews, modifier = GlanceModifier.fillMaxSize())
 		}
 	}
 

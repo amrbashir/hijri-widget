@@ -63,6 +63,20 @@ class PreferencesManager {
 			default = 22F,
 		)
 
+	val horizontalAlignment =
+		enumPreference("HORIZONTAL_ALIGNMENT", WidgetHorizontalAlignment.Center)
+
+	val verticalAlignment =
+		enumPreference("VERTICAL_ALIGNMENT", WidgetVerticalAlignment.Center)
+
+	val paddingStart = intPreference("PADDING_START", 0)
+
+	val paddingTop = intPreference("PADDING_TOP", 0)
+
+	val paddingEnd = intPreference("PADDING_END", 0)
+
+	val paddingBottom = intPreference("PADDING_BOTTOM", 0)
+
 	val textShadow =
 		booleanPreference(
 			key = "TEXT_SHADOW",

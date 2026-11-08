@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ViewQuilt
 import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.Brightness6
 import androidx.compose.material.icons.outlined.CalendarMonth
@@ -115,6 +116,13 @@ internal fun PreferenceListScreen() {
 			}
 
 			ItemGroup(label = stringResource(R.string.preferences_appearance_group_title)) {
+				Item(
+					label = stringResource(R.string.preferences_layout_title),
+					description = stringResource(R.string.preferences_layout_description),
+					icon = Icons.AutoMirrored.Outlined.ViewQuilt,
+					onClick = { navController.navigateToLayout() },
+				)
+
 				Item(
 					label = stringResource(R.string.preferences_color_title),
 					description = stringResource(R.string.preferences_color_description),

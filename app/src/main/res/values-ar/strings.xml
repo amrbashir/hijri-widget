@@ -164,4 +164,16 @@
     <string name="date_editor_close_options">إغلاق خيارات الجزء</string>
     <string name="date_editor_pattern_needs_editing">صحّحه في &lt;a href="pattern"&gt;تبويب النمط&lt;/a&gt; أو &lt;a href="fresh"&gt;ابدأ من جديد&lt;/a&gt;.</string>
     <string name="date_editor_invalid_pattern_title">نمط غير صالح</string>
+    <string name="preferences_layout_title">التخطيط</string>
+    <string name="preferences_layout_description">اضبط محاذاة النص والهوامش الداخلية</string>
+    <string name="layout_alignment">المحاذاة</string>
+    <string name="layout_horizontal">أفقيًا</string>
+    <string name="layout_vertical">رأسيًا</string>
+    <string name="layout_start">البداية</string>
+    <string name="layout_end">النهاية</string>
+    <string name="layout_center">الوسط</string>
+    <string name="layout_top">أعلى</string>
+    <string name="layout_bottom">أسفل</string>
+    <string name="layout_padding">الهوامش الداخلية (dp)</string>
+    <string name="layout_padding_hint">القيم بوحدة dp. تتبع البداية والنهاية اتجاه لغة الجهاز.</string>
 </resources>

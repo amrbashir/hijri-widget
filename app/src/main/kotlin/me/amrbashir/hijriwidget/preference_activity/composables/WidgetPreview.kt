@@ -15,6 +15,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
@@ -25,7 +26,6 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import me.amrbashir.hijriwidget.HijriDate
@@ -58,20 +58,31 @@ fun WidgetPreview(
 				.drawBehind { drawRect(Color.Transparent, blendMode = BlendMode.Clear) },
 	) {
 		Box(
-			contentAlignment = Alignment.Center,
+			contentAlignment =
+				BiasAlignment(
+					prefsManager.horizontalAlignment.value.bias,
+					prefsManager.verticalAlignment.value.bias,
+				),
 			modifier =
 				Modifier
 					.height(110.dp)
 					.width(175.dp)
 					.widgetCornerRadius(context)
-					.background(prefsManager.getBgColor().getColor(context)),
+					.background(prefsManager.getBgColor().getColor(context))
+					.padding(
+						start = prefsManager.paddingStart.value.dp,
+						top = prefsManager.paddingTop.value.dp,
+						end = prefsManager.paddingEnd.value.dp,
+						bottom = prefsManager.paddingBottom.value.dp,
+					),
 		) {
 			Text(
 				date,
+				modifier = Modifier.fillMaxWidth(),
 				color = prefsManager.getTextColor(context),
 				style =
 					TextStyle(
-						textAlign = TextAlign.Center,
+						textAlign = prefsManager.horizontalAlignment.value.textAlign,
 						fontSize = prefsManager.textSize.value.sp,
 						shadow =
 							if (prefsManager.textShadow.value) {
