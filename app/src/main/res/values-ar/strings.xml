@@ -37,7 +37,9 @@
     <string name="confirm">تأكيد</string>
     <string name="date_format_group_title">الصيغة</string>
     <string name="date_format_custom">مخصص</string>
-    <string name="date_format_custom_description">"حدد نمط تنسيق تاريخ مخصص (على سبيل المثال، 'dd-MM-yyyy', 'EEEE', 'MMMM d')"</string>
+    <string name="date_format_custom_description">رتّب أجزاء التاريخ أو أدخل صيغة مخصصة.</string>
+    <string name="date_format_visual">مرئي</string>
+    <string name="date_format_pattern">الصيغة</string>
     <string name="date_format_guide"><![CDATA[
             تخصيص كيفية ظهور التاريخ على الويدجت
             <br>
@@ -124,4 +126,42 @@
     <string name="top_contributors">أفضل المساهمين</string>
     <string name="contributions">مساهمة</string>
     <string name="checkout_the_full_list_of_contributors">اطلع على قائمة المساهمين</string>
+
+    <string name="date_editor_hint">اضغط على + لإضافة جزء. اضغط على جزء لتعديله. المس مطولًا واسحب لنقله. مرّر أفقيًا لرؤية بقية الصف.</string>
+    <string name="date_editor_invalid_pattern">صيغة غير صالحة: أغلق النص المقتبس بعلامة اقتباس مفردة.</string>
+    <string name="date_editor_add">إضافة جزء</string>
+    <string name="date_editor_day">اليوم</string>
+    <string name="date_editor_month">الشهر</string>
+    <string name="date_editor_year">السنة</string>
+    <string name="date_editor_weekday">يوم الأسبوع</string>
+    <string name="date_editor_text">نص</string>
+    <string name="date_editor_pattern">صيغة التاريخ</string>
+    <string name="date_editor_space">مسافة</string>
+    <string name="date_editor_empty_row">سطر فارغ، اسحب هنا أو</string>
+    <string name="date_editor_row">السطر %1$d</string>
+    <string name="date_editor_delete_row">حذف السطر %1$d</string>
+    <string name="date_editor_delete_component">حذف الجزء</string>
+    <string name="date_editor_language">معرّف اللغة</string>
+    <string name="date_editor_language_hint">اتركه فارغًا للغة الجهاز. أمثلة: ar، en-GB، tr-TR.</string>
+    <string name="date_editor_new_line">سطر جديد</string>
+    <string name="date_editor_insert">إدراج</string>
+    <string name="date_editor_text_hint">تُحفظ المسافات وعلامات الترقيم</string>
+    <string name="date_editor_add_text">إضافة نص</string>
+    <string name="date_editor_or">أو</string>
+    <string name="date_editor_text_placeholder">مثال: هـ</string>
+    <string name="date_editor_add_description">اختر جزءًا من التاريخ أو اكتب نصك الخاص</string>
+    <string name="date_editor_slash">شرطة مائلة</string>
+    <string name="date_editor_dash">شرطة</string>
+    <string name="date_editor_comma">فاصلة</string>
+    <string name="date_editor_start_new_line">بدء سطر جديد</string>
+    <string name="date_editor_invalid_group">صيغة غير صالحة: أغلق كل قوس مفتوح. لا يمكن تداخل المجموعات.</string>
+    <string name="date_editor_language_error">تركيب وسم اللغة غير صالح. استخدم ar أو en-GB أو zh-Hant-TW.</string>
+    <string name="date_editor_device_language">لغة الجهاز</string>
+    <string name="date_editor_custom_language">لغة مخصصة</string>
+    <string name="date_editor_device_language_hint">حاليًا %1$s.</string>
+    <string name="date_editor_custom_language_hint">أدخل وسم لغة مثل ar أو en-GB أو zh-Hant-TW.</string>
+    <string name="date_editor_view_language_tags">عرض جميع الوسوم ↗</string>
+    <string name="date_editor_close_options">إغلاق خيارات الجزء</string>
+    <string name="date_editor_pattern_needs_editing">صحّحه في &lt;a href="pattern"&gt;تبويب النمط&lt;/a&gt; أو &lt;a href="fresh"&gt;ابدأ من جديد&lt;/a&gt;.</string>
+    <string name="date_editor_invalid_pattern_title">نمط غير صالح</string>
 </resources>

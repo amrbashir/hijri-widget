@@ -86,6 +86,7 @@ dependencies {
 	implementation("androidx.glance:glance-material3:1.2.0-beta01")
 	implementation("androidx.navigation:navigation-compose:2.9.5")
 	implementation("com.github.jeziellago:compose-markdown:0.5.7")
+	implementation("com.mohamedrejeb.dnd:compose-dnd:0.4.0")
 	implementation("com.godaddy.android.colorpicker:compose-color-picker:0.7.0")
 
 	debugImplementation("androidx.compose.ui:ui-tooling")

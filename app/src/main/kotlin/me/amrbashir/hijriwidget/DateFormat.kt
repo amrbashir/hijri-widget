@@ -5,6 +5,7 @@ import android.icu.text.DateFormat
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.icu.util.ULocale
+import androidx.annotation.StringRes
 import java.text.AttributedCharacterIterator
 import java.text.CharacterIterator
 
@@ -25,13 +26,63 @@ data class DateFormatSegment(
 	val format: String,
 )
 
+internal val LANGUAGE_TAG = Regex("[a-zA-Z]{2,8}(?:-[a-zA-Z0-9]{1,8})*")
+
+internal enum class DatePatternStructureError {
+	UnclosedQuote,
+	InvalidGroupBoundary,
+	;
+
+	@get:StringRes
+	val messageRes: Int
+		get() =
+			when (this) {
+				UnclosedQuote -> R.string.date_editor_invalid_pattern
+				InvalidGroupBoundary -> R.string.date_editor_invalid_group
+			}
+}
+
+/** Checks only structure; ICU remains responsible for date codes and locale tags. */
+internal fun validateDatePatternStructure(input: String): DatePatternStructureError? {
+	var quoted = false
+	var inGroup = false
+	var index = 0
+
+	while (index < input.length) {
+		val char = input[index++]
+		if (char == '\'') {
+			if (index < input.length && input[index] == '\'') {
+				index++ // An escaped apostrophe does not open or close quoted text.
+			} else {
+				quoted = !quoted
+			}
+		} else if (!quoted) {
+			when (char) {
+				'{' -> {
+					if (inGroup) return DatePatternStructureError.InvalidGroupBoundary
+					inGroup = true
+				}
+				'}' -> {
+					if (!inGroup) return DatePatternStructureError.InvalidGroupBoundary
+					inGroup = false
+				}
+			}
+		}
+	}
+
+	return when {
+		quoted -> DatePatternStructureError.UnclosedQuote
+		inGroup -> DatePatternStructureError.InvalidGroupBoundary
+		else -> null
+	}
+}
+
 fun parseDateFormat(input: String): List<DateFormatSegment> =
 	buildList {
 		// Match quoted text first so braces and language tags inside it stay literal.
 		// Two apostrophes are escaped; an unfinished quote protects the remaining text.
 		val quotedText = """'(?:''|[^'])*(?:'|$)"""
-		val languageTag = """[a-zA-Z]{2,8}(?:-[a-zA-Z0-9]{1,8})*"""
-		val group = """($languageTag)?\{((?:$quotedText|[^'}])+)\}"""
+		val group = """(${LANGUAGE_TAG.pattern})?\{((?:$quotedText|[^'}])+)\}"""
 		val regex = Regex("$quotedText|$group")
 		var currentIndex = 0
 

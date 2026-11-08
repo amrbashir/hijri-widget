@@ -88,3 +88,5 @@ fun NavDestination.hasRouteInHierarchy(route: String): Boolean =
 	this.hierarchy.any {
 		it.route == route
 	}
+
+internal fun Char.isAsciiLetter(): Boolean = this in 'a'..'z' || this in 'A'..'Z'

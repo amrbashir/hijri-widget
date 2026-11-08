@@ -4,6 +4,7 @@
 
 ### Added
 
+- Added a visual date editor with draggable components, editable rows, and component options.
 - Each widget can now be customized separately, existing settings are carried over to all placed widgets.
 - Widget settings can now also be opened from the home screen on Pixel and other stock launchers, by long-pressing the widget and choosing "Settings".
 - Added an "Add widget" button in the app to place a new widget on the home screen.

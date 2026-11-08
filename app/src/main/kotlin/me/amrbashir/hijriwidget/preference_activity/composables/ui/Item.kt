@@ -27,6 +27,7 @@ fun Item(
 	modifier: Modifier = Modifier,
 	icon: ImageVector,
 	iconModifier: Modifier = Modifier,
+	verticalAlignment: Alignment.Vertical = Alignment.Top,
 	enabled: Boolean = true,
 	description: String? = null,
 	onClick: (() -> Unit)? = null,
@@ -42,6 +43,7 @@ fun Item(
 				tint = MaterialTheme.colorScheme.primary,
 			)
 		},
+		verticalAlignment = verticalAlignment,
 		label = label,
 		modifier = modifier,
 		enabled = enabled,
@@ -58,6 +60,7 @@ fun Item(
 	modifier: Modifier = Modifier,
 	enabled: Boolean = true,
 	icon: (@Composable () -> Unit)? = null,
+	verticalAlignment: Alignment.Vertical = Alignment.Top,
 	description: String? = null,
 	onClick: (() -> Unit)? = null,
 	endContent: (@Composable () -> Unit)? = null,
@@ -74,6 +77,7 @@ fun Item(
 	) {
 		Row(
 			horizontalArrangement = Arrangement.spacedBy(16.dp),
+			verticalAlignment = verticalAlignment,
 		) {
 			icon?.let {
 				Box(

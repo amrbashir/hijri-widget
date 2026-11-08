@@ -42,7 +42,9 @@
     <string name="confirm">Confirm</string>
     <string name="date_format_group_title">Format</string>
     <string name="date_format_custom">Custom</string>
-    <string name="date_format_custom_description">"Specify custom date format pattern (e.g., 'dd-MM-yyyy', 'EEEE', 'MMMM d')"</string>
+    <string name="date_format_custom_description">Arrange date components or enter a custom pattern.</string>
+    <string name="date_format_visual">Visual</string>
+    <string name="date_format_pattern">Pattern</string>
     <string name="date_format_guide"><![CDATA[
             Customize how the date appears on your widget
             <br>
@@ -129,4 +131,42 @@
     <string name="top_contributors">Top Contributors</string>
     <string name="contributions">%1$d contributions</string>
     <string name="checkout_the_full_list_of_contributors">Checkout the full list of contributors</string>
+
+    <string name="date_editor_hint">Tap + to add a component. Tap a component to edit it. Hold and drag to move it. Swipe sideways to see more of a row.</string>
+    <string name="date_editor_invalid_pattern">Invalid pattern: close the quoted text with an apostrophe.</string>
+    <string name="date_editor_add">Add component</string>
+    <string name="date_editor_day">Day</string>
+    <string name="date_editor_month">Month</string>
+    <string name="date_editor_year">Year</string>
+    <string name="date_editor_weekday">Weekday</string>
+    <string name="date_editor_text">Text</string>
+    <string name="date_editor_pattern">Date pattern</string>
+    <string name="date_editor_space">Space</string>
+    <string name="date_editor_empty_row">Empty line, drag here or</string>
+    <string name="date_editor_row">Row %1$d</string>
+    <string name="date_editor_delete_row">Delete row %1$d</string>
+    <string name="date_editor_delete_component">Delete component</string>
+    <string name="date_editor_language">Language tag</string>
+    <string name="date_editor_language_hint">Leave empty for device language. Examples: ar, en-GB, tr-TR.</string>
+    <string name="date_editor_new_line">New line</string>
+    <string name="date_editor_insert">Insert</string>
+    <string name="date_editor_text_hint">Spaces and punctuation are preserved</string>
+    <string name="date_editor_add_text">Add text</string>
+    <string name="date_editor_or">or</string>
+    <string name="date_editor_text_placeholder">e.g. AH</string>
+    <string name="date_editor_add_description">Choose a date part or write your own text</string>
+    <string name="date_editor_slash">Slash</string>
+    <string name="date_editor_dash">Dash</string>
+    <string name="date_editor_comma">Comma</string>
+    <string name="date_editor_start_new_line">Start a new line</string>
+    <string name="date_editor_invalid_group">Invalid pattern: match each opening brace with a closing brace. Groups cannot be nested.</string>
+    <string name="date_editor_language_error">Invalid language tag syntax. Use ar, en-GB, or zh-Hant-TW.</string>
+    <string name="date_editor_device_language">Device language</string>
+    <string name="date_editor_custom_language">Custom language</string>
+    <string name="date_editor_device_language_hint">Currently %1$s.</string>
+    <string name="date_editor_custom_language_hint">Enter a language tag, such as ar, en-GB, or zh-Hant-TW.</string>
+    <string name="date_editor_view_language_tags">View all tags ↗</string>
+    <string name="date_editor_close_options">Close component options</string>
+    <string name="date_editor_pattern_needs_editing">Fix it in the &lt;a href="pattern"&gt;Pattern tab&lt;/a&gt; or &lt;a href="fresh"&gt;start fresh&lt;/a&gt;.</string>
+    <string name="date_editor_invalid_pattern_title">Invalid pattern</string>
 </resources>
