@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -102,9 +101,7 @@ internal fun DateEditorRow(
 					Modifier
 						.fillMaxWidth()
 						.then(target(DateComponentPosition(row.id), 0F))
-						.heightIn(
-							min = 60.dp,
-						).horizontalScroll(rememberScrollState())
+						.horizontalScroll(rememberScrollState())
 						.padding(6.dp),
 				verticalAlignment = Alignment.CenterVertically,
 			) {
@@ -306,7 +303,7 @@ private fun DateComponentChip(
 	Surface(
 		onClick = onClick,
 		modifier =
-			modifier.heightIn(min = 48.dp).semantics {
+			modifier.semantics {
 				contentDescription = description
 			},
 		shape = RoundedCornerShape(4.dp),
