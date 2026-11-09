@@ -5,9 +5,20 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.GenericShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -16,10 +27,14 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.mohamedrejeb.compose.dnd.DragAndDropContainer
+import com.mohamedrejeb.compose.dnd.DragAndDropState
+import com.mohamedrejeb.compose.dnd.drop.dropTarget
 import com.mohamedrejeb.compose.dnd.rememberDragAndDropState
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.isAsciiLetter
@@ -75,51 +90,65 @@ internal fun VisualDateFormatEditor(
 
 		SharedTransitionLayout {
 			DragAndDropContainer(state = dragState) {
-				Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-					rows.forEachIndexed { rowIndex, row ->
-						key(row.id) {
-							DateEditorRow(
-								row = row,
-								rowIndex = rowIndex,
-								dragState = dragState,
-								dropPosition = dropPosition,
-								selectedComponentId = selectedComponentId,
-								onComponentMoved = { dropPosition = it },
-								onComponentDropped = { id, at ->
-									rows = rows.moveComponent(id, at)
-									onPatternChange(rows.toDatePattern())
-								},
-								onComponentSelected = { id ->
-									// Clean up empty components only when switching to a different component.
-									if (id != selectedComponentId) cleanupEmptyComponents()
-									selectedComponentId = id
-								},
-								onInsertionRequested = { insertionPosition = it },
-								onRowDeleted = {
-									cleanupEmptyComponents()
-									rows = rows.deleteRow(row.id)
-									onPatternChange(rows.toDatePattern())
-									selectedComponentId = null
-								},
-							)
+				Box {
+					if (draggedComponent != null) {
+						DateComponentDeleteZone(
+							dragState = dragState,
+							onComponentDropped = { component ->
+								rows = rows.deleteComponent(component.id)
+								onPatternChange(rows.toDatePattern())
+								if (selectedComponentId == component.id) selectedComponentId = null
+								dropPosition = null
+							},
+						)
+					}
 
-							// Each row hosts its own options, animated when the selected component changes.
-							AnimatedDateComponentOptions(
-								component = row.components.firstOrNull { it.id == selectedComponentId },
-								onChange = {
-									rows = rows.replaceComponent(it)
-									onPatternChange(rows.toDatePattern())
-								},
-								onDelete = { id ->
-									rows = rows.deleteComponent(id)
-									onPatternChange(rows.toDatePattern())
-									selectedComponentId = null
-								},
-								onDismiss = {
-									cleanupEmptyComponents()
-									selectedComponentId = null
-								},
-							)
+					Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+						rows.forEachIndexed { rowIndex, row ->
+							key(row.id) {
+								DateEditorRow(
+									row = row,
+									rowIndex = rowIndex,
+									dragState = dragState,
+									dropPosition = dropPosition,
+									selectedComponentId = selectedComponentId,
+									onComponentMoved = { dropPosition = it },
+									onComponentDropped = { id, at ->
+										rows = rows.moveComponent(id, at)
+										onPatternChange(rows.toDatePattern())
+									},
+									onComponentSelected = { id ->
+										// Clean up empty components only when switching to a different component.
+										if (id != selectedComponentId) cleanupEmptyComponents()
+										selectedComponentId = id
+									},
+									onInsertionRequested = { insertionPosition = it },
+									onRowDeleted = {
+										cleanupEmptyComponents()
+										rows = rows.deleteRow(row.id)
+										onPatternChange(rows.toDatePattern())
+										selectedComponentId = null
+									},
+								)
+
+								// Each row hosts its own options, animated when the selected component changes.
+								AnimatedDateComponentOptions(
+									component = row.components.firstOrNull { it.id == selectedComponentId },
+									onChange = {
+										rows = rows.replaceComponent(it)
+										onPatternChange(rows.toDatePattern())
+									},
+									onDelete = { id ->
+										rows = rows.deleteComponent(id)
+										onPatternChange(rows.toDatePattern())
+										selectedComponentId = null
+									},
+									onDismiss = {
+										cleanupEmptyComponents()
+										selectedComponentId = null
+									},
+								)
+							}
 						}
 					}
 				}
@@ -138,6 +167,52 @@ internal fun VisualDateFormatEditor(
 				selectedComponentId = component.id.takeUnless { component.isLineBreak }
 				insertionPosition = null
 			},
+		)
+	}
+}
+
+@Composable
+private fun BoxScope.DateComponentDeleteZone(
+	dragState: DragAndDropState<DateFormatComponent>,
+	onComponentDropped: (DateFormatComponent) -> Unit,
+) {
+	val height = 40.dp
+	var hovered by remember { mutableStateOf(false) }
+
+	Surface(
+		modifier =
+			Modifier
+				.align(
+					Alignment.TopCenter,
+				).offset(y = -height)
+				.zIndex(1F)
+				.width(220.dp)
+				.height(height)
+				.dropTarget(
+					key = "delete-component",
+					state = dragState,
+					dropAnimationEnabled = false,
+					onDragEnter = { hovered = true },
+					onDragExit = { hovered = false },
+					onDrop = {
+						hovered = false
+						onComponentDropped(it.data)
+					},
+				),
+		shape =
+			GenericShape { size, _ ->
+				moveTo(0F, size.height)
+				cubicTo(size.width * 0.2F, size.height, size.width * 0.2F, 0F, size.width / 2F, 0F)
+				cubicTo(size.width * 0.8F, 0F, size.width * 0.8F, size.height, size.width, size.height)
+				close()
+			},
+		color = MaterialTheme.colorScheme.error.copy(alpha = if (hovered) 0.9F else 0.7F),
+		contentColor = MaterialTheme.colorScheme.onError,
+	) {
+		Icon(
+			imageVector = Icons.Outlined.Delete,
+			contentDescription = stringResource(R.string.date_editor_delete_component),
+			modifier = Modifier.wrapContentSize(Alignment.Center).size(20.dp),
 		)
 	}
 }
