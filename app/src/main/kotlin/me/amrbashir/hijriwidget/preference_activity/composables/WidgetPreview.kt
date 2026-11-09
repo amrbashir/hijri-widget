@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import me.amrbashir.hijriwidget.HijriDate
@@ -34,6 +35,7 @@ import me.amrbashir.hijriwidget.preference_activity.LocalAnimatedContentScope
 import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
 import me.amrbashir.hijriwidget.preference_activity.LocalSharedTransitionScope
 import me.amrbashir.hijriwidget.widgetCornerRadius
+import kotlin.math.roundToInt
 
 @Composable
 fun WidgetPreview(
@@ -84,6 +86,7 @@ fun WidgetPreview(
 					TextStyle(
 						textAlign = prefsManager.horizontalAlignment.value.textAlign,
 						fontSize = prefsManager.textSize.value.sp,
+						fontWeight = FontWeight(prefsManager.textWeight.value.roundToInt()),
 						shadow =
 							if (prefsManager.textShadow.value) {
 								Shadow(

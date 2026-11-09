@@ -63,6 +63,12 @@ class PreferencesManager {
 			default = 22F,
 		)
 
+	val textWeight =
+		floatPreference(
+			key = "TEXT_WEIGHT",
+			default = 400F,
+		)
+
 	val horizontalAlignment =
 		enumPreference("HORIZONTAL_ALIGNMENT", WidgetHorizontalAlignment.Center)
 

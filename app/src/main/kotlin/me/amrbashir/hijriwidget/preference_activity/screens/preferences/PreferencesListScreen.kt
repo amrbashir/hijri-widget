@@ -147,6 +147,20 @@ internal fun PreferenceListScreen() {
 				}
 
 				Item(
+					label = "Text Weight",
+					description = "Change the widget text weight",
+					icon = Icons.Outlined.TextIncrease,
+				) {
+					ValueSlider(
+						value = prefsManager.textWeight.value,
+						onValueChange = { prefsManager.textWeight.value = if (it < 550F) 400F else 700F },
+						default = prefsManager.textWeight.default,
+						valueRange = 400F..700F,
+						steps = 0,
+					)
+				}
+
+				Item(
 					label = stringResource(R.string.preferences_text_shadow_title),
 					description = stringResource(R.string.preferences_text_shadow_description),
 					icon = Icons.Outlined.Brightness6,

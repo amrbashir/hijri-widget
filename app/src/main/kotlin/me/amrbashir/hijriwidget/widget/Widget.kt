@@ -1,7 +1,10 @@
 package me.amrbashir.hijriwidget.widget
 
 import android.content.Context
+import android.graphics.Typeface
 import android.os.Build
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
@@ -99,7 +102,12 @@ class HijriWidget : GlanceAppWidget() {
 		val remoteViews = RemoteViews(context.packageName, remoteViewLayout)
 
 		val date = HijriDate.todayFormatted(prefsManager)
-		remoteViews.setTextViewText(remoteViewId, date)
+		val spannableDate = SpannableString(date)
+		// RemoteViews uses a bold span because exact font weights are not supported here.
+		if (prefsManager.textWeight.value >= 600F) {
+			spannableDate.setSpan(StyleSpan(Typeface.BOLD), 0, date.length, 0)
+		}
+		remoteViews.setTextViewText(remoteViewId, spannableDate)
 
 		val horizontalAlignment = prefsManager.horizontalAlignment.value
 		val verticalAlignment = prefsManager.verticalAlignment.value
