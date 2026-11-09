@@ -18,7 +18,7 @@ import me.amrbashir.hijriwidget.widget.HijriWidget
  * Bump it and add a migration step in [migrateConfig] whenever the stored config changes shape.
  *
  * - v1: global preferences in [LEGACY_PREF]
- * - v2: per-widget preferences with explicit Arabic locale for saved date formats
+ * - v2: per-widget preferences, explicit Arabic date locale, and TEXT_SIZE renamed to FONT_SIZE
  */
 private const val CONFIG_VERSION = 2
 
@@ -77,8 +77,8 @@ private suspend fun migrateV1ToV2(
 ) {
 	val ids = HijriWidget.glanceIds(context)
 	if (ids.isNotEmpty()) {
-		// v1 keys and value types match the current ones, so parsing them validates values
-		val legacy = PreferencesManager.fromPreferences(legacyPrefs.toPreferences())
+		// Rename the legacy size key before parsing with the current preference definitions.
+		val legacy = PreferencesManager.fromPreferences(legacyPrefs.toPreferences().migrateFontSize())
 		legacy.dateFormat.value = preserveArabicDateFormat(legacy.dateFormat.value)
 		legacy.dateCustomFormat.value = preserveArabicDateFormat(legacy.dateCustomFormat.value)
 		if (!legacy.dateIsCustomFormat.value && legacy.dateFormat.value !in DATE_FORMAT_PRESETES) {
@@ -112,4 +112,13 @@ private fun SharedPreferences.toPreferences(): Preferences {
 private fun preserveArabicDateFormat(format: String): String =
 	parseDateFormat(format).joinToString("") { segment ->
 		"${segment.langCode ?: "ar-SA"}{${segment.format}}"
+	}
+
+private fun Preferences.migrateFontSize(): Preferences =
+	toMutablePreferences().apply {
+		val oldKey = floatPreferencesKey("TEXT_SIZE")
+		val newKey = floatPreferencesKey("FONT_SIZE")
+		val oldSize = this[oldKey]
+		if (this[newKey] == null && oldSize != null) this[newKey] = oldSize
+		remove(oldKey)
 	}

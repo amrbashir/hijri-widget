@@ -140,14 +140,14 @@ internal fun PreferenceListScreen() {
 				)
 
 				Item(
-					label = stringResource(R.string.preferences_text_size_title),
-					description = stringResource(R.string.preferences_text_size_description),
+					label = stringResource(R.string.preferences_font_size_title),
+					description = stringResource(R.string.preferences_font_size_description),
 					icon = Icons.Outlined.TextIncrease,
 				) {
 					ValueSlider(
-						value = prefsManager.textSize.value,
-						onValueChange = { prefsManager.textSize.value = it },
-						default = prefsManager.textSize.default,
+						value = prefsManager.fontSize.value,
+						onValueChange = { prefsManager.fontSize.value = it },
+						default = prefsManager.fontSize.default,
 						valueRange = 1F..50F,
 						steps = 50,
 					)

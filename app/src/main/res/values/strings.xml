@@ -116,8 +116,8 @@
     <string name="preferences_appearance_group_title">Appearance</string>
     <string name="preferences_color_title">Color</string>
     <string name="preferences_color_description">Choose the widget text and background color</string>
-    <string name="preferences_text_size_title">Text Size</string>
-    <string name="preferences_text_size_description">Change the widget text size</string>
+    <string name="preferences_font_size_title">Font Size</string>
+    <string name="preferences_font_size_description">Change the widget font size</string>
     <string name="preferences_text_shadow_title">Text Shadow</string>
     <string name="preferences_text_shadow_description">Enable or disable the widget text shadow</string>
     <string name="preferences_misc_group_title">Misc.</string>

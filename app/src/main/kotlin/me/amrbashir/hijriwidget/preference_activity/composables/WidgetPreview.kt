@@ -1,6 +1,7 @@
 package me.amrbashir.hijriwidget.preference_activity.composables
 
 import android.text.SpannableString
+import android.view.View
 import android.widget.TextView
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.background
@@ -29,10 +30,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.R
+import me.amrbashir.hijriwidget.applyFontWeight
+import me.amrbashir.hijriwidget.applyHorizontalAlignment
 import me.amrbashir.hijriwidget.preference_activity.LocalAnimatedContentScope
 import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
 import me.amrbashir.hijriwidget.preference_activity.LocalSharedTransitionScope
-import me.amrbashir.hijriwidget.widget.applyFontWeight
 import me.amrbashir.hijriwidget.widgetCornerRadius
 
 @Composable
@@ -77,6 +79,8 @@ fun WidgetPreview(
 					),
 		) {
 			val textColor = prefsManager.getTextColor(context).toArgb()
+			val isDeviceRTL = context.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
+
 			AndroidView(
 				modifier = Modifier.fillMaxWidth(),
 				factory = { TextView(it) },
@@ -84,8 +88,12 @@ fun WidgetPreview(
 					view.text =
 						SpannableString(date).apply {
 							applyFontWeight(context, prefsManager.textFontFamily.value, prefsManager.getFontWeight())
+							applyHorizontalAlignment(
+								prefsManager.horizontalAlignment.value,
+								isDeviceRTL,
+							)
 						}
-					view.textSize = prefsManager.textSize.value
+					view.textSize = prefsManager.fontSize.value
 					view.gravity = prefsManager.horizontalAlignment.value.gravity
 					view.setTextColor(textColor)
 					if (prefsManager.textShadow.value) {

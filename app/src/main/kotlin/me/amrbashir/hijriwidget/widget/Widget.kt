@@ -1,16 +1,8 @@
 package me.amrbashir.hijriwidget.widget
 
 import android.content.Context
-import android.graphics.Typeface
 import android.os.Build
-import android.text.Layout
 import android.text.SpannableString
-import android.text.Spanned
-import android.text.TextDirectionHeuristics
-import android.text.style.AlignmentSpan
-import android.text.style.StyleSpan
-import android.text.style.TextAppearanceSpan
-import android.text.style.TypefaceSpan
 import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
@@ -43,12 +35,12 @@ import androidx.glance.state.PreferencesGlanceStateDefinition
 import kotlinx.coroutines.launch
 import me.amrbashir.hijriwidget.ColorMode
 import me.amrbashir.hijriwidget.HijriDate
-import me.amrbashir.hijriwidget.HorizontalAlignment
 import me.amrbashir.hijriwidget.PreferencesManager
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.addIfNotNull
 import me.amrbashir.hijriwidget.android.AlarmReceiver
-import me.amrbashir.hijriwidget.systemFontFamily
+import me.amrbashir.hijriwidget.applyFontWeight
+import me.amrbashir.hijriwidget.applyHorizontalAlignment
 import me.amrbashir.hijriwidget.widgetCornerRadius
 import kotlin.math.roundToInt
 
@@ -137,7 +129,7 @@ class HijriWidget : GlanceAppWidget() {
 		remoteViews.setTextViewTextSize(
 			remoteViewId,
 			TypedValue.COMPLEX_UNIT_SP,
-			prefsManager.textSize.value,
+			prefsManager.fontSize.value,
 		)
 
 		val textColorMode = prefsManager.textColorMode.value
@@ -211,73 +203,5 @@ class HijriWidget : GlanceAppWidget() {
 				refresh(context, id)
 			}
 		}
-	}
-}
-
-private fun SpannableString.applyHorizontalAlignment(
-	horizontalAlignment: HorizontalAlignment,
-	isDeviceRTL: Boolean,
-) {
-	val directionHeuristic =
-		if (isDeviceRTL) {
-			TextDirectionHeuristics.FIRSTSTRONG_RTL
-		} else {
-			TextDirectionHeuristics.FIRSTSTRONG_LTR
-		}
-
-	// Alignment is relative to paragraph direction; separate spans keep mixed LTR/RTL lines
-	// aligned to the same physical left or right edge.
-	var start = 0
-	for (paragraph in split('\n')) {
-		val isRtl = directionHeuristic.isRtl(paragraph, 0, paragraph.length)
-
-		val alignment =
-			when (horizontalAlignment) {
-				HorizontalAlignment.Left ->
-					if (isRtl) Layout.Alignment.ALIGN_OPPOSITE else Layout.Alignment.ALIGN_NORMAL
-				HorizontalAlignment.Center -> Layout.Alignment.ALIGN_CENTER
-				HorizontalAlignment.Right ->
-					if (isRtl) Layout.Alignment.ALIGN_NORMAL else Layout.Alignment.ALIGN_OPPOSITE
-			}
-
-		val end = start + paragraph.length
-
-		setSpan(
-			AlignmentSpan.Standard(alignment),
-			start,
-			end,
-			Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
-		)
-
-		start = end + 1
-	}
-}
-
-internal fun SpannableString.applyFontWeight(
-	context: Context,
-	familyName: String,
-	weight: Int,
-) {
-	val family = systemFontFamily(familyName)
-	val name = family.weightAliases[weight] ?: family.name
-	setSpan(TypefaceSpan(name), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-	if (family.variable && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-		val nearestWeight = (100..900 step 100).minBy { kotlin.math.abs(it - weight) }
-		val appearance =
-			when (nearestWeight) {
-				100 -> R.style.WidgetWeight100
-				200 -> R.style.WidgetWeight200
-				300 -> R.style.WidgetWeight300
-				400 -> R.style.WidgetWeight400
-				500 -> R.style.WidgetWeight500
-				600 -> R.style.WidgetWeight600
-				700 -> R.style.WidgetWeight700
-				800 -> R.style.WidgetWeight800
-				else -> R.style.WidgetWeight900
-			}
-		setSpan(TextAppearanceSpan(context, appearance), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-	} else if (weight == 700) {
-		setSpan(StyleSpan(Typeface.BOLD), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 	}
 }

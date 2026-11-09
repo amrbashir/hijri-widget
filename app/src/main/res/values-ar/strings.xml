@@ -111,8 +111,8 @@
     <string name="preferences_appearance_group_title">المظهر</string>
     <string name="preferences_color_title">اللون</string>
     <string name="preferences_color_description">اختر لون نص الويدجت وخلفيته</string>
-    <string name="preferences_text_size_title">حجم النص</string>
-    <string name="preferences_text_size_description">غيّر حجم نص الويدجت</string>
+    <string name="preferences_font_size_title">حجم الخط</string>
+    <string name="preferences_font_size_description">غيّر حجم خط الويدجت</string>
     <string name="preferences_text_shadow_title">ظل النص</string>
     <string name="preferences_text_shadow_description">تمكين أو تعطيل ظل نص الويدجت</string>
     <string name="preferences_misc_group_title">متنوع</string>
