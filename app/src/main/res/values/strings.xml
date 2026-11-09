@@ -185,7 +185,7 @@
     <string name="layout_padding_hint">Values are in dp. Start and end follow the device language.</string>
     <string name="font_family">Font family</string>
     <string name="font_system_default">System default</string>
-    <string name="font_weight">Weight</string>
+    <string name="font_weight">Font Weight</string>
     <string name="font_weight_hint">Available weights depend on the font and language. Some choices may look the same.</string>
     <string name="font_choose">Choose a font</string>
     <string name="font_search">Search fonts</string>

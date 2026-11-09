@@ -121,18 +121,28 @@ internal fun PreferenceListScreen() {
 
 			ItemGroup(label = stringResource(R.string.preferences_appearance_group_title)) {
 				Item(
-					label = stringResource(R.string.preferences_layout_title),
-					description = stringResource(R.string.preferences_layout_description),
-					icon = Icons.AutoMirrored.Outlined.ViewQuilt,
-					onClick = { navController.navigateToLayout() },
-				)
-
-				Item(
 					label = stringResource(R.string.preferences_color_title),
 					description = stringResource(R.string.preferences_color_description),
 					icon = Icons.Outlined.ColorLens,
 					onClick = {
 						navController.navigateToColor()
+					},
+				)
+
+				Item(
+					label = stringResource(R.string.preferences_text_shadow_title),
+					description = stringResource(R.string.preferences_text_shadow_description),
+					icon = Icons.Outlined.Brightness6,
+					endContent = {
+						Switch(
+							checked = prefsManager.textShadow.value,
+							onCheckedChange = {
+								prefsManager.textShadow.value = it
+							},
+						)
+					},
+					onClick = {
+						prefsManager.textShadow.value = !prefsManager.textShadow.value
 					},
 				)
 
@@ -187,20 +197,10 @@ internal fun PreferenceListScreen() {
 				}
 
 				Item(
-					label = stringResource(R.string.preferences_text_shadow_title),
-					description = stringResource(R.string.preferences_text_shadow_description),
-					icon = Icons.Outlined.Brightness6,
-					endContent = {
-						Switch(
-							checked = prefsManager.textShadow.value,
-							onCheckedChange = {
-								prefsManager.textShadow.value = it
-							},
-						)
-					},
-					onClick = {
-						prefsManager.textShadow.value = !prefsManager.textShadow.value
-					},
+					label = stringResource(R.string.preferences_layout_title),
+					description = stringResource(R.string.preferences_layout_description),
+					icon = Icons.AutoMirrored.Outlined.ViewQuilt,
+					onClick = { navController.navigateToLayout() },
 				)
 			}
 
