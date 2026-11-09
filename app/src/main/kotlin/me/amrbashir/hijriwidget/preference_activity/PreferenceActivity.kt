@@ -37,6 +37,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import me.amrbashir.hijriwidget.PreferencesManager
@@ -187,6 +188,7 @@ fun PreferencesScaffold(
 				start = insets.calculateStartPadding(layoutDirection),
 				top = insets.calculateTopPadding(),
 				end = insets.calculateEndPadding(layoutDirection),
+				bottom = if (showMainNavigation) 0.dp else insets.calculateBottomPadding(),
 			)
 		SharedTransitionLayout(
 			modifier =
