@@ -11,6 +11,7 @@ import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.ColorLens
 import androidx.compose.material.icons.outlined.FontDownload
 import androidx.compose.material.icons.outlined.FormatBold
+import androidx.compose.material.icons.outlined.FormatColorFill
 import androidx.compose.material.icons.outlined.MoreTime
 import androidx.compose.material.icons.outlined.SettingsBackupRestore
 import androidx.compose.material.icons.outlined.TextIncrease
@@ -22,16 +23,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import me.amrbashir.hijriwidget.ColorMode
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.formatTime
 import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
 import me.amrbashir.hijriwidget.preference_activity.LocalNavController
 import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
 import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
+import me.amrbashir.hijriwidget.preference_activity.composables.ColorOptions
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
 import me.amrbashir.hijriwidget.preference_activity.composables.ScrollableScreenColumn
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.Item
@@ -120,14 +124,30 @@ internal fun PreferenceListScreen() {
 			}
 
 			ItemGroup(label = stringResource(R.string.preferences_appearance_group_title)) {
-				Item(
-					label = stringResource(R.string.preferences_color_title),
-					description = stringResource(R.string.preferences_color_description),
-					icon = Icons.Outlined.ColorLens,
-					onClick = {
-						navController.navigateToColor()
-					},
-				)
+				val context = LocalContext.current
+				Item(label = stringResource(R.string.text_color), icon = Icons.Outlined.ColorLens) {
+					ColorOptions(
+						modes = ColorMode.all(),
+						selectedMode = prefsManager.textColorMode.value,
+						previewColor = { prefsManager.getTextColor(context, it) },
+						onModeSelected = {
+							prefsManager.textColorMode.value = it
+							if (it == ColorMode.Custom) navController.navigateToCustomTextColor()
+						},
+					)
+				}
+
+				Item(label = stringResource(R.string.background_color), icon = Icons.Outlined.FormatColorFill) {
+					ColorOptions(
+						modes = ColorMode.allForBg(),
+						selectedMode = prefsManager.bgColorMode.value,
+						previewColor = { prefsManager.getBgColor(context, it).getColor(context) },
+						onModeSelected = {
+							prefsManager.bgColorMode.value = it
+							if (it == ColorMode.Custom) navController.navigateToCustomBackgroundColor()
+						},
+					)
+				}
 
 				Item(
 					label = stringResource(R.string.preferences_text_shadow_title),

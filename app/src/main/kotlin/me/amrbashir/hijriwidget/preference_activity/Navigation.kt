@@ -14,7 +14,7 @@ import me.amrbashir.hijriwidget.preference_activity.screens.homeDestination
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.PREFERENCES_DESTINATION
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.PREFERENCES_LIST_DESTINATION
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.calendarCalculationMethodDestination
-import me.amrbashir.hijriwidget.preference_activity.screens.preferences.colorDestination
+import me.amrbashir.hijriwidget.preference_activity.screens.preferences.customColorDestination
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.dateFormatDestination
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.dayStartDestination
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.fontDestination
@@ -67,9 +67,9 @@ fun Navigation(
 			dateFormatDestination()
 			dayStartDestination()
 			calendarCalculationMethodDestination()
-			colorDestination()
 			layoutDestination()
 			fontDestination()
+			customColorDestination()
 		}
 	}
 }

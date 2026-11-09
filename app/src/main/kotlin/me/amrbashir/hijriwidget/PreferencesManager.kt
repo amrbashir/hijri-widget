@@ -147,11 +147,14 @@ class PreferencesManager {
 	}
 
 	@Composable
-	fun getTextColor(context: Context): Color {
+	fun getTextColor(
+		context: Context,
+		mode: ColorMode = textColorMode.value,
+	): Color {
 		val isDark =
 			context.resources.configuration.uiMode and
 				Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-		return when (textColorMode.value) {
+		return when (mode) {
 			ColorMode.Dynamic if Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ->
 				GlanceTheme.colors.primary.getColor(context)
 			ColorMode.System -> if (isDark) Color.Dark else Color.White
@@ -163,11 +166,14 @@ class PreferencesManager {
 	}
 
 	@Composable
-	fun getBgColor(context: Context): ColorProvider {
+	fun getBgColor(
+		context: Context,
+		mode: ColorMode = bgColorMode.value,
+	): ColorProvider {
 		val isDark =
 			context.resources.configuration.uiMode and
 				Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-		return when (bgColorMode.value) {
+		return when (mode) {
 			ColorMode.Dynamic if Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ->
 				GlanceTheme.colors.widgetBackground
 			ColorMode.System -> ColorProvider(if (isDark) Color.Dark else Color.White)
