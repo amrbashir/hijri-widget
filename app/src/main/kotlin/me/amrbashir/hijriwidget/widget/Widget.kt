@@ -3,8 +3,14 @@ package me.amrbashir.hijriwidget.widget
 import android.content.Context
 import android.graphics.Typeface
 import android.os.Build
+import android.text.Layout
 import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextDirectionHeuristics
+import android.text.style.AlignmentSpan
 import android.text.style.StyleSpan
+import android.text.style.TextAppearanceSpan
+import android.text.style.TypefaceSpan
 import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
@@ -37,10 +43,12 @@ import androidx.glance.state.PreferencesGlanceStateDefinition
 import kotlinx.coroutines.launch
 import me.amrbashir.hijriwidget.ColorMode
 import me.amrbashir.hijriwidget.HijriDate
+import me.amrbashir.hijriwidget.HorizontalAlignment
 import me.amrbashir.hijriwidget.PreferencesManager
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.addIfNotNull
 import me.amrbashir.hijriwidget.android.AlarmReceiver
+import me.amrbashir.hijriwidget.systemFontFamily
 import me.amrbashir.hijriwidget.widgetCornerRadius
 import kotlin.math.roundToInt
 
@@ -94,35 +102,35 @@ class HijriWidget : GlanceAppWidget() {
 		val context = LocalContext.current
 		val coroutineScope = rememberCoroutineScope()
 
-		val textShadow = prefsManager.textShadow.value
-		val remoteViewId =
-			if (textShadow) R.id.widget_text_shadow else R.id.widget_text
-		val remoteViewLayout =
-			if (textShadow) R.layout.widget_text_shadow else R.layout.widget_text
-		val remoteViews = RemoteViews(context.packageName, remoteViewLayout)
-
 		val date = HijriDate.todayFormatted(prefsManager)
-		val spannableDate = SpannableString(date)
-		// RemoteViews uses a bold span because exact font weights are not supported here.
-		if (prefsManager.textWeight.value >= 600F) {
-			spannableDate.setSpan(StyleSpan(Typeface.BOLD), 0, date.length, 0)
-		}
-		remoteViews.setTextViewText(remoteViewId, spannableDate)
+
+		val textShadow = prefsManager.textShadow.value
+
+		val remoteViewId = if (textShadow) R.id.widget_text_shadow else R.id.widget_text
+		val layout = if (textShadow) R.layout.widget_text_shadow else R.layout.widget_text
+		val remoteViews = RemoteViews(context.packageName, layout)
+
+		val isDeviceRTL = context.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
+		val text =
+			SpannableString(date).apply {
+				applyFontWeight(context, prefsManager.textFontFamily.value, prefsManager.getFontWeight())
+				applyHorizontalAlignment(prefsManager.horizontalAlignment.value, isDeviceRTL)
+			}
+		remoteViews.setTextViewText(remoteViewId, text)
 
 		val horizontalAlignment = prefsManager.horizontalAlignment.value
 		val verticalAlignment = prefsManager.verticalAlignment.value
 		val gravity = horizontalAlignment.gravity or verticalAlignment.gravity
-		remoteViews.setInt(remoteViewId, "setGravity", gravity)
+		remoteViews.setInt(R.id.widget_text_container, "setGravity", gravity)
 
 		val density = context.resources.displayMetrics.density
-		val isRtl = context.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
 		val start = (prefsManager.paddingStart.value * density).roundToInt()
 		val end = (prefsManager.paddingEnd.value * density).roundToInt()
 		remoteViews.setViewPadding(
-			remoteViewId,
-			if (isRtl) end else start,
+			R.id.widget_text_container,
+			if (isDeviceRTL) end else start,
 			(prefsManager.paddingTop.value * density).roundToInt(),
-			if (isRtl) start else end,
+			if (isDeviceRTL) start else end,
 			(prefsManager.paddingBottom.value * density).roundToInt(),
 		)
 
@@ -140,7 +148,7 @@ class HijriWidget : GlanceAppWidget() {
 			remoteViews.setTextColor(remoteViewId, textColor.toArgb())
 		}
 
-		val bgColor = prefsManager.getBgColor()
+		val bgColor = prefsManager.getBgColor(context)
 
 		Box(
 			contentAlignment = Alignment.Center,
@@ -203,5 +211,73 @@ class HijriWidget : GlanceAppWidget() {
 				refresh(context, id)
 			}
 		}
+	}
+}
+
+private fun SpannableString.applyHorizontalAlignment(
+	horizontalAlignment: HorizontalAlignment,
+	isDeviceRTL: Boolean,
+) {
+	val directionHeuristic =
+		if (isDeviceRTL) {
+			TextDirectionHeuristics.FIRSTSTRONG_RTL
+		} else {
+			TextDirectionHeuristics.FIRSTSTRONG_LTR
+		}
+
+	// Alignment is relative to paragraph direction; separate spans keep mixed LTR/RTL lines
+	// aligned to the same physical left or right edge.
+	var start = 0
+	for (paragraph in split('\n')) {
+		val isRtl = directionHeuristic.isRtl(paragraph, 0, paragraph.length)
+
+		val alignment =
+			when (horizontalAlignment) {
+				HorizontalAlignment.Left ->
+					if (isRtl) Layout.Alignment.ALIGN_OPPOSITE else Layout.Alignment.ALIGN_NORMAL
+				HorizontalAlignment.Center -> Layout.Alignment.ALIGN_CENTER
+				HorizontalAlignment.Right ->
+					if (isRtl) Layout.Alignment.ALIGN_NORMAL else Layout.Alignment.ALIGN_OPPOSITE
+			}
+
+		val end = start + paragraph.length
+
+		setSpan(
+			AlignmentSpan.Standard(alignment),
+			start,
+			end,
+			Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+		)
+
+		start = end + 1
+	}
+}
+
+internal fun SpannableString.applyFontWeight(
+	context: Context,
+	familyName: String,
+	weight: Int,
+) {
+	val family = systemFontFamily(familyName)
+	val name = family.weightAliases[weight] ?: family.name
+	setSpan(TypefaceSpan(name), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+	if (family.variable && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+		val nearestWeight = (100..900 step 100).minBy { kotlin.math.abs(it - weight) }
+		val appearance =
+			when (nearestWeight) {
+				100 -> R.style.WidgetWeight100
+				200 -> R.style.WidgetWeight200
+				300 -> R.style.WidgetWeight300
+				400 -> R.style.WidgetWeight400
+				500 -> R.style.WidgetWeight500
+				600 -> R.style.WidgetWeight600
+				700 -> R.style.WidgetWeight700
+				800 -> R.style.WidgetWeight800
+				else -> R.style.WidgetWeight900
+			}
+		setSpan(TextAppearanceSpan(context, appearance), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+	} else if (weight == 700) {
+		setSpan(StyleSpan(Typeface.BOLD), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 	}
 }

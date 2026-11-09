@@ -25,6 +25,7 @@ fun ValueSlider(
 	default: Float,
 	valueRange: ClosedFloatingPointRange<Float>,
 	steps: Int,
+	valueLabel: String = value.roundToInt().toString(),
 ) {
 	Row(
 		verticalAlignment = Alignment.CenterVertically,
@@ -39,7 +40,7 @@ fun ValueSlider(
 
 		Spacer(modifier = Modifier.width(8.dp))
 
-		Text(value.roundToInt().toString())
+		Text(valueLabel)
 
 		val isDefault = value == default
 		AnimatedVisibility(!isDefault) {

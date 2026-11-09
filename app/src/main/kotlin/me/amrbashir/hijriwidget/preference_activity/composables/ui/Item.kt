@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import me.amrbashir.hijriwidget.addIfNotNull
 
@@ -28,6 +29,7 @@ fun Item(
 	icon: ImageVector,
 	iconModifier: Modifier = Modifier,
 	verticalAlignment: Alignment.Vertical = Alignment.Top,
+	labelFontFamily: FontFamily? = null,
 	enabled: Boolean = true,
 	description: String? = null,
 	onClick: (() -> Unit)? = null,
@@ -44,6 +46,7 @@ fun Item(
 			)
 		},
 		verticalAlignment = verticalAlignment,
+		labelFontFamily = labelFontFamily,
 		label = label,
 		modifier = modifier,
 		enabled = enabled,
@@ -61,6 +64,7 @@ fun Item(
 	enabled: Boolean = true,
 	icon: (@Composable () -> Unit)? = null,
 	verticalAlignment: Alignment.Vertical = Alignment.Top,
+	labelFontFamily: FontFamily? = null,
 	description: String? = null,
 	onClick: (() -> Unit)? = null,
 	endContent: (@Composable () -> Unit)? = null,
@@ -99,6 +103,7 @@ fun Item(
 						label,
 						color = MaterialTheme.colorScheme.onBackground,
 						style = MaterialTheme.typography.bodyLarge,
+						fontFamily = labelFontFamily,
 					)
 
 					description?.let {

@@ -1,12 +1,14 @@
 package me.amrbashir.hijriwidget
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
+import android.view.Gravity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.text.style.TextAlign
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -20,6 +22,7 @@ import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.state.PreferencesGlanceStateDefinition
 import androidx.glance.unit.ColorProvider
 import me.amrbashir.hijriwidget.widget.HijriWidget
+import kotlin.math.roundToInt
 
 val Color.Companion.Dark: Color get() = Color(0xFF151515)
 
@@ -63,6 +66,8 @@ class PreferencesManager {
 			default = 22F,
 		)
 
+	val textFontFamily = stringPreference("TEXT_FONT_FAMILY", "")
+
 	val textWeight =
 		floatPreference(
 			key = "TEXT_WEIGHT",
@@ -70,10 +75,10 @@ class PreferencesManager {
 		)
 
 	val horizontalAlignment =
-		enumPreference("HORIZONTAL_ALIGNMENT", WidgetHorizontalAlignment.Center)
+		enumPreference("HORIZONTAL_ALIGNMENT", HorizontalAlignment.Center)
 
 	val verticalAlignment =
-		enumPreference("VERTICAL_ALIGNMENT", WidgetVerticalAlignment.Center)
+		enumPreference("VERTICAL_ALIGNMENT", VerticalAlignment.Center)
 
 	val paddingStart = intPreference("PADDING_START", 0)
 
@@ -125,43 +130,44 @@ class PreferencesManager {
 			default = 0,
 		)
 
-	@Composable
-	fun getTextColor(context: Context): Color =
-		when (this.textColorMode.value) {
-			ColorMode.Dynamic if Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ->
-				GlanceTheme.colors.primary.getColor(
-					context,
-				)
+	fun supportedFontWeights(): List<Int> = systemFontFamily(textFontFamily.value).supportedWeights()
 
-			ColorMode.System if isSystemInDarkTheme() -> Color.Dark
-			ColorMode.System if !isSystemInDarkTheme() -> Color.White
+	fun getFontWeight(): Int {
+		val requested = textWeight.value.roundToInt()
+		return supportedFontWeights().minBy { kotlin.math.abs(it - requested) }
+	}
+
+	@Composable
+	fun getTextColor(context: Context): Color {
+		val isDark =
+			context.resources.configuration.uiMode and
+				Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+		return when (textColorMode.value) {
+			ColorMode.Dynamic if Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ->
+				GlanceTheme.colors.primary.getColor(context)
+			ColorMode.System -> if (isDark) Color.Dark else Color.White
 			ColorMode.Dark -> Color.Dark
 			ColorMode.Light -> Color.White
-			ColorMode.Custom -> Color(this.textCustomColor.value)
+			ColorMode.Custom -> Color(textCustomColor.value)
 			else -> Color.White
 		}
+	}
 
 	@Composable
-	fun getBgColor(): ColorProvider =
-		when (this.bgColorMode.value) {
+	fun getBgColor(context: Context): ColorProvider {
+		val isDark =
+			context.resources.configuration.uiMode and
+				Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+		return when (bgColorMode.value) {
 			ColorMode.Dynamic if Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ->
 				GlanceTheme.colors.widgetBackground
-
-			ColorMode.System if isSystemInDarkTheme() ->
-				ColorProvider(
-					Color.Dark,
-				)
-
-			ColorMode.System if !isSystemInDarkTheme() ->
-				ColorProvider(
-					Color.White,
-				)
-
+			ColorMode.System -> ColorProvider(if (isDark) Color.Dark else Color.White)
 			ColorMode.Dark -> ColorProvider(Color.Dark)
 			ColorMode.Light -> ColorProvider(Color.White)
-			ColorMode.Custom -> ColorProvider(Color(this.bgCustomColor.value))
+			ColorMode.Custom -> ColorProvider(Color(bgCustomColor.value))
 			else -> ColorProvider(Color.Transparent)
 		}
+	}
 
 	companion object {
 		/**
@@ -316,4 +322,23 @@ class Preference<T, K>(
 	fun reset() {
 		value = default
 	}
+}
+
+enum class HorizontalAlignment(
+	val gravity: Int,
+	val bias: Float,
+	val textAlign: TextAlign,
+) {
+	Left(Gravity.LEFT, -1F, TextAlign.Left),
+	Center(Gravity.CENTER_HORIZONTAL, 0F, TextAlign.Center),
+	Right(Gravity.RIGHT, 1F, TextAlign.Right),
+}
+
+enum class VerticalAlignment(
+	val gravity: Int,
+	val bias: Float,
+) {
+	Top(Gravity.TOP, -1F),
+	Center(Gravity.CENTER_VERTICAL, 0F),
+	Bottom(Gravity.BOTTOM, 1F),
 }

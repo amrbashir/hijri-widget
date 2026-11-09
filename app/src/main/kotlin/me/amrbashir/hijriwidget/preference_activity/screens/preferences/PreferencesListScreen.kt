@@ -12,13 +12,18 @@ import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.Brightness6
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.ColorLens
+import androidx.compose.material.icons.outlined.FontDownload
+import androidx.compose.material.icons.outlined.FormatBold
 import androidx.compose.material.icons.outlined.MoreTime
 import androidx.compose.material.icons.outlined.SettingsBackupRestore
 import androidx.compose.material.icons.outlined.TextIncrease
 import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -34,6 +39,7 @@ import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreen
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.Item
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.ItemGroup
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.ValueSlider
+import kotlin.math.roundToInt
 
 const val PREFERENCES_DESTINATION = "/preferences"
 const val PREFERENCES_LIST_DESTINATION = "/preferences/"
@@ -53,6 +59,7 @@ internal fun PreferenceListScreen() {
 
 	val prefsManager = LocalSelectedWidget.current.prefsManager
 	val navController = LocalNavController.current
+	val weights = prefsManager.supportedFontWeights()
 
 	PreferenceScreenLayout {
 		Column(
@@ -147,17 +154,39 @@ internal fun PreferenceListScreen() {
 				}
 
 				Item(
-					label = "Text Weight",
-					description = "Change the widget text weight",
-					icon = Icons.Outlined.TextIncrease,
+					label = stringResource(R.string.font_family),
+					description =
+						prefsManager.textFontFamily.value.ifEmpty {
+							stringResource(R.string.font_system_default)
+						},
+					icon = Icons.Outlined.FontDownload,
+					onClick = { navController.navigateToFont() },
+				)
+
+				Item(
+					label = stringResource(R.string.font_weight),
+					description = stringResource(R.string.font_weight_hint),
+					icon = Icons.Outlined.FormatBold,
 				) {
-					ValueSlider(
-						value = prefsManager.textWeight.value,
-						onValueChange = { prefsManager.textWeight.value = if (it < 550F) 400F else 700F },
-						default = prefsManager.textWeight.default,
-						valueRange = 400F..700F,
-						steps = 0,
-					)
+					if (weights.size == 1) {
+						Text(weights.single().toString())
+					} else {
+						val defaultWeightIndex =
+							weights.indices.minBy {
+								kotlin.math.abs(weights[it] - prefsManager.textWeight.default)
+							}
+
+						ValueSlider(
+							value = weights.indexOf(prefsManager.getFontWeight()).toFloat(),
+							onValueChange = { value ->
+								prefsManager.textWeight.value = weights[value.roundToInt()].toFloat()
+							},
+							default = defaultWeightIndex.toFloat(),
+							valueLabel = prefsManager.getFontWeight().toString(),
+							valueRange = 0F..weights.lastIndex.toFloat(),
+							steps = weights.size - 2,
+						)
+					}
 				}
 
 				Item(

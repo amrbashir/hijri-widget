@@ -35,10 +35,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import me.amrbashir.hijriwidget.HorizontalAlignment
 import me.amrbashir.hijriwidget.PreferencesManager
 import me.amrbashir.hijriwidget.R
-import me.amrbashir.hijriwidget.WidgetHorizontalAlignment
-import me.amrbashir.hijriwidget.WidgetVerticalAlignment
+import me.amrbashir.hijriwidget.VerticalAlignment
 import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
 import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
 import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
@@ -80,10 +80,10 @@ private fun AlignmentPicker(prefsManager: PreferencesManager) {
 	ItemGroup(label = stringResource(R.string.layout_alignment)) {
 		Item(label = stringResource(R.string.layout_horizontal)) {
 			AlignmentOptions(
-				labels = listOf(R.string.layout_start, R.string.layout_center, R.string.layout_end),
+				labels = listOf(R.string.layout_left, R.string.layout_center, R.string.layout_right),
 				selectedIndex = prefsManager.horizontalAlignment.value.ordinal,
 				onSelected = {
-					prefsManager.horizontalAlignment.value = WidgetHorizontalAlignment.entries[it]
+					prefsManager.horizontalAlignment.value = HorizontalAlignment.entries[it]
 				},
 			)
 		}
@@ -91,7 +91,7 @@ private fun AlignmentPicker(prefsManager: PreferencesManager) {
 			AlignmentOptions(
 				labels = listOf(R.string.layout_top, R.string.layout_center, R.string.layout_bottom),
 				selectedIndex = prefsManager.verticalAlignment.value.ordinal,
-				onSelected = { prefsManager.verticalAlignment.value = WidgetVerticalAlignment.entries[it] },
+				onSelected = { prefsManager.verticalAlignment.value = VerticalAlignment.entries[it] },
 			)
 		}
 	}

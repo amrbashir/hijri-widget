@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Applied after the family span so variable weights preserve the selected system family. -->
+    <style name="WidgetWeight100">
+        <item name="android:fontVariationSettings">\'wght\' 100</item>
+    </style>
+    <style name="WidgetWeight200">
+        <item name="android:fontVariationSettings">\'wght\' 200</item>
+    </style>
+    <style name="WidgetWeight300">
+        <item name="android:fontVariationSettings">\'wght\' 300</item>
+    </style>
+    <style name="WidgetWeight400">
+        <item name="android:fontVariationSettings">\'wght\' 400</item>
+    </style>
+    <style name="WidgetWeight500">
+        <item name="android:fontVariationSettings">\'wght\' 500</item>
+    </style>
+    <style name="WidgetWeight600">
+        <item name="android:fontVariationSettings">\'wght\' 600</item>
+    </style>
+    <style name="WidgetWeight700">
+        <item name="android:fontVariationSettings">\'wght\' 700</item>
+    </style>
+    <style name="WidgetWeight800">
+        <item name="android:fontVariationSettings">\'wght\' 800</item>
+    </style>
+    <style name="WidgetWeight900">
+        <item name="android:fontVariationSettings">\'wght\' 900</item>
+    </style>
+</resources>

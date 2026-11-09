@@ -169,6 +169,8 @@
     <string name="layout_alignment">المحاذاة</string>
     <string name="layout_horizontal">أفقيًا</string>
     <string name="layout_vertical">رأسيًا</string>
+    <string name="layout_left">اليسار</string>
+    <string name="layout_right">اليمين</string>
     <string name="layout_start">البداية</string>
     <string name="layout_end">النهاية</string>
     <string name="layout_center">الوسط</string>
@@ -176,4 +178,11 @@
     <string name="layout_bottom">أسفل</string>
     <string name="layout_padding">الهوامش الداخلية (dp)</string>
     <string name="layout_padding_hint">القيم بوحدة dp. تتبع البداية والنهاية اتجاه لغة الجهاز.</string>
+    <string name="font_family">نوع الخط</string>
+    <string name="font_system_default">الخط الافتراضي للجهاز</string>
+    <string name="font_weight">وزن الخط</string>
+    <string name="font_weight_hint">تعتمد الأوزان المتاحة على الخط واللغة. قد تبدو بعض الخيارات متشابهة.</string>
+    <string name="font_choose">اختر خطًا</string>
+    <string name="font_search">ابحث عن خط</string>
+    <string name="font_no_results">لا توجد خطوط مطابقة</string>
 </resources>

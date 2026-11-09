@@ -1,5 +1,7 @@
 package me.amrbashir.hijriwidget.preference_activity.composables
 
+import android.text.SpannableString
+import android.widget.TextView
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -12,30 +14,26 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.BiasAlignment
+import androidx.compose.ui.BiasAbsoluteAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import me.amrbashir.hijriwidget.HijriDate
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.LocalAnimatedContentScope
 import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
 import me.amrbashir.hijriwidget.preference_activity.LocalSharedTransitionScope
+import me.amrbashir.hijriwidget.widget.applyFontWeight
 import me.amrbashir.hijriwidget.widgetCornerRadius
-import kotlin.math.roundToInt
 
 @Composable
 fun WidgetPreview(
@@ -61,7 +59,7 @@ fun WidgetPreview(
 	) {
 		Box(
 			contentAlignment =
-				BiasAlignment(
+				BiasAbsoluteAlignment(
 					prefsManager.horizontalAlignment.value.bias,
 					prefsManager.verticalAlignment.value.bias,
 				),
@@ -70,7 +68,7 @@ fun WidgetPreview(
 					.height(110.dp)
 					.width(175.dp)
 					.widgetCornerRadius(context)
-					.background(prefsManager.getBgColor().getColor(context))
+					.background(prefsManager.getBgColor(context).getColor(context))
 					.padding(
 						start = prefsManager.paddingStart.value.dp,
 						top = prefsManager.paddingTop.value.dp,
@@ -78,26 +76,24 @@ fun WidgetPreview(
 						bottom = prefsManager.paddingBottom.value.dp,
 					),
 		) {
-			Text(
-				date,
+			val textColor = prefsManager.getTextColor(context).toArgb()
+			AndroidView(
 				modifier = Modifier.fillMaxWidth(),
-				color = prefsManager.getTextColor(context),
-				style =
-					TextStyle(
-						textAlign = prefsManager.horizontalAlignment.value.textAlign,
-						fontSize = prefsManager.textSize.value.sp,
-						fontWeight = FontWeight(prefsManager.textWeight.value.roundToInt()),
-						shadow =
-							if (prefsManager.textShadow.value) {
-								Shadow(
-									color = Color(0, 0, 0, 128),
-									offset = Offset(x = 1f, y = 1f),
-									blurRadius = 1f,
-								)
-							} else {
-								null
-							},
-					),
+				factory = { TextView(it) },
+				update = { view ->
+					view.text =
+						SpannableString(date).apply {
+							applyFontWeight(context, prefsManager.textFontFamily.value, prefsManager.getFontWeight())
+						}
+					view.textSize = prefsManager.textSize.value
+					view.gravity = prefsManager.horizontalAlignment.value.gravity
+					view.setTextColor(textColor)
+					if (prefsManager.textShadow.value) {
+						view.setShadowLayer(1F, 1F, 1F, android.graphics.Color.argb(128, 0, 0, 0))
+					} else {
+						view.setShadowLayer(0F, 0F, 0F, android.graphics.Color.TRANSPARENT)
+					}
+				},
 			)
 		}
 
