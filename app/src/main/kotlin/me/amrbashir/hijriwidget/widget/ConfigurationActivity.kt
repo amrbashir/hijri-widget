@@ -59,7 +59,7 @@ class WidgetConfigurationActivity : ComponentActivity() {
 						},
 					) {
 						// Opened from a widget goes straight to its preferences
-						PreferencesScaffold(startDestination = PREFERENCES_DESTINATION)
+						PreferencesScaffold(startDestination = PREFERENCES_DESTINATION, showMainNavigation = false)
 					}
 				}
 			}

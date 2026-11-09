@@ -97,3 +97,5 @@ val LocalOpenWidgetPrefs =
 
 /** Whether preferences screens show the widget preview, false when it's shown outside them */
 val LocalShowWidgetPreview = compositionLocalOf { true }
+
+val LocalShowMainNavigation = compositionLocalOf { true }

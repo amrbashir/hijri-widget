@@ -5,20 +5,15 @@ import android.content.ComponentName
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -46,13 +41,13 @@ import androidx.lifecycle.compose.currentStateAsState
 import androidx.navigation.NavGraphBuilder
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
-import me.amrbashir.hijriwidget.preference_activity.LocalNavController
 import me.amrbashir.hijriwidget.preference_activity.LocalOpenWidgetPrefs
 import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
 import me.amrbashir.hijriwidget.preference_activity.WidgetInstance
 import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
+import me.amrbashir.hijriwidget.preference_activity.composables.ScreenLayout
+import me.amrbashir.hijriwidget.preference_activity.composables.ScrollableScreenColumn
 import me.amrbashir.hijriwidget.preference_activity.composables.SharedWidgetPreview
-import me.amrbashir.hijriwidget.preference_activity.screenPadding
 import me.amrbashir.hijriwidget.widget.HijriWidgetReceiver
 
 const val HOME_DESTINATION = "/"
@@ -65,7 +60,6 @@ fun NavGraphBuilder.homeDestination() {
 private fun HomeScreen() {
 	LocalAppBarTitle.current.value = stringResource(R.string.app_name)
 
-	val navController = LocalNavController.current
 	val context = LocalContext.current
 	val appWidgetManager = remember { AppWidgetManager.getInstance(context) }
 
@@ -90,66 +84,40 @@ private fun HomeScreen() {
 			null,
 		)
 	}
-	val openAbout = { navController.navigateToAbout() }
 
 	// Fills the screen even while loading, as navigation transitions slide relative to its size
 	Box(Modifier.fillMaxSize()) {
 		val widgets = widgets ?: return@Box
 
 		if (widgets.isEmpty()) {
-			EmptyHomeScreen(canAddWidget, addWidget, openAbout)
+			EmptyHomeScreen(canAddWidget, addWidget)
 		} else {
-			WidgetsHomeScreen(widgets, canAddWidget, addWidget, openAbout)
+			WidgetsHomeScreen(widgets)
 		}
 	}
 }
 
 @Composable
-private fun WidgetsHomeScreen(
-	widgets: List<WidgetInstance>,
-	canAddWidget: Boolean,
-	addWidget: () -> Unit,
-	openAbout: () -> Unit,
-) {
+private fun WidgetsHomeScreen(widgets: List<WidgetInstance>) {
 	val openWidgetPrefs = LocalOpenWidgetPrefs.current
 
-	Column(
-		verticalArrangement = Arrangement.spacedBy(16.dp),
-		modifier =
-			Modifier
-				.fillMaxSize()
-				.verticalScroll(rememberScrollState())
-				// Applied after the scroll, so widgets shadows are not clipped
-				.screenPadding(),
-	) {
-		for (widget in widgets) {
-			key(widget.appWidgetId) {
-				CompositionLocalProvider(LocalSelectedWidget provides widget) {
-					SharedWidgetPreview(
-						modifier = Modifier.shadow(6.dp, RoundedCornerShape(20.dp)),
-						onSettingsClick = { openWidgetPrefs(widget) },
-					)
+	ScreenLayout {
+		ScrollableScreenColumn(
+			verticalArrangement = Arrangement.spacedBy(16.dp),
+			modifier =
+				Modifier
+					.fillMaxSize(),
+		) {
+			for (widget in widgets) {
+				key(widget.appWidgetId) {
+					CompositionLocalProvider(LocalSelectedWidget provides widget) {
+						SharedWidgetPreview(
+							modifier = Modifier.shadow(6.dp, RoundedCornerShape(20.dp)),
+							onSettingsClick = { openWidgetPrefs(widget) },
+						)
+					}
 				}
 			}
-		}
-
-		Row(
-			horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
-			modifier = Modifier.fillMaxWidth(),
-		) {
-			if (canAddWidget) {
-				FlatButton(
-					icon = Icons.Outlined.Add,
-					label = stringResource(R.string.home_screen_add_widget),
-					onClick = addWidget,
-				)
-			}
-
-			FlatButton(
-				icon = Icons.Outlined.Info,
-				label = stringResource(R.string.preferences_about_title),
-				onClick = openAbout,
-			)
 		}
 	}
 }
@@ -158,55 +126,45 @@ private fun WidgetsHomeScreen(
 private fun EmptyHomeScreen(
 	canAddWidget: Boolean,
 	addWidget: () -> Unit,
-	openAbout: () -> Unit,
 ) {
-	Box(
-		modifier =
-			Modifier
-				.fillMaxSize()
-				.screenPadding(),
+	ScreenLayout(
+		modifier = Modifier.fillMaxSize(),
 	) {
-		Column(
-			horizontalAlignment = Alignment.CenterHorizontally,
-			modifier = Modifier.align(Alignment.Center),
-		) {
-			Icon(
-				Icons.Outlined.Widgets,
-				contentDescription = null,
-				tint = MaterialTheme.colorScheme.onSurfaceVariant,
-				modifier = Modifier.size(48.dp),
-			)
-			Spacer(Modifier.height(16.dp))
-			Text(
-				stringResource(R.string.home_screen_no_widgets_title),
-				style = MaterialTheme.typography.titleLarge,
-			)
-
-			Spacer(Modifier.height(8.dp))
-
-			if (canAddWidget) {
-				FlatButton(
-					icon = Icons.Outlined.Add,
-					label = stringResource(R.string.home_screen_add_widget_long),
-					onClick = addWidget,
+		Box(Modifier.fillMaxSize()) {
+			Column(
+				horizontalAlignment = Alignment.CenterHorizontally,
+				modifier = Modifier.align(Alignment.Center),
+			) {
+				Icon(
+					Icons.Outlined.Widgets,
+					contentDescription = null,
+					tint = MaterialTheme.colorScheme.onSurfaceVariant,
+					modifier = Modifier.size(48.dp),
 				)
-			} else {
+				Spacer(Modifier.height(16.dp))
 				Text(
-					stringResource(R.string.home_screen_no_widgets),
-					style = MaterialTheme.typography.bodyMedium,
-					color = MaterialTheme.colorScheme.onSurfaceVariant,
-					textAlign = TextAlign.Center,
-					modifier = Modifier.padding(horizontal = 16.dp),
+					stringResource(R.string.home_screen_no_widgets_title),
+					style = MaterialTheme.typography.titleLarge,
 				)
-			}
-		}
 
-		Box(Modifier.align(Alignment.BottomCenter)) {
-			FlatButton(
-				icon = Icons.Outlined.Info,
-				label = stringResource(R.string.preferences_about_title),
-				onClick = openAbout,
-			)
+				Spacer(Modifier.height(8.dp))
+
+				if (canAddWidget) {
+					FlatButton(
+						icon = Icons.Outlined.Add,
+						label = stringResource(R.string.home_screen_add_widget_long),
+						onClick = addWidget,
+					)
+				} else {
+					Text(
+						stringResource(R.string.home_screen_no_widgets),
+						style = MaterialTheme.typography.bodyMedium,
+						color = MaterialTheme.colorScheme.onSurfaceVariant,
+						textAlign = TextAlign.Center,
+						modifier = Modifier.padding(horizontal = 16.dp),
+					)
+				}
+			}
 		}
 	}
 }

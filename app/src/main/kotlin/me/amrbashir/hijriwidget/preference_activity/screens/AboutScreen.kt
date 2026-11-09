@@ -13,9 +13,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PrivacyTip
 import androidx.compose.material.icons.outlined.People
@@ -44,10 +42,11 @@ import me.amrbashir.hijriwidget.CONTRIBUTORS
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
 import me.amrbashir.hijriwidget.preference_activity.composables.Changelog
+import me.amrbashir.hijriwidget.preference_activity.composables.ScreenLayout
+import me.amrbashir.hijriwidget.preference_activity.composables.ScrollableScreenColumn
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.Item
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.ItemGroup
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.adaptiveIconPainterResource
-import me.amrbashir.hijriwidget.preference_activity.screenPadding
 
 const val ABOUT_DESTINATION = "/About"
 
@@ -95,33 +94,33 @@ val QUICK_LINKS =
 internal fun AboutScreen() {
 	LocalAppBarTitle.current.value = stringResource(R.string.about_screen_title)
 
-	Column(
-		verticalArrangement = Arrangement.spacedBy(16.dp),
-		modifier =
-			Modifier
-				.screenPadding()
-				.fillMaxSize()
-				.imePadding()
-				.verticalScroll(rememberScrollState()),
-	) {
-		AppInfo()
-
-		Row(
-			horizontalArrangement = Arrangement.SpaceEvenly,
+	ScreenLayout {
+		ScrollableScreenColumn(
+			verticalArrangement = Arrangement.spacedBy(16.dp),
 			modifier =
 				Modifier
-					.clip(RoundedCornerShape(20.dp))
-					.fillMaxWidth()
-					.padding(8.dp),
+					.fillMaxSize()
+					.imePadding(),
 		) {
-			for (link in QUICK_LINKS) {
-				QuickLinkButton(link)
+			AppInfo()
+
+			Row(
+				horizontalArrangement = Arrangement.SpaceEvenly,
+				modifier =
+					Modifier
+						.clip(RoundedCornerShape(20.dp))
+						.fillMaxWidth()
+						.padding(8.dp),
+			) {
+				for (link in QUICK_LINKS) {
+					QuickLinkButton(link)
+				}
 			}
+
+			Contributors()
+
+			Changelog()
 		}
-
-		Contributors()
-
-		Changelog()
 	}
 }
 

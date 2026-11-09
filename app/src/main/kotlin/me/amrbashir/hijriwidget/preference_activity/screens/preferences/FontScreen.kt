@@ -4,9 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
@@ -34,6 +32,7 @@ import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
 import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
+import me.amrbashir.hijriwidget.preference_activity.composables.ScrollableScreenColumn
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.Item
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.ItemGroup
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.RadioIcon
@@ -77,8 +76,8 @@ internal fun FontScreen() {
 				modifier = Modifier.fillMaxWidth(),
 			)
 
-			Column(
-				modifier = Modifier.weight(1F).verticalScroll(rememberScrollState()),
+			ScrollableScreenColumn(
+				modifier = Modifier.weight(1F),
 				verticalArrangement = Arrangement.spacedBy(16.dp),
 			) {
 				ItemGroup(label = stringResource(R.string.font_family)) {

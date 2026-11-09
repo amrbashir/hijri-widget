@@ -1,11 +1,8 @@
 package me.amrbashir.hijriwidget.preference_activity.screens.preferences
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ViewQuilt
 import androidx.compose.material.icons.outlined.AccessTime
@@ -36,6 +33,7 @@ import me.amrbashir.hijriwidget.preference_activity.LocalNavController
 import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
 import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
+import me.amrbashir.hijriwidget.preference_activity.composables.ScrollableScreenColumn
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.Item
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.ItemGroup
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.ValueSlider
@@ -62,13 +60,12 @@ internal fun PreferenceListScreen() {
 	val weights = prefsManager.supportedFontWeights()
 
 	PreferenceScreenLayout {
-		Column(
+		ScrollableScreenColumn(
 			verticalArrangement = Arrangement.spacedBy(16.dp),
 			modifier =
 				Modifier
 					.fillMaxSize()
-					.imePadding()
-					.verticalScroll(rememberScrollState()),
+					.imePadding(),
 		) {
 			ItemGroup(
 				label = stringResource(R.string.preferences_functionality_group_title),

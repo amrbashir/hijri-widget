@@ -185,4 +185,6 @@
     <string name="font_choose">اختر خطًا</string>
     <string name="font_search">ابحث عن خط</string>
     <string name="font_no_results">لا توجد خطوط مطابقة</string>
+    <string name="navigation_home">الرئيسية</string>
+    <string name="navigation_back">رجوع</string>
 </resources>

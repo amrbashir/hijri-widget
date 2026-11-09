@@ -1,7 +1,6 @@
 package me.amrbashir.hijriwidget.preference_activity.composables
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -48,7 +47,6 @@ fun TopAppBar(
 				scrolledContainerColor = containerColor,
 			),
 		scrollBehavior = scrollBehavior,
-		navigationIcon = { GoBackButton() },
 		actions = {
 			if (
 				currentDestination?.hasRouteInHierarchy(PREFERENCES_DESTINATION) ?: false
@@ -59,23 +57,6 @@ fun TopAppBar(
 			}
 		},
 	)
-}
-
-@Composable
-private fun GoBackButton() {
-	val navController = LocalNavController.current
-	// previousBackStackEntry isn't observable, reading the current entry
-	// recomposes this on every navigation, so it's never stale
-	val currentBackStackEntry by navController.currentBackStackEntryAsState()
-
-	if (currentBackStackEntry != null && navController.previousBackStackEntry != null) {
-		IconButton(onClick = { navController.navigateUp() }) {
-			Icon(
-				imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-				contentDescription = null,
-			)
-		}
-	}
 }
 
 /** Saves the selected widget's preferences and updates it, then calls [onSave] */

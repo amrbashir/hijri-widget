@@ -7,10 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material3.Card
@@ -49,6 +47,7 @@ import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
 import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
+import me.amrbashir.hijriwidget.preference_activity.composables.ScrollableScreenColumn
 import me.amrbashir.hijriwidget.preference_activity.composables.VisualDateFormatEditor
 import me.amrbashir.hijriwidget.preference_activity.composables.parseDateFormatRows
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.Item
@@ -79,13 +78,12 @@ internal fun DateFormatScreen() {
 	val showPattern = editingPattern
 
 	PreferenceScreenLayout {
-		Column(
+		ScrollableScreenColumn(
 			verticalArrangement = Arrangement.spacedBy(16.dp),
 			modifier =
 				Modifier
 					.fillMaxSize()
-					.imePadding()
-					.verticalScroll(rememberScrollState()),
+					.imePadding(),
 		) {
 			ItemGroup(label = stringResource(R.string.date_format_group_title)) {
 				for (format in DATE_FORMAT_PRESETES) {

@@ -40,7 +40,7 @@ abstract class GenerateContributorsTask : DefaultTask() {
 				val avatarUrl = contributor["avatar_url"] as String
 				val url = contributor["html_url"] as String
 				val contributions = contributor["contributions"] as Int
-				val resourceName = "contributor_${login.replace('-', '_')}"
+				val resourceName = "contributor_${login.lowercase().replace('-', '_')}"
 
 				val connection = URI(avatarUrl).toURL().openConnection()
 				val contentType = connection.contentType ?: "image/png"

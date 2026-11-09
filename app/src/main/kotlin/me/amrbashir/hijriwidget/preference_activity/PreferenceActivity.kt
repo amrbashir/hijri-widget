@@ -9,8 +9,12 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -25,16 +29,22 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import me.amrbashir.hijriwidget.PreferencesManager
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.android.HijriWidgetApp
+import me.amrbashir.hijriwidget.preference_activity.composables.MainNavigationBar
 import me.amrbashir.hijriwidget.preference_activity.composables.TopAppBar
+import me.amrbashir.hijriwidget.preference_activity.composables.mainNavigationBlur
 import me.amrbashir.hijriwidget.preference_activity.screens.HOME_DESTINATION
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.navigateToPreferences
 
@@ -153,29 +163,64 @@ fun PreferencesProvider(
 }
 
 /** The preferences screens, starting at [startDestination] */
-@OptIn(ExperimentalSharedTransitionApi::class)
+@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun PreferencesScaffold(
 	startDestination: String,
 	modifier: Modifier = Modifier,
+	showMainNavigation: Boolean = true,
 	topBar: @Composable () -> Unit = {},
 ) {
 	Scaffold(
 		containerColor = MaterialTheme.colorScheme.darkLightContainerColor,
 		snackbarHost = { SnackbarHost(hostState = LocalSnackBarHostState.current) },
-		topBar = topBar,
+		topBar = {
+			if (showMainNavigation) {
+				topBar()
+			}
+		},
 		modifier = modifier,
-	) {
+	) { insets ->
+		val layoutDirection = LocalLayoutDirection.current
+		val contentInsets =
+			PaddingValues(
+				start = insets.calculateStartPadding(layoutDirection),
+				top = insets.calculateTopPadding(),
+				end = insets.calculateEndPadding(layoutDirection),
+			)
 		SharedTransitionLayout(
 			modifier =
 				Modifier
-					.consumeWindowInsets(it)
-					.padding(it),
+					.consumeWindowInsets(contentInsets)
+					.padding(contentInsets),
 		) {
 			CompositionLocalProvider(
 				LocalSharedTransitionScope provides this,
+				LocalShowMainNavigation provides showMainNavigation,
 			) {
-				Navigation(startDestination = startDestination)
+				Box {
+					Navigation(
+						startDestination = startDestination,
+						modifier =
+							Modifier
+								.fillMaxSize()
+								// Src preserves preview holes that reveal the wallpaper through the blur layer.
+								// Match the Scaffold background so opaque areas keep the same appearance.
+								.graphicsLayer { blendMode = BlendMode.Src }
+								.mainNavigationBlur(enabled = showMainNavigation)
+								.background(MaterialTheme.colorScheme.darkLightContainerColor),
+					)
+
+					if (showMainNavigation) {
+						MainNavigationBar(
+							modifier =
+								Modifier
+									.align(
+										Alignment.BottomCenter,
+									).fillMaxWidth(),
+						)
+					}
+				}
 			}
 		}
 	}

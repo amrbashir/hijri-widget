@@ -2,7 +2,6 @@ package me.amrbashir.hijriwidget.preference_activity
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
@@ -12,10 +11,8 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 
 val primaryLight = Color(0xFF4C662B)
 val onPrimaryLight = Color(0xFFFFFFFF)
@@ -511,5 +508,3 @@ fun PreferenceActivityTheme(
 val ColorScheme.darkLightContainerColor: Color
 	@Composable
 	get() = if (isSystemInDarkTheme()) this.surfaceContainer else this.surfaceContainerLow
-
-fun Modifier.screenPadding(): Modifier = padding(start = 16.dp, end = 16.dp, bottom = 16.dp)

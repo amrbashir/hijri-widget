@@ -3,7 +3,6 @@ import me.amrbashir.hijriwidget.build.GenerateContributorsTask
 
 plugins {
 	id("com.android.application")
-	id("org.jetbrains.kotlin.android")
 	id("org.jetbrains.kotlin.plugin.compose")
 }
 
@@ -19,7 +18,7 @@ val hasSigningConfig =
 
 android {
 	namespace = "me.amrbashir.hijriwidget"
-	compileSdk = 36
+	compileSdk = 37
 
 	defaultConfig {
 
@@ -69,8 +68,8 @@ android {
 	}
 
 	sourceSets.getByName("main") {
-		kotlin.srcDir("build/generated/source")
-		res.srcDir("build/generated/resources")
+		kotlin.directories.add("build/generated/source")
+		res.directories.add("build/generated/resources")
 	}
 }
 
@@ -87,6 +86,9 @@ dependencies {
 	implementation("androidx.navigation:navigation-compose:2.9.5")
 	implementation("com.github.jeziellago:compose-markdown:0.5.7")
 	implementation("com.mohamedrejeb.dnd:compose-dnd:0.4.0")
+	implementation("androidx.compose.ui:ui:1.13.0-beta02")
+	implementation("androidx.compose.foundation:foundation:1.13.0-beta02")
+	implementation("androidx.compose.animation:animation:1.13.0-beta02")
 	implementation("com.godaddy.android.colorpicker:compose-color-picker:0.7.0")
 
 	debugImplementation("androidx.compose.ui:ui-tooling")

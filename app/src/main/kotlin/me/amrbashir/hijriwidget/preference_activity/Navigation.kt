@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -21,10 +22,14 @@ import me.amrbashir.hijriwidget.preference_activity.screens.preferences.layoutDe
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.preferenceListDestination
 
 @Composable
-fun Navigation(startDestination: String) {
+fun Navigation(
+	startDestination: String,
+	modifier: Modifier = Modifier,
+) {
 	val navController = LocalNavController.current
 
 	NavHost(
+		modifier = modifier,
 		navController = navController,
 		startDestination = startDestination,
 		enterTransition = {

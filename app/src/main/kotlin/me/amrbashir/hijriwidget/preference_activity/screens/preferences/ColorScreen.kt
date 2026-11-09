@@ -1,11 +1,8 @@
 package me.amrbashir.hijriwidget.preference_activity.screens.preferences
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
@@ -18,6 +15,7 @@ import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
 import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
+import me.amrbashir.hijriwidget.preference_activity.composables.ScrollableScreenColumn
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.ColorPicker
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.Item
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.ItemGroup
@@ -44,13 +42,12 @@ internal fun ColorScreen() {
 	val bgColorModes = ColorMode.allForBg()
 
 	PreferenceScreenLayout {
-		Column(
+		ScrollableScreenColumn(
 			verticalArrangement = Arrangement.spacedBy(16.dp),
 			modifier =
 				Modifier
 					.fillMaxSize()
-					.imePadding()
-					.verticalScroll(rememberScrollState()),
+					.imePadding(),
 		) {
 			ItemGroup(label = stringResource(R.string.text_color)) {
 				for (mode in textColorModes) {
