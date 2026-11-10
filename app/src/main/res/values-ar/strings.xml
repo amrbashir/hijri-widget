@@ -193,4 +193,6 @@
     <string name="dynamic_color_primary_container">حاوية أساسية ديناميكية</string>
     <string name="dynamic_color_secondary_container">حاوية ثانوية ديناميكية</string>
     <string name="dynamic_color_tertiary_container">حاوية ثالثة ديناميكية</string>
+    <string name="save">حفظ</string>
+    <string name="saved">تم الحفظ</string>
 </resources>

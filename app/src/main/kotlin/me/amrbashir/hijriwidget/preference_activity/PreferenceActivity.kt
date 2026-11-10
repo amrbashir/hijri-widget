@@ -36,12 +36,10 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import me.amrbashir.hijriwidget.PreferencesManager
-import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.android.HijriWidgetApp
 import me.amrbashir.hijriwidget.preference_activity.composables.MainNavigationBar
 import me.amrbashir.hijriwidget.preference_activity.composables.TopAppBar
@@ -81,9 +79,6 @@ private fun PreferenceActivityContent() {
 			appWidgetId = null,
 			loading = { LoadingBackground() },
 		) {
-			val snackBarHostState = LocalSnackBarHostState.current
-			val widgetUpdatedMessage = stringResource(R.string.widget_updated)
-
 			val topAppBarState = rememberTopAppBarState()
 			val topAppBarScrollBehavior =
 				TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
@@ -94,7 +89,6 @@ private fun PreferenceActivityContent() {
 				topBar = {
 					TopAppBar(
 						scrollBehavior = topAppBarScrollBehavior,
-						onSave = { snackBarHostState.showSnackbar(widgetUpdatedMessage) },
 					)
 				},
 			)

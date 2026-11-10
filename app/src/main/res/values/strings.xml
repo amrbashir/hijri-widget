@@ -198,4 +198,6 @@
     <string name="dynamic_color_primary_container">Dynamic primary container</string>
     <string name="dynamic_color_secondary_container">Dynamic secondary container</string>
     <string name="dynamic_color_tertiary_container">Dynamic tertiary container</string>
+    <string name="save">Save</string>
+    <string name="saved">Saved</string>
 </resources>
