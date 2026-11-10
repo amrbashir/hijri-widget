@@ -125,7 +125,7 @@
     <string name="checkout_the_full_changelog"><![CDATA[اطلع على سجل التغييرات الكامل على: <a href="%1$s">%1$s</a>]]></string>
     <string name="top_contributors">أفضل المساهمين</string>
     <string name="contributions">مساهمة</string>
-    <string name="checkout_the_full_list_of_contributors">اطلع على قائمة المساهمين</string>
+    <string name="all_contributors">جميع المساهمين</string>
 
     <string name="date_editor_hint">اضغط على + لإضافة جزء، أو على جزء لتعديله. المس مطولًا واسحب، ثم أفلت عند الخط لنقله داخل الصف أو بين الصفوف. مرّر أفقيًا لرؤية بقية الصف.</string>
     <string name="date_editor_invalid_pattern">صيغة غير صالحة: أغلق النص المقتبس بعلامة اقتباس مفردة.</string>
