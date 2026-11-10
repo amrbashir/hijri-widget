@@ -57,9 +57,9 @@ class PreferencesManager {
 				if (Build.VERSION.SDK_INT >=
 					Build.VERSION_CODES.S
 				) {
-					ColorMode.Dynamic
+					ColorMode.DynamicPrimary
 				} else {
-					ColorMode.System
+					ColorMode.DeviceTheme
 				},
 		)
 
@@ -157,7 +157,13 @@ class PreferencesManager {
 		return when (mode) {
 			ColorMode.Dynamic if Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ->
 				GlanceTheme.colors.primary.getColor(context)
-			ColorMode.System -> if (isDark) Color.Dark else Color.White
+			ColorMode.DynamicPrimary -> GlanceTheme.colors.primary.getColor(context)
+			ColorMode.DynamicSecondary -> GlanceTheme.colors.secondary.getColor(context)
+			ColorMode.DynamicTertiary -> GlanceTheme.colors.tertiary.getColor(context)
+			ColorMode.DynamicPrimaryContainer -> GlanceTheme.colors.primaryContainer.getColor(context)
+			ColorMode.DynamicSecondaryContainer -> GlanceTheme.colors.secondaryContainer.getColor(context)
+			ColorMode.DynamicTertiaryContainer -> GlanceTheme.colors.tertiaryContainer.getColor(context)
+			ColorMode.DeviceTheme -> if (isDark) Color.Dark else Color.White
 			ColorMode.Dark -> Color.Dark
 			ColorMode.Light -> Color.White
 			ColorMode.Custom -> Color(textCustomColor.value)
@@ -176,7 +182,13 @@ class PreferencesManager {
 		return when (mode) {
 			ColorMode.Dynamic if Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ->
 				GlanceTheme.colors.widgetBackground
-			ColorMode.System -> ColorProvider(if (isDark) Color.Dark else Color.White)
+			ColorMode.DynamicPrimary -> GlanceTheme.colors.primary
+			ColorMode.DynamicSecondary -> GlanceTheme.colors.secondary
+			ColorMode.DynamicTertiary -> GlanceTheme.colors.tertiary
+			ColorMode.DynamicPrimaryContainer -> GlanceTheme.colors.primaryContainer
+			ColorMode.DynamicSecondaryContainer -> GlanceTheme.colors.secondaryContainer
+			ColorMode.DynamicTertiaryContainer -> GlanceTheme.colors.tertiaryContainer
+			ColorMode.DeviceTheme -> ColorProvider(if (isDark) Color.Dark else Color.White)
 			ColorMode.Dark -> ColorProvider(Color.Dark)
 			ColorMode.Light -> ColorProvider(Color.White)
 			ColorMode.Custom -> ColorProvider(Color(bgCustomColor.value))

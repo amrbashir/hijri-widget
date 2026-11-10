@@ -8,8 +8,8 @@
     <string name="home_screen_add_widget">إضافة ويدجت</string>
     <string name="home_screen_add_widget_long">أضف ويدجت جديد إلى شاشتك الرئيسية</string>
     <string name="color_mode_dynamic_description">لون ديناميكى بناءً على خلفية جهازك</string>
-    <string name="color_mode_system">النظام</string>
-    <string name="color_mode_system_description">لون فاتح أو داكن بناءً على إعدادات الجهاز</string>
+    <string name="color_mode_device_theme">مظهر الجهاز</string>
+    <string name="color_mode_device_theme_description">لون فاتح أو داكن بناءً على إعدادات الجهاز</string>
     <string name="color_mode_dark">داكن</string>
     <string name="color_mode_dark_description">لون داكن، عادةً أسود</string>
     <string name="color_mode_light">فاتح</string>
@@ -187,4 +187,10 @@
     <string name="font_no_results">لا توجد خطوط مطابقة</string>
     <string name="navigation_home">الرئيسية</string>
     <string name="navigation_back">رجوع</string>
+    <string name="dynamic_color_primary">ديناميكي أساسي</string>
+    <string name="dynamic_color_secondary">ديناميكي ثانوي</string>
+    <string name="dynamic_color_tertiary">ديناميكي ثالث</string>
+    <string name="dynamic_color_primary_container">حاوية أساسية ديناميكية</string>
+    <string name="dynamic_color_secondary_container">حاوية ثانوية ديناميكية</string>
+    <string name="dynamic_color_tertiary_container">حاوية ثالثة ديناميكية</string>
 </resources>

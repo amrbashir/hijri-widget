@@ -35,9 +35,9 @@ import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
 import me.amrbashir.hijriwidget.preference_activity.LocalNavController
 import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
 import me.amrbashir.hijriwidget.preference_activity.animatedContentComposable
-import me.amrbashir.hijriwidget.preference_activity.composables.ColorOptions
 import me.amrbashir.hijriwidget.preference_activity.composables.PreferenceScreenLayout
 import me.amrbashir.hijriwidget.preference_activity.composables.ScrollableScreenColumn
+import me.amrbashir.hijriwidget.preference_activity.composables.SwatchRow
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.Item
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.ItemGroup
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.ValueSlider
@@ -125,8 +125,11 @@ internal fun PreferenceListScreen() {
 
 			ItemGroup(label = stringResource(R.string.preferences_appearance_group_title)) {
 				val context = LocalContext.current
-				Item(label = stringResource(R.string.text_color), icon = Icons.Outlined.ColorLens) {
-					ColorOptions(
+				Item(
+					label = stringResource(R.string.text_color),
+					icon = Icons.Outlined.ColorLens,
+				) {
+					SwatchRow(
 						modes = ColorMode.all(),
 						selectedMode = prefsManager.textColorMode.value,
 						previewColor = { prefsManager.getTextColor(context, it) },
@@ -137,8 +140,11 @@ internal fun PreferenceListScreen() {
 					)
 				}
 
-				Item(label = stringResource(R.string.background_color), icon = Icons.Outlined.FormatColorFill) {
-					ColorOptions(
+				Item(
+					label = stringResource(R.string.background_color),
+					icon = Icons.Outlined.FormatColorFill,
+				) {
+					SwatchRow(
 						modes = ColorMode.allForBg(),
 						selectedMode = prefsManager.bgColorMode.value,
 						previewColor = { prefsManager.getBgColor(context, it).getColor(context) },

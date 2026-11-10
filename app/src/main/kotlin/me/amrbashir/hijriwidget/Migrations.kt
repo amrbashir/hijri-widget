@@ -18,7 +18,7 @@ import me.amrbashir.hijriwidget.widget.HijriWidget
  * Bump it and add a migration step in [migrateConfig] whenever the stored config changes shape.
  *
  * - v1: global preferences in [LEGACY_PREF]
- * - v2: per-widget preferences, explicit Arabic date locale, and TEXT_SIZE renamed to FONT_SIZE
+ * - v2: per-widget preferences, explicit Arabic date locale, TEXT_SIZE renamed to FONT_SIZE, and explicit dynamic color roles
  */
 private const val CONFIG_VERSION = 2
 
@@ -77,8 +77,11 @@ private suspend fun migrateV1ToV2(
 ) {
 	val ids = HijriWidget.glanceIds(context)
 	if (ids.isNotEmpty()) {
-		// Rename the legacy size key before parsing with the current preference definitions.
-		val legacy = PreferencesManager.fromPreferences(legacyPrefs.toPreferences().migrateFontSize())
+		// Convert legacy keys and enum values before parsing the current preferences.
+		val legacy =
+			PreferencesManager.fromPreferences(
+				legacyPrefs.toPreferences().migrateFontSize().migrateColorModes(),
+			)
 		legacy.dateFormat.value = preserveArabicDateFormat(legacy.dateFormat.value)
 		legacy.dateCustomFormat.value = preserveArabicDateFormat(legacy.dateCustomFormat.value)
 		if (!legacy.dateIsCustomFormat.value && legacy.dateFormat.value !in DATE_FORMAT_PRESETES) {
@@ -121,4 +124,14 @@ private fun Preferences.migrateFontSize(): Preferences =
 		val oldSize = this[oldKey]
 		if (this[newKey] == null && oldSize != null) this[newKey] = oldSize
 		remove(oldKey)
+	}
+
+private fun Preferences.migrateColorModes(): Preferences =
+	toMutablePreferences().apply {
+		val textKey = stringPreferencesKey("TEXT_COLOR_MODE")
+		val backgroundKey = stringPreferencesKey("BG_COLOR_MODE")
+		if (this[textKey] == "System") this[textKey] = ColorMode.DeviceTheme.name
+		if (this[backgroundKey] == "System") this[backgroundKey] = ColorMode.DeviceTheme.name
+		if (this[textKey] == "Dynamic") this[textKey] = ColorMode.DynamicPrimary.name
+		if (this[backgroundKey] == "Dynamic") this[backgroundKey] = ColorMode.DynamicPrimaryContainer.name
 	}

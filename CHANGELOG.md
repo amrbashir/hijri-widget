@@ -4,6 +4,7 @@
 
 ### Added
 
+- Added primary, secondary, and tertiary Material You color choices for widget text and backgrounds.
 - Added system font selection and font weight options for each widget.
 - Added per-widget text alignment and padding controls.
 - Added a visual date editor with draggable components, editable rows, and component options.

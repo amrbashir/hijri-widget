@@ -10,8 +10,8 @@
     <string name="home_screen_add_widget_long">Add a new widget to your home screen</string>
     <string name="color_mode_dynamic" translatable="false">Material You</string>
     <string name="color_mode_dynamic_description">Dynamic color based on your wallpaper</string>
-    <string name="color_mode_system">System</string>
-    <string name="color_mode_system_description">Light or dark color based on device settings</string>
+    <string name="color_mode_device_theme">Device theme</string>
+    <string name="color_mode_device_theme_description">Light or dark color based on device settings</string>
     <string name="color_mode_dark">Dark</string>
     <string name="color_mode_dark_description">Dark color, usually black</string>
     <string name="color_mode_light">Light</string>
@@ -192,4 +192,10 @@
     <string name="font_no_results">No matching fonts</string>
     <string name="navigation_home">Home</string>
     <string name="navigation_back">Back</string>
+    <string name="dynamic_color_primary">Dynamic primary</string>
+    <string name="dynamic_color_secondary">Dynamic secondary</string>
+    <string name="dynamic_color_tertiary">Dynamic tertiary</string>
+    <string name="dynamic_color_primary_container">Dynamic primary container</string>
+    <string name="dynamic_color_secondary_container">Dynamic secondary container</string>
+    <string name="dynamic_color_tertiary_container">Dynamic tertiary container</string>
 </resources>
