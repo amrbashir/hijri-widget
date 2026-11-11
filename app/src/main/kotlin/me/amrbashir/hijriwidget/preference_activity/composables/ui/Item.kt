@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import me.amrbashir.hijriwidget.addIfNotNull
 
@@ -59,10 +60,11 @@ fun Item(
 
 @Composable
 fun Item(
-	label: String,
+	label: String? = null,
 	modifier: Modifier = Modifier,
 	enabled: Boolean = true,
 	icon: (@Composable () -> Unit)? = null,
+	iconSize: Dp = 32.dp,
 	verticalAlignment: Alignment.Vertical = Alignment.Top,
 	labelFontFamily: FontFamily? = null,
 	description: String? = null,
@@ -79,43 +81,45 @@ fun Item(
 				.background(MaterialTheme.colorScheme.surfaceBright)
 				.padding(16.dp),
 	) {
-		Row(
-			horizontalArrangement = Arrangement.spacedBy(16.dp),
-			verticalAlignment = verticalAlignment,
-		) {
-			icon?.let {
-				Box(
-					contentAlignment = Alignment.Center,
-					modifier = Modifier.size(32.dp),
-				) {
-					icon()
-				}
-			}
-
+		if (label != null) {
 			Row(
-				modifier = Modifier.fillMaxWidth(),
-				verticalAlignment = Alignment.CenterVertically,
+				horizontalArrangement = Arrangement.spacedBy(16.dp),
+				verticalAlignment = verticalAlignment,
 			) {
-				Column(
-					modifier = Modifier.weight(1F),
-				) {
-					Text(
-						label,
-						color = MaterialTheme.colorScheme.onBackground,
-						style = MaterialTheme.typography.bodyLarge,
-						fontFamily = labelFontFamily,
-					)
-
-					description?.let {
-						Text(
-							description,
-							color = MaterialTheme.colorScheme.onSurfaceVariant,
-							style = MaterialTheme.typography.bodyMedium,
-						)
+				icon?.let {
+					Box(
+						contentAlignment = Alignment.Center,
+						modifier = Modifier.size(iconSize),
+					) {
+						icon()
 					}
 				}
 
-				if (endContent != null) endContent()
+				Row(
+					modifier = Modifier.fillMaxWidth(),
+					verticalAlignment = Alignment.CenterVertically,
+				) {
+					Column(
+						modifier = Modifier.weight(1F),
+					) {
+						Text(
+							label,
+							color = MaterialTheme.colorScheme.onBackground,
+							style = MaterialTheme.typography.bodyLarge,
+							fontFamily = labelFontFamily,
+						)
+
+						description?.let {
+							Text(
+								description,
+								color = MaterialTheme.colorScheme.onSurfaceVariant,
+								style = MaterialTheme.typography.bodyMedium,
+							)
+						}
+					}
+
+					if (endContent != null) endContent()
+				}
 			}
 		}
 

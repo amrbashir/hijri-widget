@@ -127,10 +127,9 @@
     <string name="reset_to_default">Reset to default</string>
     <string name="changelog">Changelog</string>
     <string name="widget_updated">Widget updated!</string>
-    <string name="checkout_the_full_changelog"><![CDATA[Checkout the full Changelog at: <a href=\"%1$s\">%1$s</a>]]></string>
     <string name="top_contributors">Top Contributors</string>
     <string name="contributions">%1$d contributions</string>
-    <string name="all_contributors">All contributors</string>
+    <string name="all_contributors">See all contributors</string>
 
     <string name="date_editor_hint">Tap + to add a component or tap one to edit. Hold and drag, then drop at the line to move it within or between rows. Swipe sideways to see more of a row.</string>
     <string name="date_editor_invalid_pattern">Invalid pattern: close the quoted text with an apostrophe.</string>
@@ -200,4 +199,23 @@
     <string name="dynamic_color_tertiary_container">Dynamic tertiary container</string>
     <string name="save">Save</string>
     <string name="saved">Saved</string>
+    <string name="settings_title">Settings</string>
+    <string name="full_changelog">Full changelog</string>
+    <string name="latest_release">Latest release</string>
+    <string name="contributors">Contributors</string>
+    <string name="logs">Logs</string>
+    <string name="logs_description">View app logs and send them by email</string>
+    <string name="send_logs">Send logs</string>
+    <string name="refresh_logs">Refresh</string>
+    <string name="loading_logs">Loading logs…</string>
+    <string name="no_logs">No app logs available.</string>
+    <string name="logs_review_hint">Review logs before sending. Recent app logs may include error messages and input values. Android keeps a limited log buffer; older logs may no longer be available.</string>
+    <string name="logs_read_failed">Could not load app logs. Try refreshing.</string>
+    <string name="logs_send_failed">Could not open the email app.</string>
+    <string name="no_email_app">No email app is installed. Install or enable an email app to send logs.</string>
+    <string name="clear_logs">Clear logs</string>
+    <string name="logs_clear_failed">Could not clear app logs.</string>
+    <string name="project_author_contributions">Project author · %1$d contributions</string>
+    <string name="meet_contributors">Meet the contributors</string>
+    <string name="contributor_totals">%1$d people · %2$d contributions</string>
 </resources>

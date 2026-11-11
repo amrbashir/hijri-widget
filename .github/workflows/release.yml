@@ -54,6 +54,13 @@ jobs:
       - name: Build AAB
         run: ./gradlew bundleRelease --stacktrace
 
+      - name: Retain release mapping for diagnostic reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: mapping-${{ github.sha }}
+          path: app/build/outputs/mapping/release/mapping.txt
+          if-no-files-found: error
+
       - name: Release to Google Play
         uses: r0adkll/upload-google-play@v1
         with:
@@ -79,6 +86,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           name: Hijri Widget ${{ github.ref_name }}
-          files: hijri-widget-${{ github.ref_name }}.apk
+          files: |
+            hijri-widget-${{ github.ref_name }}.apk
+            app/build/outputs/mapping/release/mapping.txt
           body_path: RELEASE_NOTES.md
           draft: true

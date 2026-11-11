@@ -4,6 +4,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material3.Icon
@@ -15,11 +17,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun CollapsibleButton(
 	header: String,
 	collapsed: Boolean = true,
+	endContent: (@Composable () -> Unit)? = null,
 	content: @Composable (() -> Unit),
 ) {
 	var collapsed by remember { mutableStateOf(collapsed) }
@@ -32,11 +36,17 @@ fun CollapsibleButton(
 	Item(
 		label = header,
 		endContent = {
-			Icon(
-				imageVector = Icons.Outlined.KeyboardArrowDown,
-				contentDescription = null,
-				modifier = Modifier.rotate(arrowRotation),
-			)
+			Row(
+				verticalAlignment = Alignment.CenterVertically,
+				horizontalArrangement = Arrangement.spacedBy(8.dp),
+			) {
+				endContent?.invoke()
+				Icon(
+					imageVector = Icons.Outlined.KeyboardArrowDown,
+					contentDescription = null,
+					modifier = Modifier.rotate(arrowRotation),
+				)
+			}
 		},
 		onClick = { collapsed = !collapsed },
 	) {

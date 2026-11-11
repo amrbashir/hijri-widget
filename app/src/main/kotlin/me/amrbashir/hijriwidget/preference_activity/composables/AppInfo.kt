@@ -1,4 +1,4 @@
-package me.amrbashir.hijriwidget.preference_activity.screens
+package me.amrbashir.hijriwidget.preference_activity.composables
 
 import android.content.Intent
 import androidx.annotation.DrawableRes
@@ -7,18 +7,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PrivacyTip
-import androidx.compose.material.icons.outlined.Reply
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,47 +20,29 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
 import me.amrbashir.hijriwidget.BuildConfig
-import me.amrbashir.hijriwidget.CONTRIBUTORS
 import me.amrbashir.hijriwidget.R
-import me.amrbashir.hijriwidget.preference_activity.LocalAppBarTitle
-import me.amrbashir.hijriwidget.preference_activity.composables.Changelog
-import me.amrbashir.hijriwidget.preference_activity.composables.ScreenLayout
-import me.amrbashir.hijriwidget.preference_activity.composables.ScrollableScreenColumn
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.Item
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.ItemGroup
 import me.amrbashir.hijriwidget.preference_activity.composables.ui.adaptiveIconPainterResource
 
-const val ABOUT_DESTINATION = "/About"
-
-fun NavGraphBuilder.aboutDestination() {
-	composable(route = ABOUT_DESTINATION) { AboutScreen() }
-}
-
-fun NavController.navigateToAbout() {
-	navigate(route = ABOUT_DESTINATION)
-}
-
-data class QuickLink(
+private data class QuickLink(
 	val label: Int,
 	@param:DrawableRes val iconResId: Int? = null,
 	val icon: ImageVector? = null,
 	val url: String,
 )
 
-val QUICK_LINKS =
+private val QUICK_LINKS =
 	listOf(
 		QuickLink(
 			label = R.string.quick_link_github,
@@ -90,69 +66,38 @@ val QUICK_LINKS =
 		),
 	)
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun AboutScreen() {
-	LocalAppBarTitle.current.value = stringResource(R.string.about_screen_title)
+internal fun AppInfo() {
+	ItemGroup(label = stringResource(R.string.about_screen_title)) {
+		Item(
+			label = stringResource(R.string.app_name),
+			description = "${BuildConfig.VERSION_NAME} (${BuildConfig.GIT_SHA})",
+			verticalAlignment = Alignment.CenterVertically,
+			iconSize = 64.dp,
+			icon = {
+				Image(
+					painter = adaptiveIconPainterResource(R.mipmap.ic_launcher),
+					contentDescription = null,
+					modifier = Modifier.size(64.dp),
+				)
+			},
+		)
 
-	ScreenLayout {
-		ScrollableScreenColumn(
-			verticalArrangement = Arrangement.spacedBy(16.dp),
-			modifier =
-				Modifier
-					.fillMaxSize()
-					.imePadding(),
-		) {
-			AppInfo()
-
+		Item {
 			Row(
 				horizontalArrangement = Arrangement.SpaceEvenly,
-				modifier =
-					Modifier
-						.clip(RoundedCornerShape(20.dp))
-						.fillMaxWidth()
-						.padding(8.dp),
+				modifier = Modifier.fillMaxWidth(),
 			) {
-				for (link in QUICK_LINKS) {
-					QuickLinkButton(link)
-				}
+				for (link in QUICK_LINKS) QuickLinkButton(link)
 			}
-
-			Contributors()
-
-			Changelog()
 		}
-	}
-}
-
-@Composable
-private fun AppInfo() {
-	Column(
-		horizontalAlignment = Alignment.CenterHorizontally,
-		verticalArrangement = Arrangement.spacedBy(16.dp),
-		modifier = Modifier.fillMaxSize(),
-	) {
-		Image(
-			painter = adaptiveIconPainterResource(R.mipmap.ic_launcher),
-			contentDescription = null,
-			modifier = Modifier.requiredSize(64.dp),
-		)
-
-		Text(
-			stringResource(R.string.app_name),
-			style = MaterialTheme.typography.titleLarge,
-		)
-
-		Text(
-			"${BuildConfig.VERSION_NAME} (${BuildConfig.GIT_SHA})",
-			style = MaterialTheme.typography.bodyMedium,
-		)
 	}
 }
 
 @Composable
 private fun RowScope.QuickLinkButton(link: QuickLink) {
 	val context = LocalContext.current
+	val description = stringResource(link.label)
 
 	val openLink = {
 		context.startActivity(
@@ -164,7 +109,7 @@ private fun RowScope.QuickLinkButton(link: QuickLink) {
 	}
 
 	TextButton(
-		modifier = Modifier.weight(1F),
+		modifier = Modifier.weight(1F).semantics { contentDescription = description },
 		colors =
 			ButtonDefaults
 				.textButtonColors()
@@ -200,49 +145,6 @@ private fun QuickLinkButtonIcon(link: QuickLink) {
 			imageVector = link.icon,
 			contentDescription = null,
 			modifier = modifier,
-		)
-	}
-}
-
-@Composable
-private fun Contributors() {
-	val context = LocalContext.current
-
-	val openLink = { url: String ->
-		context.startActivity(
-			Intent(
-				Intent.ACTION_VIEW,
-				url.toUri(),
-			),
-		)
-	}
-
-	ItemGroup(stringResource(R.string.top_contributors)) {
-		for (contributor in CONTRIBUTORS) {
-			Item(
-				label = contributor.username,
-				description = stringResource(R.string.contributions, contributor.contributions),
-				onClick = { openLink(contributor.url) },
-				icon = {
-					Image(
-						modifier = Modifier.clip(RoundedCornerShape(100)),
-						painter = painterResource(contributor.avatar),
-						contentDescription = null,
-					)
-				},
-			)
-		}
-
-		Item(
-			label = stringResource(R.string.all_contributors),
-			onClick = { openLink("https://github.com/amrbashir/hijri-widget/graphs/contributors") },
-			icon = {
-				Icon(
-					imageVector = Icons.Outlined.Reply,
-					modifier = Modifier.graphicsLayer { scaleX = -1F },
-					contentDescription = null,
-				)
-			},
 		)
 	}
 }

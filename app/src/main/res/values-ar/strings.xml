@@ -122,7 +122,6 @@
     <string name="reset_to_default">إعادة تعيين إلى الافتراضي</string>
     <string name="changelog">سجل التغييرات</string>
     <string name="widget_updated">تم تحديث الويدجت!</string>
-    <string name="checkout_the_full_changelog"><![CDATA[اطلع على سجل التغييرات الكامل على: <a href="%1$s">%1$s</a>]]></string>
     <string name="top_contributors">أفضل المساهمين</string>
     <string name="contributions">مساهمة</string>
     <string name="all_contributors">جميع المساهمين</string>
@@ -195,4 +194,5 @@
     <string name="dynamic_color_tertiary_container">حاوية ثالثة ديناميكية</string>
     <string name="save">حفظ</string>
     <string name="saved">تم الحفظ</string>
+    <string name="full_changelog">سجل التغييرات الكامل</string>
 </resources>

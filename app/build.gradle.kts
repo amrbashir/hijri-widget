@@ -68,7 +68,9 @@ android {
 	}
 
 	sourceSets.getByName("main") {
-		kotlin.directories.add("build/generated/source")
+		kotlin.directories.addAll(
+			listOf("build/generated/source/changelog", "build/generated/source/contributors"),
+		)
 		res.directories.add("build/generated/resources")
 	}
 }

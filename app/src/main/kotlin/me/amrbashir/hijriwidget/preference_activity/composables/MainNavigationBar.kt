@@ -26,7 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -54,8 +54,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import me.amrbashir.hijriwidget.R
 import me.amrbashir.hijriwidget.preference_activity.LocalNavController
 import me.amrbashir.hijriwidget.preference_activity.LocalShowMainNavigation
-import me.amrbashir.hijriwidget.preference_activity.screens.ABOUT_DESTINATION
 import me.amrbashir.hijriwidget.preference_activity.screens.HOME_DESTINATION
+import me.amrbashir.hijriwidget.preference_activity.screens.settings.SETTINGS_DESTINATION
 import me.amrbashir.hijriwidget.widget.HijriWidgetReceiver
 
 internal data class MainDestination(
@@ -67,7 +67,7 @@ internal data class MainDestination(
 internal val MAIN_DESTINATIONS =
 	listOf(
 		MainDestination(HOME_DESTINATION, R.string.navigation_home, Icons.Outlined.Home),
-		MainDestination(ABOUT_DESTINATION, R.string.about_screen_title, Icons.Outlined.Info),
+		MainDestination(SETTINGS_DESTINATION, R.string.settings_title, Icons.Outlined.Settings),
 	)
 
 /**

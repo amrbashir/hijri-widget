@@ -41,6 +41,7 @@ import me.amrbashir.hijriwidget.addIfNotNull
 import me.amrbashir.hijriwidget.android.AlarmReceiver
 import me.amrbashir.hijriwidget.applyFontWeight
 import me.amrbashir.hijriwidget.applyHorizontalAlignment
+import me.amrbashir.hijriwidget.logException
 import me.amrbashir.hijriwidget.widgetCornerRadius
 import kotlin.math.roundToInt
 
@@ -51,6 +52,16 @@ class HijriWidgetReceiver : GlanceAppWidgetReceiver() {
 class HijriWidget : GlanceAppWidget() {
 	override val sizeMode: SizeMode = SizeMode.Single
 	override val stateDefinition: GlanceStateDefinition<*> = PreferencesGlanceStateDefinition
+
+	override fun onCompositionError(
+		context: Context,
+		glanceId: GlanceId,
+		appWidgetId: Int,
+		throwable: Throwable,
+	) {
+		logException(throwable)
+		super.onCompositionError(context, glanceId, appWidgetId, throwable)
+	}
 
 	override suspend fun provideGlance(
 		context: Context,

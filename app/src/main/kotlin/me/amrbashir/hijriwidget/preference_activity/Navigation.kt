@@ -9,7 +9,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import me.amrbashir.hijriwidget.preference_activity.screens.aboutDestination
 import me.amrbashir.hijriwidget.preference_activity.screens.homeDestination
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.PREFERENCES_DESTINATION
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.PREFERENCES_LIST_DESTINATION
@@ -20,6 +19,8 @@ import me.amrbashir.hijriwidget.preference_activity.screens.preferences.dayStart
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.fontDestination
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.layoutDestination
 import me.amrbashir.hijriwidget.preference_activity.screens.preferences.preferenceListDestination
+import me.amrbashir.hijriwidget.preference_activity.screens.settings.logsDestination
+import me.amrbashir.hijriwidget.preference_activity.screens.settings.settingsDestination
 
 @Composable
 fun Navigation(
@@ -58,7 +59,8 @@ fun Navigation(
 		},
 	) {
 		homeDestination()
-		aboutDestination()
+		settingsDestination()
+		logsDestination()
 		navigation(
 			route = PREFERENCES_DESTINATION,
 			startDestination = PREFERENCES_LIST_DESTINATION,
