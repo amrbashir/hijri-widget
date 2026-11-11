@@ -6,7 +6,7 @@ Choose your colors, fonts, languages, and layout.
 </p>
 
 <p align="center">
-  <img src="screenshots/hero.png" alt="Hijri Widget — Hijri dates. Your style. On your home screen." width="1024">
+  <img src="screenshots/feature-graphic.png" alt="Hijri Widget — Hijri dates. Your style. On your home screen." width="1024">
 </p>
 
 ## Download
@@ -47,15 +47,15 @@ Requires **Android 8.0 or later**. Works offline, with no ads or account require
 ## Screenshots
 
 <p align="center">
-  <img src="store/en-US/phone-screenshots/01-home-screen.png" alt="Transparent English date widget on the home screen" width="360">
-  <img src="store/en-US/phone-screenshots/02-home-arabic.png" alt="Arabic date widget with a light Material You background on the home screen" width="360">
+  <img src="screenshots/01-home-screen.png" alt="Transparent English date widget on the home screen" width="360">
+  <img src="screenshots/02-home-arabic.png" alt="Arabic date widget with a light Material You background on the home screen" width="360">
 </p>
 
 <table>
   <tr>
-    <td><img src="store/en-US/phone-screenshots/03-appearance.png" alt="Light theme with widget text and background color swatches" width="240"></td>
-    <td><img src="store/en-US/phone-screenshots/04-date-editor.png" alt="Visual date editor with weekday and date components on separate rows" width="240"></td>
-    <td><img src="store/en-US/phone-screenshots/05-date-formats.png" alt="Dark theme with English, Arabic, and mixed-language date presets" width="240"></td>
+    <td><img src="screenshots/03-appearance.png" alt="Light theme with widget text and background color swatches" width="240"></td>
+    <td><img src="screenshots/04-date-editor.png" alt="Visual date editor with weekday and date components on separate rows" width="240"></td>
+    <td><img src="screenshots/05-date-formats.png" alt="Dark theme with English, Arabic, and mixed-language date presets" width="240"></td>
   </tr>
   <tr>
     <td align="center">Colors and appearance</td>
