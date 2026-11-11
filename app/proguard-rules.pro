@@ -21,3 +21,9 @@
 #-renamesourcefileattribute SourceFile
 
 -dontwarn org.slf4j.impl.StaticLoggerBinder
+
+# Room 2.2.5 (via Glance/WorkManager) creates this database through reflection.
+# Its bundled keep rule does not preserve the constructor with current R8.
+-keep class androidx.work.impl.WorkDatabase_Impl {
+    public <init>();
+}
