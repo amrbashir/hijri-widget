@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-11-11
+
 ### Added
 
 - Added an internal Logs screen with an option to email app logs. Nothing is sent automatically.
