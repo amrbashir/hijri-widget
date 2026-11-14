@@ -27,3 +27,16 @@
 -keep class androidx.work.impl.WorkDatabase_Impl {
     public <init>();
 }
+
+# WorkManager 2.7.1 creates every work request's InputMerger (OverwritingInputMerger
+# by default) through Class.newInstance(). Its bundled `-keep class * extends InputMerger`
+# keeps only the class, so R8 full mode strips the constructor, every Glance
+# SessionWorker then fails before running and widgets stay on "Loading...".
+-keep class * extends androidx.work.InputMerger {
+    public <init>();
+}
+
+# Glance records each GlanceAppWidget's class name to map widgets to their receiver.
+# Keep the name stable across releases so lookups like getGlanceIds(HijriWidget::class.java)
+# keep matching what an earlier version stored.
+-keepnames class * extends androidx.glance.appwidget.GlanceAppWidget

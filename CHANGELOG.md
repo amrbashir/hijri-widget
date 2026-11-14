@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed widgets staying on "Loading..." forever after updating to 2.0.0, including newly added widgets.
+
 ## [2.0.0] - 2026-11-11
 
 ### Added
