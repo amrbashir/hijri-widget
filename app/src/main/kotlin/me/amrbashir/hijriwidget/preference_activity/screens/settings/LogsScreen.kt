@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.DeleteSweep
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.Icon
@@ -82,6 +83,7 @@ private fun LogsScreen() {
 			canSend = state.status == Logs.Status.Ready,
 			refreshing = refreshing,
 			onSend = { Logs.send(context) },
+			onCopy = { Logs.copy(context) },
 			onRefresh = ::refreshLogs,
 			onClear = { scope.launch { Logs.clear() } },
 		)
@@ -97,6 +99,7 @@ private fun LogsActions(
 	canSend: Boolean,
 	refreshing: Boolean,
 	onSend: () -> Unit,
+	onCopy: () -> Unit,
 	onRefresh: () -> Unit,
 	onClear: () -> Unit,
 ) {
@@ -107,6 +110,16 @@ private fun LogsActions(
 			onClick = onSend,
 		) {
 			Text(stringResource(R.string.send_logs))
+		}
+		ConnectedButton(
+			modifier = Modifier.width(56.dp),
+			enabled = canSend && !refreshing,
+			onClick = onCopy,
+		) {
+			Icon(
+				imageVector = Icons.Outlined.ContentCopy,
+				contentDescription = stringResource(R.string.copy_logs),
+			)
 		}
 		ConnectedButton(
 			modifier = Modifier.width(56.dp),

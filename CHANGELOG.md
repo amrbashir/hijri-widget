@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Added a button to copy app logs from the Logs screen.
+
 ### Fixed
 
 - Fixed widgets staying on "Loading..." forever after updating to 2.0.0, including newly added widgets.

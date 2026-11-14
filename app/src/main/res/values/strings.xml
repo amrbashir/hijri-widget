@@ -204,8 +204,11 @@
     <string name="latest_release">Latest release</string>
     <string name="contributors">Contributors</string>
     <string name="logs">Logs</string>
-    <string name="logs_description">View app logs and send them by email</string>
+    <string name="logs_description">View app logs, copy them, or send them by email</string>
     <string name="send_logs">Send logs</string>
+    <string name="copy_logs">Copy logs</string>
+    <string name="logs_copied">Logs copied</string>
+    <string name="logs_copy_failed">Could not copy logs.</string>
     <string name="refresh_logs">Refresh</string>
     <string name="loading_logs">Loading logs…</string>
     <string name="no_logs">No app logs available.</string>

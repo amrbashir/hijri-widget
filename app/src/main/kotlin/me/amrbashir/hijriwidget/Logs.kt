@@ -1,10 +1,13 @@
 package me.amrbashir.hijriwidget
 
 import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
+import android.widget.Toast
 import androidx.core.content.FileProvider
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -100,6 +103,29 @@ internal object Logs {
 
 		runCatching { sendDraftEmail(context, current.logs) }
 			.onSuccess(onSuccess)
+			.onFailure(onFailure)
+	}
+
+	fun copy(context: Context) {
+		val current = mutableState.value
+		if (current.status != Status.Ready) return
+
+		val onSuccess: (Unit) -> Unit = {
+			// Android 13+ shows its own confirmation when something is copied.
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+				Toast.makeText(context, R.string.logs_copied, Toast.LENGTH_SHORT).show()
+			}
+			mutableState.update { it.copy(error = null) }
+		}
+		val onFailure: (Throwable) -> Unit = { failure ->
+			logException(failure)
+			mutableState.update { it.copy(error = R.string.logs_copy_failed) }
+		}
+
+		runCatching {
+			val clipboard = context.getSystemService(ClipboardManager::class.java)
+			clipboard.setPrimaryClip(ClipData.newPlainText("Hijri Widget logs", current.logs))
+		}.onSuccess(onSuccess)
 			.onFailure(onFailure)
 	}
 
