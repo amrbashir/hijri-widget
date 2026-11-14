@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.0.1] - 2026-11-14
+
 ### Added
 
 - Added a button to copy app logs from the Logs screen.
