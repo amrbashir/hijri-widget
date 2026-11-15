@@ -57,6 +57,14 @@ android {
 				"proguard-rules.pro",
 			)
 		}
+
+		// Minified like release, installable next to it, used by the :e2e tests
+		create("e2e") {
+			initWith(getByName("release"))
+			applicationIdSuffix = ".e2e"
+			signingConfig = signingConfigs.getByName("debug")
+			matchingFallbacks += "release"
+		}
 	}
 	compileOptions {
 		sourceCompatibility = JavaVersion.VERSION_21

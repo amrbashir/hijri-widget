@@ -1,6 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
 	id("com.android.application") version "9.1.0" apply false
+	id("com.android.test") version "9.1.0" apply false
 	id("org.jlleitschuh.gradle.ktlint") version "14.2.0" apply false
 	id("org.jetbrains.kotlin.plugin.compose") version "2.2.20" apply false
 }
@@ -19,9 +20,9 @@ allprojects {
 }
 
 tasks.register("fmt") {
-	dependsOn("ktlintFormat", ":app:ktlintFormat")
+	dependsOn("ktlintFormat", ":app:ktlintFormat", ":e2e:ktlintFormat")
 }
 
 tasks.register("fmtCheck") {
-	dependsOn("ktlintCheck", ":app:ktlintCheck")
+	dependsOn("ktlintCheck", ":app:ktlintCheck", ":e2e:ktlintCheck")
 }

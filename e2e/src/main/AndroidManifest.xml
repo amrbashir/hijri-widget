@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- The app under test, built with the `e2e` build type -->
+    <queries>
+        <package android:name="me.amrbashir.hijriwidget.e2e" />
+    </queries>
+</manifest>
