@@ -1,5 +1,7 @@
 package me.amrbashir.hijriwidget.widget
 
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
 import android.os.Build
 import android.text.SpannableString
@@ -49,6 +51,14 @@ class HijriWidgetReceiver : GlanceAppWidgetReceiver() {
 	override val glanceAppWidget: GlanceAppWidget = HijriWidget()
 }
 
+/**
+ * Samsung lock screen widget. It shares [HijriWidget], so [HijriWidget.glanceIds]
+ * includes its widgets, which refresh and are customized like home screen ones.
+ */
+class HijriLockScreenWidgetReceiver : GlanceAppWidgetReceiver() {
+	override val glanceAppWidget: GlanceAppWidget = HijriWidget()
+}
+
 class HijriWidget : GlanceAppWidget() {
 	override val sizeMode: SizeMode = SizeMode.Single
 	override val stateDefinition: GlanceStateDefinition<*> = PreferencesGlanceStateDefinition
@@ -76,12 +86,15 @@ class HijriWidget : GlanceAppWidget() {
 			}
 		}
 
+		val appWidgetId = GlanceAppWidgetManager(context).getAppWidgetId(id)
+		val isLockScreen = LockScreen.isLockScreenWidget(context, appWidgetId)
+
 		provideContent {
 			val prefs = currentState<Preferences>()
 			val prefsManager = PreferencesManager.fromPreferences(prefs)
 
 			GlanceTheme {
-				Content(prefsManager, id)
+				Content(prefsManager, id, isLockScreen)
 			}
 		}
 	}
@@ -101,6 +114,7 @@ class HijriWidget : GlanceAppWidget() {
 	private fun Content(
 		prefsManager: PreferencesManager,
 		id: GlanceId? = null,
+		isLockScreen: Boolean = false,
 	) {
 		val context = LocalContext.current
 		val coroutineScope = rememberCoroutineScope()
@@ -143,15 +157,19 @@ class HijriWidget : GlanceAppWidget() {
 			prefsManager.fontSize.value,
 		)
 
+		// See [LockScreen] for why lock screen widgets ignore the colors
 		val textColorMode = prefsManager.textColorMode.value
-		val textColor = prefsManager.getTextColor(context)
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && textColorMode == ColorMode.Dynamic) {
+		val textColor = prefsManager.getTextColor(context, isLockScreen = isLockScreen)
+		if (!isLockScreen &&
+			Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+			textColorMode == ColorMode.Dynamic
+		) {
 			remoteViews.setColorAttr(remoteViewId, "setTextColor", android.R.attr.colorPrimary)
 		} else {
 			remoteViews.setTextColor(remoteViewId, textColor.toArgb())
 		}
 
-		val bgColor = prefsManager.getBgColor(context)
+		val bgColor = prefsManager.getBgColor(context, isLockScreen = isLockScreen)
 
 		Box(
 			contentAlignment = Alignment.Center,
@@ -198,8 +216,20 @@ class HijriWidget : GlanceAppWidget() {
 		/** Ids of all placed widgets, ordered by when they were added, ties broken by `appWidgetId` */
 		suspend fun glanceIds(context: Context): List<GlanceId> {
 			val manager = GlanceAppWidgetManager(context)
-			return manager
-				.getGlanceIds(HijriWidget::class.java)
+			val ids = manager.getGlanceIds(HijriWidget::class.java)
+
+			// Glance only tracks receivers listed by `AppWidgetManager.getInstalledProviders()`,
+			// which skips Samsung's lock screen category, so after an app update it forgets
+			// lock screen widgets until they're redrawn. Ask `AppWidgetManager` for them instead.
+			val lockScreenIds =
+				AppWidgetManager
+					.getInstance(context)
+					.getAppWidgetIds(ComponentName(context, HijriLockScreenWidgetReceiver::class.java))
+					.toList()
+					.mapNotNull { runCatching { manager.getGlanceIdBy(it) }.getOrNull() }
+
+			return (ids + lockScreenIds)
+				.distinct()
 				.map { id ->
 					// Not shown yet, so it's the newest
 					val addedAt =

@@ -59,7 +59,8 @@ fun NavController.navigateToPreferences() {
 internal fun PreferenceListScreen() {
 	LocalAppBarTitle.current.value = stringResource(R.string.app_name)
 
-	val prefsManager = LocalSelectedWidget.current.prefsManager
+	val widget = LocalSelectedWidget.current
+	val prefsManager = widget.prefsManager
 	val navController = LocalNavController.current
 	val weights = prefsManager.supportedFontWeights()
 
@@ -125,9 +126,15 @@ internal fun PreferenceListScreen() {
 
 			ItemGroup(label = stringResource(R.string.preferences_appearance_group_title)) {
 				val context = LocalContext.current
+				// Samsung's lock screen draws widgets in white without a background, see [LockScreen]
+				val colorsEnabled = !widget.isLockScreen
+				val lockScreenUnsupported = stringResource(R.string.preferences_lock_screen_unsupported)
+
 				Item(
 					label = stringResource(R.string.text_color),
 					icon = Icons.Outlined.ColorLens,
+					enabled = colorsEnabled,
+					description = if (colorsEnabled) null else lockScreenUnsupported,
 				) {
 					SwatchRow(
 						modes = ColorMode.all(),
@@ -137,12 +144,15 @@ internal fun PreferenceListScreen() {
 							prefsManager.textColorMode.value = it
 							if (it == ColorMode.Custom) navController.navigateToCustomTextColor()
 						},
+						enabled = colorsEnabled,
 					)
 				}
 
 				Item(
 					label = stringResource(R.string.background_color),
 					icon = Icons.Outlined.FormatColorFill,
+					enabled = colorsEnabled,
+					description = if (colorsEnabled) null else lockScreenUnsupported,
 				) {
 					SwatchRow(
 						modes = ColorMode.allForBg(),
@@ -152,6 +162,7 @@ internal fun PreferenceListScreen() {
 							prefsManager.bgColorMode.value = it
 							if (it == ColorMode.Custom) navController.navigateToCustomBackgroundColor()
 						},
+						enabled = colorsEnabled,
 					)
 				}
 

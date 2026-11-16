@@ -1,6 +1,7 @@
 package me.amrbashir.hijriwidget.preference_activity.composables
 
 import android.text.SpannableString
+import android.util.SizeF
 import android.view.View
 import android.widget.TextView
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -35,6 +36,7 @@ import me.amrbashir.hijriwidget.applyHorizontalAlignment
 import me.amrbashir.hijriwidget.preference_activity.LocalAnimatedContentScope
 import me.amrbashir.hijriwidget.preference_activity.LocalSelectedWidget
 import me.amrbashir.hijriwidget.preference_activity.LocalSharedTransitionScope
+import me.amrbashir.hijriwidget.widget.LockScreen
 import me.amrbashir.hijriwidget.widgetCornerRadius
 
 @Composable
@@ -43,9 +45,14 @@ fun WidgetPreview(
 	onSettingsClick: (() -> Unit)? = null,
 ) {
 	val context = LocalContext.current
-	val prefsManager = LocalSelectedWidget.current.prefsManager
+	val widget = LocalSelectedWidget.current
+	val prefsManager = widget.prefsManager
+	val isLockScreen = widget.isLockScreen
 
 	val date = HijriDate.todayFormatted(prefsManager)
+
+	// Lock screen widgets are drawn at the size of Samsung's lock screen tiles, see [LockScreen]
+	val size = if (isLockScreen) LockScreen.tileSize else SizeF(175F, 110F)
 
 	// Wallpaper container
 	Box(
@@ -67,10 +74,10 @@ fun WidgetPreview(
 				),
 			modifier =
 				Modifier
-					.height(110.dp)
-					.width(175.dp)
+					.height(size.height.dp)
+					.width(size.width.dp)
 					.widgetCornerRadius(context)
-					.background(prefsManager.getBgColor(context).getColor(context))
+					.background(prefsManager.getBgColor(context, isLockScreen = isLockScreen).getColor(context))
 					.padding(
 						start = prefsManager.paddingStart.value.dp,
 						top = prefsManager.paddingTop.value.dp,
@@ -78,7 +85,7 @@ fun WidgetPreview(
 						bottom = prefsManager.paddingBottom.value.dp,
 					),
 		) {
-			val textColor = prefsManager.getTextColor(context).toArgb()
+			val textColor = prefsManager.getTextColor(context, isLockScreen = isLockScreen).toArgb()
 			val isDeviceRTL = context.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
 
 			AndroidView(

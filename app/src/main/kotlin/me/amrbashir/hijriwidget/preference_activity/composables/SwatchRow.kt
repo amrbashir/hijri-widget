@@ -49,6 +49,7 @@ internal fun SwatchRow(
 	selectedMode: ColorMode,
 	previewColor: @Composable (ColorMode) -> Color,
 	onModeSelected: (ColorMode) -> Unit,
+	enabled: Boolean = true,
 ) {
 	BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
 		val count = modes.size
@@ -68,6 +69,7 @@ internal fun SwatchRow(
 					color = previewColor(mode),
 					description = stringResource(mode.label),
 					selectedOption = mode == selectedMode,
+					enabled = enabled,
 					onClick = { onModeSelected(mode) },
 				)
 			}
@@ -82,6 +84,7 @@ private fun Swatch(
 	color: Color,
 	description: String,
 	selectedOption: Boolean,
+	enabled: Boolean,
 	onClick: () -> Unit,
 ) {
 	val icon =
@@ -114,6 +117,7 @@ private fun Swatch(
 		positionProvider = TooltipDefaults.rememberTooltipPositionProvider(),
 		tooltip = { PlainTooltip { Text(description) } },
 		state = rememberTooltipState(),
+		enableUserInput = enabled,
 	) {
 		Box(
 			modifier =
@@ -124,6 +128,7 @@ private fun Swatch(
 		) {
 			Surface(
 				onClick = onClick,
+				enabled = enabled,
 				modifier =
 					Modifier.size(40.dp).semantics {
 						contentDescription = description

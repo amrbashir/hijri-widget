@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Samsung lock screen and AOD widget, see `values/attrs.xml` for the Samsung attributes.
+    Lock screen widgets there are limited to 1x1 or 2x1 and drawn in a single color.
+-->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:description="@string/app_description"
+    android:initialLayout="@layout/glance_default_loading_layout"
+    android:minWidth="@dimen/widget_min_width"
+    android:minHeight="@dimen/widget_min_height"
+    android:previewImage="@drawable/preview"
+    android:resizeMode="none"
+    android:targetCellWidth="2"
+    android:targetCellHeight="1"
+    android:updatePeriodMillis="0"
+    android:widgetCategory="keyguard"
+    app:targetHost="2"
+    app:widgetSize="2"
+    app:widgetStyle="2"
+    tools:targetApi="31" />

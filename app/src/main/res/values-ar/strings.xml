@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">الويدجت الهجري</string>
     <string name="app_description">ويدجت لعرض التاريخ الهجري</string>
+    <string name="lock_screen_widget_label">التاريخ الهجري (شاشة القفل)</string>
     <string name="home_screen_no_widgets">أضف الويدجت الهجري إلى شاشتك الرئيسية، ثم عد إلى هنا لتخصيصه</string>
     <string name="home_screen_no_widgets_title">لا توجد ويدجت بعد</string>
     <string name="home_screen_widget_settings">إعدادات الويدجت</string>
@@ -113,6 +114,7 @@
     <string name="preferences_color_description">اختر لون نص الويدجت وخلفيته</string>
     <string name="preferences_font_size_title">حجم الخط</string>
     <string name="preferences_font_size_description">غيّر حجم خط الويدجت</string>
+    <string name="preferences_lock_screen_unsupported">غير متاح لويدجت شاشة القفل</string>
     <string name="preferences_text_shadow_title">ظل النص</string>
     <string name="preferences_text_shadow_description">تمكين أو تعطيل ظل نص الويدجت</string>
     <string name="preferences_misc_group_title">متنوع</string>

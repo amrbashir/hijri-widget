@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontFamily
@@ -79,7 +80,9 @@ fun Item(
 				.addIfNotNull(onClick) { clickable(enabled, onClick = it) }
 				.clip(RoundedCornerShape(4.dp))
 				.background(MaterialTheme.colorScheme.surfaceBright)
-				.padding(16.dp),
+				.padding(16.dp)
+				// Only dims the item, controls inside need their own `enabled` to stop responding
+				.then(if (enabled) Modifier else Modifier.alpha(DISABLED_ALPHA)),
 	) {
 		if (label != null) {
 			Row(
@@ -126,3 +129,6 @@ fun Item(
 		if (content != null) content()
 	}
 }
+
+/** Material's opacity for disabled content */
+private const val DISABLED_ALPHA = 0.38F

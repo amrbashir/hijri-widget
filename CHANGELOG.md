@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Added lock screen widget support, including Samsung Galaxy phones.
+
 ## [2.0.1] - 2026-11-14
 
 ### Added

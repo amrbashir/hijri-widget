@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        Undocumented Samsung One UI attributes, read by name from the widget provider XML,
+        which decide whether a widget is offered in the lock screen and AOD widget picker.
+        Samsung ignores `widgetCategory="keyguard"` for that picker.
+    -->
+
+    <!-- Where the widget can be placed: home=1, lock screen and AOD=2, cover screen=4 -->
+    <attr name="targetHost" format="integer" />
+    <!-- Supported sizes: 1x1=1, 2x1=2 -->
+    <attr name="widgetSize" format="integer" />
+    <!-- How it's drawn: colorful=1, monotone=2 -->
+    <attr name="widgetStyle" format="integer" />
+</resources>

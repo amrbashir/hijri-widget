@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Hijri Widget</string>
     <string name="app_description">Android widget for displaying Hijri date</string>
+    <string name="lock_screen_widget_label">Hijri date (lock screen)</string>
     <string name="widget_preview_date" translatable="false">16 رمضان 1445</string>
     <string name="home_screen_no_widgets">Add Hijri Widget to your home screen, then come back here to customize it</string>
     <string name="home_screen_no_widgets_title">No widgets yet</string>
@@ -118,6 +119,7 @@
     <string name="preferences_color_description">Choose the widget text and background color</string>
     <string name="preferences_font_size_title">Font Size</string>
     <string name="preferences_font_size_description">Change the widget font size</string>
+    <string name="preferences_lock_screen_unsupported">Not available for lock screen widgets</string>
     <string name="preferences_text_shadow_title">Text Shadow</string>
     <string name="preferences_text_shadow_description">Enable or disable the widget text shadow</string>
     <string name="preferences_misc_group_title">Misc.</string>

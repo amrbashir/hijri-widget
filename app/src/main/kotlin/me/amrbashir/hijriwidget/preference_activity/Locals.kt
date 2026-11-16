@@ -14,6 +14,7 @@ import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.navigation.NavHostController
 import me.amrbashir.hijriwidget.PreferencesManager
 import me.amrbashir.hijriwidget.widget.HijriWidget
+import me.amrbashir.hijriwidget.widget.LockScreen
 
 val LocalNavController =
 	compositionLocalOf<NavHostController> {
@@ -43,7 +44,7 @@ val LocalAnimatedContentScope =
 	}
 
 /**
- * A widget instance on the home screen and a draft of its preferences.
+ * A placed widget instance and a draft of its preferences.
  *
  * Edits to [prefsManager] are only persisted to the widget when saved.
  */
@@ -51,6 +52,8 @@ data class WidgetInstance(
 	val id: GlanceId,
 	val appWidgetId: Int,
 	val prefsManager: PreferencesManager,
+	/** Placed on Samsung's lock screen, see [LockScreen] */
+	val isLockScreen: Boolean = false,
 ) {
 	companion object {
 		suspend fun load(
@@ -58,7 +61,12 @@ data class WidgetInstance(
 			appWidgetId: Int,
 		): WidgetInstance {
 			val glanceId = GlanceAppWidgetManager(context).getGlanceIdBy(appWidgetId)
-			return WidgetInstance(glanceId, appWidgetId, PreferencesManager.load(context, glanceId))
+			return WidgetInstance(
+				glanceId,
+				appWidgetId,
+				PreferencesManager.load(context, glanceId),
+				LockScreen.isLockScreenWidget(context, appWidgetId),
+			)
 		}
 
 		suspend fun load(
@@ -66,7 +74,12 @@ data class WidgetInstance(
 			glanceId: GlanceId,
 		): WidgetInstance {
 			val appWidgetId = GlanceAppWidgetManager(context).getAppWidgetId(glanceId)
-			return WidgetInstance(glanceId, appWidgetId, PreferencesManager.load(context, glanceId))
+			return WidgetInstance(
+				glanceId,
+				appWidgetId,
+				PreferencesManager.load(context, glanceId),
+				LockScreen.isLockScreenWidget(context, appWidgetId),
+			)
 		}
 
 		suspend fun loadAll(context: Context): List<WidgetInstance> =

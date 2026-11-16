@@ -31,6 +31,7 @@ import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.state.PreferencesGlanceStateDefinition
 import androidx.glance.unit.ColorProvider
 import me.amrbashir.hijriwidget.widget.HijriWidget
+import me.amrbashir.hijriwidget.widget.LockScreen
 import kotlin.math.roundToInt
 
 val Color.Companion.Dark: Color get() = Color(0xFF151515)
@@ -146,11 +147,15 @@ class PreferencesManager {
 		return supportedFontWeights().minBy { kotlin.math.abs(it - requested) }
 	}
 
+	/** Lock screen widgets are always white, see [LockScreen] */
 	@Composable
 	fun getTextColor(
 		context: Context,
 		mode: ColorMode = textColorMode.value,
+		isLockScreen: Boolean = false,
 	): Color {
+		if (isLockScreen) return Color.White
+
 		val isDark =
 			context.resources.configuration.uiMode and
 				Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
@@ -171,11 +176,15 @@ class PreferencesManager {
 		}
 	}
 
+	/** Lock screen widgets are always transparent, see [LockScreen] */
 	@Composable
 	fun getBgColor(
 		context: Context,
 		mode: ColorMode = bgColorMode.value,
+		isLockScreen: Boolean = false,
 	): ColorProvider {
+		if (isLockScreen) return ColorProvider(Color.Transparent)
+
 		val isDark =
 			context.resources.configuration.uiMode and
 				Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES

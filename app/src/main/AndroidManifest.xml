@@ -44,6 +44,29 @@
                 android:resource="@xml/hijri_widget_info" />
         </receiver>
 
+        <!--
+            Samsung lock screen and AOD widget, which Samsung's picker finds through the
+            `widgetStyle` meta-data and the Samsung attributes in its provider XML.
+            Enabled by default because Samsung's lock screen only learns about widgets when the
+            app is installed, and disabled on other devices, see `HijriWidgetApp`, so they don't
+            list a second lock screen widget.
+        -->
+        <receiver
+            android:name=".widget.HijriLockScreenWidgetReceiver"
+            android:exported="false"
+            android:label="@string/lock_screen_widget_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/hijri_lock_screen_widget_info" />
+            <meta-data
+                android:name="widgetStyle"
+                android:value="complication" />
+        </receiver>
+
         <receiver
             android:name=".android.AlarmReceiver"
             android:exported="false">
