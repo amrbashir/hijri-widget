@@ -84,7 +84,6 @@ private suspend fun migrateV1ToV2(
 ) {
 	val ids = HijriWidget.glanceIds(context)
 
-
 	if (ids.isEmpty()) {
 		legacyPrefs.edit(commit = true) { clear() }
 		return
