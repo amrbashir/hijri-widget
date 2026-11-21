@@ -141,13 +141,13 @@ class HijriWidget : GlanceAppWidget() {
 		remoteViews.setInt(R.id.widget_text_container, "setGravity", gravity)
 
 		val density = context.resources.displayMetrics.density
-		val start = (prefsManager.paddingStart.value * density).roundToInt()
-		val end = (prefsManager.paddingEnd.value * density).roundToInt()
+		val left = (prefsManager.paddingLeft.value * density).roundToInt()
+		val right = (prefsManager.paddingRight.value * density).roundToInt()
 		remoteViews.setViewPadding(
 			R.id.widget_text_container,
-			if (isDeviceRTL) end else start,
+			left,
 			(prefsManager.paddingTop.value * density).roundToInt(),
-			if (isDeviceRTL) start else end,
+			right,
 			(prefsManager.paddingBottom.value * density).roundToInt(),
 		)
 

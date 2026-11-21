@@ -119,8 +119,8 @@ private fun AlignmentOptions(
 private fun PaddingPicker(prefsManager: PreferencesManager) {
 	val focusManager = LocalFocusManager.current
 	var top by remember(prefsManager) { mutableStateOf(prefsManager.paddingTop.value.toString()) }
-	var start by remember(prefsManager) { mutableStateOf(prefsManager.paddingStart.value.toString()) }
-	var end by remember(prefsManager) { mutableStateOf(prefsManager.paddingEnd.value.toString()) }
+	var left by remember(prefsManager) { mutableStateOf(prefsManager.paddingLeft.value.toString()) }
+	var right by remember(prefsManager) { mutableStateOf(prefsManager.paddingRight.value.toString()) }
 	var bottom by remember(
 		prefsManager,
 	) { mutableStateOf(prefsManager.paddingBottom.value.toString()) }
@@ -146,24 +146,24 @@ private fun PaddingPicker(prefsManager: PreferencesManager) {
 
 			Row(
 				verticalAlignment = Alignment.CenterVertically,
-				horizontalArrangement = Arrangement.spacedBy(10.dp),
+				horizontalArrangement = Arrangement.Absolute.spacedBy(10.dp),
 			) {
 				PaddingInput(
-					label = stringResource(R.string.layout_start),
-					value = start,
+					label = stringResource(R.string.layout_left),
+					value = left,
 					onValueChange = {
-						start = it
-						it.toIntOrNull()?.let { value -> prefsManager.paddingStart.value = value }
+						left = it
+						it.toIntOrNull()?.let { value -> prefsManager.paddingLeft.value = value }
 					},
 					modifier = Modifier.weight(1F),
 				)
 				Spacer(modifier = Modifier.weight(1F))
 				PaddingInput(
-					label = stringResource(R.string.layout_end),
-					value = end,
+					label = stringResource(R.string.layout_right),
+					value = right,
 					onValueChange = {
-						end = it
-						it.toIntOrNull()?.let { value -> prefsManager.paddingEnd.value = value }
+						right = it
+						it.toIntOrNull()?.let { value -> prefsManager.paddingRight.value = value }
 					},
 					modifier = Modifier.weight(1F),
 				)
@@ -186,13 +186,13 @@ private fun PaddingPicker(prefsManager: PreferencesManager) {
 			PaddingPickerFooter(
 				onReset = {
 					focusManager.clearFocus()
-					prefsManager.paddingStart.reset()
+					prefsManager.paddingLeft.reset()
 					prefsManager.paddingTop.reset()
-					prefsManager.paddingEnd.reset()
+					prefsManager.paddingRight.reset()
 					prefsManager.paddingBottom.reset()
 					top = prefsManager.paddingTop.value.toString()
-					start = prefsManager.paddingStart.value.toString()
-					end = prefsManager.paddingEnd.value.toString()
+					left = prefsManager.paddingLeft.value.toString()
+					right = prefsManager.paddingRight.value.toString()
 					bottom = prefsManager.paddingBottom.value.toString()
 				},
 			)

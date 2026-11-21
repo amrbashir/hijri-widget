@@ -177,13 +177,11 @@
     <string name="layout_vertical">Vertical</string>
     <string name="layout_left">Left</string>
     <string name="layout_right">Right</string>
-    <string name="layout_start">Start</string>
-    <string name="layout_end">End</string>
     <string name="layout_center">Center</string>
     <string name="layout_top">Top</string>
     <string name="layout_bottom">Bottom</string>
     <string name="layout_padding">Padding (dp)</string>
-    <string name="layout_padding_hint">Values are in dp. Start and end follow the device language.</string>
+    <string name="layout_padding_hint">Values are in dp. Left and right stay the same in all device languages.</string>
     <string name="font_family">Font family</string>
     <string name="font_system_default">System default</string>
     <string name="font_weight">Font Weight</string>

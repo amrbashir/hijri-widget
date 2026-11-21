@@ -90,11 +90,11 @@ class PreferencesManager {
 	val verticalAlignment =
 		enumPreference("VERTICAL_ALIGNMENT", VerticalAlignment.Center)
 
-	val paddingStart = intPreference("PADDING_START", 0)
+	val paddingLeft = intPreference("PADDING_LEFT", 0)
 
 	val paddingTop = intPreference("PADDING_TOP", 0)
 
-	val paddingEnd = intPreference("PADDING_END", 0)
+	val paddingRight = intPreference("PADDING_RIGHT", 0)
 
 	val paddingBottom = intPreference("PADDING_BOTTOM", 0)
 

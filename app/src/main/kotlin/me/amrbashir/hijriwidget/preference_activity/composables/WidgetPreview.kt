@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -78,10 +79,10 @@ fun WidgetPreview(
 					.width(size.width.dp)
 					.widgetCornerRadius(context)
 					.background(prefsManager.getBgColor(context, isLockScreen = isLockScreen).getColor(context))
-					.padding(
-						start = prefsManager.paddingStart.value.dp,
+					.absolutePadding(
+						left = prefsManager.paddingLeft.value.dp,
 						top = prefsManager.paddingTop.value.dp,
-						end = prefsManager.paddingEnd.value.dp,
+						right = prefsManager.paddingRight.value.dp,
 						bottom = prefsManager.paddingBottom.value.dp,
 					),
 		) {

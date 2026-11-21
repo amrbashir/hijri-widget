@@ -6,6 +6,10 @@
 
 - Added lock screen widget support, including Samsung Galaxy phones.
 
+### Changed
+
+- Horizontal padding now uses fixed Left and Right sides in all device languages, in both widgets and previews. Existing padding values are preserved.
+
 ## [2.0.1] - 2026-11-14
 
 ### Added
